@@ -1,0 +1,1058 @@
+---
+title: "Introduction to Bayesian methods"
+bibliography: references.bib
+cite-method: citeproc
+link-citations: true
+editor_options:
+  chunk_output_type: console
+format: html
+---
+
+```{r, include=FALSE, echo=FALSE, eval=FALSE, warning=FALSE, message=FALSE}
+## -----------------------------------------------------------
+## Digital Clinical Trial (DCT) Wearable Dataset Simulation
+## Complete dataset (no missing) + Amputated dataset (with missing)
+## -----------------------------------------------------------
+
+set.seed(2025)
+
+# Number of patients
+n <- 500
+
+# -----------------------------------------------------------
+# Baseline characteristics
+# -----------------------------------------------------------
+
+age <- round(runif(n, 18, 80))
+
+baseline_inflammation <- rnorm(
+  n,
+  mean = 3 + 0.03 * (age - 50),
+  sd = 1
+)
+
+frailty <- rnorm(
+  n,
+  mean = 0.4 + 0.004 * (age - 50),
+  sd = 0.12
+)
+
+# -----------------------------------------------------------
+# Wearable physiological signals (no missing)
+# -----------------------------------------------------------
+
+resting_hr <- rnorm(
+  n,
+  mean = 60 +
+         0.5 * (age - 50) +
+         4 * frailty +
+         3 * baseline_inflammation,
+  sd = 5
+)
+
+hrv <- rnorm(
+  n,
+  mean = 70 -
+         0.6 * (age - 50) -
+         10 * frailty -
+         8 * baseline_inflammation,
+  sd = 10
+)
+
+skin_temp <- rnorm(
+  n,
+  mean = 33.0 +
+         0.015 * (age - 50) +
+         0.5 * baseline_inflammation,
+  sd = 0.35
+)
+
+activity_index <- rnorm(
+  n,
+  mean = 60 -
+         15 * frailty -
+         5 * baseline_inflammation,
+  sd = 8
+)
+
+# -----------------------------------------------------------
+# Digital biomarker endpoint: Stress Score
+# -----------------------------------------------------------
+
+stress_score <- 40 +
+  0.35 * resting_hr +
+  -0.30 * hrv +
+  0.15 * age +
+  6 * baseline_inflammation +
+  12 * frailty +
+  rnorm(n, 0, 6)
+
+# -----------------------------------------------------------
+# Clinical event risk
+# -----------------------------------------------------------
+
+linpred <- -5 +
+  0.04 * stress_score +
+  0.03 * age +
+  0.8  * baseline_inflammation +
+  1.5  * frailty
+
+event_risk <- 1 / (1 + exp(-linpred))
+event_occurred <- rbinom(n, 1, event_risk)
+
+# -----------------------------------------------------------
+# COMPLETE DATASET (no missing)
+# -----------------------------------------------------------
+
+dct_wearable_complete <- data.frame(
+  age,
+  baseline_inflammation,
+  frailty,
+  resting_hr,
+  hrv,
+  skin_temp,
+  activity_index,
+  stress_score,
+  event_risk,
+  event_occurred
+)
+
+
+# -----------------------------------------------------------
+# AMPUTATED DATASET (MAR + MCAR)
+# -----------------------------------------------------------
+
+# Copy complete dataset
+dct_wearable_amputated <- dct_wearable_complete
+
+# MCAR: random dropout for activity
+set.seed(2026)
+drop_act <- sample(1:n, 45)
+dct_wearable_amputated$activity_index[drop_act] <- NA
+
+# MAR: older → HRV missing
+dct_wearable_amputated$hrv[
+  age > 60 & runif(n) < 0.28
+] <- NA
+
+# MAR: high stress → skin temp missing
+dct_wearable_amputated$skin_temp[
+  stress_score > quantile(stress_score, 0.75) &
+    runif(n) < 0.25
+] <- NA
+
+# MAR: frail → resting HR missing
+dct_wearable_amputated$resting_hr[
+  frailty > quantile(frailty, 0.8) &
+    runif(n) < 0.30
+] <- NA
+
+# -----------------------------------------------------------
+# Save datasets
+# -----------------------------------------------------------
+
+saveRDS(dct_wearable_complete,  "dct_wearable_complete.rds")
+saveRDS(dct_wearable_amputated, "dct_wearable_amputated.rds")
+
+
+
+```
+
+## Motivation
+
+```{r}
+# -----------------------------------------------------------
+# Reload example
+# -----------------------------------------------------------
+
+wearable_complete <- readRDS("~/att_ai_ml/att_book/data/dct_wearable_complete.rds")
+str(wearable_complete)
+```
+
+In this chapter we work with a simulated dataset representing a decentralised clinical trial in which participants are monitored remotely through wearable devices. Although simulated, the structure mirrors the data routinely collected in contemporary digital-health and pharmaceutical pipelines. Each participant contributes baseline clinical information such as age, frailty, and an inflammation score derived from laboratory markers. Alongside these features, the dataset includes continuous physiological measurements obtained from a wearable sensor: resting heart rate, heart rate variability, skin temperature, and a general activity index capturing daily mobility. A composite stress score summarises overall physiological load, and the dataset also contains a modelled probability of clinical deterioration and a binary indicator of adverse events.
+
+Examples like this matter because wearable-derived variables have become central to modern clinical research. Remote monitoring gives investigators the ability to observe physiological dynamics as they unfold in real life rather than only during scheduled clinic visits. Signals such as HRV, resting heart rate, skin temperature, and activity levels are already used as exploratory or surrogate endpoints in ongoing studies by major pharmaceutical companies, and several digital biomarkers are beginning to receive regulatory attention. These measurements also tend to co-move in structured, physiologically meaningful ways: inflammation and frailty are associated with increases in resting heart rate and skin temperature; HRV declines with age and clinical burden; activity levels fall as frailty rises; and an overall stress score reflects these interacting components.
+
+## Understanding Probabilities, Models, and Likelihood
+
+Before discussing Bayesian reasoning, we need a shared language for uncertainty. A probability distribution describes how likely different outcomes or parameter values are. For example, resting heart rate recorded by a wearable sensor fluctuates across individuals and days, and part of that variability can be captured by a distribution such as a Normal or Log-Normal.
+
+A probability distribution provides:
+
+-   A sample space: all possible values (e.g., heart rate 40–120 bpm)
+
+-   A way to assign likelihood to values
+
+-   A mathematical structure for modelling variation
+
+-   Knowing a distribution allows us to compute quantities such as:
+
+    -   the probability that resting heart rate exceeds 80 bpm
+
+    -   the expected average HRV in a population
+
+    -   the density at specific values
+
+Example in R:
+
+```{r}
+# probability heart rate > 80 under a Normal(70,8)
+1 - pnorm(80, mean = 70, sd = 8)
+
+# density at HR = 75
+dnorm(75, mean = 70, sd = 8)
+
+```
+
+Many physiological measurements in decentralised clinical trials—such as resting heart rate, HRV, skin temperature, or daily activity—are well approximated by a normal distribution. A probability density curve summarises how likely different values are. The peak indicates the most plausible range (around the mean), and the spread reflects biological variability (captured by the standard deviation).
+
+```{r}
+library(ggplot2)
+
+# Parameters for illustration
+mu  <- 70     # mean
+sd  <- 8      # standard deviation
+grid <- seq(mu - 4*sd, mu + 4*sd, length.out = 800)
+
+df_norm <- data.frame(
+  x = grid,
+  density = dnorm(grid, mean = mu, sd = sd)
+)
+
+ggplot(df_norm, aes(x = x, y = density)) +
+  geom_line(color = "#1f77b4", linewidth = 1.5) +
+  geom_vline(xintercept = mu, color = "darkred", linetype = "dashed", linewidth = 1.1) +
+  annotate("text", x = mu, y = max(df_norm$density)*0.95,
+           label = paste("mean =", mu), color = "darkred", hjust = -0.2) +
+  labs(
+    title = "Normal Distribution (μ = 70, σ = 8)",
+    x = "Value",
+    y = "Density"
+  ) +
+  theme_minimal(base_size = 15) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5)
+  )
+
+```
+
+## What is statistical inference?
+
+Statistical inference concerns the process of learning about unknown aspects of a population or a data-generating process using observed data. The central objective is to use measurements collected in a sample to draw conclusions about quantities that cannot be observed directly.
+
+In the context of wearable-sensor data from a decentralised clinical trial, several inferential questions arise naturally:
+
+– What is the true mean resting heart rate in the trial population? – How strongly is frailty associated with heart-rate variability? – What is the probability that an individual will experience an adverse event, given their physiological profile?
+
+To answer such questions, we adopt a statistical model describing how the observed measurements arise. Statistical inference then consists of using the model and the observed data to learn about the unknown model parameters.
+
+Two major inferential paradigms are commonly used.
+
+### Frequentist inference.
+
+Here, the parameters of the model are treated as fixed but unknown constants. Randomness arises only from the repeated sampling of data. Estimation therefore focuses on identifying the single parameter values that best explain the observed data.
+
+### Bayesian inference.
+
+In the Bayesian framework, the data are treated as fixed once observed, and uncertainty is expressed through probability distributions over the parameters themselves. The aim is to describe this uncertainty before and after observing the data.
+
+Despite their conceptual differences, both approaches rely on the same fundamental building block: the likelihood.
+
+## The likelihood function
+
+The likelihood function quantifies how compatible a set of parameter values is with the observed data. It is derived from the assumed probability model for the measurements.
+
+Suppose resting heart rate in the trial is modelled as
+
+$$
+y_i \sim \mathcal{N}\left(\mu, \sigma^2\right),
+$$
+
+where $\mu$ is the population mean and $\sigma^2$ is the measurement variability. For a sample $y_1, \ldots, y_n$, the likelihood of $\mu$ is
+
+$$
+L(\mu)=\prod_{i=1}^n f\left(y_i \mid \mu\right),
+$$
+
+where $f(\cdot)$ is the Normal density. Although $f(\cdot)$ is interpreted as a probability density when viewed as a function of $y_i$, it becomes a likelihood when viewed as a function of $\mu$ with the data held fixed. Higher likelihood values indicate that a given value of $\mu$ provides a better explanation of the observed data.
+
+A simple example in R illustrates this idea:
+
+```{r}
+likelihood <- function(mu, y, sigma) {
+  prod(dnorm(y, mean = mu, sd = sigma))
+}
+
+set.seed(1)
+y <- rnorm(10, mean = 72, sd = 8)
+
+likelihood(70, y, sigma = 8) 
+likelihood(72, y, sigma = 8)  # larger: μ = 72 fits better
+
+```
+
+Because likelihoods often take extremely small values, it is common to work with the log-likelihood:
+
+$$
+\ell(\mu)=\log L(\mu)=-\frac{n}{2} \log \left(2 \pi \sigma^2\right)-\frac{1}{2 \sigma^2} \sum_{i=1}^n\left(y_i-\mu\right)^2 .
+$$
+
+```{r}
+library(ggplot2)
+
+set.seed(1)
+y <- rnorm(20, mean = 72, sd = 8)
+sigma <- 8
+
+# grid of candidate means
+mu_grid <- seq(60, 85, length.out = 400)
+
+# compute likelihood of each μ (up to a proportionality constant)
+lik_values <- sapply(mu_grid, function(mu) {
+  prod(dnorm(y, mean = mu, sd = sigma))
+})
+
+# normalise for visualisation
+lik_values_scaled <- lik_values / max(lik_values)
+
+df_lik <- data.frame(
+  mu   = mu_grid,
+  like = lik_values_scaled
+)
+
+ggplot(df_lik, aes(x = mu, y = like)) +
+  geom_line(linewidth = 1.4, color = "#ff7f0e") +
+  labs(
+    title = "Likelihood Function for μ",
+    x = expression(mu),
+    y = "Likelihood (scaled to 1)"
+  ) +
+  theme_minimal(base_size = 15) +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+
+```
+
+
+## Maximum likelihood estimation (MLE) One of the fundamental frequentist strategies is to choose the parameter value that maximises the likelihood:
+
+$$
+\hat{\mu}_{\mathrm{MLE}}=\arg \max _\mu L(\mu) .
+$$
+
+For the Normal model with known $\sigma$, the MLE has a closed form:
+
+$$
+\hat{\mu}_{\mathrm{MLE}}=\bar{y} .
+$$
+
+This result is intuitive: the value of $\mu$ that makes the observed data most probable is the sample mean.
+
+In R:
+
+```{r}
+ybar <- mean(y)
+ybar  # MLE of μ
+
+```
+
+For more complex models-such as logistic regression for event risk or hierarchical models describing physiological dependencies-likelihood maximisation may require numerical optimisation (e.g., via optim ( ) or specialized software). Regardless of complexity, the principle is the same: the best-fitting parameter values are those that produce the highest likelihood.
+
+The Bayesian approach, introduced in the next section, expands on this idea by combining the likelihood with prior information to produce a full posterior distribution over the parameters rather than a single best value.
+
+## Introducing Bayesian reasoning
+
+Bayesian modelling provides a coherent framework for reasoning under uncertainty, particularly in digital-health and wearable-sensor settings where physiological signals vary across individuals, time, and context. The central idea is that parameters—such as the average resting heart rate in a decentralised clinical trial—are treated as uncertain quantities, and this uncertainty is represented through probability distributions. Once the data have been collected, they are considered fixed, and all remaining uncertainty lies in the parameters themselves.
+
+This perspective contrasts with the frequentist view but relies on the same building blocks: a probabilistic model for the measurements and the likelihood. What distinguishes Bayesian reasoning is the explicit incorporation of prior knowledge and a formal rule for updating uncertainty as new data arrive.
+
+### Bayes Theorem
+
+Bayesian inference is grounded in a single identity-Bayes' theorem-which combines prior information with the likelihood contributed by the data:
+
+$$
+p(\theta \mid y)=\frac{p(y \mid \theta) p(\theta)}{p(y)} .
+$$
+
+Where: - $p(\theta)$ is the prior distribution, representing what is known (or assumed) before observing any wearable data; - $p(y \mid \theta)$ is the likelihood, describing how plausible the observed measurements are for different values of $\theta$; - $p(\theta \mid y)$ is the posterior distribution, reflecting updated beliefs after the data are observed; - $p(y)$ is the marginal likelihood, ensuring that the posterior integrates to one.
+
+In proportional form:
+
+$$
+p(\theta \mid y) \propto p(y \mid \theta) p(\theta),
+$$
+
+which makes Bayesian inference appear as a learning rule: new evidence reshapes prior beliefs.
+
+A small numerical example of Bayes' theorem in R To illustrate how Bayes' theorem works in practice, consider estimating the probability that a participant is highly frail after observing an elevated resting heart rate (\>85 bpm).
+
+We assume: - prior probability of high frailty: $p(F=1)=0.30$; - probability of high HR given frailty: $p(H R>85 \mid F=1)=0.55$; - probability of high HR given low frailty: $p(H R>85 \mid F=0)=0.12$.
+
+Using Bayes' rule:
+
+```{r}
+p_frail <- 0.30
+p_notfrail <- 1 - p_frail
+
+p_hr_given_frail <- 0.55
+p_hr_given_notfrail <- 0.12
+
+posterior <- (p_hr_given_frail * p_frail) /
+  (p_hr_given_frail * p_frail + p_hr_given_notfrail * p_notfrail)
+
+posterior
+
+```
+
+This calculation yields a posterior probability of approximately 66%, showing how relevant physiological evidence (elevated HR) increases our belief that an individual is frail.
+
+Bayesian updating in physiological monitoring This updating mechanism mirrors clinical reasoning. A clinician assessing resting heart rate or HRV carries implicit prior expectations (based on age, frailty, or inflammatory status) and adjusts these expectations as new wearable-sensor data accumulate. Bayesian models offer a transparent and principled way to represent this process. Priors stabilise inference when data are sparse or noisy; as evidence grows, the likelihood takes over and the posterior becomes increasingly data-driven.
+
+To illustrate Bayesian updating more formally, consider estimating the mean resting heart rate $\mu$ in the trial. Assume that the observed values $y_1, \ldots, y_n$ follow a Normal model with known measurement variability. A prior distribution encodes initial beliefs about $\mu_1$, and the wearable data update these beliefs through the likelihood, yielding a posterior distribution.
+
+The figure below shows the prior, the likelihood scaled for comparison, and the posterior.
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+set.seed(42)
+
+# -------------------------------------
+# Simulated dataset (resting heart rate)
+# -------------------------------------
+y <- rnorm(50, mean = 72, sd = 8)
+n  <- length(y)
+ybar <- mean(y)
+sigma <- 8  # assumed known measurement variability
+
+# -------------------------------------
+# Prior: μ ~ Normal(70, 10^2)
+# -------------------------------------
+mu_prior_mean <- 70
+mu_prior_sd   <- 10
+
+# -------------------------------------
+# Posterior parameters (Normal-Normal updating)
+# -------------------------------------
+posterior_mean <- ( (mu_prior_mean / mu_prior_sd^2) + (n * ybar / sigma^2) ) /
+                  ( (1 / mu_prior_sd^2) + (n / sigma^2) )
+
+posterior_sd <- sqrt( 1 / ( (1 / mu_prior_sd^2) + (n / sigma^2) ) )
+
+# -------------------------------------
+# Build grid
+# -------------------------------------
+grid <- seq(50, 90, length.out = 800)
+
+prior_density      <- dnorm(grid, mu_prior_mean,   mu_prior_sd)
+posterior_density  <- dnorm(grid, posterior_mean, posterior_sd)
+
+# Likelihood of μ (scaled for plotting)
+likelihood_raw <- dnorm(ybar, mean = grid, sd = sigma/sqrt(n))
+likelihood_density <- likelihood_raw / max(likelihood_raw) * max(prior_density)
+
+# -------------------------------------
+# Build tidy dataframe
+# -------------------------------------
+df <- data.frame(
+  mu = grid,
+  Prior      = prior_density,
+  Likelihood = likelihood_density,
+  Posterior  = posterior_density
+) |>
+  pivot_longer(cols = c("Prior", "Likelihood", "Posterior"),
+               names_to = "Distribution",
+               values_to = "Density")
+
+# -------------------------------------
+# ggplot
+# -------------------------------------
+ggplot(df, aes(x = mu, y = Density, color = Distribution)) +
+  geom_line(linewidth = 1.4) +
+  scale_color_manual(values = c(
+    "Prior" = "#1f77b4",
+    "Likelihood" = "#ff7f0e",
+    "Posterior" = "#2ca02c"
+  )) +
+  labs(
+    title = "Bayesian Updating: Prior, Likelihood, and Posterior",
+    x = expression(mu),
+    y = "Density (scaled)"
+  ) +
+  theme_minimal(base_size = 15) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    legend.position = "top",
+    legend.title = element_blank()
+  )
+
+```
+
+## Bayesian linear regression
+
+Once we understand Bayesian updating in the one-parameter case, the next step is to extend the framework to regression. Regression is a natural modelling tool in decentralised clinical trials: we may wish to quantify how frailty influences resting heart rate, how inflammation shifts HRV, or how physiological variables interact.
+
+In the frequentist framework, a regression yields point estimates of the regression coefficients. In the Bayesian framework, these coefficients—now denoted by weights w are treated as uncertain quantities with full posterior distributions.
+
+This section introduces Bayesian linear regression using the wearable dataset and compares it to classical (frequentist) regression while highlighting conceptual and interpretational differences.
+
+### Frequentist vs Bayesian Regression
+
+A simple linear model for resting heart rate may be written as:
+
+$$
+\mathrm{HR}_i=w_0+w_1 \cdot \text { frailty }_i+\varepsilon_i, \quad \varepsilon_i \sim \mathcal{N}\left(0, \sigma^2\right) .
+$$
+
+Frequentist OLS: - The weights $w_0$ and $w_1$ are fixed but unknown constants. - Data are random due to sampling variability. - Estimates $\hat{w}_0, \hat{w}_1$ maximise the likelihood. - Uncertainty is summarised via confidence intervals and p-values.
+
+Bayesian regression: - Data are fixed once observed. - The weights $w_0, w_1$ and variance $\sigma^2$ are uncertain, with probability distributions. - The inferential target is the posterior:
+
+$$
+p\left(w_0, w_1, \sigma \mid y, x\right),
+$$
+
+which describes all plausible values for the weights given the data and prior assumptions.
+
+This allows Bayesian models to answer questions that classical models cannot-e.g., "What is the probability that frailty increases resting heart rate?" (i.e., $\operatorname{Pr}\left(w_1>0 \mid\right.$ data))
+
+### Frequentist Regression Example
+
+We begin with a traditional OLS model:
+
+```{r}
+fit_lm <- lm(resting_hr ~ frailty, data = wearable_complete)
+summary(fit_lm)
+
+```
+
+This output includes: - point estimates for $w_0$ and $w_1$; - standard errors; - p-values; - confidence intervals.
+
+These objects quantify sampling variability, but they do not provide probability statements about the weights themselves.
+
+## Bayesian Linear Regression Model Specification
+
+Before fitting the Bayesian model, we explicitly state the probabilistic structure. For each individual $i$ in the decentralised clinical trial, resting heart rate is modeled as
+
+$$
+\mathrm{HR}_i \sim \mathcal{N}\left(w_0+w_1 \text { frailty }_i, \sigma^2\right) .
+$$
+
+The Bayesian formulation assigns prior distributions to all unknown quantities:
+
+$$
+w_0 \sim \mathcal{N}\left(60,20^2\right), \quad w_1 \sim \mathcal{N}\left(0,20^2\right), \quad \sigma \sim \text { HalfNormal }(10) .
+$$
+
+These priors represent weak prior beliefs about baseline heart rate (around 60 bpm), an uncertain association between frailty and heart rate, and a plausible scale for residual variability.
+
+Given the data $\left(y_i, x_i\right)$, Bayes' theorem yields a posterior distribution:
+
+$$
+p\left(w_0, w_1, \sigma \mid y, x\right) \propto p\left(y \mid w_0, w_1, \sigma, x\right) p\left(w_0\right) p\left(w_1\right) p(\sigma) .
+$$
+
+This posterior cannot be computed analytically; instead, it is approximated using Markov Chain Monte Carlo (MCMC), as implemented in rstanarm::stan_glm().
+
+```{r}
+# Refit Bayesian model (must run BEFORE posterior extraction)
+library(rstanarm)
+
+fit_bayes <- stan_glm(
+  resting_hr ~ frailty,
+  data = wearable_complete,
+  prior = normal(0, 20),               # prior for w1
+  prior_intercept = normal(60, 20),    # prior for w0
+  chains = 2, iter = 2000, refresh = 0
+)
+print(fit_bayes)
+
+```
+
+### Understanding MCMC: how Bayesian posteriors are computed
+
+Until now the Bayesian examples relied on stan_glm( ), which conveniently returns draws from the posterior. Behind this simplicity is an important computational idea: Monte Carlo sampling via Markov chains (MCMC).
+
+In most realistic models-including regressions, hierarchical structures, or logistic models-the posterior distribution has no closed-form solution. Bayes' theorem still holds, but the expression
+
+$$
+p\left(w_0, w_1, \sigma \mid y, x\right)
+$$
+
+cannot be written analytically. MCMC approximates this distribution by generating samples:
+
+$$
+\left\{w^{(1)}, w^{(2)}, \ldots, w^{(S)}\right\} \sim p(w \mid y) .
+$$
+
+These samples allow the computation of: - posterior means and medians - credible intervals - probabilities such as $P\left(w_1>0 \mid\right.$ data $)$ - predictive distributions
+
+### The Stan approach: Hamiltonian Monte Carlo (HMC)
+
+The rstanarm package relies on Stan, which implements Hamiltonian Monte Carlo (HMC) - an efficient MCMC algorithm that avoids slow random-walk behaviour.
+
+Stan returns: - multiple chains - thousands of posterior draws - diagnostics for convergence
+
+This ensures highly reliable approximations to the posterior.
+
+### Inspecting the MCMC samples
+
+```{r}
+posterior <- as.data.frame(fit_bayes)
+head(posterior)
+
+```
+
+Each row is one posterior draw; each column corresponds to a parameter ( w0 , w1 , sigma ). Posterior probability that $w_1>0$
+
+```{r}
+  mean(posterior$frailty > 0)
+
+```
+
+Interpretation:
+
+“Given the data and the priors, the probability that frailty increases resting HR is 1%.”
+
+A frequentist model cannot provide this probability.
+
+### MCMC Diagnostics
+
+Evaluating MCMC convergence is essential. \#### Trace plots
+
+Trace plots show parameter trajectories across iterations. Good chains look like overlapping "hairy caterpillars".
+
+```{r}
+library(bayesplot)
+
+mcmc_trace(as.array(fit_bayes), pars = c("(Intercept)", "frailty"))
+
+```
+
+Expected behaviour:
+
+-   chains overlap
+
+-   no visible upward/downward drift
+
+-   no sticking
+
+Additional diagnostic plots:
+
+```{r}
+posterior_draws <- as.array(fit_bayes)
+
+mcmc_trace(posterior_draws, pars = c("(Intercept)", "frailty"))
+mcmc_dens_overlay(posterior_draws, pars = c("(Intercept)", "frailty"))
+mcmc_acf(posterior_draws, pars = c("(Intercept)", "frailty"))
+
+```
+
+#### R-hat (Gelman–Rubin diagnostic)
+
+R-hat close to 1 (≤ 1.01) indicates convergence.
+
+```{r}
+rhat_values <- rstan::summary(fit_bayes$stanfit)$summary[ , "Rhat"]
+rhat_values
+```
+
+### Interpretation of Posterior Weights
+
+#### Interpretation of $w_0$ (Intercept)
+
+Posterior median around 51.7 bpm, with low uncertainty. Represents predicted resting HR when frailty $=0$ (least frail individuals).
+
+#### Interpretation of $w_1$ (Frailty effect)
+
+Posterior median % 46 bpm increase per 1-unit increase in frailty. Credible interval entirely above zero ⇒ very strong evidence of a positive association. \#### Noise parameter $\sigma$ Posterior median $\boldsymbol{\approx} \mathbf{1 1 . 2 ~ b p m}$, consistent with simulated residual noise.
+
+### Posteriors of the weights
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+posterior <- as.data.frame(fit_bayes)
+
+posterior <- posterior |> 
+  rename(
+    w0 = `(Intercept)`,
+    w1 = frailty
+  ) |>
+  select(w0, w1) |>
+  pivot_longer(cols = everything(),
+               names_to = "weight",
+               values_to = "value")
+
+posterior$weight <- factor(
+  posterior$weight,
+  levels = c("w0", "w1"),
+  labels = c("w₀ (Intercept)", "w₁ (Effect of Frailty)")
+)
+
+ggplot(posterior, aes(x = value, fill = weight)) +
+  geom_density(alpha = 0.6) +
+  facet_wrap(~ weight, scales = "free", ncol = 2) +
+  geom_vline(xintercept = 0, color = "red", linetype = "dashed") +
+  scale_fill_manual(values = c("#8dbdff", "#95d0a3")) +
+  labs(
+    title = "Posterior Distributions of Regression Weights",
+    x = "Weight value",
+    y = "Density"
+  ) +
+  theme_minimal(base_size = 15) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    legend.position = "none"
+  )
+
+```
+
+### Credible Intervals vs Confidence Intervals
+
+A 95% Bayesian credible interval means: There is a 95% probability that the true weight lies in this interval, given the data and the priors.
+
+A 95% frequentist confidence interval means: If we repeated the experiment infinitely many times, $95 \%$ of the computed intervals would contain the true value.
+
+It does not express probability about the parameter.
+
+### Frequentist vs Bayesian comparison table
+
+| Concept | Bayesian credible interval | Frequentist confidence interval |
+|-------------------|-------------------|-----------------------------------|
+| What is uncertain? | The parameter (w) | The interval |
+| Interpretation | $Prob((w) in interval | data)$ | 95% of intervals would contain (w) under repeated sampling |
+| Depends on prior? | Yes | No |
+| Can answer “Is (w_1 \> 0)?” | **Yes** | No |
+
+## Posterior distributions and treatment of pure risk measures
+
+Before introducing how Bayesian posterior distributions help quantify clinical risk, it is useful to clarify what we mean by risk in the first place. In clinical and digital-health settings, risk typically refers to the probability that an adverse outcome will occur. Whether the outcome is deterioration, infection, hospitalisation, or early physiological instability, the risk attached to a participant is fundamentally a probability statement. A higher probability indicates greater uncertainty about the future—but in a clinically dangerous direction.
+
+Probability is therefore a natural mathematical language for expressing risk. If a model gives a participant a 25% deterioration probability, we can interpret this directly: out of many individuals with similar physiology, about one in four would be expected to deteriorate. When probability distributions themselves are uncertain—because data are limited, noisy, or highly variable—the model should express that uncertainty as well. This is where Bayesian methods excel: rather than producing a single risk estimate, they produce an entire distribution describing all plausible values of that risk.
+
+From this perspective, Bayesian models do not simply output numbers; they yield risk objects: posterior distributions over clinically meaningful quantities. These risk objects fully encode our uncertainty, allow us to compute thresholds, credible intervals, and tail probabilities, and directly address the kinds of questions clinicians ask: “How likely is it that this participant will deteriorate?”, “What is the uncertainty around this risk?”, and “How does new data update that risk?”
+
+### Why Bayesian risk modelling is more intuitive
+
+Risk measures are probabilities by definition or imply the usage of a precise measure of risk.
+
+A Bayesian posterior distribution gives probability statements about: - the likelihood that a physiologic burden exceed the threshold - the probability that a digital biomarker crosses a critical clinical value - the probability that an individual will experience an event, given their physiology - the probability that a model weight (such as the frailty effect) is positive or negative - the full predictive distribution of outcomes for a new patient
+
+These are direct expressions of uncertainty, not the indirect repeated-sampling logic of frequentist inference.
+
+For example: - A clinician does not want to know whether the association between HRV and adverse events is "significant at 0.05". - They want to know: "What is the probability that this participant experiences an event within the next 7 days?" Posterior distributions answer these questions immediately.
+
+### Bayesian modelling of event risk in the wearable-sensor dataset
+
+In the DCT dataset used in this chapter, each participant has a simulated probability of deterioration ( event_risk ) influenced by: - frailty - stress score - inflammation - age
+
+A fully **Bayesian logistic regression** model treats these risk contributions as uncertain and estimates directly the posterior distribution of the probability:
+
+$$
+P\left(\text { event }_i=1 \mid \text { physiology }_i, \text { data }\right) .
+$$
+
+The output is a distribution for each participant's risk, not a single number. Thus we can compute: - posterior mean risk - posterior credible intervals for the risk - posterior probability that risk exceeds a clinically important threshold
+
+For example, after fitting a Bayesian logistic model:
+
+```{r}
+# Bayesian event-risk model
+library(rstanarm)
+
+fit_event <- stan_glm(
+  event_occurred ~ stress_score + frailty + age + baseline_inflammation,
+  data = wearable_complete,
+  family = binomial(link = "logit"),
+  prior = normal(0, 2),
+  prior_intercept = normal(0, 5),
+  chains = 2, iter = 2000, refresh = 0
+)
+
+```
+
+We can obtain the posterior distribution of risk for any participant:
+
+```{r}
+# posterior risk for the first patient
+posterior_risk <- posterior_epred(fit_event)[ , 1]
+
+
+```
+
+Each of these directly addresses clinical or monitoring questions: - "What is the probability that this participant's true risk exceeds a critical threshold?" - "What is the $95 \%$ credible interval for the deterioration risk?" - "How uncertain are we about the risk estimate itself?"
+
+These are quantities clinicians can reason about naturally. Posterior predictive distributions as risk objects Bayesian models provide not only parameter posteriors but also posterior predictive distributions, which are essential in risk modelling. For a future observation:
+
+$$
+y_{\text {new }} \sim p\left(y_{\text {new }} \mid x_{\text {new }}, \text { data }\right),
+$$
+
+we can simulate entire distributions of likely outcomes.
+
+For a new participant with given physiology:
+
+```{r}
+new_patient <- data.frame(
+  age                  = 72,
+  baseline_inflammation = 4.1,
+  frailty              = 0.55,
+  resting_hr           = 82,
+  hrv                  = 45,
+  skin_temp            = 33.8,
+  activity_index       = 52,
+  stress_score         = 67
+)
+
+
+# Posterior event probability draws
+posterior_prob <- posterior_epred(fit_event, newdata = new_patient)
+
+# Summary
+mean_risk <- mean(posterior_prob)
+quantile_risk <- quantile(posterior_prob, c(0.025, 0.5, 0.975))
+
+mean_risk
+quantile_risk
+
+# Posterior predictive binary outcomes
+pp <- posterior_predict(fit_event, newdata = new_patient)
+
+# Summaries
+table(pp)
+mean(pp)   # predictive event probability
+
+
+```
+
+The previous code block computes posterior event-risk estimates for a new participant by passing their clinical and wearable-sensor profile through the Bayesian logistic regression model. For illustration, consider the following patient:
+
+-   age $=72$
+
+-   baseline inflammation = 4.1
+
+-   frailty $=0.55$
+
+-   resting $\mathrm{HR}=82 \mathrm{bpm}$
+
+-   HRV $=45 \mathrm{~ms}$
+
+-   skin temperature $=33.8^{\circ} \mathrm{C}$
+
+-   activity index = 52
+
+-   stress score $=67$
+
+Using the fitted Bayesian model, the posterior distribution for this patient's event probability is extremely concentrated near 1 . The posterior mean risk is approximately 0.99 , with a $95 \%$ credible interval spanning roughly 0.97-0.999. This reflects very strong evidence-given the model, data, and priors-that the patient belongs to a highrisk profile.
+
+The posterior predictive distribution (which generates full simulated outcomes rather than probabilities) tells the same story. Across 2,000 posterior predictive draws, 1,974 simulated outcomes were events and 26 were non-events, yielding a predictive event rate of about 0.987 .
+
+Both summaries communicate the same conclusion: given this physiological and clinical profile, the model assigns an extremely high probability of deterioration.
+
+## Bayesian tree models
+
+Up to this point we focused on Bayesian regression, where relationships between predictors and outcomes are represented through linear weights. However, physiological data collected in decentralised trials often involve nonlinear effects, threshold behaviours, and interactions that are difficult to capture with simple parametric models.
+
+Decision trees and random forests (introduced earlier in the course) address this by partitioning the predictor space into regions and fitting simple models within each leaf. Bayesian tree models follow the same philosophy but add a fully probabilistic framework, yielding posterior uncertainty, credible intervals for predictions, and principled regularisation.
+
+Among such models, the most widely used is BART - Bayesian Additive Regression Trees.
+
+The BART Model BART represents the response as a sum of many small regression trees:
+
+$$
+y_i=\sum_{t=1}^m g\left(x_i ; T_t, M_t\right)+\varepsilon_i, \quad \varepsilon_i \sim \mathcal{N}\left(0, \sigma^2\right) .
+$$
+
+Each component includes:
+
+-   $T_t$ : the structure of the $t$-th tree (its splits),
+
+-   $M_t$ : the set of leaf parameters for that tree,
+
+\- $g(\cdot)$ : a function that assigns the appropriate leaf mean to input $x_i$.
+
+The Bayesian specification places priors on all unknowns:
+
+1\. Tree structure prior
+
+Shallow trees are favoured. For a node at depth $d$ :
+
+$$
+p(\text { node splits })=\alpha(1+d)^{-\beta},
+$$
+
+$$
+p(\text { node splits })=\alpha(1+d)^{-\beta},
+$$
+
+encouraging regularization via many small trees.
+
+2\. Leaf parameter priors
+
+$$
+\mu_{t \ell} \sim \mathcal{N}\left(0, \tau^2 / m\right),
+$$
+
+where $m$ is the total number of trees (often 50-200), and $\tau$ controls shrinkage. 3. Error variance prior
+
+$$
+\sigma^2 \sim \operatorname{Inverse-Gamma}(\nu / 2, \nu \lambda / 2) .
+$$
+
+Together, these priors ensure that no single tree dominates; instead, the model builds a smooth ensemble whose posterior is sampled via MCMC.
+
+The resulting posterior is:
+
+$$
+p\left(T_1, M_1, \ldots, T_m, M_m, \sigma \mid y, X\right)
+$$
+
+and predictions are obtained by averaging over thousands of posterior tree ensembles.
+
+### BART possibilities
+
+Bayesian Additive Regression Trees offer a natural extension of Bayesian modelling when physiological relationships become too irregular, nonlinear, or interaction-driven for simple regression to capture. In decentralised clinical-trial datasets, wearable signals often show threshold behaviour—resting heart rate may rise smoothly with frailty until a particular physiological burden is reached, after which the change accelerates sharply. Skin temperature may react differently depending on whether inflammation is mild or severe, and HRV frequently interacts with both age and frailty in ways that defy linear specification. Models that assume a single straight-line relationship can miss these patterns.
+
+This is precisely where BART excels. Instead of committing to one functional form, BART models the outcome as the sum of many small regression trees, each capturing a different local pattern in the data. The ensemble adapts automatically to nonlinearity, varying slopes, threshold effects, and interactions—without requiring the analyst to specify those structures in advance. Because the model is Bayesian, every prediction comes with a full posterior distribution. This allows us to express questions in clinically meaningful terms: not only *what is the predicted event risk for this participant*, but *how certain are we about that risk*, taking into account all nonlinear physiological interactions implied by the data.
+
+In contrast to the linear Bayesian model introduced earlier—which focuses on uncertainty about specific regression weights such as w1w_1w1​—BART centres its uncertainty on the *predictions themselves*. This shift often aligns more naturally with clinical decision-making. For example, instead of asking whether frailty has a positive effect on resting heart rate, a BART model directly answers questions such as: *Given the full physiological profile of a participant, what is the posterior distribution of their probability of deterioration?* In digital-health applications where risk stratification matters more than explicit coefficient interpretation, BART provides a flexible, uncertainty-aware alternative.
+
+### Fitting BART with R
+
+```{r}
+#install.packages("dbarts")
+library(dbarts)
+
+X <- wearable_complete[, c("frailty", "baseline_inflammation")]
+y <- wearable_complete$resting_hr
+
+bart_fit <- dbarts::bart(
+  x.train = X,
+  y.train = y,
+  ntree   = 50,      # number of trees
+  ndpost  = 2000,    # posterior draws
+  nskip   = 1000,    # burn-in
+  keeptrees = TRUE
+)
+
+
+
+```
+
+```{r}
+# posterior predictions for the training data
+bart_pred <- bart_fit$yhat.train
+
+# posterior mean and 95% credible interval for first individual
+mean_pred <- mean(bart_pred[, 1])
+ci_pred   <- quantile(bart_pred[, 1], c(0.025, 0.975))
+
+mean_pred
+ci_pred
+
+```
+
+In the previous section we introduced Bayesian Additive Regression Trees (BART) as a flexible, fully Bayesian non-parametric regression model. After fitting the model with the wearable-sensor features frailty and baseline_inflammation as predictors of resting_hr, the BART sampler produced 2,000 posterior draws after a 1,000-iteration burn-in phase. These draws represent the posterior uncertainty over the entire ensemble of regression trees.
+
+BART naturally provides posterior predictive samples for each individual in the dataset. Extracting these samples allows us to summarise the expected resting heart rate for any participant and to compute uncertainty bands directly from the posterior.
+
+For illustration, the following summary corresponds to the first participant in the dataset:
+
+-   Posterior mean prediction: approximately 78.3 bpm
+
+-   95% posterior credible interval: \[74.3, 82.5\] bpm
+
+This interval quantifies genuine uncertainty about the individual's true resting heart rate under the model—incorporating nonlinear effects, interactions, and the full posterior over tree structures. Unlike classical intervals derived from linear regression, BART’s uncertainty directly reflects the model’s flexibility and the posterior distribution of all trees.
+
+These posterior predictive summaries are directly usable in clinical decision-support settings. Instead of producing a single point forecast, BART offers a full distribution describing all plausible physiological values, making it naturally aligned with risk-aware modelling of wearable-trial data.
+
+## Bayesian Tree Models: Complementing Random Forests and XGBoost
+
+In the previous chapter we examined classical tree-based ensemble methods — Random Forests and Gradient Boosted Trees (XGBoost). Both approaches achieve strong predictive performance by aggregating many simple decision trees, and both are well suited to nonlinearities and complex interaction structures commonly observed in wearable-derived physiological signals. What they do not provide, however, is a coherent way to quantify uncertainty. Their predictions are deterministic functions of the training sample, and uncertainty must be approximated through ad-hoc resampling or assumptions that do not fully reflect the model structure.
+
+Bayesian Additive Regression Trees (BART) extends the same foundational idea — representing a regression function as the sum of many small trees — but places the entire ensemble inside a Bayesian framework. This makes BART particularly appealing for clinical and digital-health applications, where risk quantification, uncertainty intervals, and probability statements are more clinically meaningful than point estimates alone.
+
+Revisiting the Structure of a Tree Ensemble Random Forests and XGBoost rely on a common representation:
+
+$$
+f(x)=\sum_{t=1}^m g\left(x ; T_t, M_t\right),
+$$
+
+where each $T_t$ defines a set of splits, and the leaf parameters $M_t$ give the predicted value within each region. These methods differ in how the trees are constructed - RF uses bootstrap samples and decorrelated predictors, XGBoost uses sequential boosting - but the structure is always an additive sum of trees.
+
+BART adopts exactly the same form, but interprets all unknowns as random variables with prior distributions. Instead of producing a single fitted ensemble, BART samples thousands of different ensembles from the posterior, each a plausible explanation of the data. This makes its predictions **inherently probabilistic.**
+
+Why BART is Different Where Random Forests and XGBoost return a single prediction, BART returns a posterior predictive distribution. For every participant in a decentralised trial, we obtain a distribution of likely physiological values or event risks, not just a central estimate.
+
+This improves modelling in several ways: - nonlinearities such as abrupt increases in resting HR at high frailty levels are learned in a fully datadriven way; - interactions among physiology measures emerge naturally (e.g., inflammation modifying the effect of frailty); - uncertainty is preserved and propagated through all layers of the model, making predictions interpretable as risk distributions rather than isolated numbers.
+
+In contexts where clinical decisions depend not only on expected values but on the range of plausible outcomes, BART offers a more intuitive probabilistic interpretation than traditional ensembles.
+
+### Running RF and Xgboosst
+
+```{r}
+library(randomForest)
+library(xgboost)
+
+# Random Forest model
+rf_fit <- randomForest(
+  x = X, y = y,
+  ntree = 500,
+  mtry  = 2
+)
+
+# XGBoost model
+dmat <- xgb.DMatrix(data = as.matrix(X), label = y)
+
+xgb_fit <- xgboost(
+  data = dmat,
+  objective = "reg:squarederror",
+  nrounds = 300,
+  eta = 0.05,
+  max_depth = 3,
+  verbose = 0
+)
+
+rf_pred  <- predict(rf_fit, X)
+xgb_pred <- predict(xgb_fit, as.matrix(X))
+
+```
+
+```{r}
+# RMSE helper
+rmse <- function(truth, pred) {
+  sqrt(mean((truth - pred)^2))
+}
+
+# BART posterior mean prediction for each individual
+bart_mean_pred <- rowMeans(bart_pred)
+
+# RMSEs
+rmse_bart <- rmse(y, bart_mean_pred)
+rmse_rf   <- rmse(y, rf_pred)
+rmse_xgb  <- rmse(y, xgb_pred)
+
+rmse_bart
+rmse_rf
+rmse_xgb
+
+```
+
+| Model | RMSE (↓ better) | Handles Nonlinearity | Uncertainty Quantification | Interactions Automatically | Posterior Predictive Dist. | Notes |
+|-----------|-----------|-----------|-----------|-----------|-----------|-----------|
+| **BART** | **12.89** | Yes | **Full posterior** | Yes | **Yes** | Lower accuracy but richest uncertainty + Bayesian structure |
+| **Random Forest** | **4.35** | Yes | No | Yes | No | Best predictive RMSE but no probabilistic interpretation |
+| **XGBoost** | **6.35** | Yes | No | Yes (via splits) | No | Strong performance, tunable, deterministic |
+
+
+Although Random Forests and XGBoost do not provide native posterior uncertainty, approximate measures can sometimes be obtained through resampling. In practice this is typically done by:
+
+Bootstrapping the training data (fit many RF/XGB models on resampled datasets)
+
+Estimating variability across predictions
+
+However, these procedures are not Bayesian, they do not propagate structural model uncertainty, and they lack a coherent probabilistic interpretation. The resulting intervals are often wider, unstable, or sensitive to tuning choices. This stands in contrast to BART, where uncertainty arises directly from the posterior distribution over entire ensembles of trees.

@@ -1,0 +1,2037 @@
+---
+title: "High Dimension Data Strategies"
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+## Motivational example
+
+```{r, include=FALSE,echo=FALSE,warning=FALSE,eval=FALSE,message=FALSE}
+# ------------------------------------------------------------
+# Simulated High-Dimensional Dermatology Dataset
+# Psoriasis patients treated with anti–IL-17 biologics
+# ------------------------------------------------------------
+
+set.seed(1234)
+
+# Number of patients
+n <- 200
+
+# ------------------------------------------------------------
+# 1. Genomic block (1,500 genes)
+# Two latent genomic signatures:
+#  - G1: inflammatory axis (IL17/IL23 pathway)
+#  - G2: barrier/keratinocyte differentiation
+# ------------------------------------------------------------
+
+latent_G1 <- rnorm(n, 0, 1)
+latent_G2 <- rnorm(n, 0, 1)
+
+# gene loadings
+G1_load <- matrix(rnorm(1500, 0.7, 0.2), nrow = n, ncol = 1500, byrow = TRUE)
+G2_load <- matrix(rnorm(1500, 0.7, 0.2), nrow = n, ncol = 1500, byrow = TRUE)
+
+Gene_block <- latent_G1 * G1_load + latent_G2 * G2_load + 
+  matrix(rnorm(n*1500, 0, 0.5), n, 1500)
+
+colnames(Gene_block) <- paste0("gene_", 1:1500)
+
+# ------------------------------------------------------------
+# 2. Microbiome (300 ASVs collapsed)
+# Two microbial communities:
+#   M1 = dysbiotic signature
+#   M2 = commensal-dominant signature
+# ------------------------------------------------------------
+
+latent_M1 <- rnorm(n, 0, 1)
+latent_M2 <- rnorm(n, 0, 1)
+
+ASV_load1 <- matrix(rnorm(300, 0.5, 0.1), nrow = n, ncol = 300, byrow = TRUE)
+ASV_load2 <- matrix(rnorm(300, 0.5, 0.1), nrow = n, ncol = 300, byrow = TRUE)
+
+Microbiome_block <- latent_M1 * ASV_load1 + latent_M2 * ASV_load2 +
+  matrix(rnorm(n*300, 0, 0.5), n, 300)
+
+colnames(Microbiome_block) <- paste0("ASV_", 1:300)
+
+# ------------------------------------------------------------
+# 3. Exposome (30 variables: pollution, UV, humidity, etc.)
+# ------------------------------------------------------------
+
+Exposome_block <- data.frame(
+  NO2 = rnorm(n, 25, 8),
+  PM10 = rnorm(n, 18, 6),
+  UV_index = rnorm(n, 4, 1),
+  temperature = rnorm(n, 15, 5),
+  humidity = rnorm(n, 60, 12)
+)
+
+# Fill remaining variables
+for(i in 6:30){
+  Exposome_block[[paste0("expo_", i)]] <- rnorm(n, 0, 1)
+}
+
+# ------------------------------------------------------------
+# 4. Biomarkers (20 vars: PASI baseline, DLQI, cytokines)
+# ------------------------------------------------------------
+
+Biomarkers_block <- data.frame(
+  PASI_baseline = rnorm(n, 12, 3),
+  DLQI = rnorm(n, 8, 4)
+)
+
+# Cytokines (IL17, IL23, TNF, IL-6 etc.)
+for(i in 1:18){
+  Biomarkers_block[[paste0("cytokine_", i)]] <-
+    2*latent_G1 + rnorm(n, 0, 1)
+}
+
+# ------------------------------------------------------------
+# 5. Outcome – PASI reduction after 12 weeks
+# Influenced by:
+#  - genomic inflammation (G1)
+#  - microbiome dysbiosis (M1)
+#  - exposome (pollution worsens response)
+#  - random noise
+# ------------------------------------------------------------
+
+Outcome <-  -2*latent_G1 + 
+            1.5*latent_M1 -
+            0.5*Exposome_block$NO2 + 
+            rnorm(n, 0, 1)
+
+# Scale to "ΔPASI" reasonable range
+Outcome <- 20 + Outcome + rnorm(n, 0, 3)
+
+# ------------------------------------------------------------
+# Final dataset assembly
+# ------------------------------------------------------------
+
+Dermato_ATT <- data.frame(
+  patient_id = paste0("P", 1:n),
+  Outcome_PASI12 = Outcome,
+  Biomarkers_block,
+  Exposome_block,
+  Gene_block,
+  Microbiome_block
+)
+
+# ------------------------------------------------------------
+# Save dataset
+# ------------------------------------------------------------
+
+saveRDS(Dermato_ATT, "data/Dermato_ATT_simulated.rds")
+
+# ------------------------------------------------------------
+# Reload example
+# ------------------------------------------------------------
+
+# data <- readRDS("Dermato_ATT_simulated.rds")
+# str(data)
+
+```
+
+To anchor the ideas in this chapter, we begin with a example dataset inspired by advanced therapeutic technologies in dermatology. The clinical setting is moderate-to-severe psoriasis, a chronic inflammatory skin disease characterised by keratinocyte hyperproliferation, immune dysregulation involving the IL-17/IL-23 axis, and substantial patient-to-patient heterogeneity. Psoriasis is particularly well suited for illustrating high-dimensional data challenges because its biology spans multiple layers: immune signalling in the skin, microbial community shifts, and environmental triggers that modulate disease activity.
+
+Imagine a cohort of patients who initiate treatment with an anti–IL-17 biologic. Before therapy begins, an extensive set of measurements is collected. These measurements include gene expression profiles from lesional skin—about fifteen hundred genes capturing inflammatory pathways, barrier function, and cellular differentiation. Each gene defines one axis in the data space, and the genomics block alone positions each patient as a point in a fifteen-hundred-dimensional cloud.
+
+Alongside the genomic layer, the dataset incorporates three hundred features derived from the skin microbiome. These represent aggregated amplicon sequence variants describing the relative abundance of microbial taxa. Psoriasis frequently shows alterations in the cutaneous microbiota, with some patients displaying a more dysbiotic pattern and others retaining a commensal-dominant profile. These microbial dimensions interact with, but do not mirror, the genomic axes, increasing the complexity of the data geometry.
+
+To capture external influences, the dataset includes environmental exposure variables such as NO₂, PM₁₀, ultraviolet index, local temperature, and humidity. Psoriasis severity and treatment response often fluctuate with environmental and seasonal factors, and this exposome block provides a complementary source of structured variability.
+
+Clinical and biochemical markers provide additional anchors to the dataset: baseline PASI scores, dermatology-specific quality-of-life indices, and a panel of cytokines reflecting local immune activation. These lower-dimensional features help ground the high-dimensional layers in clinically interpretable signals.
+
+The outcome of interest is the change in PASI after twelve weeks of therapy. This continuous measurement captures individual response to treatment and allows us to relate the high-dimensional predictors to a meaningful clinical endpoint.
+
+This dataset is intentionally heterogeneous and high dimensional, placing each patient in a space with nearly two thousand axes. As we move to the next section, this geometric perspective motivates the need to reduce dimensionality: high-dimensional spaces behave counterintuitively, distances become unstable, and noisy or redundant variables obscure meaningful structure. The challenges of this dataset naturally set the stage for understanding the curse of dimensionality and why dimensionality reduction becomes essential.
+
+```{r}
+library(dplyr)
+ df<- readRDS("~/att_ai_ml/data/Dermato_ATT_simulated.rds")
+ str(df)
+```
+
+## What is a dimension?
+
+In short a dimension is each of the features present in a dataset. In other words the dimension of a dataset is identical to the number of variables (or columns) it contains.
+
+When working with multivariate datasets, it is often helpful to visualize how observations occupy space when only a handful of dimensions are considered. Although we cannot directly visualize the genomic, microbial, and exposome components of the psoriasis dataset—which together span nearly two thousand axes—we *can* project selected pairs or triplets of variables into two- or three-dimensional plots. These visualizations help reinforce the geometric interpretation of dimensions introduced above.
+
+In low dimensions, distance, neighbourhood structure, and separation between patients behave intuitively. As more variables are added, this intuition quickly breaks down. Before we explore why this happens, the examples below illustrate how a dataset “looks” when restricted to two and three axes. These small visual slices help anchor the abstract notion of dimensions in concrete graphics.
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(plotly)
+ggplot(df, aes(x = PASI_baseline,
+               y = NO2,
+               colour = Outcome_PASI12)) +
+  geom_point(alpha = 0.8, size = 2) +
+  scale_colour_viridis_c(option = "C") +
+  labs(title = "Patients represented in two dimensions",
+       x = "Baseline PASI",
+       y = "NO₂ exposure",
+       colour = "ΔPASI 12 weeks") +
+  theme_minimal(base_size = 14)
+
+```
+
+This 2D view shows how each variable defines one axis in the space.\
+
+In reality, the dataset contains thousands of such axes simultaneously—something impossible to visualize directly, but essential for understanding the geometry of high-dimensional data.
+
+With three variables, each patient can be seen as a point in a three-dimensional cloud.\
+
+The example below uses **PASI_baseline**, **NO₂**, and a single gene (gene_1).\
+
+In an HTML Quarto book, this produces an **interactive 3D plot** that the student can rotate.
+
+```{r, message=FALSE}
+library(plotly)
+
+plot_ly(
+  df,
+  x = ~PASI_baseline,
+  y = ~NO2,
+  z = ~gene_1,
+  color = ~Outcome_PASI12,
+  colorscale = "Viridis",
+  type = "scatter3d",
+  mode = "markers",
+  marker = list(size = 3, opacity = 0.7)
+) |>
+  layout(
+    title = "Patients represented in three dimensions",
+    scene = list(
+      xaxis = list(title = "Baseline PASI"),
+      yaxis = list(title = "NO₂"),
+      zaxis = list(title = "gene_1")
+    )
+  )
+
+
+```
+
+The two introductory plots provide a first glimpse of how patients in our simulated psoriasis cohort distribute themselves when represented in only a handful of variables. These figures are intentionally simple: they show what happens when we restrict attention to two or three axes of variation and attempt to visualize clinical and environmental information directly.
+
+In the two-dimensional plot, each patient is positioned according to baseline PASI and NO₂ exposure, with the treatment response (ΔPASI after twelve weeks) encoded through colour. Although the scatter suggests a broad spread along both axes, no obvious groupings emerge. Patients with similar clinical outcomes are dispersed throughout the space, and improvement or worsening does not align cleanly with either baseline severity or pollution levels. This lack of visible structure is not surprising. Disease burden, environmental exposures, and treatment response arise from highly multivariate processes, and a projection onto only two variables often hides most of the relevant variation.
+
+The three-dimensional representation adds gene expression into the picture by using one inflammatory gene as an additional axis. Even with this extra dimension, the overall shape remains a diffuse cloud rather than a set of compact, separable groups. The colouring by ΔPASI again shows subtle gradients but no clear partitioning. A single molecular feature, even when combined with clinical and environmental measures, carries only a small fraction of the information available in the full dataset. When thousands of genomic and microbiome variables coexist with dozens of environmental and clinical covariates, any low-dimensional projection will necessarily obscure important structure.
+
+These two figures serve as a useful reminder of the limits of direct visualization. Human intuition is well suited to perceiving structure in two or three dimensions, but modern datasets routinely occupy spaces with hundreds or thousands of variables. Within such spaces, distances behave differently, densities fall, collinearity increases, and meaningful patterns often reside in directions that are not aligned with any single observed variable. The diffuse appearance of both plots illustrates these issues clearly: even though the dataset contains strong simulated relationships, they are not apparent when viewed through only two or three coordinates.
+
+For this reason, dimension-reduction methods become essential. Techniques such as principal component analysis, t-SNE, UMAP, self-organizing maps, and locally linear embedding allow us to project high-dimensional data into spaces where structure becomes visible. Before developing these methods in detail, it is important to understand what is meant by a “dimension” in a statistical sense and why high-dimensional settings pose unique challenges. Before moving to the methods of dimension reduction lets discuss a lit bit more on visualization of multivariate datasets.
+
+
+## Measuring Distances in High-Dimensional Space
+
+
+Measuring Distances in High-Dimensional Space
+Understanding how distances are computed is the geometric foundation of every technique in this chapter. Whether the goal is PCA, clustering, t-SNE, UMAP, SOM or LLE, everything begins with a single, essential question:
+
+How far apart are two observations?
+In all introductory examples, we begin with the Euclidean distance, the straight-line distance familiar from basic geometry.
+
+In two or three dimensions, Euclidean distance matches our intuition well: points that look close really are close.
+
+But once the number of variables reaches dozens, hundreds, or thousands-as in multi-omics dermatology datasets-the behaviour of Euclidean distance changes dramatically.
+
+This section builds intuition step-by-step:
+
+1. Euclidean distance in 2D
+2. Euclidean distance in 3D
+3. Euclidean distance in $p$ dimensions
+4. Why Euclidean distance breaks down in high dimensions
+5. Why alternative distance metrics become necessary
+
+### Euclidean Distance Between Two Points in Two Dimensions
+Suppose two patients are represented by two quantitative variables-for example, PASI_baseline and $\mathbf{N O}_{\mathbf{2}}$ exposure.
+
+Each patient is a point in a 2-dimensional space.
+The straight-line (Euclidean) distance is:
+
+$$
+d(A, B)=\sqrt{\left(x_B-x_A\right)^2+\left(y_B-y_A\right)^2} .
+$$
+
+
+The plot below illustrates this geometry:
+
+```{r}
+library(ggplot2)
+
+# Two points A and B in 2D
+A <- c(1, 1)
+B <- c(4, 3)
+
+df_points <- data.frame(
+  x = c(A[1], B[1]),
+  y = c(A[2], B[2]),
+  label = c("A", "B")
+)
+
+ggplot(df_points, aes(x, y)) +
+  geom_point(size = 4, colour = "purple") +
+  geom_text(aes(label = label), vjust = -1.1, size = 5) +
+  
+  # dashed horizontal/vertical components
+  geom_segment(aes(
+    x = A[1], y = A[2],
+    xend = B[1], yend = A[2]),
+    linetype = "dashed"
+  ) +
+  geom_segment(aes(
+    x = B[1], y = A[2],
+    xend = B[1], yend = B[2]),
+    linetype = "dashed"
+  ) +
+  
+  # straight-line Euclidean distance
+  geom_segment(aes(
+    x = A[1], y = A[2],
+    xend = B[1], yend = B[2]),
+    linewidth = 1.2, colour = "blue",
+    arrow = arrow(length = unit(0.25, "cm"))
+  ) +
+  
+  annotate("text", x = 2.4, y = 2.1,
+           label = "Euclidean distance",
+           colour = "blue", size = 5) +
+  
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Euclidean distance between two points in 2D",
+    x = "Var 1", y = "Var 2"
+  )
+
+```
+
+The dashed lines represent the horizontal and vertical components:
+
+$$
+\Delta x=x_B-x_A, \quad \Delta y=y_B-y_A,
+$$
+
+and the blue arrow represents the Euclidean distance.
+
+To compute the number in R:
+
+```{r}
+sqrt((B[1] - A[1])^2 + (B[2] - A[2])^2)
+
+```
+
+### Euclidean Distance in Three Dimensions
+Now suppose patients are described by three measurements-say PASI_baseline, $\mathbf{N O}_{\mathbf{2}}$, and gene_1. Each patient becomes a point in 3D space, and Euclidean distance generalises to:
+
+$$
+d(A, B)=\sqrt{\left(x_B-x_A\right)^2+\left(y_B-y_A\right)^2+\left(z_B-z_A\right)^2} .
+$$
+
+
+A geometric illustration:
+
+```{r}
+library(plotly)
+
+# Define three 3D points
+A <- c(1, 1, 1)
+B <- c(4, 3, 2)
+C <- c(2, 4, 3)
+
+points <- data.frame(
+  x = c(A[1], B[1], C[1]),
+  y = c(A[2], B[2], C[2]),
+  z = c(A[3], B[3], C[3]),
+  label = c("A", "B", "C")
+)
+
+# Function to draw a segment between two points
+segment3d <- function(P, Q, color="blue") {
+  list(
+    x = c(P[1], Q[1]),
+    y = c(P[2], Q[2]),
+    z = c(P[3], Q[3]),
+    type = "scatter3d",
+    mode = "lines",
+    line = list(color=color, width=6),
+    showlegend = FALSE
+  )
+}
+
+plot_ly() %>%
+  add_markers(
+    data = points,
+    x = ~x, y = ~y, z = ~z,
+    text = ~label, textposition = "top center",
+    marker = list(size = 8,
+                  color = c("purple", "green", "orange")),
+    showlegend = FALSE
+  ) %>%
+  add_trace(segment3d(A, B, color="blue")) %>%
+  add_trace(segment3d(A, C, color="red")) %>%
+  add_trace(segment3d(C, B, color="darkgreen")) %>%
+  layout(
+    title = "Triangle in 3D: Distances Between Points A, B, and C",
+    scene = list(
+      xaxis = list(title="Var 1", range=c(0,6)),
+      yaxis = list(title="Var 2", range=c(0,6)),
+      zaxis = list(title="Var 3", range=c(0,6)),
+      aspectmode="cube",
+      camera=list(eye=list(x=1.7,y=1.7,z=1.5))
+    )
+  )
+
+```
+
+
+### Euclidean Distance in $p$ Dimensions
+If each patient is represented by $p$ quantitative variables:
+
+$$
+A=\left(x_1^{(A)}, \ldots, x_p^{(A)}\right), \quad B=\left(x_1^{(B)}, \ldots, x_p^{(B)}\right),
+$$
+
+then Euclidean distance becomes:
+
+$$
+d(A, B)=\sqrt{\sum_{j=1}^p\left(x_j^{(B)}-x_j^{(A)}\right)^2} .
+$$
+
+
+This is exactly the same formula-just extended over more coordinates.
+
+However, as $p$ grows:
+- Distances increase automatically
+- Small differences accumulate across hundreds or thousands of dimensions
+- Nearest and farthest neighbours become almost the same distance away
+
+This distance instability is one of the core reasons PCA and nonlinear methods become necessary.
+Example in R :
+
+```{r}
+A_vec <- c(1, 2, 0.5, 3, -1, 4)
+B_vec <- c(2, 3, 1.1, 5, -0.2, 3)
+
+sqrt(sum((B_vec - A_vec)^2))
+
+dist(rbind(A_vec, B_vec))
+
+```
+
+
+
+#### Why Euclidean Distance Breaks Down in High Dimensions
+
+The formulas above generalise cleanly to any number of dimensions, but the geometry does not.
+As the number of variables increases—even when each variable is informative and well behaved—Euclidean distances become counterintuitive.
+
+Two phenomena are responsible:
+
+Distance expansion
+Every additional dimension adds another squared difference. Even tiny differences accumulate.
+
+Distance concentration
+The ratio between the smallest and largest pairwise distances approaches 1.
+In other words, everything becomes equally far apart.
+
+Both behaviours arise even in perfectly clean, simulated data, which makes the effect unavoidable in real multi-omics datasets containing thousands of features.
+
+The following simulation illustrates distance concentration using random Gaussian points:
+
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+set.seed(1)
+dims <- c(2, 5, 10, 50, 100, 500)
+n_points <- 300
+
+distance_summary <- lapply(dims, function(p) {
+  
+  # simulate n points in p dimensions
+  X <- matrix(rnorm(n_points * p), nrow = n_points)
+  
+  # compute all pairwise Euclidean distances
+  D <- dist(X)
+  
+  tibble(
+    dimension = p,
+    min_dist  = min(D),
+    max_dist  = max(D),
+    ratio     = min(D) / max(D)
+  )
+}) |> bind_rows()
+
+distance_summary
+
+```
+
+Which can be view with the help of this graphic
+
+```{r}
+ggplot(distance_summary, aes(x = dimension, y = ratio)) +
+  geom_line(colour = "darkblue", linewidth = 1.2) +
+  geom_point(size = 2.5, colour = "darkred") +
+  scale_x_continuous(trans = "log10") +
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Distance concentration in high dimensions",
+    x = "Number of dimensions (log scale)",
+    y = "min(distance) / max(distance)"
+  )
+
+```
+
+As dimension increases from 2 to 500, the smallest and largest distances become almost indistinguishable.
+In such settings, the meaning of “closest neighbour” becomes nearly arbitrary.
+
+This motivates the transition from Euclidean distance to alternative definitions of similarity.
+
+### Beyond Euclidean Distance: Alternative Metrics for High-Dimensional Data
+
+High-dimensional geometry requires distance measures that remain meaningful even when many variables contribute noise, redundancy, or irrelevant variation. Here we introduce three widely used metrics and illustrate them using small, interpretable examples.
+
+1. Manhattan distance (L1 norm)
+2. Cosine distance (angular similarity)
+3. Mahalanobis distance (correlation-adjusted)
+
+Each has a different geometric interpretation and different strengths in multi-omics settings.
+
+Manhattan Distance (L1)
+Manhattan distance replaces the $\sqrt{ }$ (sum of squares) with the sum of absolute differences:
+
+$$
+d_{\operatorname{Man}}(A, B)=\sum_{j=1}^p\left|x_j^{(B)}-x_j^{(A)}\right| .
+$$
+
+
+It tends to behave more robustly when many dimensions include noise because differences do not get squared.
+
+
+Example with three variables:
+
+```{r}
+df_small <- data.frame(
+  PASI  = c(10, 12),
+  NO2   = c(20, 55),
+  gene1 = c(0.1, 0.9)
+)
+
+dist(df_small, method = "manhattan")
+
+```
+Manhattan distance often produces more stable neighbour relationships in high-dimensional spaces than Euclidean distance.
+Cosine Distance (Angular Similarity)
+Cosine distance measures angle, not absolute magnitude.
+Two observations are considered similar when they point in the same direction in high-dimensional space —even if their overall magnitude differs.
+
+$$
+d_{\cos }(A, B)=1-\frac{A \cdot B}{\|A\|\|B\|} .
+$$
+
+
+This metric is extremely common in gene expression, text data, microbiome compositional profiles, and sparse features.
+
+Example (using the Isa package):
+
+```{r}
+library(lsa)
+
+df_small <- data.frame(
+  PASI  = c(10, 12),
+  NO2   = c(20, 55),
+  gene1 = c(0.1, 0.9)
+)
+
+cosine_distance <- function(a, b) {
+  a <- as.numeric(a)
+  b <- as.numeric(b)
+  1 - sum(a * b) / (sqrt(sum(a^2)) * sqrt(sum(b^2)))
+}
+
+cosine_distance(df_small[1,], df_small[2,])
+
+```
+
+Cosine distance is not affected by overall scaling-only by relative patterns.
+
+Mahalanobis Distance: A Correlation-Aware Metric
+Mahalanobis distance accounts for:
+- correlations among variables,
+- differences in scale,
+- redundant dimensions.
+
+It rescales the space by the inverse covariance matrix so that correlated variables do not artificially inflate distance.
+
+$$
+d_{\mathrm{Mah}}(A, B)=\sqrt{(A-B)^{\top} \Sigma^{-1}(A-B)} .
+$$
+
+
+This metric is especially powerful in multi-omics settings, where large blocks of correlated genes or microbial taxa dominate Euclidean distance.
+
+Example:
+
+```{r}
+library(MASS)   # for ginv()
+
+# ------------------------------------------------------------
+# Small example dataset (3 variables, 3 observations)
+# This guarantees that the covariance matrix is singular.
+# ------------------------------------------------------------
+df_small <- data.frame(
+  PASI  = c(10, 12, 18),
+  NO2   = c(20, 55, 45),
+  gene1 = c(0.1, 0.9, 0.5)
+)
+
+# Convert to matrix so rows behave as numeric vectors
+X <- as.matrix(df_small)
+
+# ------------------------------------------------------------
+# Covariance matrix of the variables
+# Note: With only 3 observations, Sigma is singular (non-invertible)
+# ------------------------------------------------------------
+Sigma <- cov(X)
+
+# Inspect Sigma
+Sigma
+
+# ------------------------------------------------------------
+# Extract two patient vectors A and B
+# ------------------------------------------------------------
+A <- X[1, ]
+B <- X[2, ]
+
+# ------------------------------------------------------------
+# Mahalanobis distance with pseudoinverse
+# solve(Sigma) would fail here because Sigma is singular.
+# We use the Moore–Penrose pseudoinverse instead.
+# ------------------------------------------------------------
+invSigma <- ginv(Sigma)   # always safe, even if Sigma is singular
+
+d_mahal <- sqrt( t(A - B) %*% invSigma %*% (A - B) )
+d_mahal
+
+
+```
+
+### Distances in a nutshell! 
+Each distance metric encodes a different notion of similarity, and in high-dimensional biomedical datasets these differences become substantial rather than cosmetic. Euclidean distance measures absolute differences along every axis, Manhattan accumulates deviations linearly, cosine distance emphasises direction rather than magnitude, and Mahalanobis adjusts for correlations and redundant structure in the data.
+
+In low dimensions, these metrics often agree, but in multi-omics settings the neighbourhood structure can change dramatically depending on which one is used. Two patients may lie close under Euclidean distance yet appear far apart under cosine distance if their expression levels differ in magnitude but share the same pattern. Conversely, a block of highly correlated genomic variables can inflate Euclidean distances while Mahalanobis explicitly discounts such redundancy.
+
+The three-variable example introduced earlier illustrates these contrasts. Euclidean distance reacts most strongly to large shifts in a single axis (e.g. NO₂), Manhattan evaluates overall divergence, cosine focuses on relative shapes, and Mahalanobis amplifies differences along decorrelated directions while down-weighting correlated ones. This diversity of geometric emphasis explains why PCA, t-SNE and UMAP uncover different structural views of the same dataset: each implicitly relies on a different distance behaviour.
+
+As dimensionality grows, Euclidean distance deteriorates due to expansion and concentration: all points become far from one another, and nearest neighbours become indistinguishable. Neighbourhood-based methods then operate on unstable geometry. Although alternative metrics alleviate some problems, none escape the curse of dimensionality entirely; reducing the dimension of the data becomes unavoidable.
+
+To visualise how different metrics behave, we can compare their distance matrices for the small toy dataset:
+
+
+```{r}
+library(lsa)
+library(MASS)
+
+df_small <- data.frame(
+  PASI  = c(10, 12, 18),
+  NO2   = c(20, 55, 45),
+  gene1 = c(0.1, 0.9, 0.5)
+)
+
+X <- as.matrix(df_small)
+
+# Euclidean
+D_euc <- dist(X, method = "euclidean")
+
+# Manhattan
+D_man <- dist(X, method = "manhattan")
+
+# Cosine
+cosine_distance <- function(a, b) 1 - cosine(a, b)
+D_cos <- outer(1:3, 1:3,
+               Vectorize(function(i, j) cosine_distance(X[i, ], X[j, ])))
+
+# Mahalanobis using pseudoinverse
+Sigma <- cov(X)
+invSigma <- ginv(Sigma)
+d_mahal_pair <- function(i, j) {
+  diff <- X[i, ] - X[j, ]
+  sqrt(t(diff) %*% invSigma %*% diff)
+}
+D_mah <- outer(1:3, 1:3, Vectorize(d_mahal_pair))
+
+D_euc
+D_man
+D_cos
+D_mah
+
+```
+
+
+
+Even in this tiny example the matrices differ meaningfully; in a dataset with thousands of variables, the differences become dramatic. Because PCA, t-SNE, UMAP, SOM and LLE are all distance-driven methods—each constructing neighbourhoods in its own way—any distortion in the metric propagates directly into the final embedding.
+
+Linear PCA implicitly assumes Euclidean geometry; t-SNE converts Euclidean distances into local Gaussian similarities; UMAP constructs a fuzzy nearest-neighbour graph; SOM updates lattice neurons using Euclidean distance; and LLE reconstructs each point from its neighbours. If the distance metric becomes unstable, PCA may emphasise noise, t-SNE may fragment the space arbitrarily, UMAP may form spurious clusters, SOM may impose patterns, and LLE may fail to unfold manifolds.
+
+Understanding the geometry of distance is therefore not optional: it determines the validity, stability and interpretability of all nonlinear representations that follow.
+
+
+## Techniques for Visualizing Multiple Dimensions in a Single Graphic
+
+As the number of variables in a dataset increases, direct visualization becomes progressively more challenging. While simple scatterplots or pairs plots can depict relationships among a handful of variables, they quickly lose interpretability once dozens or hundreds of measurements are involved. A few multivariate visualization techniques extend the capacity of graphical exploration and allow many dimensions to be represented simultaneously, each preserving different aspects of the underlying structure.
+
+One approach is the **parallel coordinate plot**, in which each variable is drawn as a vertical axis and each observation is represented as a polyline crossing all axes. When many observations follow similar multivariate patterns, their lines tend to form coherent bundles, whereas unusual or distinct profiles appear as diverging trajectories. This style of plot is particularly useful for identifying latent groupings or outliers across large sets of features. In R, the GGally package provides convenient functions for producing such plots:
+
+```{r}
+library(GGally)
+library(dplyr)
+
+df_small <- df %>% 
+  dplyr::select(PASI_baseline, NO2, PM10, gene_1, gene_2, Outcome_PASI12)
+
+ggparcoord(
+  data = df_small,
+  columns = 1:6,
+  scale = "std",
+  alphaLines = 0.4
+) +
+  theme_minimal() +
+  labs(title = "Parallel coordinate plot of selected variables")
+
+```
+
+### Lattice graphics for multivariate data
+
+The lattice system in R provides an alternative framework for displaying multivariate relationships, structured around the idea of conditioning plots. Rather than attempting to represent many dimensions within a single panel, lattice graphics show how the relationship between two variables changes across levels or ranges of a third. This approach is particularly useful in high-dimensional clinical or molecular datasets, where interactions among patient characteristics, environmental exposures, and molecular markers may vary across subgroups.
+
+Lattice plots are built on the notion of *trellis displays*: grids of panels, each panel corresponding to a subset of the data defined by conditioning variables. In a dataset combining genomic expression, exposome profiles, and clinical severity, conditioning can be used to reveal how associations differ across patient segments. For example, one may examine how NO₂ exposure relates to baseline PASI stratified by quartiles of an inflammatory gene, or how exposure–response patterns differ across microbiome clusters. This form of visualization is especially effective when the structure being investigated is not globally linear but instead varies across local regions of the dataset.
+
+The following illustration uses lattice to examine the relationship between baseline PASI and NO₂ exposure, conditioned on quartiles of an inflammatory gene:
+
+```{r}
+library(lattice)
+library(dplyr)
+
+# Construct gene-based strata for conditioning
+df_lattice <- df %>% 
+  mutate(gene_band = ntile(gene_1, 4))
+
+xyplot(
+  NO2 ~ PASI_baseline | factor(gene_band),
+  data = df_lattice,
+  layout = c(2, 2),
+  pch = 16, col = "darkred",
+  xlab = "Baseline PASI",
+  ylab = "NO₂ exposure",
+  main = "Conditioned scatterplots by quartiles of gene_1 expression"
+)
+
+```
+
+In each panel, the basic exposure–severity pattern is retained, but the distribution shifts according to the gene expression stratum. This helps illustrate how a third variable, which might not be easy to represent directly in low-dimensional space, can modulate an otherwise diffuse relationship.
+
+The lattice framework also supports multivariate conditioning with smoothers, which can help highlight structure that is not visually apparent in raw scatterplots. For instance:
+
+```{r}
+xyplot(
+  NO2 ~ PASI_baseline | factor(gene_band),
+  data = df_lattice,
+  layout = c(2, 2),
+  panel = function(x, y, ...) {
+    panel.xyplot(x, y, pch = 16, col = "gray40")
+    panel.loess(x, y, col = "darkblue", lwd = 2)
+  },
+  xlab = "Baseline PASI",
+  ylab = "NO₂ exposure"
+)
+
+```
+
+By adding a panel-specific smoother, each facet displays a local trend, making differences across strata easier to compare.
+
+Finally, lattice can also be used for conditioned density plots or conditioned histograms, which are valuable when exploring differences in molecular or environmental distributions across clinical outcome groups. For example:
+
+```{r}
+densityplot(
+  ~ gene_1 | cut(Outcome_PASI12, breaks = 3),
+  data = df,
+  plot.points = FALSE,
+  col = "purple",
+  lwd = 2,
+  xlab = "Gene 1 expression (scaled)",
+  main = "Conditioned density plots of inflammatory gene expression"
+)
+
+```
+
+Taken together, lattice graphics offer a flexible way to explore high-dimensional data through structured, conditioned displays. Although they do not circumvent the dimensionality problem, they provide an interpretable set of tools for examining how relationships among variables differ across biologically meaningful subspaces. These displays complement the dimension-reduction techniques introduced later in the chapter by offering an intermediate step: they preserve the original variables while still revealing structure that single-panel plots would miss.
+
+## The curse of dimensionality
+
+High-dimensional datasets behave in ways that differ fundamentally from the low-dimensional settings we can visualize. As the number of variables increases, the geometry of the underlying data space changes in counterintuitive ways. Points become sparse, distances lose discriminatory power, correlations proliferate, and meaningful structure often becomes hidden along directions that are not directly observable. This collection of phenomena is known as the *curse of dimensionality*, a term originally associated with numerical approximation but now widely used to describe a broad suite of challenges in statistical learning.
+
+To understand why high-dimensional analysis becomes so difficult, it helps to examine how distance, volume, and neighbourhood structure evolve as the dimension grows. In ordinary two- or three-dimensional spaces, intuition works reasonably well: nearby points truly feel close, clusters are compact, and the geometry is navigable. But in very high dimensions—such as those produced by genomic expression matrices, microbiome abundance vectors, or exposome profiles—these intuitive notions break down.
+
+In high dimensions, the distance between the closest pair of points and the distance between the most distant pair become nearly identical. This undermines methods that rely on relative distances—nearest-neighbour classification, clustering, kernel methods, or manifold estimation—because the contrast between “near” and “far” disappears.
+
+The simulation below illustrates this phenomenon: as we increase the number of dimensions p, the ratio between the minimum and maximum pairwise distances approaches one.
+
+```{r}
+library(dplyr)
+library(ggplot2)
+
+set.seed(123)
+
+dims <- c(2, 5, 10, 50, 100, 500)
+n_points <- 200
+
+distance_summary <- lapply(dims, function(p) {
+  X <- matrix(rnorm(n_points * p), nrow = n_points)
+  D <- dist(X)
+  tibble(
+    dimension = p,
+    min_dist = min(D),
+    max_dist = max(D),
+    ratio = min(D) / max(D)
+  )
+}) %>% bind_rows()
+
+distance_summary
+
+```
+
+```{r}
+ggplot(distance_summary, aes(x = dimension, y = ratio)) +
+  geom_line(size = 1.1, colour = "darkblue") +
+  geom_point(size = 2, colour = "darkred") +
+  scale_x_continuous(trans = "log10") +
+  labs(
+    title = "Concentration of distances in high dimensions",
+    x = "Dimension (log scale)",
+    y = "min(distance) / max(distance)"
+  ) +
+  theme_minimal(base_size = 14)
+
+```
+
+This abstract simulation reflects precisely what happens in our psoriasis dataset. Although each patient lives in a space defined by nearly two thousand variables, the raw Euclidean distance between patients is dominated by noise contributed by unrelated dimensions. The genomic block alone—1500 correlated genes—causes distances to be large and nearly homogeneous across patients. The addition of microbiome features and exposome variables further increases the dimensionality, pushing distances toward a narrow band where meaningful biological differences no longer translate into measurable separation. Even patients with very different underlying inflammatory signatures may end up appearing similarly distant when measured in the full raw feature space.
+
+Another consequence of high dimensionality is the rise of collinearity. Biological systems contain modules of coordinated activity: groups of genes co-regulated by the same pathway, microbial taxa that track together, or environmental exposures that co-vary seasonally. As the number of variables increases, so does the probability that many of them are redundant, linearly dependent, or nearly so. This reduces the effective dimensionality of the dataset, creates numerical instability, and complicates interpretation. In the psoriasis example, the IL-17/IL-23 axis produces clusters of highly correlated genes, and microbial communities often form compositional modules. These structures amplify the curse of dimensionality by introducing broad corridors of dependency within a vast space.
+
+### Collinearity
+
+Taken together, these effects—sparsity, distance concentration, and collinearity—make high-dimensional spaces difficult to navigate and even harder to model. Visual inspection becomes uninformative, distances lose meaning, and the most relevant biological structure can remain hidden along composite directions that are not aligned with any single variable. For these reasons, reducing the dimensionality of the data becomes essential. Dimensionality reduction seeks to identify low-dimensional representations that preserve the key structure of the dataset—variation, neighbourhood relationships, clusters, or manifold geometry—while eliminating noise and redundancy. In other words reduction dimension techniques makes possible to represent the same information in a dataset with new created variables, in number lower than the original number of features.
+
+Before turning to specific techniques such as principal component analysis, it is helpful to examine more closely how collinearity interacts with the curse of dimensionality and why addressing it is a natural first step in any high-dimensional workflow.
+
+## Collinearity and Redundancy in High Dimensions
+
+Collinearity refers to the situation in which two or more variables convey overlapping information because they move together in a systematic way. Formally, a set of predictors
+
+$$
+X_1, X_2, \ldots, X_p
+$$
+
+is collinear when one or more of them can be expressed as an approximately linear combination of the others. In matrix notation, this means the covariance matrix
+
+$$
+\Sigma=\frac{1}{n} X^{\top} X
+$$
+
+contains near-redundant columns, leading to high pairwise correlations or even near-zero eigenvalues. The geometric implication is that the data cloud occupies a much lower-dimensional subspace than the number of measured variables would suggest.
+
+Collinearity is a defining feature of multi-omics data. Gene expression modules often arise from common transcriptional programs, generating blocks of highly correlated genes. Microbiome abundance features exhibit strong dependencies due to compositional constraints and ecological co-occurrence patterns. Exposome variables often move together through seasonal influences or shared environmental conditions. When such blocks coexist within the same dataset, the result is a geometry dominated by a handful of latent processes embedded in a very large number of measured variables.
+
+In the psoriasis example, the IL-17/IL-23 inflammatory axis drives coordinated expression across dozens of genes, many of which contribute redundant information. To illustrate this, consider the correlation structure of the first 50 genes in the genomic block:
+
+```{r}
+library(ggplot2)
+library(reshape2)
+
+gene_subset <- df %>% 
+  dplyr::select(starts_with("gene_")) %>% 
+  dplyr::select(1:50)
+
+cor_mat <- cor(gene_subset)
+
+cor_df <- melt(cor_mat)
+
+ggplot(cor_df, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_viridis_c(option = "C", limits = c(-1, 1)) +
+  coord_fixed() +
+  theme_minimal(base_size = 12) +
+  labs(
+    title = "Correlation heatmap of 50 genomic features",
+    x = "",
+    y = "",
+    fill = "Correlation"
+  )
+
+```
+
+The heatmap reveals correlated genes, reflecting shared underlying regulatory signals rather than independent biological drivers. When scaled to the full 1500-gene space, this dependence creates long corridors of redundancy where many axes contribute little unique information.
+
+Collinearity also manifests in the microbiome block. Even though microbial abundance features are generated independently in the simulation, they are anchored to latent dysbiosis and commensal signatures. This induces patterns that resemble ecological modules. A simple visualization using the first 30 microbiome features shows similar structure:
+
+```{r}
+micro_subset <- df %>% 
+ dplyr::select(starts_with("ASV_")) %>% 
+  dplyr::select(1:30)
+
+micro_cor <- cor(micro_subset)
+
+micro_df <- melt(micro_cor)
+
+ggplot(micro_df, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  scale_fill_viridis_c(option = "C", limits = c(-1, 1)) +
+  coord_fixed() +
+  theme_minimal(base_size = 12) +
+  labs(
+    title = "Correlation heatmap of 30 microbiome features",
+    x = "",
+    y = "",
+    fill = "Correlation"
+  )
+
+```
+
+These dependencies have several consequences. Regressions that use raw variables become unstable because small perturbations in the data can lead to large changes in estimated coefficients. Distance-based procedures weigh correlated dimensions repeatedly, distorting neighbourhood structure. Clustering algorithms may split or merge groups based on redundant patterns rather than true latent structure. Interpretability also suffers: when many variables carry essentially the same information, it becomes difficult to discern which dimensions reflect genuine biological signals.
+
+Despite these challenges, collinearity offers a key opportunity: it reveals that the data often lie near a low-dimensional subspace. In other words, even though the measured feature space spans thousands of axes, the underlying variation is driven by a much smaller number of latent processes. Dimensionality-reduction methods exploit this fact. By identifying directions along which the data vary most, or by seeking low-dimensional manifolds that preserve neighbourhood relations, these techniques both stabilize analysis and reveal interpretable structure.
+
+The presence of strong collinearity therefore provides a natural bridge to dimensionality reduction. Principal component analysis (PCA), in particular, is designed to extract the dominant axes of variation from high-dimensional spaces. Before applying nonlinear methods such as t-SNE, UMAP, or self-organizing maps, PCA offers the first principled approach to summarizing structure, stabilizing computations, and mitigating the effects of the curse of dimensionality.
+
+## Principal Component Analysis
+
+Principal Component Analysis (PCA) is a method for re-expressing high-dimensional data in terms of a smaller set of orthogonal axes that capture the dominant patterns of variation. It is built on a simple geometric idea: in any cloud of points occupying a high-dimensional space—such as our Dermato-ATT dataset, which contains gene expression, microbiome profiles, exposome measurements, and inflammatory biomarkers—some directions contain far more variability than others. PCA identifies these directions and rotates the coordinate system so that the first axis aligns with the greatest possible variance, the next axis captures the largest remaining variance under the constraint of orthogonality, and subsequent axes continue this pattern.
+
+The following Figure llustrates this idea using a simple two-dimensional slice of a multivariate dataset. The original coordinate axes are fixed, but the point cloud stretches more strongly along an oblique direction. PCA identifies this dominant direction of spread (PC1) and the largest remaining orthogonal direction (PC2). These new axes are not selected variables but linear combinations of them, and they form the rotated coordinate system that best captures the intrinsic geometry of the dataset.
+
+```{r}
+library(ggplot2)
+library(MASS)
+set.seed(123)
+
+# Generate a correlated cloud (so rotation is visible)
+Sigma <- matrix(c(3, 2.7,
+                  2.7, 3), nrow = 2)
+
+df_2 <- MASS::mvrnorm(n = 300,
+                    mu = c(0, 0),
+                    Sigma = Sigma) %>%
+  as.data.frame() %>%
+  setNames(c("x", "y"))
+
+# Fit PCA
+pca_fit_2 <- prcomp(df_2, scale. = FALSE)
+rot <- pca_fit_2$rotation
+prop_var <- pca_fit_2$sdev^2 / sum(pca_fit_2$sdev^2)
+
+# Length of arrows
+scale_factor <- 3
+
+PC1 <- rot[,1] * scale_factor
+PC2 <- rot[,2] * scale_factor
+
+ggplot(df_2, aes(x, y)) +
+  geom_point(alpha = 0.5, size = 2) +
+  
+  # Original axes
+  geom_segment(aes(x = 0, y = 0, xend = scale_factor, yend = 0),
+               color = "gray40", size = 1.2) +
+  geom_segment(aes(x = 0, y = 0, xend = 0, yend = scale_factor),
+               color = "gray40", size = 1.2) +
+
+  # PCA axes
+  geom_segment(aes(x = 0, y = 0, xend = PC1[1], yend = PC1[2]),
+               arrow = arrow(length = unit(0.3, "cm")),
+               color = "red", size = 1.4) +
+  geom_segment(aes(x = 0, y = 0, xend = PC2[1], yend = PC2[2]),
+               arrow = arrow(length = unit(0.3, "cm")),
+               color = "blue", size = 1.4) +
+  
+  annotate("text", x = PC1[1]*1.1, y = PC1[2]*1.1,
+           label = paste0("PC1 (", round(prop_var[1]*100,1), "%)"),
+           color = "red", size = 5.2, fontface = "bold") +
+  
+  annotate("text", x = PC2[1]*1.1, y = PC2[2]*1.1,
+           label = paste0("PC2 (", round(prop_var[2]*100,1), "%)"),
+           color = "blue", size = 5.2, fontface = "bold") +
+  
+  labs(
+    title = "Geometric interpretation of PCA as a rotation",
+    subtitle = "PC1 aligns with the direction of maximal spread; PC2 is orthogonal and captures the next largest variation",
+    x = "Original axis 1",
+    y = "Original axis 2"
+  ) +
+  theme_minimal(base_size = 14)
+
+
+
+```
+
+From a geometric point of view, the operation is a rotation of the data cloud. If each patient is represented as a point in a space where every molecular or environmental variable forms an axis of its own, the cloud of points spreads more extensively along certain directions than others. PCA finds these directions and uses them as new axes. The resulting “principal components’’ are not simply chosen variables; they are linear combinations of the originals and correspond to slanted directions in the original multidimensional space. These combinations are constructed so that the first component captures the broadest overall spread, the second captures the broadest remaining spread orthogonally, and subsequent components continue the pattern.
+
+Algebraically, PCA corresponds to computing the eigen decomposition of the covariance (or correlation) matrix of the standardized variables. Each eigenvector gives the coefficients of a principal component, and each eigenvalue gives the amount of variance encoded by that direction. Because the eigenvectors are orthogonal, each component adds genuinely new information not captured by earlier components.
+
+In the psoriasis dataset, this geometric rotation often reveals interpretable biological structure. A dominant inflammatory axis typically emerges, blending IL-17 pathway genes, cytokine concentrations, and sometimes specific microbial signatures associated with dysbiosis. A separate axis may isolate environmental gradients, mixing ultraviolet exposure, particulate matter, temperature, and humidity. Although PCA does not know anything about treatment response, these principal directions often correlate with disease activity or therapeutic improvement, making the representation clinically informative.
+
+### Building your first PCA model
+
+Before fitting a PCA model it is essential to select appropriate variables. PCA can only process quantitative variables because it depends on the computation of variances and covariances in Euclidean space; categorical variables do not have meaningful numerical variance and cannot be incorporated directly. Identifiers, treatment labels, diagnostic categories, and any other non-numeric columns must either be removed or handled using dedicated extension methods such as MCA or FAMD.
+
+For the Dermato-ATT dataset, we therefore begin by selecting the quantitative predictors—gene expression markers, microbial profiles, exposome features, and biochemical biomarkers. The 12-week PASI improvement is excluded because PCA is unsupervised. Standardisation is also essential. Without scaling, variables with very large units or natural ranges would dominate the computation of covariance, forcing PCA to align itself with measurement scale rather than with biological structure.
+
+```{r}
+library(dplyr)
+
+df_pca <- df %>%
+  dplyr::select(-patient_id, -Outcome_PASI12) %>%
+  dplyr::mutate(across(everything(), scale))
+
+```
+
+### Fitting PCA Using FactoMineR
+
+
+We now fit PCA using the FactoMineR package
+
+
+```{r}
+library(FactoMineR)
+library(factoextra)
+
+res.pca <- PCA(df_pca, graph = FALSE)
+#str(res.pca)
+```
+
+The code above shows that FactoMineR organises the entire PCA output into a coherent structure that mirrors the geometry of the method. The eigenvalues quantify how much variance each principal component captures, while the associated proportions indicate the relative importance of the axes. The variables are represented through their coordinates on the components, the quality of their representation (cos²), and their contributions to each axis, all of which help reveal which molecular or environmental features shape the underlying structure. Individuals are described in parallel, with their coordinates, cos² values, and contributions providing insight into how patients are positioned in the new latent space. The correlation circle summarises the relationships among variables by projecting them into the component space, and optional supplementary individuals or variables can be projected onto the existing axes without influencing their construction.
+
+
+The variance explained is by each PC is obtained via `res.pca$eig` of which we show the firt 6 elements below:
+
+```{r}
+head(res.pca$eig)
+```
+
+
+To visualize the variance structure we can use a graphic name scree plot like the one below that represents the percentage of explained variances by each PC. 
+
+```{r}
+fviz_screeplot(res.pca, ncp = 10)
+```
+
+
+### Scores and Loadings: What They Represent and How to Extract Them
+
+Once a PCA model has been fitted, two sets of quantities become central for interpretation: the scores and the loadings. Scores give the coordinates of each individual in the new component space. They show where each patient sits along the latent axes of variation uncovered by PCA, making it possible to visualise biological separation, identify clusters, or explore relationships with clinical outcomes. Loadings describe how each principal component is constructed from the original variables. Each loading is a coefficient in the linear combination that forms the component, and variables with large absolute loadings are those that most strongly influence its orientation.
+
+FactoMineR stores these quantities within the `res.pca$ind` and `res.pca$var` lists. The coordinates of individuals are found in `res.pca$ind$coord`, while the coordinates of variables—often interpreted as loadings in PCA with scaling—are stored in `res.pca$var$coord`. These coordinates are essential for building interpretability: they clarify which biological modules dominate each axis and how individuals project onto them.
+
+```{r}
+# Scores (individual coordinates)
+scores <- res.pca$ind$coord
+
+# Loadings (variable coordinates)
+loadings <- res.pca$var$coord
+
+```
+Because all variables were standardised before PCA, each loading can be interpreted directly as the correlation between the variable and the component. Larger absolute values reflect stronger association with the PC axis.
+
+To see the variance structure of the components, a scree plot provides an immediate overview of how much information each axis retains. This is especially useful in high-dimensional multi-omics settings, where only a handful of components represent most of the meaningful covariance.
+
+```{r}
+fviz_screeplot(res.pca, ncp = 10)
+
+```
+
+
+### Identifying the Most Important Variables for Each Component
+
+Understanding which variables drive a principal component requires examining their contributions. FactoMineR directly provides contributions (in %) through res.pca$var$contrib, which quantify how much each variable participates in forming each axis. Higher contribution values indicate more influential variables.
+
+```{r}
+contrib <- res.pca$var$contrib
+# Top 10 for PC1, PC2, PC3
+
+
+```
+
+
+From the later matrix in `res.pca$var$contrib`, we can extract the ten most important variables for any component. Below is a general approach to obtain the top contributors for the first three components.
+
+```{r}
+ library(ggplot2)
+library(dplyr)
+library(tibble)
+library(patchwork)
+
+# -----------------------------------------------------------
+# top10_vars(): Extract the Top 10 contributing variables for a PCA component
+#
+# This helper function retrieves the variables that contribute
+# most strongly to a given principal component.
+#
+# INPUT:
+#   component  -> integer (1 = PC1, 2 = PC2, etc.)
+#
+# INTERNALS:
+#   contrib is a matrix from FactoMineR:
+#     rows   = variables
+#     cols   = principal components
+#
+# STEPS:
+#   1. Select the column corresponding to the chosen PC.
+#   2. Sort contributions from highest to lowest.
+#   3. Keep only the top 10 variables.
+#   4. Convert to a tidy tibble for easy plotting.
+#   5. Reverse factor order so barplots appear in descending order.
+#
+# OUTPUT:
+#   A tibble with two columns:
+#     - variable: variable name
+#     - contribution: percentage contribution to the selected PC
+# -----------------------------------------------------------
+top10_vars <- function(component) {
+  contrib[, component] |>                       # extract contributions for the given PC
+    sort(decreasing = TRUE) |>                  # order from strongest to weakest
+    head(10) |>                                 # keep the top 10
+    enframe(name = "variable",                  # convert vector to tibble
+            value = "contribution") |>
+    mutate(variable = factor(variable,          # ensures barplot ordering
+                              levels = rev(variable)))
+}
+
+# -----------------------------------------------------------
+# plot_top10(): Barplot of the top 10 contributors to one PC
+#
+# This function visualises the output of top10_vars().
+#
+# CHOICES:
+#   - Horizontal bars (coord_flip) improve label readability,
+#     especially for gene or ASV names.
+#   - Steelblue bars + minimal theme give a clean textbook look.
+#
+# OUTPUT:
+#   A ggplot object.
+# -----------------------------------------------------------
+plot_top10 <- function(component) {
+  df <- top10_vars(component)
+
+  ggplot(df, aes(x = variable, y = contribution)) +
+    geom_col(fill = "steelblue") +              # barplot
+    coord_flip() +                              # horizontal orientation
+    theme_minimal(base_size = 13) +
+    labs(
+      title = paste("Top 10 Variable Contributions to PC", component),
+      x = "Variable",
+      y = "Contribution (%)"
+    )
+}
+
+# -----------------------------------------------------------
+# Generate barplots for PC1, PC2, and PC3
+#
+# Each plot shows the 10 most influential variables for the
+# corresponding principal component.
+#
+# Patchwork syntax (p1 / p2 / p3) stacks the three plots vertically,
+# producing a coherent combined figure for the textbook.
+# -----------------------------------------------------------
+p1 <- plot_top10(1)   # PC1 top contributors
+p2 <- plot_top10(2)   # PC2 top contributors
+p3 <- plot_top10(3)   # PC3 top contributors
+
+p1 / p2 / p3
+
+```
+
+```{r}
+# -----------------------------------------------------------
+# Create reusable objects containing the top contributors
+# for the first three principal components.
+#
+# These objects are used later for:
+#   - reduced correlation circles
+#   - reduced biplots
+#   - multi-panel figures combining barplots + loadings
+#
+# By computing them here, we ensure they exist globally
+# throughout the chapter and avoid rendering errors.
+# -----------------------------------------------------------
+top10_PC1 <- top10_vars(1)
+top10_PC2 <- top10_vars(2)
+top10_PC3 <- top10_vars(3)
+
+# Print to confirm structure (optional)
+top10_PC1
+top10_PC2
+top10_PC3
+
+```
+
+
+### Interpreting Positive and Negative Loadings Within Each Component
+
+For each principal component, variables may contribute in the same direction or in opposite directions, and this polarity becomes biologically meaningful once the geometry of PCA is understood. A variable with a large positive loading reinforces the orientation of the component, pushing individuals with high values of that variable toward the positive side of the axis. Conversely, a variable with a large negative loading exerts an influence in the opposite direction, pulling individuals toward the negative side. Positive and negative loadings therefore reflect opposing biological tendencies encoded along the same latent dimension.
+
+In multi-omics settings, such as the Dermato-ATT dataset, these opposing directions often correspond to antagonistic biological processes. For example, inflammatory gene modules might define the positive direction of PC1, while barrier-restoration transcripts or commensal microbial signatures define the negative direction. Examining both sides of each axis clarifies whether a principal component reflects a true biological gradient rather than a unidirectional cluster of correlated variables.
+
+The following code extracts the ten variables with the strongest positive and negative loadings for each of the first three components. Because PCA was performed on standardized variables, the loadings correspond to variable–component correlations, making the sign and magnitude directly interpretable.
+
+```{r}
+# -----------------------------------------------------------
+# Extract strongest positive and negative loadings for a PC
+#
+# INPUT:
+#   component -> integer index (1 = PC1)
+#
+# STEPS:
+#   1. Select loadings for the chosen component.
+#   2. Sort in decreasing order for positive loadings.
+#   3. Sort in increasing order for negative loadings.
+#   4. Keep the 10 strongest on each side.
+#
+# -----------------------------------------------------------
+get_signed_loadings <- function(component) {
+  load_vec <- loadings[, component]
+
+  top_pos <- sort(load_vec, decreasing = TRUE)[1:10]
+  top_neg <- sort(load_vec, decreasing = FALSE)[1:10]
+
+  list(
+    positive = tibble(variable = names(top_pos),
+                      loading  = as.numeric(top_pos)),
+    negative = tibble(variable = names(top_neg),
+                      loading  = as.numeric(top_neg))
+  )
+}
+
+# Build signed-loading summaries for PC1–PC3
+PC1_loads <- get_signed_loadings(1)
+PC2_loads <- get_signed_loadings(2)
+PC3_loads <- get_signed_loadings(3)
+```
+
+```{r}
+PC1_loads
+PC2_loads
+PC3_loads
+```
+
+
+These tables help define the biological interpretation of each PC. PC1 may separate patients along an inflammatory gradient, with high-expression inflammatory genes on the positive side and barrier-related transcripts or microbial signatures on the negative side. PC2 may separate alternative microbial communities in opposite directions, while PC3 may distinguish distinct cytokine patterns that represent systemic immune activation. By examining positive and negative contributions jointly, the latent structure of each component becomes clearer and better grounded in biological mechanisms.
+
+
+
+### Interpretation Unifying Contributions and Loadings Signals
+
+The contribution profiles and signed loadings provide two complementary perspectives on the PCA structure: contributions show which variables build the component, while loadings reveal how strongly and in which direction they pull the component axis. Interpreting both together allows a precise reconstruction of the biological meaning of each PC.
+
+PC1 – Local inflammatory transcriptomic axis
+
+PC1 is dominated almost exclusively by gene-expression features. The top ten contributors all lie between 7.69% and 7.79%, an extremely tight range that indicates a highly coherent molecular module rather than isolated drivers. Their signed loadings are also extraordinarily large, with values around 0.954–0.961, meaning these genes correlate almost perfectly with the PC1 axis.
+
+Biologically, this is exactly what one expects from a coordinated inflammatory programme. Such modules in real psoriasis data typically represent:
+
+IL-17 / IL-23 inflammatory pathways
+
+keratinocyte activation transcriptional signatures
+
+generic immune up-regulation genes
+
+The negative side of PC1 is weak: the strongest negative loadings (DLQI = –0.181, NO₂ = –0.115, PM10 = –0.088) are very small in magnitude compared with the gene-driven positive loadings (~0.96). This asymmetry shows that PC1 is not a balanced contrast but rather a unipolar inflammatory transcriptomic axis. High PC1 scores reflect strong up-regulation of inflammatory genes; low scores correspond to a quieter molecular state.
+
+PC2 – Microbial community structure
+
+PC2 presents an entirely different pattern. The top ten contributors are all microbiome ASVs with contributions between 0.383 and 0.394, nearly an order of magnitude larger than the gene contributions in PC1. Their loadings are also very strong and tightly grouped (0.884–0.896), marking a highly cohesive ecological gradient.
+
+The negative loadings are again small: gene_943 (–0.134), PASI_baseline (–0.103), cytokine_12 (–0.105). This polarity shows that PC2 is another unipolar axis, now capturing a microbial dysbiosis vs. commensal community structure, independent of the transcriptomic signals of PC1.
+
+The near-orthogonality between PC1 and PC2 directions is reflected numerically by the absence of gene or cytokine variables among the top PC2 contributors, reinforcing that PC2 encodes an orthogonal, microbiome-specific layer of variation.
+
+PC3 – Systemic cytokine activation
+
+PC3 is overwhelmingly dominated by cytokines. Contributions for the top 10 cytokines lie between 0.738 and 0.831, by far the largest contribution values among all PCs. The associated loadings are also very strong (0.595–0.631). This pattern reveals another tightly coordinated biological module — now representing systemic immune signalling rather than local transcriptional inflammation.
+
+On the negative side, PC3 loadings include several genes (e.g., gene_158 = –0.516, gene_721 = –0.500), showing a moderate inverse relationship between certain gene modules and systemic cytokine levels. Unlike PC1 and PC2, PC3 is more balanced, with both strong positive and moderately strong negative loadings. This indicates that PC3 captures a contrast between systemic cytokine activation (positive direction) and specific gene-expression programmes (negative direction).
+
+Biologically, PC3 therefore reflects systemic inflammatory activation, distinct from:
+
+local/transcriptomic inflammation (PC1)
+
+microbial structure (PC2)
+
+| Component | Dominant Contributors (numeric evidence) | Loadings (direction & magnitude)                                               | Biological Interpretation                 |
+| --------- | ---------------------------------------- | ------------------------------------------------------------------------------ | ----------------------------------------- |
+| **PC1**   | Genes: 7.69–7.79% contrib                | Very strong positive loadings 0.954–0.961; weak negatives                      | Local/transcriptomic inflammation         |
+| **PC2**   | ASVs: 0.383–0.394 contrib                | Strong positive loadings 0.884–0.896; small negatives                          | Microbial dysbiosis / ecological gradient |
+| **PC3**   | Cytokines: 0.738–0.831 contrib           | Strong positives 0.595–0.631; moderate negative gene loadings –0.516 to –0.389 | Systemic immune activation                |
+
+
+
+### Geometric Visualisation Through Scores
+
+Once the PCA model has been fitted, each patient can be projected into the space defined by the principal components. These new coordinates—called scores—represent the locations of the individuals after the original high-dimensional cloud has been rotated into a smaller set of orthogonal directions.
+
+The first two components often provide the most informative low-dimensional view of the data. The plot below displays the scores of all individuals along PC1 and PC2. Points are coloured according to their 12-week PASI change, but this colour gradient is not used by PCA during computation; it is merely overlaid afterward to allow qualitative inspection.
+
+
+```{r}
+fviz_pca_ind(
+  res.pca,
+  col.ind = df$Outcome_PASI12,
+  gradient.cols = c("blue","yellow","red"),
+  addEllipses = FALSE
+)
+
+```
+
+
+At this stage, interpretation is deliberately limited to the geometric structure visible in the projection. PCA is an unsupervised method: it has no awareness of clinical outcomes, diagnostic groups, or biological pathways. The geometry of the scores plot reflects only the directions of maximal variance in the quantitative variables that were provided to the algorithm.
+
+Several points follow from this:
+
+PC1 represents the direction of greatest variation in the dataset.
+It is the axis along which individuals differ most strongly in terms of the original standardized variables. No biological meaning should yet be assigned to it; it is simply the mathematically dominant direction.
+
+PC2 captures the second-largest remaining variation under the constraint of orthogonality.
+This ensures that PC1 and PC2 describe independent directions of variation, forming a natural coordinate system for exploring individual differences.
+
+Distances in the scores plot approximate similarity.
+Individuals close together have similar profiles across all quantitative variables, whereas individuals far apart differ strongly. This geometry comes directly from the rotation and scaling inherent in PCA.
+
+Colour conveys the outcome but does not influence the PCA.
+The gradient applied to PASI change is merely a visual overlay. Clusters or gradients in colour should not yet be interpreted as causal or mechanistic patterns; they serve only as a visual hint that outcome might align with one of the major dimensions of variation.
+
+### Visualising Variable Structure: The Correlation Circle (PC1–PC2 Focus)
+
+While the scores plot reveals how patients distribute themselves across the dominant PCA axes, the correlation circle answers a complementary question:
+
+Which variables shape PC1 and PC2, and how do these variables relate to each other?
+
+In FactoMineR, each standardized variable is projected into the PC1–PC2 plane according to its correlation with each component.
+This provides a geometric summary of the high-dimensional structure after PCA has reorganised the dataset.
+
+#### The Standard Correlation Circle (PC1–PC2)
+
+```{r}
+# STANDARD FULL CORRELATION CIRCLE (all variables)
+fviz_pca_var(
+  res.pca,
+  col.var = "contrib",
+  gradient.cols = c("blue", "white", "red"),
+  repel = FALSE
+)
+```
+
+This plot displays every variable—all genes, ASVs, exposome variables, and cytokines—projected into the PC1–PC2 plane.
+The colour scale indicates contribution: darker red arrows exert stronger influence on the components.
+
+#### How to Read the Correlation Circle
+
+Several principles guide interpretation:
+
+Distance from the origin
+Variables far from the centre are well represented by PC1–PC2 (high cos²).
+Variables near the centre are poorly explained by these two components.
+
+Angle between vectors:
+
+- Small angle → strongly positively correlated variables
+
+- 180° apart → strongly negatively correlated variables
+
+ 90° apart → uncorrelated variables
+
+Length of vectors:
+
+Long arrows indicate strong correlation with the components; short arrows indicate weak correlation.
+
+Clusters of arrows:
+
+Groups of variables pointing in similar directions indicate biological modules:
+
+- inflammatory gene clusters
+
+- microbial ASV communities
+
+- exposome gradients
+
+- cytokine signalling
+
+These clusters reveal the statistical manifestation of latent processes in the dataset.
+
+#### Why the Full Correlation Circle Fails in Multi-Omics
+
+In high-dimensional datasets (like ours, with ~2000 variables), the full correlation circle becomes:
+
+- visually overloaded
+
+- unreadable due to label collisions
+
+- dominated by density rather than structure
+
+- unhelpful for identifying which specific variables drive a component
+
+- misleading when poorly represented variables crowd near the origin
+
+In short: the plot contains the right information but presents it in the wrong way.
+
+What we want is a plot that:
+
+- highlights the key variables
+- shows their alignment along PC1 and PC2
+- clarifies biological modules
+- avoids the “hairball” effect
+
+To fix this, we build reduced correlation circles that show only the top contributing variables.
+
+```{r}
+fviz_pca_var(
+  res.pca,
+  select.var = list(name = top10_PC1$variable),
+  col.var = "contrib",
+  gradient.cols = c("blue", "white", "red"),
+  repel = TRUE,
+  title = "Reduced Correlation Circle – Top Contributors to PC1"
+)
+
+```
+
+
+```{r}
+fviz_pca_var(
+  res.pca,
+  select.var = list(name = top10_PC2$variable),
+  col.var = "contrib",
+  gradient.cols = c("blue", "white", "red"),
+  repel = TRUE,
+  title = "Reduced Correlation Circle – Top Contributors to PC2"
+)
+
+```
+
+We can add the circles above with the barplots already created to have an alternative representation like the following:
+
+
+
+
+```{r}
+p_PC1_bar <- plot_top10(1)   # Top 10 contributors to PC1
+p_PC2_bar <- plot_top10(2)   # Top 10 contributors to PC2
+
+p_PC1_circle <- fviz_pca_var(
+  res.pca,
+  select.var = list(name = top10_PC1$variable),
+  col.var = "contrib",
+  gradient.cols = c("blue","white","red"),
+  repel = TRUE,
+  title = "PC1 – Reduced Correlation Circle"
+)
+
+p_PC2_circle <- fviz_pca_var(
+  res.pca,
+  select.var = list(name = top10_PC2$variable),
+  col.var = "contrib",
+  gradient.cols = c("blue","white","red"),
+  repel = TRUE,
+  title = "PC2 – Reduced Correlation Circle"
+)
+
+# Combine barplots and circles for interpretability
+(p_PC1_bar | p_PC1_circle) /
+(p_PC2_bar | p_PC2_circle)
+
+```
+
+
+The top-left barplot lists the ten variables that contribute most to PC1. All are gene-expression features, and their contribution values are highly similar. This pattern indicates that PC1 captures a coherent transcriptomic axis along which many genes vary in a coordinated fashion.
+
+In the reduced correlation circle (top-right):
+
+* The top PC1 genes cluster tightly along the positive direction of the PC1 axis.
+
+* Their vectors share nearly identical angles, reflecting strong positive correlations among these genes.
+
+* Their distance from the origin shows that they are well represented by the first two components.
+
+This configuration reafirms our conclusions regarding PCs and their interpretation
+
+The four panels together illustrate several important characteristics of the dataset:
+
+* PC1 and PC2 reflect different biological layers.
+
+* PC1 is dominated by gene-expression variables.
+
+* PC2 is dominated by microbiome variables.
+
+The two layers are largely independent.
+
+The near-orthogonality between the gene and ASV vectors indicates that transcriptional and microbial variations contribute separate, non-overlapping sources of structure.
+
+The PCA axes acquire a clear biological interpretation reaffirming that 
+PC1 can be viewed as a transcriptional variation axis and
+PC2 can be viewed as a microbiome-composition axis.
+
+
+```{r,eval=FALSE, echo=FALSE, include=FALSE, warning=FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+
+set.seed(2027)
+
+# ------------------------------------------------------------
+# 1. Generate two expressive manifolds
+#    - 1) S-curve (main structure)
+#    - 2) Swiss roll (secondary structure)
+# ------------------------------------------------------------
+
+n1 <- 350   # S-curve points
+n2 <- 150   # Swiss-roll points
+n  <- n1 + n2
+
+# ---- S-curve ----
+t1 <- runif(n1, -3*pi/2, 3*pi/2)
+x1 <- sin(t1)
+y1 <- t1
+z1 <- cos(t1)
+
+Scurve <- data.frame(
+  manifold = "S",
+  X1 = x1,
+  X2 = y1 + rnorm(n1, 0, 0.15),
+  X3 = z1
+)
+
+# ---- Swiss roll ----
+t2 <- runif(n2, 1, 4*pi)
+h2 <- runif(n2, -2, 2)
+x2 <- t2 * cos(t2)
+y2 <- h2
+z2 <- t2 * sin(t2)
+
+Swiss <- data.frame(
+  manifold = "R",
+  X1 = x2 / max(x2),
+  X2 = y2,
+  X3 = z2 / max(z2)
+)
+
+df_raw <- rbind(Scurve, Swiss)
+
+# ------------------------------------------------------------
+# 2. Create cytokine signals (smooth gradients)
+# ------------------------------------------------------------
+df_raw <- df_raw %>%
+  mutate(
+    cytokine_1 = 2 + 1.5 * X1 + rnorm(n, 0, 0.1),
+    cytokine_2 = 1 + 1.2 * X2 + rnorm(n, 0, 0.1),
+    cytokine_3 = 0.5 * (X1 + X2) + rnorm(n, 0, 0.1),
+    cytokine_4 = sin(X2) + rnorm(n, 0, 0.1)
+  )
+
+# ------------------------------------------------------------
+# 3. Wearable features (oscillatory, high-frequency)
+# ------------------------------------------------------------
+df_raw <- df_raw %>%
+  mutate(
+    wearable_1 = sin(4*X1) + rnorm(n, 0, 0.2),
+    wearable_2 = cos(5*X2) + rnorm(n, 0, 0.2),
+    wearable_3 = sin(6*X3) + cos(3*X1) + rnorm(n, 0, 0.2),
+    wearable_4 = sin(10*(X1+X2)) + rnorm(n, 0, 0.2)
+  )
+
+# ------------------------------------------------------------
+# 4. Clinical features (cluster-like behavior)
+# ------------------------------------------------------------
+df_raw <- df_raw %>%
+  mutate(
+    clinical_1 = ifelse(manifold == "S",
+                        3 + rnorm(n, 0, 0.3),
+                        5 + rnorm(n, 0, 0.3)),
+    clinical_2 = ifelse(X2 > 0,
+                        2.5 + rnorm(n,0,0.3),
+                        1.2 + rnorm(n,0,0.3)),
+    clinical_3 = ifelse(X1 > 0,
+                        3 + 0.5*X1 + rnorm(n, 0, 0.2),
+                        2 + 0.5*X1 + rnorm(n, 0, 0.2))
+  )
+
+# ------------------------------------------------------------
+# 5. Outcome (ΔScore): nonlinear combination of features
+# ------------------------------------------------------------
+df_raw <- df_raw %>%
+  mutate(
+    delta_score =
+      0.4*cytokine_1 +
+      0.3*wearable_3 +
+      0.5*clinical_2 +
+      0.25*sin(X1 + X2) +
+      rnorm(n, 0, 0.3)
+  )
+
+# ------------------------------------------------------------
+# 6. Responder category (clear split)
+# ------------------------------------------------------------
+df_raw <- df_raw %>%
+  mutate(
+    responder = ifelse(delta_score > median(delta_score),
+                       "High response", "Low response")
+  )
+
+# ------------------------------------------------------------
+# 7. Add patient_id and reorder columns
+# ------------------------------------------------------------
+df_final <- df_raw %>%
+  dplyr::mutate(patient_id = 1:n) %>%
+  dplyr::select(patient_id, everything()) %>% 
+  dplyr::select(-X1, -X2, -X3, -manifold)
+
+# ------------------------------------------------------------
+# 8. Save dataset
+# ------------------------------------------------------------
+saveRDS(df_final, "DigitalTrial_ManifoldPedagogy.rds")
+
+df_final
+colnames(df_final)
+```
+
+
+## Introducing another example of interest for the next methods
+In this second part of the chapter, we work with a compact dataset drawn from a hypothetical digital clinical trial involving 500 participants. Each patient contributes a combination of inflammatory biomarkers, wearable-sensor metrics and traditional clinical measurements collected across the study period. Although small, the dataset reflects the type of multimodal structure that routinely arises in digitally augmented trials—where physiological, behavioural and biological signals interact in ways that are often nonlinear.
+
+The central goal of this dataset is to illustrate how different dimension-reduction methods reveal complementary aspects of the underlying patient landscape. Digital trials frequently involve high-frequency sensor streams, multichannel biomarkers and continuous response measures. Even when the number of features is modest, the relationships among them tend to bend, saturate, cluster locally or interact in complex ways. This makes the dataset particularly well suited for exploring methods such as t-SNE, UMAP, Self-Organizing Maps (SOMs) and Locally Linear Embedding (LLE), which are designed precisely for uncovering hidden geometry in such contexts.
+
+Understanding the variables
+
+Despite its simplicity, the dataset captures three major pillars typically monitored in digital clinical trials:
+
+Inflammatory biomarkers (cytokine_1–cytokine_4)
+
+These four measurements represent circulating cytokines commonly tracked to quantify systemic inflammatory activity and treatment effects.
+They reflect gradual biological shifts, intermittent rises in inflammatory tone, and coordinated behaviour across related pathways.
+Because cytokine responses rarely change in a straight line, these variables naturally carry curved or folded patterns—ideal for methods that focus on local biological neighbourhoods.
+
+Wearable-sensor metrics (wearable_1–wearable_4)
+
+These features summarise patient-level signals extracted from continuous monitoring devices such as wrist-worn sensors or patches.
+They capture fluctuations in rest–activity cycles, movement variability, autonomic signatures and broad physiological rhythms.
+Wearable data are known for their smooth transitions and subtle drifts, often producing clusters or arcs in reduced-dimensional projections.
+
+Clinical assessments (clinical_1–clinical_3)
+
+These variables represent conventional clinical endpoints collected during follow-up visits—composite severity scores, symptom indices, or laboratory-based measures.
+They anchor the digital biomarkers in clinically interpretable space and often evolve along slower trajectories that intersect with cytokine and wearable patterns.
+
+Treatment response (delta_score)
+
+The endpoint of interest, delta_score, reflects the change in each patient’s outcome over time.
+Although numerical, it encodes a combination of biological, behavioural and clinical processes, making linear separability unlikely and nonlinear shifts common.
+We also define a binary responder label to distinguish patients who achieved clinically meaningful improvement from those who did not.
+
+## t-SNE: Recovering Local Biological Neighbourhoods in the Digital Clinical Trial Dataset
+
+In the second part of the chapter we work with a digital clinical-trial dataset containing multimodal information from several hundred patients—cytokine biomarkers, wearable-sensor patterns and clinical measurements. As in real advanced-therapeutic trials, these features interact in nonlinear ways: inflammatory markers rise along curved trajectories, wearable rhythms drift or bend, and clinical patterns cluster locally rather than aligning along straight axes.
+This makes the dataset a natural candidate for nonlinear dimension-reduction.
+
+t-distributed Stochastic Neighbour Embedding (t-SNE) is designed precisely for this type of structure. Instead of searching for global linear directions, as PCA does, t-SNE focuses entirely on preserving local neighbourhoods. The algorithm assumes that what matters biologically is who each patient is similar to, not the overall orientation of the feature space. Patients with comparable cytokine profiles or wearable rhythms should remain close together even if the global geometry is curved or distorted.
+
+To achieve this, t-SNE converts pairwise distances into similarity probabilities. Close patients receive high probabilities; distant ones receive values near zero. Each patient uses its own local bandwidth, controlled by the perplexity, which acts as the effective neighbourhood size. For datasets of this scale, perplexity values around 30–50 typically balance fine detail and broader structure.
+
+With these similarity relationships defined, t-SNE searches for a two-dimensional layout that reproduces them. Points start in random positions and are iteratively moved so that neighbours in the original space remain neighbours in the embedding. A Student’s t distribution (with heavy tails) is used in 2-D, which forces dissimilar patients apart and prevents the crowding that occurs when collapsing high-dimensional data. The optimisation continues until the mismatch between high- and low-dimensional similarities (quantified by the KL divergence) is minimised.
+
+The resulting map preserves local biological structure extremely well. Patients with similar inflammatory and wearable signatures cluster together, and smooth physiological transitions often appear as arcs or curved pathways. However, global distances should not be over-interpreted; the space is faithful locally, not globally.
+
+## Implementing t-SNE
+
+To explore nonlinear structure in the digital clinical-trial dataset, we apply t-distributed Stochastic Neighbour Embedding (t-SNE) to the full set of numeric cytokine, wearable, and clinical measurements. Whereas PCA searches for straight, linear axes summarising the data, t-SNE reconstructs the local neighbourhoods of the original high-dimensional space. Patients who are similar across dozens of biological and digital features remain close together in the two-dimensional embedding, while patients with divergent profiles are pushed apart.
+
+The workflow begins by loading the dataset and selecting only numeric variables. Identifier columns and the clinical outcome (delta_score) are removed to ensure that the embedding is driven solely by observed biological and digital signals rather than labels or outcomes. The resulting feature matrix is scaled and passed to Rtsne(), using a perplexity of 40—appropriate for a cohort of a few hundred patients, and effective at balancing fine-grained detail with broader cohort structure.
+
+After t-SNE converges, we merge the two-dimensional coordinates with key variables such as the clinical response and a binary responder label. This allows us to examine how patterns in response, inflammation, or wearable behaviour map onto the learned manifold. The first plot colours each patient by delta_score, revealing the nonlinear organisation of states across the cohort.
+
+The full implementation is shown below:
+
+```{r}
+library(dplyr)
+library(Rtsne)
+library(ggplot2)
+
+# ------------------------------------------------------------
+# 1. Load the pedagogical digital trial dataset
+# ------------------------------------------------------------
+ df <- readRDS("~/att_ai_ml/DigitalTrial_ManifoldPedagogy.rds")
+# assuming df is already in memory with the columns you showed
+
+colnames(df)
+
+# ------------------------------------------------------------
+# 2. Build the feature matrix for t-SNE
+#    - keep only numeric variables used as features
+#    - remove identifiers and outcome / labels
+# ------------------------------------------------------------
+numeric_cols <- names(df)[sapply(df, is.numeric)]
+
+cols_to_remove <- c("patient_id", "delta_score") 
+
+numeric_keep <- setdiff(numeric_cols, cols_to_remove)
+
+
+X_tsne <- df[, numeric_keep] |>
+  scale() |>
+  as.matrix()
+
+dim(X_tsne)   # should be 500 × (number of numeric predictors kept)
+
+# ------------------------------------------------------------
+# 3. Run t-SNE
+# ------------------------------------------------------------
+set.seed(2026)
+
+tsne_fit <- Rtsne(
+  X_tsne,
+  dims       = 2,
+  perplexity = 40,
+  theta      = 0.5,
+  max_iter   = 1500,
+  verbose    = TRUE
+)
+
+# ------------------------------------------------------------
+# 4. Merge embedding with outcome / labels
+# ------------------------------------------------------------
+tsne_df <- data.frame(
+  tSNE1       = tsne_fit$Y[, 1],
+  tSNE2       = tsne_fit$Y[, 2],
+  delta_score = df$delta_score,
+  responder   = df$responder
+)
+
+# ------------------------------------------------------------
+# 5. Plot t-SNE embedding colored by response
+# ------------------------------------------------------------
+ggplot(tsne_df, aes(tSNE1, tSNE2, colour = delta_score)) +
+  geom_point(size = 1.5, alpha = 0.8) +
+  scale_colour_viridis_c() +
+  theme_minimal() +
+  labs(
+    title = "t-SNE embedding of digital clinical trial features",
+    colour = "ΔScore"
+  )
+
+```
+
+### Interpreting the t-SNE embedding
+
+The t-SNE map offers a compact, two-dimensional view of how patients relate to one another across all clinical, cytokine, behavioural, and wearable features collected in the digital trial. Instead of forming neat, linear clusters, the patients occupy several curved, irregular structures—an indication that their profiles vary along nonlinear physiological and behavioural gradients rather than along simple straight axes.
+
+Colours represent the clinical response (ΔScore), and the smooth transitions in colour across the map highlight that treatment response changes gradually along these trajectories. In the upper region of the map, where points cluster more tightly, patients tend to share similar cytokine levels and clinical markers, producing a band of relatively high ΔScore values. In contrast, the lower region contains a more diffuse arrangement of patients with lower response, reflecting greater heterogeneity in their wearable and behavioural patterns.
+
+Although the horizontal and vertical axes have no direct interpretation in t-SNE, the spatial relationships do: patients positioned close together share highly similar multimodal profiles, while those far apart differ across several biological or digital domains. The figure therefore serves as a visual summary of how complex patient data coalesce into meaningful local neighbourhoods—highlighting where similar physiological states appear and where clinically relevant differences emerge within the cohort.
+
+### Faceted t-SNE: examining individual variable gradients
+
+To better understand how specific trial variables vary along the manifold, we create a faceted version of the t-SNE map. Each facet displays the same two-dimensional embedding but colours the points according to a single feature, such as a cytokine, wearable metric, or clinical variable. 
+
+The code below constructs the faceted plot:
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+# ------------------------------------------------------------
+# 1. Select variables to facet (update for new dataset)
+# ------------------------------------------------------------
+vars_to_facet <- c(
+  "cytokine_1",
+  "cytokine_3",
+  "wearable_1",
+  "wearable_3",
+  "clinical_1",
+  "clinical_3"
+)
+
+# ------------------------------------------------------------
+# 2. Merge embedding with the selected variables
+# ------------------------------------------------------------
+tsne_df <- df %>%
+  dplyr::select(all_of(vars_to_facet), delta_score) %>%
+  dplyr::mutate(
+    tSNE1 = tsne_fit$Y[, 1],
+    tSNE2 = tsne_fit$Y[, 2],
+    responder = ifelse(
+      delta_score > median(delta_score),
+      "High response",
+      "Low response"
+    )
+  )
+
+# ------------------------------------------------------------
+# 3. Reshape for faceting
+# ------------------------------------------------------------
+tsne_long <- tsne_df %>%
+  pivot_longer(
+    cols = all_of(vars_to_facet),
+    names_to = "Variable",
+    values_to = "Value"
+  )
+
+# ------------------------------------------------------------
+# 4. Faceted t-SNE plot (Figure 14.7 style)
+# ------------------------------------------------------------
+ggplot(tsne_long, aes(tSNE1, tSNE2, color = Value, shape = responder)) +
+  geom_point(size = 2, alpha = 0.9) +
+  facet_wrap(~ Variable, ncol = 3) +
+  scale_color_viridis_c() +
+  theme_minimal(base_size = 13) +
+  labs(
+    title = "t-SNE1 vs t-SNE2 faceted by trial variables",
+    subtitle = "Colour = variable value | Shape = responder type",
+    x = "tSNE1",
+    y = "tSNE2",
+    color = "Value",
+    shape = "Responder"
+  )
+
+
+```
+
+The faceted t-SNE figure shows how individual trial variables behave across the same nonlinear patient manifold. Each panel uses identical t-SNE coordinates, but colours the points by a single feature, allowing us to visually compare molecular, wearable, and clinical patterns on a shared 2-D map. Shapes indicate responder status, helping connect biological patterns with clinical improvement.
+
+Across variables, consistent structure emerges. The two clinical markers display broad, smooth gradients that follow the main arms of the manifold, suggesting that clinical severity and recovery potential change gradually along patient trajectories. The cytokine variables show more localized shifts: in some regions, cytokine values rise sharply or form pockets with distinct expression levels, hinting at immune-driven sub-phenotypes embedded within the cohort. Wearable features, in contrast, tend to highlight behavioural and physiological rhythms, often producing bands or compact regions where activity or sensor-derived signals deviate from the rest of the manifold.
+
+Responder shapes overlay this structure and reveal where improvement concentrates. Areas with a higher proportion of high-response patients align with zones where clinical and cytokine gradients shift favorably, whereas regions dominated by low-response patients correspond to less favourable molecular or wearable patterns. Together, these faceted panels show how diverse data modalities vary across the same patient manifold and help clarify which biological or behavioural signatures are most closely linked to treatment response.
+
+## Uniform Manifold Approximation and Projection (UMAP)
+
+Where t-SNE concentrates on preserving very local neighbourhoods, UMAP approaches the problem from a geometric perspective. Instead of focusing only on pairwise similarities, UMAP attempts to learn the shape of the space in which the patients live—the manifold formed by their combined cytokine, wearable, and clinical features. Once this manifold is estimated in high dimensions, UMAP builds a lower-dimensional version that preserves both local detail and broader structural relationships.
+
+This makes UMAP especially suitable for digital clinical trial data. Multimodal measurements—such as inflammatory cytokines, sensor-derived behaviour, and clinical scores—rarely follow linear directions. Instead, they tend to form curved trajectories, branching patterns, and regions with very different density, all of which UMAP captures naturally. In contrast to t-SNE, UMAP often reveals clearer large-scale organisation, produces more stable embeddings across repeated runs, and scales efficiently to datasets with many patients and features.
+
+UMAP constructs its representation by assuming that the high-dimensional data lie on an underlying manifold. Around each patient, it defines a “fuzzy” neighbourhood whose width adapts to local density: tight where many similar patients cluster together, broader where data are sparse. These neighbourhoods form the weighted edges of a graph that approximates the dataset’s intrinsic structure. The algorithm then searches for a two-dimensional layout whose relationships mirror this graph as closely as possible.
+
+### Three hyperparameters control how UMAP views the data:
+
+Several hyperparameters shape the behaviour of UMAP, and understanding them helps interpret the resulting patient manifold. The first is n_neighbors, which controls how large each neighbourhood is in the high-dimensional space. Small values make UMAP focus on very local structure, highlighting sharp molecular or behavioural transitions. Larger values smooth over these fine details and reveal broader cohort-level organisation, often producing cleaner global trajectories.
+
+The min_dist hyperparameter determines how tightly points may cluster in the final embedding. When min_dist is small, UMAP allows compact, sharply defined regions; when it is larger, the map spreads points more evenly across the plane. This helps balance visual clarity with the preservation of meaningful biological variation.
+
+The metric argument specifies how distances are computed in the original feature space. Euclidean distance is standard and works well for mixed clinical, cytokine, and wearable features, but alternative metrics can emphasise different relationships if needed.
+
+A key practical advantage of UMAP is that, unlike t-SNE, it is deterministic when the random seed is fixed and can project new patients onto an existing embedding. This makes it suitable for machine-learning pipelines and for real-time monitoring scenarios in digital or decentralised clinical trials—where new patients may need to be visually integrated into an established patient-state manifold.
+
+### Implementing UMAP
+
+The code follows the same structure: identify the numeric features to use, build the model matrix, compute the UMAP embedding, and visualise the result.
+
+```{r}
+library(dplyr)
+library(umap)
+library(ggplot2)
+
+# ------------------------------------------------------------
+# 1. Load dataset
+# ------------------------------------------------------------
+df <- readRDS("~/att_ai_ml/DigitalTrial_ManifoldPedagogy.rds")
+
+# ------------------------------------------------------------
+# 2. Identify numeric variables
+# ------------------------------------------------------------
+numeric_cols <- names(df)[sapply(df, is.numeric)]
+
+# Remove identifiers and the clinical outcome
+cols_to_remove <- c("patient_id", "delta_score")
+
+numeric_keep <- setdiff(numeric_cols, cols_to_remove)
+
+# ------------------------------------------------------------
+# 3. Build UMAP feature matrix
+# ------------------------------------------------------------
+X_umap <- df[, numeric_keep] %>%
+  scale() %>%
+  as.matrix()
+
+dim(X_umap)   # should be 500 × 11 (or similar depending on dataset)
+
+# ------------------------------------------------------------
+# 4. Configure and run UMAP
+# ------------------------------------------------------------
+set.seed(2026)
+
+umap_config <- umap.defaults
+umap_config$n_neighbors <- 20      # size of the neighbourhood
+umap_config$min_dist    <- 0.15    # cluster tightness
+umap_config$metric      <- "euclidean"
+
+umap_fit <- umap(X_umap, config = umap_config)
+
+# ------------------------------------------------------------
+# 5. Merge embedding with the dataset
+# ------------------------------------------------------------
+umap_df <- df %>%
+  mutate(
+    UMAP1 = umap_fit$layout[, 1],
+    UMAP2 = umap_fit$layout[, 2]
+  )
+
+# ------------------------------------------------------------
+# 6. Plot UMAP embedding
+# ------------------------------------------------------------
+ggplot(umap_df, aes(UMAP1, UMAP2, colour = delta_score)) +
+  geom_point(size = 1.8, alpha = 0.9) +
+  scale_colour_viridis_c() +
+  theme_minimal() +
+  labs(
+    title = "UMAP embedding of digital clinical trial features",
+    colour = "ΔScore"
+  )
+
+```
+
+### Interpreting the UMAP embedding
+
+The UMAP embedding provides a compact view of how the digital-trial features organise across the cohort. Unlike t-SNE, which tends to emphasise very local structures, UMAP balances local and global relationships. The result is a map where patients form several smoothly connected regions, each reflecting distinct combinations of cytokine, wearable, and clinical measurements.
+
+In this embedding, points are coloured by ΔScore, the trial’s continuous clinical outcome. The colour gradient makes it easy to see where stronger or weaker responses occur across the manifold. In the current figure, these patterns appear as:
+
+Smooth arcs of increasing ΔScore, where neighbouring patients show gradually higher clinical response.
+These arcs correspond to coordinated changes across multiple clinical and digital variables.
+
+Compact pockets of lower ΔScore, typically at the lower part of the manifold.
+These regions group patients with more limited improvement, reflecting similar biological and behavioural profiles.
+
+Distinct transitions, where the colour shifts steadily from low to high values.
+These transitional zones often represent intermediate physiological states rather than sharp subgroup boundaries.
+
+Because UMAP preserves more global geometry than t-SNE, the spacing between patient groups is informative: regions that appear close in the 2-D map correspond to patients who were genuinely similar across the high-dimensional feature set. Conversely, areas that are clearly separated reflect meaningful multi-modal differences.
+
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+# ------------------------------------------------------------
+# 1. Select variables to facet (adapted to new dataset)
+# ------------------------------------------------------------
+vars_to_facet <- c(
+  "cytokine_1",
+  "cytokine_3",
+  "wearable_1",
+  "wearable_3",
+  "clinical_1",
+  "clinical_3"
+)
+
+# ------------------------------------------------------------
+# 2. Build UMAP dataframe with responder classification
+# ------------------------------------------------------------
+umap_df <- df %>%
+  dplyr::select(all_of(vars_to_facet), delta_score) %>%
+  dplyr::mutate(
+    UMAP1 = umap_fit$layout[, 1],
+    UMAP2 = umap_fit$layout[, 2],
+    responder = ifelse(delta_score > median(delta_score),
+                       "High response", "Low response")
+  )
+
+# ------------------------------------------------------------
+# 3. Reshape for faceting
+# ------------------------------------------------------------
+umap_long <- umap_df %>%
+  pivot_longer(
+    cols      = all_of(vars_to_facet),
+    names_to  = "Variable",
+    values_to = "Value"
+  )
+
+# ------------------------------------------------------------
+# 4. Faceted UMAP figure (Figure 14.7 style)
+# ------------------------------------------------------------
+ggplot(umap_long, aes(UMAP1, UMAP2, color = Value, shape = responder)) +
+  geom_point(size = 2, alpha = 0.9) +
+  facet_wrap(~ Variable, ncol = 3) +
+  scale_color_viridis_c() +
+  theme_minimal(base_size = 13) +
+  labs(
+    title = "UMAP1 vs UMAP2 faceted by trial variables",
+    subtitle = "Color = variable value | Shape = responder type",
+    x = "UMAP1",
+    y = "UMAP2",
+    color = "Value",
+    shape = "Responder"
+  )
+
+```
+
+The faceted UMAP view allows us to examine how individual trial variables vary across the same two-dimensional embedding. Each panel shows the identical UMAP manifold, but the points are coloured according to a specific cytokine, wearable feature, or clinical marker. This makes it possible to see whether a variable changes smoothly along the manifold, forms local peaks, or concentrates within particular patient regions.
+
+Across the panels, several patterns emerge. Some clinical markers (e.g., clinical_1) show broad gradients that sweep across large areas of the embedding, suggesting they capture global physiological trends shared by multiple patient subgroups. Cytokine measurements often display more localised or curved gradients, reflecting the nonlinear biological transitions embedded in the high-dimensional space. Wearable features tend to highlight behaviourally distinct regions, with pockets of higher or lower values appearing in specific segments of the manifold.
+
+Responder status, represented by point shapes, overlays an additional layer of interpretation. Regions enriched for high-response patients often coincide with specific value ranges of cytokine or wearable variables, whereas low-response patients cluster in areas characterised by different physiological or behavioural patterns. This visual alignment between variable intensity and response category helps connect mechanistic factors to clinical outcomes.
+
+### Comparing t-SNE and UMAP 
+
+t-SNE and UMAP produce visually different but complementary views of the same high-dimensional patient profiles. Plotting the two embeddings side-by-side makes it easier to understand what each method preserves and how these differences matter for clinical interpretation.
+
+In this dataset, t-SNE arranges patients into several compact regions connected by curved paths. This layout emphasises local neighbourhoods: patients who look similar across cytokine, wearable, and clinical measurements cluster tightly together, but the relative spacing between different clusters should not be interpreted literally. t-SNE excels at revealing fine-grained structure and subtle transitions, which appear as smooth colour gradients in ΔScore within each local group.
+
+UMAP, by contrast, produces an embedding with clearer global organisation. Patient regions that appear distinct under t-SNE often unfold into a broader continuum under UMAP, making large-scale gradients in ΔScore easier to interpret. Neighbourhoods remain coherent, but their arrangement reflects genuine similarities in the original multimodal space, allowing global distances to carry meaning.
+
+When compared side-by-side, the two methods highlight complementary aspects of the trial cohort:
+
+t-SNE reveals tight micro-structures and local continuity in patient profiles.
+
+UMAP reveals broader clinical pathways and how patient subpopulations relate to one another.
+
+Viewing both embeddings together provides a richer picture of the cohort, helping identify regions of consistent improvement, areas of mixed response, and potential mechanistic subtypes that may warrant deeper investigation.
+
+The code below generates the side-by-side comparison:
+
+```{r}
+library(patchwork)
+
+# t-SNE plot
+
+p_tsne <- ggplot(tsne_df, aes(tSNE1, tSNE2, colour = delta_score)) +
+geom_point(size = 1.6, alpha = 0.85) +
+scale_colour_viridis_c() +
+theme_minimal() +
+labs(
+title = "t-SNE embedding",
+colour = "ΔScore"
+)
+
+# UMAP plot
+
+p_umap <- ggplot(umap_df, aes(UMAP1, UMAP2, colour = delta_score)) +
+geom_point(size = 1.6, alpha = 0.85) +
+scale_colour_viridis_c() +
+theme_minimal() +
+labs(
+title = "UMAP embedding",
+colour = "ΔScore"
+)
+
+# Side-by-side
+
+p_tsne + p_umap +
+plot_annotation(
+title = "Comparison of t-SNE and UMAP embeddings",
+subtitle = "t-SNE preserves local neighbourhoods; UMAP captures both local and global structure"
+)
+
+```
+
+```{r, include=FALSE, echo=FALSE, warning=FALSE, message=FALSE }
+## INCLUE SOM and LLE 
+```
+
+

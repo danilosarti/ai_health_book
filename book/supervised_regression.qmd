@@ -1,0 +1,2668 @@
+---
+title: "Supervised Learning: Regression tasks"
+bibliography: references.bib
+cite-method: citeproc
+link-citations: true
+editor_options:
+  chunk_output_type: console
+format: html
+---
+
+## Setting up R
+
+Run this code in your R studio to make sure you have all the packages required installed!
+
+```{r}
+#| label: setup-install-packages
+#| message: false
+#| warning: false
+
+# Packages needed in this section
+req_pkgs <- c(
+  "dplyr",      # data wrangling
+  "ggplot2",    # plotting
+  "tidyr",      # tidying
+  "readr",      # read/write csv
+  "tibble",     # tibbles/printing
+  "gridExtra",  # simple plot grids
+  "emmeans",    # adjusted means / contrasts
+  "effsize",     # effect sizes (Cohen's d, Cliff's delta)
+ "DataExplorer" ,#for missingness
+  "glmnet",
+ "lmtest" ,# for checking the 
+ "pROC"
+ )
+
+# Install any that are missing
+to_install <- setdiff(req_pkgs, rownames(installed.packages()))
+if (length(to_install) > 0) {
+  install.packages(to_install, dependencies = TRUE)
+}
+# Load all (silently)
+invisible(lapply(req_pkgs, require, character.only = TRUE))
+
+```
+
+## Recall
+
+In the introduction to AI section we learnt that models are representations that provide information for evidence based decisions. We also learnt that for each machine learning task we may have different models that use different learning algorithms, their performance needs to be evaluated. Comparison between such models is better performed via metrics. We also learnt the importance of cross validation to avoid variance, bias and over-fitting.
+
+In this chapter with a motivational example we will start with the first kind of supervised learning technique, in which the models will learn from the relation between **continuous or binary labels** and explanatory features, this kind of task is named `regression`.
+
+The introductory chapter defined a generic representation of a model using an equation:
+
+$$Y=f(x1,x2,...,xn)+error$$ Where Y is attribute considered as label or response and x's are the explanatory features and error is due to random process os measure errors usually notate as $\epsilon$
+
+In this chapter we will give attention to a series of models in which this mathematical function f can be defined as:
+
+$$Y= \mu + w1 * x1 +.... wn *xn+ \epsilon$$ {#eq-linear} Once all $w_i$s are raised to the power of 1 we say this model is linear on the parameters or simply linear. $\mu$ and $w_i$s are named parameters which we can estimate using different algorithms. The $w_is$ will be weighting the importance of feature $x_i$ when explaining Y.
+
+In this chapter we will cover three main classes of models and respective algorithms to determine the parameters as follows:
+
+-   linear regression which parameters are estimated by least squares (which use the great idea of minimizing the errors between the real values and the predicted values)
+
+and two models that consider the notion of regularization for avoiding model complexity (using an idea of shrinkage - defined later)
+
+-   lasso regression, estimated via Least Absolute Shrinkage and Selection Operator (LASSO) and L1 regularization
+-   Ridge regresion estimated via L2 norm.
+
+The idea of Lasso and Ridge regression is making the values of $w_i$s smaller as possible (ridge) or zero (lasso) for the least important features.
+
+Once we will be covering regression tasks we will also address the logistic regression model that is useful when we want to model a binary response variable Y= 0 or 1 using explanatory features.
+
+After running a machine learning method and estimating the parameters, also named weights, we can rewrite it as:
+
+$$\hat{Y}= \hat{\mu} + \hat{w_1}* x1 +....+\hat{w_n} *xn$$ The values with a hat are the estimatives for each parameter an assume values depending on the model fitted. The $\hat{Y}$ is named predicted value. It is the value returned by the modell fitted for a given set of explanatory features multiplied by the parameters estimated. We will further see the importance of this value for estimating measures of error and model performance.
+
+Before seeing the details about regression models we will start by describing a particular case in which they will be applied.
+
+## Motivational context : chemotherapy clinical trial (focus on variables and practical interpretation)
+
+As a motivational example we will use a **simulated randomized clinical trial** (1:1) ,a typical kind of experiment conducted to determine efficacy of drugs, in our case a chemoterapeutic one, including only **patients with tumors**.\
+Half of the patients receive **chemotherapy** (`chemo`), and the other half do not (`no_chemo`). The practical goal is to evaluate whether patients treated with chemotherapy show **greater tumor reduction**, and to understand how **gene expression** and **clinical characteristics** influence this response.
+
+### What is measured (and how to interpret each variable)
+
+**Unit of analysis:** patients. We have 10000 thousand patients.
+
+**Treatment** - `treatment` (factor: `no_chemo`, `chemo`)\
+Represents whether the patient received the chemotherapy.\
+In regression models, the coefficient for `chemo` directly quantifies the **average difference in tumor reduction** compared with `no_chemo`.
+
+**Dose** - `dose_intensity` (continuous, \~0 for `no_chemo` and 0.8–1.1 for `chemo`)\
+Measures how strong the chemotherapy was for treated patients.\
+A positive regression coefficient means that **higher dose intensity** is associated with **greater tumor shrinkage**.
+
+**Outcomes** - `baseline_tumor_mm` (continuous, mm): tumor size before treatment\
+- `post_tumor_mm` (continuous, mm): tumor size after treatment\
+- `response_percent` (continuous, 0–100): percentage of tumor shrinkage,\
+calculated as `100 × (baseline − post) / baseline`\
+→ Higher values mean **better therapeutic response**.\
+- `high_response` (binary, 0/1): equal to 1 if `response_percent ≥ 30` (similar to RECIST clinical criteria) @eisenhauer2009recist.\
+→ Used in logistic regression to model the **probability of a strong response**.
+
+The RECIST (Response Evaluation Criteria in Solid Tumors) @eisenhauer2009recist are standardized, internationally accepted criteria used to assess tumor response to treatment in clinical trials. Developed by an international collaboration between the EORTC, NCI (U.S.), and NCIC (Canada), RECIST provides quantitative guidelines for measuring changes in tumor size using imaging (typically CT or MRI). Under RECIST version 1.1 (2009), tumor response is classified as: Complete Response (CR): Disappearance of all target lesions. Partial Response (PR): ≥30% decrease in the sum of the diameters of target lesions (relative to baseline). Progressive Disease (PD): ≥20% increase in the sum of diameters (plus an absolute increase of ≥5 mm) or appearance of new lesions. Stable Disease (SD): Neither sufficient shrinkage nor sufficient increase to qualify as PR or PD.
+
+**Clinical profile** - `patient_age` (continuous, years): older age may slightly reduce treatment effect.\
+- `tumor_grade` (factor: `G1`, `G2`, `G3`): aggressiveness of the tumor.\
+More aggressive tumors may respond more strongly because of higher proliferation rates.\
+- `performance_score` (ordinal, 0–2): functional status (ECOG-like scale).\
+Higher scores indicate poorer condition and typically **lower treatment benefit** due to toxicity or fragility.
+
+**Gene expression (omics)** - `gene_01` … `gene_20000` (continuous, log2-CPM normalized)\
+Represent quantitative gene expression levels.\
+Some genes were simulated as **causal** (directly affecting response),\
+others as **correlated** (co-expressed with causal ones),\
+and the rest as **noise**.
+
+The above example will be considered the reality for which we want to create a model representation. In penalized models (LASSO or Ridge), we expect the **causal and correlated genes** to receive higher weights (non-zero coefficients), while noisy ones will shrink toward zero.
+
+### Experimental objectives and practical questions
+
+-   **Main question:** Do patients treated with chemotherapy (`chemo`) show higher average tumor shrinkage than those who do not (`no_chemo`)?\
+-   **Clinical modulators:** Do age, tumor grade, or performance score modify this effect?\
+-   **Molecular biomarkers:** Which genes are associated with treatment response?\
+-   **Predictive modeling:** Given a patient’s clinical and molecular profile, how well can we predict their tumor reduction and probability of high response?
+
+```{r, include=FALSE, echo=FALSE}
+# #| label: gen-and-save-ct-chemo-continuous-genes
+# #| include: false
+# #| echo: false
+# #| message: false
+# #| warning: false
+# # Clinical trial (tumor patients only): chemo vs no_chemo (1:1).
+# # Gene expression is continuous (log2-CPM-like), not ternary.
+# # Outcomes:
+# #   - response_percent = 100 * (baseline - post) / baseline   (continuous shrinkage)
+# #   - high_response    = 1 if response_percent >= 30          (RECIST-like)
+# # Chemo must have larger mean shrinkage than no_chemo.
+# # 
+# set.seed(2025)
+# 
+# # ---- SETTINGS ----
+# n <- 10000                     # total sample size (all are tumor patients in this trial)
+# p <- 2000                      # number of genes
+# gene_names <- paste0("gene_", sprintf("%02d", 1:p))
+# 
+# # Randomization 1:1
+# treatment <- factor(sample(c("chemo","no_chemo"), n, replace = TRUE),
+#                     levels = c("no_chemo","chemo"))
+# 
+# # Clinical covariates
+# patient_age       <- round(runif(n, 22, 82))
+# tumor_grade       <- factor(sample(c("G1","G2","G3"), n, TRUE, c(0.25,0.45,0.30)))
+# performance_score <- sample(0:2, n, TRUE, prob = c(0.55,0.35,0.10))  # ECOG-like (0 best)
+# 
+# # Dose intensity (only meaningful for chemo; control = 0)
+# dose_intensity <- ifelse(treatment == "chemo", runif(n, 0.8, 1.1), 0)
+# 
+# # ---- CONTINUOUS GENE EXPRESSION (simulate counts -> log2 CPM) ----
+# # We simulate library sizes, gene base expression, and modest correlation structure.
+# 
+# # Library sizes (per sample), e.g., 2–6 million reads
+# lib_size <- round(runif(n, 2e6, 6e6))
+# 
+# # Gene base expression levels (on log scale for rates)
+# # Some genes are higher expressed than others
+# gene_base_mu <- rnorm(p, mean = -6, sd = 1)  # base log-rate offsets
+# 
+# # Low-rank correlation structure across genes via two latent factors
+# f1 <- rnorm(n, 0, 1)
+# f2 <- rnorm(n, 0, 1)
+# gene_loading1 <- rnorm(p, 0.5, 0.3)
+# gene_loading2 <- rnorm(p, -0.4, 0.3)
+# 
+# # Build raw count matrix via Poisson with sample-specific library sizes
+# counts <- matrix(0L, n, p, dimnames = list(NULL, gene_names))
+# for (j in 1:p) {
+#   # per-sample log-rate for gene j
+#   log_rate <- log(lib_size) + gene_base_mu[j] + gene_loading1[j]*f1 + gene_loading2[j]*f2 + rnorm(n, 0, 0.2)
+#   rate <- pmax(exp(log_rate), 1e-6)
+#   counts[, j] <- rpois(n, lambda = rate)
+# }
+# 
+# # CPM and log2-CPM transform (simple, library-size normalized)
+# cpm <- counts / rowSums(counts) * 1e6
+# expr_log2 <- log2(cpm + 1)
+# colnames(expr_log2) <- gene_names
+# 
+# # ---- Define causal and response-linked genes on continuous expression ----
+# idx_true   <- c(1, 5, 12)   # truly causal genes (affect shrinkage)
+# idx_linked <- c(8, 14, 19)  # response-linked (non-causal but correlated)
+# 
+# # Standardize gene expression for effect calculation
+# expr_std <- scale(expr_log2)
+# 
+# # Causal gene effects on shrinkage proportion (small-to-moderate)
+# beta_genes <- rep(0, p)
+# beta_genes[idx_true] <- c(0.06, -0.10, 0.05)   # signs: +, -, +
+# gene_signal <- drop(expr_std %*% beta_genes)
+# 
+# # ---- Baseline tumor size (mm) ----
+# baseline_tumor_mm <- rlnorm(n, meanlog = log(45), sdlog = 0.35)
+# 
+# # ---- Chemo efficacy (Emax-like) and toxicity ----
+# Emax <- 0.70                              # max shrinkage at high intensity
+# EC50 <- 0.85                              # intensity that gives 50% of Emax
+# efficacy_raw <- Emax * (dose_intensity / (EC50 + pmax(dose_intensity, 1e-6)))
+# efficacy_raw[treatment == "no_chemo"] <- 0
+# 
+# # Small clinical effects
+# age_eff   <- 0.001 * (patient_age - 55)                      # tiny
+# grade_eff <- c(G1 = 0.00, G2 = 0.02, G3 = 0.05)[tumor_grade] # slightly higher in G3
+# perf_eff  <- c(`0` = 0.00, `1` = -0.02, `2` = -0.05)[as.character(performance_score)]
+# 
+# # Toxicity penalty (reduces net benefit slightly at higher intensity)
+# toxicity <- 0.06 * (pmax(dose_intensity - 0.95, 0))^2
+# 
+# # ---- Shrinkage proportion (0..1), then sizes and percent ----
+# shrink_prop <- pmin(pmax(efficacy_raw + gene_signal + age_eff + grade_eff + perf_eff - toxicity +
+#                            rnorm(n, 0, 0.03), 0), 1)
+# 
+# post_tumor_mm    <- baseline_tumor_mm * (1 - shrink_prop)
+# response_percent <- pmin(pmax(100 * (baseline_tumor_mm - post_tumor_mm) / baseline_tumor_mm, 0), 100)
+# high_response    <- as.integer(response_percent >= 30)  # RECIST-like threshold
+# 
+# # ---- Response-linked (non-causal) genes: align a few with shrinkage ----
+# # We add a small correlation by replacing those columns with noisy ranks of shrink_prop
+# linked_signal <- as.numeric(scale(shrink_prop))
+# linked_signal[is.na(linked_signal)] <- 0
+# for (j in idx_linked) {
+#   expr_log2[, j] <- scale(linked_signal + rnorm(n, 0, 0.2))[,1]  # overwrite with linked pattern
+# }
+# 
+# # ---- Final dataset ----
+# trial_ct <- data.frame(
+#   patient_id        = sprintf("P%03d", 1:n),
+#   treatment         = treatment,
+#   dose_intensity    = round(dose_intensity, 3),
+#   patient_age       = patient_age,
+#   tumor_grade       = tumor_grade,
+#   performance_score = performance_score,
+#   baseline_tumor_mm = round(baseline_tumor_mm, 1),
+#   post_tumor_mm     = round(post_tumor_mm, 1),
+#   response_percent  = round(response_percent, 1),
+#   high_response     = high_response
+# )
+# trial_ct <- cbind(trial_ct, as.data.frame(expr_log2))  # continuous gene expression
+# 
+# # ---- Safety net: guarantee chemo minus no_chemo >= margin ----
+# margin <- 18  # desired minimal difference (pp) in mean response_percent
+# m <- with(trial_ct, tapply(response_percent, treatment, mean))
+# if (all(c("chemo","no_chemo") %in% names(m))) {
+#   need <- (m["no_chemo"] + margin) - m["chemo"]
+#   if (!is.na(need) && need > 0) {
+#     trial_ct$response_percent <- ifelse(
+#       trial_ct$treatment == "chemo",
+#       pmin(pmax(trial_ct$response_percent + as.numeric(need), 0), 100),
+#       trial_ct$response_percent
+#     )
+#     trial_ct$post_tumor_mm <- ifelse(
+#       trial_ct$treatment == "chemo",
+#       round(trial_ct$baseline_tumor_mm * (1 - trial_ct$response_percent/100), 1),
+#       trial_ct$post_tumor_mm
+#     )
+#     trial_ct$high_response <- as.integer(trial_ct$response_percent >= 30)
+#   }
+# }
+# 
+# # ---- SAVE ----
+# dir.create("data", showWarnings = FALSE)
+# saveRDS(trial_ct, "data/trial_ct_chemo_cont.rds")
+# readr::write_csv(trial_ct, "data/trial_ct_chemo_cont.csv")
+
+
+```
+
+## Reading the dataset into our environment
+
+Lets read the dataset in our R studio and check its structure of the first 15 columns
+
+```{r}
+#| label: load-trial
+#| message: false
+#| warning: false
+trial_ct <- readRDS("~/att_ai_ml/data/trial_ct_chemo_cont.rds")
+str(trial_ct[, 1:15])   # peek
+str(trial_ct)
+```
+
+### Notes for analysis
+
+An important first stage in any statistical or machine learning modelling is the exploratory analysis in which we use simple metrics of visualization tools to have a first glimpse of the dataset we have in hands. In this sense, we can use figures like histograms or boxplots that represent the distribution of continuous features and scatterplots that show the relationship between two continuous variables
+
+For example, we can produce, Boxplots of `response_percent` by `treatment`, histograms of `response_percent`, and scatter plots of `baseline_tumor_mm` vs `post_tumor_mm`.
+
+In summary, in our clinical trial example, `response_percent` is the main continuous endpoint, `high_response` is its clinically relevant binary version, `treatment` and `dose_intensity` define the intervention, and clinical plus gene variables explain **for whom** and **how much** the chemotherapy works.
+
+Our objective in this chapter will be:
+
+For linear regression:
+
+-   Report **estimated coefficients**, **standard errors**, **t-values**, and **p-values** for each predictor.
+
+-   Evaluate **model fit** using metrics such as **R²** and **adjusted R²** to assess explained variability.
+
+-   Check **residual diagnostics** (normality, homoscedasticity, and influential points) to verify model assumptions.
+
+-   Plot **fitted vs observed values** and **residual vs fitted** to visually inspect model adequacy.
+
+<!-- -->
+
+-   Report **confidence intervals** for main effects (e.g., treatment effect, dose effect).
+
+<!-- -->
+
+-   Summarize **predicted responses** or **marginal means** by treatment group for interpretation and communication of clinical impact.
+
+<!-- -->
+
+-   For LASSO, Ridge and Elastic Net: use **cross-validation** to select the regularization parameter λ, and compare their stability and sparsity.\
+-   In your report, distinguish clearly between:
+    -   **Average treatment effects** (`chemo` vs `no_chemo`)\
+    -   **Modulating effects** (genes, age, grade, performance, dose intensity)
+-   For logistic regression: report **odds ratios** with 95% CIs and evaluate **ROC/AUC** and **calibration**.
+
+We start usually by understanding if we have any bits of the data that may be missing. Using this code below we can see that our dataset is indeed complete. We will dedicate a section on missing data in future chapters. In the case of our motivational example we have a complete dataset.
+
+```{r}
+#| label: ea-types
+#| message: false
+#| warning: false
+type_map <- tibble::tibble(
+  variable    = names(trial_ct),
+  class       = sapply(trial_ct, \(x) paste(class(x), collapse = "/")),
+  n_missing   = sapply(trial_ct, \(x) sum(is.na(x))),
+  pct_missing = round(100 * sapply(trial_ct, \(x) mean(is.na(x))), 2),
+  n_unique    = sapply(trial_ct, \(x) dplyr::n_distinct(x)),
+  example     = sapply(trial_ct, \(x) paste(utils::head(unique(x), 3), collapse = ", "))
+)
+type_map %>% arrange(desc(class))
+
+```
+
+```{r, warning =FALSE, include=FALSE}
+if (!requireNamespace("DataExplorer", quietly = TRUE)) install.packages("DataExplorer")
+library(DataExplorer)
+library(ggplot2)
+
+# Seleciona só variáveis com NA; se não houver, usa todas
+has_na <- vapply(trial_ct, function(x) any(is.na(x)), logical(1))
+df_plot <- if (any(has_na)) trial_ct[, has_na, drop = FALSE] else trial_ct
+
+# Gera o gráfico base do DataExplorer e força limite inferior 0 no eixo de contagem
+p <- plot_missing(df_plot, title = "Per-variable missingness (count & proportion)")
+
+```
+
+```{r}
+p + scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, .05)))
+
+```
+
+An important first stage in any statistical or machine learning modelling is the exploratory analysis in which we use simple metrics of visualization tools to have a first glimpse of the dataset we have in hands. In this sense, we can use figures like histograms or boxplots that represent the distribution of continuous features and scatterplots that show the relationship between two continuous variables
+
+For example, we can produce, Boxplots of `response_percent` by `treatment`, histograms of `response_percent`, and scatter plots of `baseline_tumor_mm` vs `post_tumor_mm`.
+
+Below we have the codes to produce some exploratory graphics
+
+```{r}
+#| label: ea-hists
+#| fig-cap: "Distributions of outcomes and key covariates."
+#| fig-width: 7
+#| fig-height: 6
+p1 <- ggplot(trial_ct, aes(response_percent)) + geom_histogram(bins = 30) +
+  labs(x = "Response percent", y = "Count")
+p2 <- ggplot(trial_ct, aes(factor(high_response))) + geom_bar() +
+  labs(x = "High response (≥30%)", y = "Count")
+p3 <- ggplot(trial_ct, aes(baseline_tumor_mm)) + geom_histogram(bins = 30) +
+  labs(x = "Baseline tumor (mm)", y = "Count")
+p4 <- ggplot(trial_ct, aes(patient_age)) + geom_histogram(bins = 30) +
+  labs(x = "Age (years)", y = "Count")
+gridExtra::grid.arrange(p1, p2, p3, p4, ncol = 2)
+
+```
+
+```{r}
+#| label: ea-scatter-size
+#| fig-cap: "Baseline vs post-treatment tumor size."
+#| fig-width: 7
+#| fig-height: 5
+ggplot(trial_ct, aes(baseline_tumor_mm, post_tumor_mm, color = treatment)) +
+  geom_point(alpha = 0.6) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2) +
+  labs(x = "Baseline (mm)", y = "Post (mm)", color = "Treatment")
+
+```
+
+```{r}
+#| label: ea-box
+#| fig-cap: "Response by treatment."
+#| fig-width: 6
+#| fig-height: 4
+ggplot(trial_ct, aes(treatment, response_percent)) +
+  geom_boxplot() +
+  labs(x = "Treatment", y = "Response percent")
+
+```
+
+```{r}
+#| label: ea-box-plus
+#| fig-cap: "Response by treatment with raw points and mean ± 95% CI."
+#| fig-width: 7
+#| fig-height: 4
+ggplot(trial_ct, aes(treatment, response_percent)) +
+  geom_boxplot(outlier.shape = NA, width = 0.6) +
+  stat_summary(fun = mean, geom = "point", shape = 23, size = 3, fill = "white") +
+  stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.15) +
+  labs(x = "Treatment", y = "Response percent")
+
+```
+
+We can also create some summaries of the dataset. For example we can summarise the reponse_percent feature in each of the groups.
+
+```{r}
+#| label: ea-summaries
+trial_ct %>%
+  group_by(treatment) %>%
+  summarise(
+    n      = n(),
+    mean   = mean(response_percent),
+    sd     = sd(response_percent),
+    median = median(response_percent),
+    q1     = quantile(response_percent, 0.25),
+    q3     = quantile(response_percent, 0.75)
+  )
+
+```
+
+```{r, include=FALSE, echo=FALSE}
+# #| label: ea-effect-sizes
+# #| include: false
+# #| echo: false
+# suppressPackageStartupMessages(library(effsize))
+# x <- subset(trial_ct, treatment == "no_chemo")$response_percent
+# y <- subset(trial_ct, treatment == "chemo")$response_percent
+# d_cohen     <- effsize::cohen.d(y, x, hedges.correction = TRUE)                  # chemo vs no_chemo
+# delta_cliff <- effsize::cliff.delta(response_percent ~ treatment, data = trial_ct)
+# d_cohen; delta_cliff
+
+```
+
+We can also perform the calculation of some correlations to determine associations between features. Plotting this correlations is also important helping us to discuss the level of association between features. The code below calculates the correlation between the level of expression of each gene and the response_percent feature.
+
+```{r}
+#| label: ea-gene-scan
+gene_cols <- grep("^gene_", names(trial_ct), value = TRUE)
+cors <- sapply(gene_cols, function(g) {
+  suppressWarnings(cor(trial_ct[[g]], trial_ct$response_percent, use = "pairwise.complete.obs"))
+})
+top10_names <- names(sort(abs(cors), decreasing = TRUE))[1:10]
+top10_df <- tibble::tibble(
+  gene = top10_names,
+  cor  = unname(cors[top10_names])
+) %>%
+  dplyr::mutate(gene = reorder(gene, abs(cor)))
+
+ggplot(top10_df, aes(x = gene, y = cor, fill = cor > 0)) +
+  geom_col() +
+  coord_flip() +
+  guides(fill = "none") +
+  labs(x = "Gene", y = "Correlation with response_percent",
+       title = "Top 10 genes by absolute correlation (signed)")
+
+```
+
+## Metrics for model comparison
+
+Before comparing regression methods, it is important to understand the metrics used to evaluate how well a model predicts continuous or binary outcomes. Each metric captures a different aspect of model performance: accuracy, precision, or calibration and helps interpret how reliable a model’s predictions are in practice.
+
+We will focus on following main evaluation metrics commonly used for regression and classification.
+
+### Error
+
+The **error** (also called the residual) for each observation is:
+
+$$
+e_i = \hat{y}_i - y_i
+$$
+
+Where: (y_i) is the observed (true) value for subject (i); (\hat{y}\_i) is the model prediction; (e_i) is the individual prediction error. Positive error = overestimation; negative error = underestimation.
+
+Example:
+
+```{r}
+#| label: fig-error-example
+#| message: false
+#| warning: false
+suppressPackageStartupMessages(library(ggplot2))
+set.seed(1)
+df_err <- data.frame(
+  patient   = 1:8,
+  observed  = c(20, 35, 40, 60, 75, 85, 95, 100),
+  predicted = c(18, 38, 37, 65, 71, 89, 92, 102)
+)
+df_err$error <- df_err$predicted - df_err$observed
+
+ggplot(df_err, aes(x = patient)) +
+  geom_segment(aes(y = observed, yend = predicted, xend = patient), linewidth = 0.7) +
+  geom_point(aes(y = observed), size = 2) +
+  geom_point(aes(y = predicted), size = 2, shape = 17) +
+  labs(x = "Patient", y = "Response (%)",
+       title = "Prediction error (eᵢ = ŷᵢ − yᵢ): observed vs predicted")
+
+```
+
+### Mean Absolute Error (MAE)
+
+The **mean absolute error** summarizes the average magnitude of errors, ignoring their sign:
+
+$$
+\mathrm{MAE} = \frac{1}{n}\sum_{i=1}^{n} |e_i| = \frac{1}{n}\sum_{i=1}^{n} |\hat{y}_i - y_i|
+$$
+
+MAE gives equal weight to all errors and is less sensitive to outliers than MSE/RMSE.\
+Interpretation: if MAE = 4, predictions are, on average, 4 units away from the observed values (e.g., 4 percentage points of tumor reduction).
+
+### Mean Square Error (MSE)
+
+The **mean square error** measures the average squared deviation:
+
+$$
+\mathrm{MSE} = \frac{1}{n}\sum_{i=1}^{n} (\hat{y}_i - y_i)^2 = \frac{1}{n}\sum_{i=1}^{n} e_i^2
+$$
+
+By squaring, large errors are penalized quadratically, making MSE more sensitive to occasional large misses useful when big mistakes are costly (for example, underestimating toxicity).
+
+### Root Mean Square Error (RMSE)
+
+The **root mean square error** is the square root of MSE, returning to the original units of the outcome:
+
+$$
+\mathrm{RMSE} = \sqrt{\frac{1}{n}\sum_{i=1}^{n} (\hat{y}_i - y_i)^2} = \sqrt{\mathrm{MSE}}
+$$
+
+RMSE can be read as the typical magnitude (standard deviation) of prediction errors; it penalizes large errors more than MAE but remains directly interpretable.
+
+### Compact comparison
+
+| Metric | Formula | Penalizes large errors strongly? | Units | Practical meaning |
+|:---|:---|:--:|:---|:---|
+| Error | $(e_i = \hat{y}_i - y_i)$ |  | Outcome units | Direction and size of each residual |
+| MAE | $(\frac{1}{n}\sum$ | e_i | ) | No (linear) |
+| MSE | $(\frac{1}{n}\sum e_i^2)$ | Yes (quadratic) | Squared units | Average squared deviation |
+| RMSE | $(\sqrt{\frac{1}{n}\sum e_i^2})$ | Yes (quadratic) | Outcome units | Typical error size (√MSE) |
+
+### Visual comparison (how metrics respond to error size)
+
+```{r}
+#| label: fig-error-metrics-comparison
+#| message: false
+#| warning: false
+
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(tidyr))
+
+df_metrics <- data.frame(error = seq(-10, 10, by = 0.25)) |>
+  mutate(
+    abs_error = abs(error),
+    sq_error  = error^2,
+    rmse_unit = sqrt(error^2)  # same as abs(error), shown for relation to RMSE
+  ) |>
+  pivot_longer(
+    cols = c(abs_error, sq_error, rmse_unit),
+    names_to = "metric", values_to = "value"
+  ) |>
+  mutate(
+    # Ensure fixed factor level order so colors map correctly
+    metric = factor(metric, levels = c("abs_error", "sq_error", "rmse_unit"))
+  )
+
+labs_map <- c(abs_error = "MAE contribution |e|",
+              sq_error  = "MSE contribution e²",
+              rmse_unit = "RMSE unit √(e²)")
+
+# Map colors by named vector to avoid level-order surprises
+col_map <- c(
+  abs_error = "#2f63c0",  # blue
+  sq_error  = "#ff7f50",  # orange/coral
+  rmse_unit = "#66c2a5"   # green
+)
+
+ggplot(df_metrics, aes(x = error, y = value, color = metric, linetype = metric)) +
+  geom_line(linewidth = 1) +
+  scale_color_manual(values = col_map, breaks = names(labs_map), labels = labs_map) +
+  scale_linetype_manual(values = c(abs_error = "solid", sq_error = "dashed", rmse_unit = "dotdash"),
+                        breaks = names(labs_map), labels = labs_map) +
+  labs(x = "Error (eᵢ = ŷᵢ − yᵢ)", y = "Contribution", color = NULL, linetype = NULL,
+       title = "How MAE, MSE, and RMSE respond to increasing error magnitude") +
+  theme_minimal()
+
+```
+
+### Worked numeric example to illustrate how to calculate errors, mae, mse and rmse and to show them in a dataframe.
+
+```{r}
+#| label: tab-mae-mse-rmse
+#| message: false
+#| warning: false
+
+errors <- c(-5, 2, -3, 8, 1, -2, 4, -1)
+mae  <- mean(abs(errors))
+mse  <- mean(errors^2)
+rmse <- sqrt(mse)
+data.frame(Metric = c("MAE","MSE","RMSE"),
+           Value  = c(mae, mse, rmse))
+```
+
+### Notes for analysis
+
+-   Use MAE when you want an intuitive average error magnitude, robust to outliers.\
+-   Use RMSE when large errors must be penalized more heavily (and to keep units interpretable).\
+-   Report both MAE and RMSE for a balanced view; and residual diagnostics (validity).\
+-   Always compute metrics with cross-validation to estimate out-of-sample performance.
+
+## Fitting simple linear regression to our data
+
+We will fit the following model for our motivational example
+
+$$Y = w_0 + w_1 X_1 + w_2 X_2 + \ldots + w_p X_p + \varepsilon$$
+
+That in our particular case will be:
+
+$$
+\text{response\_percent} =
+w_0 +
+w_1(\text{compound\_dose}) +
+w_2(\text{patient\_age}) +
+w_3(\text{disease\_type}) +
+w_4(\text{gene\_expression\_1}) +
+w_5(\text{gene\_expression\_2}) +
+\ldots +
+w_{2000}(\text{gene\_expression\_2000}) +
+\varepsilon
+$$
+
+The response variable (outcome) is response_percent the continuous measure of how much the tumor shrank (efficacy minus toxicity). The explanatory variables (predictors) include everything else in the dataset (.) except: patient_id (just an identifier) high_response (the binary version of the same outcome)
+
+So our explanatory variables include: Gene expression features (gene_expression_1 … gene_expression_20) Clinical variables (compound_dose, patient_age, disease_type, etc.)
+
+### Model assumptions for linear regression
+
+When we fit a linear regression model, we make several assumptions about the relationship between the predictors (X’s) and the outcome (Y). These assumptions matter because they affect whether the estimated coefficients and statistical tests can be trusted.
+
+```{r, echo=TRUE, include=T}
+plot_pair <- function(data_good, data_bad, xvar, yvar, title_good, title_bad, xlabel, ylabel) {
+p1 <- ggplot(data_good, aes({{xvar}}, {{yvar}})) +
+geom_point(alpha = 0.7, color = "#2f63c0") +
+geom_smooth(method = "lm", se = FALSE, color = "#ff7f50") +
+labs(title = paste("Correct:", title_good), x = xlabel, y = ylabel) +
+theme_minimal()
+p2 <- ggplot(data_bad, aes({{xvar}}, {{yvar}})) +
+geom_point(alpha = 0.7, color = "#2f63c0") +
+geom_smooth(method = "lm", se = FALSE, color = "#ff7f50") +
+labs(title = paste("Incorrect:", title_bad), x = xlabel, y = ylabel) +
+theme_minimal()
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+}
+```
+
+1)  Linearity The relationship between each predictor and the outcome is assumed to be linear (on the model’s scale). If the true relationship is curved or nonlinear, the model may systematically under- or over-predict. Check: residuals vs fitted values or vs individual predictors should look patternless (no curves).
+
+```{r, echo=F, include=T}
+
+x <- seq(0, 10, length.out = 100)
+y_lin <- 3 + 2*x + rnorm(100, 0, 2)
+y_nonlin <- 3 + 2*x + 0.8*x^3 + rnorm(100, 0, 2)
+df_good <- data.frame(x, y = y_lin)
+df_bad <- data.frame(x, y = y_nonlin)
+plot_pair(df_good, df_bad, x, y, "Linear relationship", "Curved relationship", "Predictor (x)", "Outcome (y)")
+```
+
+2)  Independence of errors Residuals (errors) should be independent across observations. This is especially important for time series or clustered data (e.g., repeated measures, multi-center studies). Violation: autocorrelation or clustering inflates apparent precision.
+
+```{r, echo=F, include=T}
+#| label: ols-assumptions-independence-better
+#| fig-cap: "Independence of errors: correct (i.i.d.) vs incorrect (strong AR(1)). Each row shows residuals over order and their ACF."
+#| fig-width: 7
+#| fig-height: 6
+#| message: false
+#| warning: false
+
+
+library(ggplot2)
+library(gridExtra)
+
+set.seed(2025)
+
+# Helper: ACF data frame + 95% bounds
+
+acf_df <- function(z, max_lag = 20) {
+ac <- acf(z, plot = FALSE, lag.max = max_lag)
+n  <- length(z)
+data.frame(
+lag = ac$lag[-1],
+acf = as.numeric(ac$acf[-1]),
+ub  = 1.96 / sqrt(n),
+lb  = -1.96 / sqrt(n)
+)
+}
+
+# Simulate clearly different residual structures
+
+n <- 150
+resid_good <- rnorm(n, 0, 1)                            # i.i.d. noise
+resid_bad  <- as.numeric(arima.sim(list(ar = 0.95),     # strong AR(1)
+n = n, sd = 0.35))
+
+df_good <- data.frame(order = 1:n, resid = resid_good)
+df_bad  <- data.frame(order = 1:n, resid = resid_bad)
+
+# Time-order scatter with smoothers (more visible pattern in AR case)
+
+p_good_ts <- ggplot(df_good, aes(order, resid)) +
+geom_point(alpha = 0.7, color = "#2f63c0") +
+geom_smooth(method = "loess", span = 0.25, se = FALSE, color = "#ff7f50") +
+labs(title = "Correct: Independent residuals", x = "Observation order", y = "Residual") +
+theme_minimal()
+
+p_bad_ts <- ggplot(df_bad, aes(order, resid)) +
+geom_point(alpha = 0.7, color = "#2f63c0") +
+geom_smooth(method = "loess", span = 0.25, se = FALSE, color = "#ff7f50") +
+labs(title = "Incorrect: Autocorrelated residuals (AR(1), φ≈0.95)", x = "Observation order", y = "Residual") +
+theme_minimal()
+
+# ACF panels with 95% bounds
+
+acf_good <- acf_df(resid_good, max_lag = 20)
+acf_bad  <- acf_df(resid_bad,  max_lag = 20)
+
+p_good_acf <- ggplot(acf_good, aes(lag, acf)) +
+geom_col(fill = "#2f63c0") +
+geom_hline(yintercept = c(0, acf_good$ub[1], acf_good$lb[1]), linetype = c("solid", "dashed", "dashed")) +
+labs(title = "ACF: independent residuals", x = "Lag", y = "ACF") +
+theme_minimal()
+
+p_bad_acf <- ggplot(acf_bad, aes(lag, acf)) +
+geom_col(fill = "#2f63c0") +
+geom_hline(yintercept = c(0, acf_bad$ub[1], acf_bad$lb[1]), linetype = c("solid", "dashed", "dashed")) +
+labs(title = "ACF: strong positive autocorrelation", x = "Lag", y = "ACF") +
+theme_minimal()
+
+gridExtra::grid.arrange(p_good_ts, p_bad_ts, p_good_acf, p_bad_acf, ncol = 2)
+
+```
+
+3)  Homoscedasticity (constant variance) The spread of residuals should be roughly constant across fitted values. If residuals fan out as predictions increase, that’s heteroskedasticity. Check: residuals vs fitted plot where spread should be similar across the range. Fixes: transform the outcome, use weighted least squares, or robust (HC) standard errors.
+
+```{r, echo=F, include=T}
+
+resid_const <- rnorm(100, 0, 2)
+resid_var <- rnorm(100, 0, 0.5 + 0.3*x)
+df_good <- data.frame(fitted = 2*x, resid = resid_const)
+df_bad <- data.frame(fitted = 2*x, resid = resid_var)
+plot_pair(df_good, df_bad, fitted, resid, "Constant variance", "Increasing variance (heteroskedasticity)", "Fitted values", "Residuals")
+```
+
+4)  Normality of residuals Residuals should be approximately normally distributed around zero. This mainly underpins valid p-values and confidence intervals (less critical for pure prediction). Check: Q–Q plot or histogram of standardized residuals.
+
+```{r, echo=F, include=T}
+
+resid_norm <- rnorm(200, 0, 1)
+resid_skew <- c(rnorm(100, 0, 1), rexp(100, 1)) - 1
+df_good <- data.frame(resid = resid_norm)
+df_bad <- data.frame(resid = resid_skew)
+p1 <- ggplot(df_good, aes(sample = resid)) + stat_qq() + stat_qq_line() +
+labs(title = "Correct: Normally distributed residuals") + theme_minimal()
+p2 <- ggplot(df_bad, aes(sample = resid)) + stat_qq() + stat_qq_line() +
+labs(title = "Incorrect: Skewed residuals") + theme_minimal()
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+```
+
+5)  No multicollinearity Predictors should not be highly correlated with each other. Severe collinearity makes individual coefficient estimates unstable and hard to interpret. Check: Variance Inflation Factor (VIF); values \> 5 (or \> 10) suggest issues.
+
+```{r, echo=F, include=T}
+
+set.seed(123)
+x1 <- rnorm(100)
+x2 <- 0.9*x1 + rnorm(100, 0, 0.2) # highly correlated
+x3 <- rnorm(100) # independent
+df_good <- data.frame(x1, x3)
+df_bad <- data.frame(x1, x2)
+p1 <- ggplot(df_good, aes(x1, x3)) +
+geom_point(alpha = 0.7, color = "#2f63c0") +
+labs(title = "Correct: Low correlation between predictors", x = "x1", y = "x3") +
+theme_minimal()
+p2 <- ggplot(df_bad, aes(x1, x2)) +
+geom_point(alpha = 0.7, color = "#2f63c0") +
+labs(title = "Incorrect: High collinearity between predictors", x = "x1", y = "x2") +
+theme_minimal()
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+```
+
+6)  No influential outliers A few extreme points should not unduly determine the fit. Check: leverage and Cook’s distance; large Cook’s D indicates influential observations worth investigation.
+
+```{r, echo=F, include=T}
+
+x <- seq(0, 10, length.out = 30)
+y <- 3 + 2*x + rnorm(30, 0, 1)
+df_good <- data.frame(x, y)
+df_bad <- rbind(df_good, data.frame(x = 10, y = 50)) # add one extreme outlier
+p1 <- ggplot(df_good, aes(x, y)) +
+geom_point(color = "#2f63c0") +
+geom_smooth(method = "lm", se = FALSE, color = "#ff7f50") +
+labs(title = "Correct: No influential outliers", x = "x", y = "y") +
+theme_minimal()
+p2 <- ggplot(df_bad, aes(x, y)) +
+geom_point(color = "#2f63c0") +
+geom_smooth(method = "lm", se = FALSE, color = "#ff7f50") +
+labs(title = "Incorrect: One extreme outlier dominates fit", x = "x", y = "y") +
+theme_minimal()
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+```
+
+When these assumptions are reasonably met, Ordinary Least Squares (OLS) yields unbiased, efficient estimates and meaningful inference about how predictors relate to the response. In practice, diagnostic plots and simple tests help verify whether the model behaves well for the data at hand.
+
+We know use the fabulous property of R to create functions and we will create three functions one to calculate `mae` and `rmse` which will be performed simultaneosly by the `eval_perform` function.
+
+```{r}
+# ---- 0) Metrics (MAE and RMSE) ----
+
+mae  <- function(y, yhat) mean(abs(y - yhat))
+rmse <- function(y, yhat) sqrt(mean((y - yhat)^2))
+
+# ---- evaluation function (MAE and RMSE) ----
+eval_perf <- function(y_true, y_pred) {
+  tibble(
+    MAE  = mae(y_true, y_pred),
+    RMSE = rmse(y_true, y_pred)
+  )
+}
+# alias to avoid mistyping
+eval_perform <- eval_perf
+
+```
+
+After that we split the data set into training (70%) of the data and test (30%) of the data.
+
+```{r}
+
+set.seed(42)
+# ---- 1) Train/Test split (70/30) ----
+n  <- nrow(trial_ct)
+ix <- sample.int(n, size = floor(0.7 * n))
+train <- trial_ct[ix, , drop = FALSE]
+test  <- trial_ct[-ix, , drop = FALSE]
+```
+
+Then we can remove some unecessary columns from the dataset.
+
+```{r}
+# ---- 2) Remove columns that must NOT enter the model ----
+# (ID and the binary endpoint; keeps the supervised task as a pure regression)
+
+drop_cols <- intersect(names(train), c("patient_id", "high_response", "baseline_tumor_mm", "post_tumor_mm"))
+train_nopii <- dplyr::select(train, -dplyr::all_of(drop_cols))
+test_nopii  <- dplyr::select(test,  -dplyr::all_of(drop_cols))
+```
+
+After that we write some code that will inform to R the formula we want to consider for this model.
+
+```{r}
+# Common formula for OLS (and to derive terms/dummies for glmnet)
+f_ols <- response_percent ~ .
+```
+
+The function for fitting a linear regression in R is \`lm\` to which we indicate the formula of the model and the training dataset to be used for construction of the model. When we write `ols_tmp <- lm(f_ols, data = train_nopii)` we are fitting a **temporary** linear model on the **training**set only to let R learn the exact design it should use: which predictors are in the model, how factors are encoded (their levels and the chosen reference), and the precise structure of any interactions or transformations. Extracting `ols_terms <- terms(ols_tmp)` gives us that **blueprint** of the design matrix.
+
+Later, when we build matrices with `model.matrix(ols_terms, data = train_nopii)` and `model.matrix(ols_terms, data = test_nopii)`, both training and test data are transformed **with the same blueprint**. This prevents issues like “factor has new levels in test,” mismatched dummy columns, or different column ordering problems that would otherwise break penalized models (e.g., `glmnet`) or yield inconsistent predictions. In short: we lock in the training design so the test set is encoded **identically**, guaranteeing compatible inputs for all models.\
+\
+These steps are important because we will use the same training and testing datasets for running Lasso and Ridge Regression later using the `glmnet` package.
+
+```{r}
+# ---- 3) Capture TRAIN terms to ensure identical dummies in TEST ----
+# (fit a temporary OLS only to extract terms & factor levels)
+
+ols_tmp   <- lm(f_ols, data = train_nopii)
+ols_terms <- terms(ols_tmp)
+```
+
+```{r}
+
+# Consistent design matrices for glmnet (no intercept column)
+X_train <- model.matrix(ols_terms, data = train_nopii)[, -1, drop = FALSE]
+X_test  <- model.matrix(ols_terms, data = test_nopii)[,  -1, drop = FALSE]
+y_train <- train_nopii$response_percent
+y_test  <- test_nopii$response_percent
+```
+
+No we proceed with the Ordinary Least Square regression analysis of our motivational example.
+
+In this block of code we are fitting and evaluating our baseline Ordinary Least Squares (OLS) regression model. The command `mod_ols <- lm(f_ols, data = train_nopii)` fits a linear regression model using only the training data. The formula `f_ols` expresses that we want to predict `response_percent`, our continuous measure of tumor shrinkage, using all available explanatory variables except for `patient_id` and `high_response`. These two variables are removed because one is simply an identifier and the other is a binary version of the same outcome, which would leak information into the model. The resulting object `mod_ols` contains the estimated coefficients and fitted values for the training set.
+
+Next, `pred_ols_train <- predict(mod_ols, newdata = train_nopii)` generates predictions for the same training data used to fit the model. These are the in-sample predictions. They allow us to evaluate how well the model fits the data it has already seen and to compute basic performance metrics such as the Mean Absolute Error (MAE) and the Root Mean Square Error (RMSE). They are also used to inspect diagnostic plots that reveal potential problems such as nonlinearity, heteroskedasticity, or outliers.
+
+Finally, `pred_ols_test <- predict(mod_ols, newdata = test_nopii)` applies the trained OLS model to the independent test dataset, which was not used during model fitting. These predictions are used to assess the model’s ability to generalize to new data. Comparing the errors on the training and test sets helps us detect whether the model is overfitting (performing much better on training data than on unseen data) or underfitting. Because we ensured earlier that categorical variables and factor levels are defined consistently between training and test sets, the prediction step runs smoothly without level-mismatch errors. In summary, this three-step process fits the baseline OLS model, obtains fitted and predicted values, and provides the foundation for fair comparison with the regularized models (LASSO and Ridge) that will be trained using the same data split.
+
+```{r}
+
+# ---- 4) OLS (uses data.frame; glmnet uses X/y) ----
+mod_ols        <- lm(f_ols, data = train_nopii)
+pred_ols_train <- predict(mod_ols, newdata = train_nopii)
+pred_ols_test  <- predict(mod_ols, newdata = test_nopii)
+```
+
+In this block we prepare and run standard OLS diagnostics to check whether the linear model assumptions look reasonable. First, we load helper packages: `ggplot2` and `dplyr` for plotting and data handling, `lmtest` for tests like Breusch–Pagan and Durbin–Watson, `sandwich` for robust variance estimators, and `car` for tools such as variance inflation factors, component-plus-residual plots, and outlier checks. Then `par(mfrow = c(2, 2))` tells base R to arrange four plots in a 2 by 2 grid. The call `plot(mod_ols)` draws the default diagnostic panel for a fitted `lm` object: Residuals vs Fitted to look for nonlinearity or heteroskedasticity, Normal Q-Q to assess approximate normality of residuals, Scale–Location to check whether residual spread is roughly constant across fitted values, and Residuals vs Leverage with Cook’s distances to flag influential observations. Together these plots provide a quick visual screening of model adequacy before we proceed to formal tests or alternative specifications.
+
+```{r}
+
+  #| label: ols-assumptions
+  #| message: false
+  #| warning: false
+  suppressPackageStartupMessages({
+    library(ggplot2)
+    library(dplyr)
+    library(lmtest)    # bptest(), dwtest()
+    library(sandwich)  # robust (HC) variance estimators
+    library(car)       # vif(), crPlots(), outlierTest()
+  })
+  
+  # --- 1) Quick base-R diagnostic panel (residuals, QQ, Scale-Location, Residuals vs Leverage)
+op <- par(mfrow = c(2, 2))
+plot(mod_ols)
+
+
+
+```
+
+**Residuals vs Fitted**\
+This plot examines whether the residuals are centered around zero and whether there is any systematic pattern. The points here are scattered roughly around the horizontal line with no obvious curve, suggesting that the relationship between predictors and outcome is reasonably linear. There is a slight spread increase for larger fitted values, but it does not seem severe. Overall, the assumption of linearity and constant variance appears acceptable.
+
+**Normal Q–Q**\
+The Q–Q plot compares the standardized residuals to what would be expected if they followed a normal distribution. Most points lie very close to the diagonal reference line, except for a few at the extreme tails. This indicates that the residuals are approximately normal, with only minor deviations that are unlikely to affect inference materially.
+
+**Scale–Location (Spread–Location)**\
+This plot checks whether the variance of residuals is constant across the range of fitted values (homoskedasticity). The red line is nearly flat, and the spread of the points is fairly uniform across the x-axis. There is no strong funnel shape or trend, so the homoskedasticity assumption is reasonably satisfied.
+
+**Residuals vs Leverage**\
+This plot identifies influential cases observations that have both high leverage (unusual predictor combinations) and large residuals (poorly fitted). Most points lie within the Cook’s distance contours, indicating that no single case is exerting excessive influence on the fitted model. A few observations (such as those labeled 800 or 1920) have higher leverage, but they do not appear to distort the overall fit.
+
+**Overall interpretation**\
+Taken together, these diagnostics suggest that the OLS model fits the data adequately. The linearity, normality, and constant-variance assumptions hold reasonably well, and there are no major outliers or influential points. Minor departures at the extremes are typical in real data and do not undermine the general validity of the model.
+
+```{r, include=FALSE, echo=FALSE}
+# par(op)
+# 
+# # --- 2) ggplot diagnostics (standardized residuals etc.)
+# diag_df <- tibble(
+#   .fitted  = fitted(mod_ols),
+#   .resid   = resid(mod_ols),
+#   .stdres  = rstandard(mod_ols),
+#   .hat     = hatvalues(mod_ols)
+# )
+# 
+# # Residuals vs Fitted (linearity + mean-zero error)
+# ggplot(diag_df, aes(.fitted, .resid)) +
+#   geom_point(alpha = 0.6) +
+#   geom_hline(yintercept = 0, linetype = 2) +
+#   labs(x = "Fitted values", y = "Residuals",
+#        title = "Residuals vs Fitted")
+# 
+# # Normal Q-Q (approx normal residuals)
+# ggplot(diag_df, aes(sample = .stdres)) +
+#   stat_qq() + stat_qq_line() +
+#   labs(title = "Normal Q-Q (standardized residuals)")
+# 
+# # Scale-Location (constant variance)
+# ggplot(diag_df, aes(.fitted, sqrt(abs(.stdres)))) +
+#   geom_point(alpha = 0.6) +
+#   geom_smooth(se = FALSE, method = "loess", formula = y ~ x) +
+#   labs(x = "Fitted values", y = "√|Standardized residuals|",
+#        title = "Scale–Location")
+# 
+# # Residuals vs Leverage with Cook’s threshold
+# cook <- cooks.distance(mod_ols)
+# thr  <- 4 / nrow(diag_df)
+# ggplot(diag_df, aes(.hat, .stdres)) +
+#   geom_point(aes(size = cook), alpha = 0.6) +
+#   geom_hline(yintercept = c(-3, 0, 3), linetype = c(3,2,3)) +
+#   geom_vline(xintercept = 2 * mean(diag_df$.hat), linetype = 3) +
+#   labs(x = "Leverage (hat values)", y = "Standardized residuals",
+#        title = "Residuals vs Leverage (size ~ Cook's D)") +
+#   guides(size = "none")
+# 
+# # --- 3) Formal tests
+# # Normality (use with caution at large n)
+# shapiro_p <- tryCatch(shapiro.test(resid(mod_ols))$p.value, error = function(e) NA_real_)
+# shapiro_p
+# 
+# # Heteroskedasticity (Breusch–Pagan)
+# bptest(mod_ols)
+# 
+# # Robust SEs (HC3) + coefficient table
+# coeftest(mod_ols, vcov = vcovHC(mod_ols, type = "HC3"))
+# 
+# # Autocorrelation of residuals (Durbin–Watson; mainly for ordered/time data)
+# dwtest(mod_ols)
+# 
+# # --- 4) Multicollinearity
+# vif_vals <- car::vif(mod_ols)   # > 5–10 can be concerning
+# vif_vals
+# 
+# # --- 5) Influential observations
+# infl  <- influence.measures(mod_ols)
+# summary(infl)
+# # Index of potential high influence by Cook's D rule-of-thumb
+# which(cook > thr)
+# 
+# # Optional: Bonferroni outlier test on studentized residuals
+# # (use judiciously; it's a flag, not a verdict)
+# car::outlierTest(mod_ols)
+# 
+# # --- 6) Nonlinearity (component+residual plots)
+# # Shows whether each predictor has residual pattern suggesting nonlinearity
+# # (will draw one plot per numeric term)
+# car::crPlots(mod_ols)
+```
+
+The next block of code is a compact toolkit to inspect, interpret, and summarize your fitted OLS model from several complementary angles. It starts with `summary(mod_ols)`, which is the classic regression report. You get one row per coefficient with its estimate, standard error, t statistic, and p value, plus model-level diagnostics such as the residual standard error, R², adjusted R², and the F test for the null that all slopes are zero. Read this first to see direction and magnitude of effects and whether they are statistically distinguishable from zero after adjusting for the other variables in the model.
+
+Next it calls `anova(mod_ols)`, which produces a Type I (sequential) ANOVA table. Here, sums of squares and p values are computed in the order that predictors enter the model. This is useful when there is a natural hierarchy or pre-specified entry order, but results can change if you reorder columns. If you need hypothesis tests that adjust for all other terms regardless of order (especially with factors and interactions), you would use `car::Anova(mod_ols, type = 3)` instead, which provides Type III tests.
+
+Then it builds a tidy coefficient table with `broom::tidy(mod_ols, conf.int = TRUE)`. This converts the model output into a clean data frame that includes coefficient estimates, standard errors, test statistics, p values, and 95% confidence intervals. The code then arranges rows by p value and prints everything, which is convenient for scanning the most and least significant terms in a reproducible, table-friendly format.
+
+The next step creates a quick ranking of “importance” by absolute t statistic. It removes the intercept, computes `abs_t = |t|`, sorts descending, and shows the top terms with their estimates, standard errors, test statistics, p values, and confidence intervals. This does not replace more formal variable-importance methods, but it is a fast way to see which coefficients have the strongest signal relative to their uncertainty within this linear specification.
+
+Finally, `broom::glance(mod_ols)` provides a one-row summary of overall fit metrics. You get R² and adjusted R² (explanatory power with and without a penalty for model size), `sigma` (residual standard deviation), the model F statistic and its p value, and information criteria such as AIC and BIC for comparing alternative models on a goodness-of-fit versus complexity trade-off.
+
+Taken together, these outputs let you check individual effects with uncertainty, evaluate sequential or fully adjusted hypothesis tests, order terms by signal-to-noise, and assess global model quality, all in tidy objects that can be reported or plotted downstream.
+
+In the context of ANOVA, **significance** tells us whether a factor or variable has a real, measurable effect on the outcome, rather than the observed differences being just due to random chance.
+
+The **p-value** is the probability of seeing a difference (or a larger one) in the data **if, in reality, the factor had no effect at all** that is, if the **null hypothesis** were true.
+
+When a p-value is very small (typically below 0.05), it means such a difference would be very unlikely to appear by random chance, so we have **evidence to reject the null hypothesis** and conclude that the variable probably does influence the outcome.
+
+In simple terms, **ANOVA uses p-values as a decision criterion**:
+
+-   A small p-value (below 0.05) → the group differences or predictor effects are statistically significant.
+
+-   A large p-value (above 0.05) → the observed differences could easily occur by chance, so we do not have strong evidence of a real effect.
+
+Significance does not measure the size or importance of the effect it only measures how confident we are that an effect exists at all.
+
+In a regression model, the **parameters** (often called coefficients or betas) quantify how much the response variable changes when a given predictor changes, while holding all other predictors constant.
+
+Each parameter represents the **direction** and **magnitude** of that predictor’s influence on the outcome.
+
+-   A **positive coefficient** means that as the predictor increases, the response tends to increase as well.
+
+-   A **negative coefficient** means that higher values of the predictor are associated with lower response values.
+
+-   A coefficient close to **zero** suggests that the variable has little or no linear impact on the outcome, once the other predictors are accounted for.
+
+The **absolute value** of the coefficient reflects how strong the relationship is (how sensitive the response is to changes in that variable), but the units of measurement matter: one unit of a gene-expression score does not mean the same as one year of age, so direct comparisons of raw coefficients can be misleading.
+
+When variables are standardized (converted to the same scale), larger absolute coefficients indicate stronger effects.
+
+Statistical tests (t values and p values) assess whether each coefficient is significantly different from zero. A small p value suggests that the estimated effect is unlikely to be due to random noise, providing evidence that this predictor truly contributes to explaining variation in the response.
+
+Following we have the code to generat the items above for our mod_ols object. We will avoid printing them here because each of the items would have thousands of elements... This brings to our minds the complexities of informing outputs of linear models with thousand of explanatories mantained by the model.
+
+```{r, echo=T, include=F}
+## 1) Classic model summary (estimates, SEs, t, p, R2, adj R2, F-test)
+  head(summary(mod_ols))
+
+## 2) ANOVA tables
+# Type I (sequential) sums of squares
+anova(mod_ols)
+
+
+
+# If you prefer Type III (common with factors and interactions):
+# car::Anova(mod_ols, type = 3)
+
+## 3) Tidy coefficient table with confidence intervals
+coef_tbl <- broom::tidy(mod_ols, conf.int = TRUE, conf.level = 0.95)
+coef_tbl %>% arrange(p.value) %>% print(n = Inf)
+
+## 4) Rank “importance” by absolute t statistic (quick screening)
+coef_tbl %>%
+  filter(term != "(Intercept)") %>%
+  mutate(abs_t = abs(statistic)) %>%
+  arrange(desc(abs_t)) %>%
+  select(term, estimate, std.error, statistic, p.value, conf.low, conf.high, abs_t) %>%
+  print(n = 25)  # top 25 terms
+
+## 5) Overall fit metrics in a single glance
+broom::glance(mod_ols)
+# Columns include: r.squared, adj.r.squared, sigma, statistic, p.value, AIC, BIC, df, etc.
+
+```
+
+The next chunck of code evaluates how well the **OLS model** predicts the tumor response in both the training and test datasets, using two standard regression error metrics: **MAE (Mean Absolute Error)** and **RMSE (Root Mean Square Error)**.
+
+The first two lines extract the true outcome values the observed tumor shrinkage percentages (`response_percent`) from the training and testing subsets. The next two blocks call the function `eval_perf()`, which calculates MAE and RMSE by comparing the true values (`y_train` or `y_test`) to the model’s predictions (`pred_ols_train` or `pred_ols_test`).
+
+Recalling:
+
+-   **MAE** represents the average absolute difference between predicted and observed values it tells how far off the predictions are, on average, in the same units as the outcome (percentage points of tumor reduction).
+
+-   **RMSE** is similar but gives more weight to large errors, making it more sensitive to occasional poor predictions.
+
+The results are stored in small tibbles and then combined into one table with the model name (“OLS”) and dataset origin (“Train” or “Test”).
+
+```{r}
+# --- Evaluate OLS with MAE and RMSE (using eval_perf) ---
+# y vectors (true values)
+y_train <- train_nopii$response_percent
+y_test  <- test_nopii$response_percent
+
+perf_ols_train <- eval_perf(y_train, pred_ols_train) |>
+  dplyr::mutate(Model = "OLS", Dataset = "Train")
+
+perf_ols_test <- eval_perf(y_test, pred_ols_test) |>
+  dplyr::mutate(Model = "OLS", Dataset = "Test")
+
+# Compact table
+dplyr::bind_rows(perf_ols_train, perf_ols_test)
+
+```
+
+The model fits the training data quite closely the average prediction error is about 1.3 percentage points. When applied to unseen data (the test set), the errors increase moderately to around 1.8–2.3 points.
+
+This comparison is crucial because it shows **generalization performance**  how well the model performs on new data that were not used for training.
+
+-   The **training performance** tells you how well the model explains patterns already seen during fitting.
+
+-   The **testing performance** reveals how well those learned relationships extend to new, unseen patients.
+
+If the test errors are only slightly higher than the training errors, as in your case, it suggests a good model that generalizes reasonably well. If test errors were much larger, it would indicate **overfitting**  the model memorized the training data instead of learning the general structure. Conversely, if both errors were high, it would point to **underfitting**, meaning the model is too simple to capture important relationships.
+
+In summary, checking both training and test performance allows you to balance **fit quality** and **predictive reliability**, ensuring that the regression model is not only accurate on known data but also trustworthy for future predictions.\
+\
+As a general guideline, whenever you a see a work quoting a linear regression try to understand if the cross validation technique was applied. You will be amazed on how many works do not bother about these details.
+
+## Some words on regularization
+
+We discussed in a previous section that the parameters of the model are important for interpretation because they tell us how each variable contributes to explaining the outcome. However, in practice, when we move from small, well-controlled models to modern biomedical or omics data, we often face a very different scenario: instead of a few predictors such as age, dose, or tumor grade, we may have **hundreds or thousands of gene-expression features**. In this context, interpreting the individual coefficients becomes nearly impossible. Many of them will be correlated with one another, some may carry redundant information, and others may simply represent random noise. Traditional linear regression tends to overfit in such high-dimensional settings it tries to give every variable a non-zero weight, which leads to unstable and unreliable estimates that generalize poorly to new data.
+
+To address this, machine-learning methods introduce the idea of **regularization**, also called **shrinkage**. The key idea is to constrain or penalize the size of the coefficients so that the model prefers simpler explanations that still fit the data well. Regularization discourages the algorithm from assigning large weights to predictors that do not truly improve predictive accuracy.
+
+Two common approaches are **Ridge regression** and **LASSO regression**. Ridge regression applies an *L2 penalty*, which shrinks all coefficients toward zero but rarely eliminates them completely; it is particularly effective when many predictors have small, distributed effects. LASSO regression, in contrast, uses an *L1 penalty*, which can shrink some coefficients exactly to zero, performing **variable selection** at the same time as estimation. This means that LASSO can automatically identify a smaller subset of genes or variables that carry most of the predictive signal, making the model both simpler and easier to interpret.### Ordinary Least Squares Sum of Squares
+
+### Ordinary Least Squares Sum of Squares
+
+The **residual sum of squares (RSS)** minimized by Ordinary Least Squares (OLS) is:
+
+$$
+\text{RSS} = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2
+           = \sum_{i=1}^{n} (y_i - \mathbf{x}_i^\top \boldsymbol{\beta})^2
+$$
+
+OLS estimates the parameters ( \boldsymbol{\beta} ) that minimize this quadratic error term, without any regularization.
+
+### Ridge Regression (L2 regularization)
+
+Ridge regression introduces a penalty proportional to the **L2 norm** of the coefficients:
+
+$$
+L_{\text{ridge}}(\boldsymbol{\beta})
+= \sum_{i=1}^{n} (y_i - \mathbf{x}_i^\top \boldsymbol{\beta})^2
++ \lambda \sum_{j=1}^{p} \beta_j^2
+$$
+
+where ( \lambda \ge 0 ) controls the penalty strength.\
+The L2 term shrinks all coefficients toward zero but does **not** set them exactly to zero.\
+It is especially useful when predictors are highly correlated.
+
+### Lasso Regression (L1 regularization)
+
+Lasso regression adds a penalty proportional to the **L1 norm** of the coefficients:
+
+$$
+L_{\text{lasso}}(\boldsymbol{\beta})
+= \sum_{i=1}^{n} (y_i - \mathbf{x}_i^\top \boldsymbol{\beta})^2
++ \lambda \sum_{j=1}^{p} |\beta_j|
+$$
+
+The L1 term encourages **sparsity**, meaning that some coefficients are driven exactly to zero, effectively performing **variable selection**.
+
+### Elastic Net (Combination of L1 and L2)
+
+The **Elastic Net** combines both Ridge (L2) and Lasso (L1) penalties:
+
+$$
+L_{\text{elastic-net}}(\boldsymbol{\beta})
+= \sum_{i=1}^{n} (y_i - \mathbf{x}_i^\top \boldsymbol{\beta})^2
++ \lambda \left[
+  \alpha \sum_{j=1}^{p} |\beta_j|
+  + (1 - \alpha) \sum_{j=1}^{p} \beta_j^2
+\right]
+$$
+
+where ( 0 \le \alpha \le 1 ) controls the mix between L1 and L2 regularization:
+
+-   ( \alpha = 1 ) → Lasso\
+-   ( \alpha = 0 ) → Ridge\
+-   ( 0 \< \alpha \< 1 ) → Elastic Net
+
+Elastic Net is particularly effective when there are many correlated predictors: it keeps Ridge’s stability while still allowing Lasso-style variable selection.
+
+In the next section we will see how to perform these three types of regression: LASSO, ridge regression, and elastic net.
+
+## Hyperparameters
+
+In $Y=f\left(x_1, x_2, \ldots, x_n\right)+$ error, the parameters are the quantities inside the function $f$ that the algorithm learns from the data to make $f$ fit well (e.g., the $b$ s in a linear model
+
+A hyperparameter is a setting that controls how f is learned, not something learned directly from the data by the usual fitting step. Hyperparameters define the shape/complexity of the function class you allow and how aggressively you search within it. They live outside f, but they constrain and guide the learning of f.
+
+Hyperparameters are configuration choices that control the learning process and the capacity of the model class used to approximate $f(\cdot)$. They are not learned from the training loss directly; instead, they are selected (e.g., via cross-validation) to achieve good generalization, helping $f$ capture the signal in $Y$ without fitting the random error.
+
+In supervised learning we seek to approximate an unknown function $f(\cdot)$ that links explanatory features $x_1, x_2, \ldots, x_n$ to a response variable $Y$ :
+
+$$
+Y=f\left(x_1, x_2, \ldots, x_n\right)+\varepsilon,
+$$
+
+where $\varepsilon$ captures random noise and unmeasured influences. When $f(\cdot)$ is assumed to be linear, the model becomes
+
+$$
+\hat{Y}=w_0+\beta_1 x_1+\cdots+w_p x_p,
+$$
+
+and the learning task consists of estimating the coefficients $w_j$ that minimize prediction error. These coefficients are the model parameters-they are learned directly from the data.
+
+However, in modern regression we often introduce an additional layer of control: hyperparameters, which determine how the coefficients are estimated and how much flexibility the model is allowed to have. Hyperparameters live outside the function $f(\cdot)$; they are not part of the fitted equation but instead regulate the learning process.
+
+OLS and the absence of hyperparameters Ordinary Least Squares (OLS) minimizes the Residual Sum of Squares (RSS):
+
+$$
+\mathrm{RSS}=\sum_{i=1}^n\left(y_i-\hat{y}_i\right)^2 .
+$$
+
+The solution for $\beta$ has a closed analytical form and depends only on the data. Because there is no external control over model complexity, OLS has no hyperparameters. Its flexibility is entirely determined by the number of predictors in the model.
+
+While OLS is unbiased and efficient under ideal conditions, it becomes unstable when predictors are highly correlated or when $p$ (number of variables) is large relative to $n$.
+
+To improve generalization, we introduce regularization-penalties that shrink coefficients toward zero and prevent overfitting.
+
+Ridge, Lasso, and Elastic Net: controlling complexity with penalties Regularized regression modifies the OLS loss by adding a penalty term that constrains the magnitude of the coefficients.
+
+The resulting objective function is
+
+$$
+\operatorname{RSS}_{\text {penalized }}=\sum_{i=1}^n\left(y_i-\hat{y}_i\right)^2+\lambda P(\boldsymbol{\beta}),
+$$
+
+where $P(\boldsymbol{\beta})$ defines the type of penalty and $\lambda>0$ is a hyperparameter that controls its strength.
+
+| Model | Penalty term ( P(\boldsymbol{\beta}) ) | Main hyperparameters | Interpretation |
+|:---|:---|:---|:---|
+| **Ridge** | $( \sum_j \beta_j^2 )$ (L2) | $( \lambda )$ | Shrinks coefficients toward zero smoothly; keeps all variables. |
+| **Lasso** | $( \sum_j |\beta_j| )$ (L1) | $( \lambda )$ | Shrinks some coefficients exactly to zero → automatic variable selection. |
+| **Elastic Net** | $( (1-\alpha)\sum_j \beta_j^2/2 + \alpha\sum_j |\beta_j|)$ | $( \lambda, \alpha )$ | Combines both effects; balances stability (Ridge) and sparsity (Lasso). |
+
+Understanding $\lambda$ : the bias-variance control knob The hyperparameter $\lambda$ regulates how strongly the model is penalized: - Small $\lambda \rightarrow$ minimal penalty, coefficients close to OLS estimates.
+
+Low bias, high variance (risk of overfitting). - Large $\lambda \rightarrow$ heavy penalty, coefficients shrink strongly.
+
+Higher bias, lower variance (risk of underfitting). Tuning $\lambda$ therefore manages the bias-variance trade-off, shaping the smoothness and generalization capacity of the learned function $f(\cdot)$.
+
+Tuning and selection Unlike $\beta$, hyperparameters are not optimized by minimizing training error. If we simply fitted the model for the smallest training loss, $\lambda$ would always shrink toward zero (i.e., revert to OLS). Instead, hyperparameters are chosen using cross-validation, evaluating predictive error on unseen folds of the data.
+
+The value of $\lambda$ (and $\alpha$ for Elastic Net) that minimizes cross-validated error-or is within one standard error of the minimum (the 1-SE rule)-is selected as optimal.
+
+After choosing the hyperparameters, the model is re-trained on the full training set to estimate the final coefficients.
+
+Conceptual summary - Parameters ( $w_j$ ) define the learned relationship $f(\cdot)$. - Hyperparameters ( $\lambda, \alpha$ ) define how the relationship is learned-controlling model flexibility and generalization. - OLS has no hyperparameters; Ridge, Lasso, and Elastic Net introduce $\lambda$ (and possibly $\alpha$ ) to regularize the model. - Choosing good hyperparameters ensures $f(X)$ captures the true signal in $Y$ rather than noise in $\varepsilon$
+
+## Fitting LASSO Regression
+
+The next block of code uses the glmnet package to fit a LASSO regression and to choose its penalty strength by cross-validation. The call to `cv.glmnet(X_train, y_train, alpha = 1, nfolds = 10)` runs a ten-fold cross-validation loop over a grid of lambda values with the L1 penalty, which defines the LASSO. For each lambda the algorithm fits the model on nine folds and evaluates prediction error on the remaining fold, then averages the error across folds. glmnet standardizes predictors internally by default, which is important so that the penalty treats variables on the same footing regardless of their scale.
+
+From this cross-validation object we extract `lambda.min`, the lambda that achieved the smallest mean cross-validated error. We then refit the model on the full training set with `glmnet(X_train, y_train, alpha = 1, lambda = cv_lasso$lambda.min)`. This produces a single LASSO model whose coefficients have been shrunk toward zero. Many uninformative coefficients are exactly zero, which performs built-in variable selection and improves interpretability while controlling variance.
+
+Finally, we obtain predicted values for both the training and the test sets with `predict(mod_lasso, newx = X_train)`and `predict(mod_lasso, newx = X_test)`. These predictions allow us to compute performance metrics such as MAE and RMSE on data used to fit the model and on held-out data. Evaluating both is useful because the training metrics show how well the model can fit observed samples, while the test metrics indicate how well the model generalizes to new patients. Some analysts also report `lambda.1se`, which is the largest lambda within one standard error of the minimum error. That choice usually yields a sparser model with similar predictive accuracy and can be attractive when parsimony is a priority.
+
+The next three chunks' outputs show the fitted **LASSO regression model** and how it performs on the training and testing data. Unlike ordinary least squares, which gives every variable a non-zero coefficient, LASSO includes a penalty that forces many coefficients exactly to zero. The result is a simpler model that keeps only the most informative predictors.
+
+The table of coefficients lists all variables that remain active after regularization. The first line, the **intercept (27.99)**, represents the baseline predicted tumor response (in percentage points) when all other predictors are at their reference or zero levels. The next few coefficients correspond to clinical factors. For instance, `treatmentchemo = 3.11` means that, on average and holding other variables constant, patients who received chemotherapy are predicted to have about three percentage points higher tumor shrinkage than those who did not. The coefficient for `dose_intensity = 3.34` indicates that stronger chemotherapy doses are associated with greater reductions in tumor size. Age has a small positive coefficient, suggesting a very mild increase in response with age, while the negative sign for `performance_score` shows that patients with worse functional status tend to respond less effectively to treatment. Tumor grade also has a clear effect, with higher grades showing larger coefficients and therefore stronger responses.
+
+After the clinical covariates, the list continues with gene expression variables. Only a fraction of the hundreds of available genes appear, meaning that the LASSO has automatically selected those with the most predictive value. For example, `gene_08`, `gene_14`, and `gene_19` have relatively large positive coefficients (around five), identifying them as strong predictors of greater tumor reduction. In contrast, genes such as `gene_05` or `gene_1778` have large negative coefficients, implying that higher expression of these genes is associated with poorer therapeutic response. The many small coefficients near zero reflect genes with weak or marginal contributions that the model nonetheless retained under the chosen regularization strength. In situation where the number of features to be considered is giant LASSO returns a smaller reasonable amount of variables compared with the original number, making interpretation of the model more facilitated.
+
+The last section of the output shows model performance using the `eval_perf()` function. The **MAE** (mean absolute error) and **RMSE** (root mean square error) values quantify how far, on average, the predictions are from the true tumor responses. The training errors are MAE = 1.49 and RMSE = 1.87, while the test errors are MAE = 1.57 and RMSE = 1.96. The similarity of these values suggests that the model generalizes well: it fits the training data closely but not excessively and maintains similar predictive accuracy on unseen test patients.
+
+Overall, this LASSO fit yields a parsimonious model that identifies a handful of relevant clinical variables and a limited subset of genes that together explain much of the variation in tumor response. The regularization penalty has successfully balanced interpretability and predictive performance by shrinking or eliminating irrelevant coefficients while preserving the key biological and clinical signals in the data.
+
+```{r}
+
+# ---- 5) LASSO (alpha = 1) with CV to choose lambda ----
+# Note: glmnet standardizes features by default (standardize = TRUE).
+cv_lasso  <- cv.glmnet(X_train, y_train, alpha = 1, nfolds = 10)
+mod_lasso <- glmnet(X_train, y_train, alpha = 1, lambda = cv_lasso$lambda.min)
+pred_lasso_train <- as.numeric(predict(mod_lasso, newx = X_train))
+pred_lasso_test  <- as.numeric(predict(mod_lasso, newx = X_test))
+
+```
+
+```{r}
+# Nonzero coefficients selected by LASSO
+coef_lasso <- coef(mod_lasso)
+nz <- which(coef_lasso != 0)
+as.matrix(coef_lasso[nz, , drop = FALSE])
+
+```
+
+```{r}
+# Compare errors with your eval_perf()
+perf_lasso_train <- eval_perf(y_train, pred_lasso_train) |> dplyr::mutate(Model="LASSO", Dataset="Train")
+perf_lasso_test  <- eval_perf(y_test,  pred_lasso_test)  |> dplyr::mutate(Model="LASSO", Dataset="Test")
+dplyr::bind_rows(perf_lasso_train, perf_lasso_test)
+
+```
+
+## Fitting Ridge Regression
+
+In the following chunks of code we will implement a ridgre regression model.
+
+The Ridge model is trained using `cv.glmnet()` with `alpha = 0`, which specifies the L2 penalty. The algorithm performs 10-fold cross-validation over a grid of possible penalty values (lambda) and identifies the one that minimizes the mean prediction error. The value of `lambda.min = 1.83` is the penalty that achieved the lowest average cross-validation error, while `lambda.1se = 2.01` corresponds to a slightly stronger penalty that still performs within one standard error of the minimum. The model is then refitted on the entire training dataset with this optimal lambda, and predictions are generated for both training and test sets.
+
+The code then computes the **Mean Absolute Error (MAE)** and **Root Mean Square Error (RMSE)** for each model OLS, LASSO, and Ridge on both the training and test sets using the `eval_perf()` function. These metrics quantify how close the model’s predictions are to the observed tumor response. The Ridge model shows MAE = 1.43 and RMSE = 1.79 on the training data, and MAE = 1.77 and RMSE = 2.23 on the test data. Compared to OLS (MAE = 1.83, RMSE = 2.28 on the test set), Ridge performs slightly better, reducing both bias and variance without overfitting. Its performance is similar to that of LASSO but typically smoother, since Ridge keeps all variables in the model rather than setting some coefficients exactly to zero.
+
+The Ridge model coefficients provide additional insight. In contrast to LASSO, which eliminates many predictors, Ridge keeps all coefficients non-zero (2,006 in this dataset) but shrinks them toward zero depending on their contribution strength. The list of the top fifteen coefficients shows that the variables with the strongest influence on tumor response are consistent with previous models: **dose_intensity** and **treatmentchemo** have the largest positive effects, indicating that higher doses and chemotherapy are associated with greater tumor shrinkage. Several genes such as `gene_14`, `gene_19`, and `gene_08` also have strong positive associations, while `gene_05` has a large negative coefficient, suggesting a detrimental effect on treatment response. Other predictors, such as tumor grade and performance score, have smaller but directionally meaningful coefficients that align with clinical expectations.
+
+Overall, these results illustrate the essence of Ridge regularization: instead of discarding predictors as LASSO does, it **shrinks all coefficients toward zero**, reducing overfitting and stabilizing estimates when many correlated variables (such as thousands of gene expressions) are present. The outcome is a model that generalizes better than OLS, retains all variables but with moderated influence, and highlights which features exert the most consistent effects across the dataset.
+
+```{r}
+
+# ---- 6) Ridge (alpha = 0) with CV ----
+cv_ridge  <- cv.glmnet(X_train, y_train, alpha = 0, nfolds = 10)
+mod_ridge <- glmnet(X_train, y_train, alpha = 0, lambda = cv_ridge$lambda.min)
+pred_ridge_train <- as.numeric(predict(mod_ridge, newx = X_train))
+pred_ridge_test  <- as.numeric(predict(mod_ridge, newx = X_test))
+```
+
+```{r}
+# ---- Performance (MAE, RMSE) using eval_perform / eval_perf ----
+perf_ridge_train <- eval_perform(y_train, pred_ridge_train) |>
+  dplyr::mutate(Model = "Ridge", Dataset = "Train")
+
+perf_ridge_test <- eval_perform(y_test, pred_ridge_test) |>
+  dplyr::mutate(Model = "Ridge", Dataset = "Test")
+
+dplyr::bind_rows(perf_ridge_train, perf_ridge_test)
+
+# ---- Quick model “summary” for discussion ----
+# Lambdas chosen by CV
+cv_ridge$lambda.min
+cv_ridge$lambda.1se
+
+# Coefficients at lambda.min
+ridge_coefs <- as.matrix(coef(mod_ridge))
+ridge_coef_tbl <- tibble::tibble(
+  term     = rownames(ridge_coefs),
+  estimate = as.numeric(ridge_coefs[, 1])
+)
+
+# How many non-zero coefficients (excluding intercept)
+nnz <- ridge_coef_tbl |>
+  dplyr::filter(term != "(Intercept)", estimate != 0) |>
+  nrow()
+
+nnz
+
+# Top coefficients by absolute magnitude (exclude intercept)
+ridge_top <- ridge_coef_tbl |>
+  dplyr::filter(term != "(Intercept)") |>
+  dplyr::mutate(abs_est = abs(estimate)) |>
+  dplyr::arrange(dplyr::desc(abs_est)) |>
+  dplyr::slice(1:15)
+## seeing the top 15 features regarding estimate
+ridge_top
+
+```
+
+```{r}
+# ---- 7) Elastic Net (tune alpha and lambda via CV) ----
+suppressPackageStartupMessages({
+  library(glmnet)
+  library(dplyr)
+  library(tibble)
+  # assumes eval_perform() already defined and X_train, X_test, y_train, y_test exist
+})
+
+set.seed(42)
+
+# Grid of alpha values (0=ridge, 1=lasso)
+alpha_grid <- seq(0.05, 0.95, by = 0.05)
+
+# For each alpha, run cv.glmnet to pick lambda; record CV error at lambda.min
+cv_list <- lapply(alpha_grid, function(a) {
+  cv.glmnet(X_train, y_train, alpha = a, nfolds = 10)
+})
+
+cv_errors <- sapply(cv_list, function(cv) min(cv$cvm))  # lower is better
+best_idx  <- which.min(cv_errors)
+best_alpha <- alpha_grid[best_idx]
+best_cv    <- cv_list[[best_idx]]
+best_lambda_min <- best_cv$lambda.min
+best_lambda_1se <- best_cv$lambda.1se
+
+best_alpha
+best_lambda_min
+best_lambda_1se
+
+# Fit final Elastic Net at best alpha/lambda
+mod_enet <- glmnet(X_train, y_train, alpha = best_alpha, lambda = best_lambda_min)
+
+# Predictions
+pred_enet_train <- as.numeric(predict(mod_enet, newx = X_train))
+pred_enet_test  <- as.numeric(predict(mod_enet, newx = X_test))
+
+# Performance
+perf_enet_train <- eval_perform(y_train, pred_enet_train) |>
+  mutate(Model = "Elastic Net", Dataset = "Train", alpha = best_alpha, lambda = best_lambda_min)
+
+perf_enet_test <- eval_perform(y_test, pred_enet_test) |>
+  mutate(Model = "Elastic Net", Dataset = "Test", alpha = best_alpha, lambda = best_lambda_min)
+
+bind_rows(perf_enet_train, perf_enet_test)
+
+# Coefficients summary
+enet_coefs <- as.matrix(coef(mod_enet))
+enet_coef_tbl <- tibble(
+  term     = rownames(enet_coefs),
+  estimate = as.numeric(enet_coefs[, 1])
+)
+
+# Count non-zero (excluding intercept)
+enet_nnz <- enet_coef_tbl |>
+  filter(term != "(Intercept)", estimate != 0) |>
+  nrow()
+enet_nnz
+
+# Top coefficients by absolute value (exclude intercept)
+enet_top <- enet_coef_tbl |>
+  filter(term != "(Intercept)") |>
+  mutate(abs_est = abs(estimate)) |>
+  arrange(desc(abs_est)) |>
+  slice(1:20)
+
+enet_top
+
+```
+
+## Elastic Net
+
+The next chunk fits an Elastic Net regression and tunes its two key hyperparameters using cross-validation, then evaluates how well it predicts on unseen data and inspects the model’s coefficients.
+
+First, it defines a grid of candidate mixing parameters alpha from 0.05 to 0.95. Elastic Net blends Ridge and LASSO: alpha equal to 0 behaves like Ridge, alpha equal to 1 behaves like LASSO, values in between trade off between the two penalties. For each alpha in the grid, `cv.glmnet()` runs 10-fold cross-validation over a sequence of lambda values and records the mean cross-validated error. The code then picks the alpha that achieves the lowest error across its lambda path, identifies the corresponding best lambda at the minimum error (`lambda.min`) and also records `lambda.1se` which is a slightly stronger penalty within one standard error of the minimum. In your run, the best alpha is 0.15, with `lambda.min`about 0.181 and `lambda.1se` about 0.288. This indicates that a model closer to Ridge than to LASSO gave the best cross-validated performance on this dataset.
+
+With the best alpha and `lambda.min` fixed, the code refits a final Elastic Net model on the full training matrix and generates predictions for both training and test sets. It then computes MAE and RMSE via `eval_perform()`. Your results show MAE 1.50 and RMSE 1.88 on training, and MAE 1.57 and RMSE 1.95 on test. The similarity between train and test errors suggests good generalization with limited overfitting. Test performance is competitive with or slightly better than the individual Ridge and LASSO models you fitted earlier, which is a common outcome when Elastic Net can borrow strengths from both penalties in the presence of many correlated predictors.
+
+Finally, the code examines the coefficient vector. It converts the sparse coefficient matrix to a tibble, counts how many coefficients are non-zero excluding the intercept, and ranks predictors by absolute magnitude. You obtained 87 non-zero coefficients, which is far sparser than Ridge and far denser than a very aggressive LASSO, reflecting the balance enforced by alpha 0.15. The top effects are biologically and clinically interpretable: `gene_19`, `gene_08`, and `gene_14` have the largest positive coefficients, `dose_intensity` and `treatmentchemo` are also strongly positive, while `gene_05` is strongly negative, and `performance_score` is moderately negative. Tumor grade indicators and several additional genes appear with smaller but non-zero effects. This pattern is what Elastic Net is designed to produce in high-dimensional settings with correlated features: it keeps groups of correlated predictors, shrinks them toward zero to control variance, and still performs variable selection to improve interpretability and prediction.
+
+```{r}
+# ---- 7) Elastic Net (tune alpha and lambda via CV) ----
+suppressPackageStartupMessages({
+  library(glmnet)
+  library(dplyr)
+  library(tibble)
+  # assumes eval_perform() already defined and X_train, X_test, y_train, y_test exist
+})
+
+set.seed(42)
+
+# Grid of alpha values (0=ridge, 1=lasso)
+alpha_grid <- seq(0.05, 0.95, by = 0.05)
+
+# For each alpha, run cv.glmnet to pick lambda; record CV error at lambda.min
+cv_list <- lapply(alpha_grid, function(a) {
+  cv.glmnet(X_train, y_train, alpha = a, nfolds = 10)
+})
+
+cv_errors <- sapply(cv_list, function(cv) min(cv$cvm))  # lower is better
+best_idx  <- which.min(cv_errors)
+best_alpha <- alpha_grid[best_idx]
+best_cv    <- cv_list[[best_idx]]
+best_lambda_min <- best_cv$lambda.min
+best_lambda_1se <- best_cv$lambda.1se
+
+best_alpha
+best_lambda_min
+best_lambda_1se
+
+# Fit final Elastic Net at best alpha/lambda
+mod_enet <- glmnet(X_train, y_train, alpha = best_alpha, lambda = best_lambda_min)
+
+# Predictions
+pred_enet_train <- as.numeric(predict(mod_enet, newx = X_train))
+pred_enet_test  <- as.numeric(predict(mod_enet, newx = X_test))
+
+# Performance
+perf_enet_train <- eval_perform(y_train, pred_enet_train) |>
+  mutate(Model = "Elastic Net", Dataset = "Train", alpha = best_alpha, lambda = best_lambda_min)
+
+perf_enet_test <- eval_perform(y_test, pred_enet_test) |>
+  mutate(Model = "Elastic Net", Dataset = "Test", alpha = best_alpha, lambda = best_lambda_min)
+
+bind_rows(perf_enet_train, perf_enet_test)
+
+# Coefficients summary
+enet_coefs <- as.matrix(coef(mod_enet))
+enet_coef_tbl <- tibble(
+  term     = rownames(enet_coefs),
+  estimate = as.numeric(enet_coefs[, 1])
+)
+
+# Count non-zero (excluding intercept)
+enet_nnz <- enet_coef_tbl |>
+  filter(term != "(Intercept)", estimate != 0) |>
+  nrow()
+enet_nnz
+
+# Top coefficients by absolute value (exclude intercept)
+enet_top <- enet_coef_tbl |>
+  filter(term != "(Intercept)") |>
+  mutate(abs_est = abs(estimate)) |>
+  arrange(desc(abs_est)) |>
+  slice(1:20)
+
+enet_top
+
+```
+
+## Comparing OLS, LASSO, Ridge and Elastic Net Regression
+
+This section compares the performance and interpretability of the four regression models Ordinary Least Squares (OLS), LASSO, Ridge, and Elastic Net using the same training and testing datasets. The code constructs two tables, one for the training set and one for the test set, summarizing each model’s **Mean Absolute Error (MAE)** and **Root Mean Square Error (RMSE)**. These metrics quantify how close the predicted tumor responses are to the observed values: lower numbers indicate more accurate predictions.
+
+On the **training data**, OLS achieves the smallest apparent errors (MAE = 1.27, RMSE = 1.59), which is expected because it freely adjusts all coefficients without any penalty. However, its flexibility can also lead to overfitting, meaning it might perform worse on new, unseen data. The Ridge model (MAE = 1.43, RMSE = 1.79) and the Elastic Net (MAE = 1.50, RMSE = 1.88) show slightly higher training errors, reflecting the effect of regularization that constrains coefficient size to prevent overfitting. LASSO (MAE = 1.49, RMSE = 1.87) behaves similarly, as it shrinks and even eliminates some coefficients.
+
+The **test set** results are more revealing, since they reflect how well each model generalizes. OLS now has the highest errors (MAE = 1.83, RMSE = 2.28), showing a clear drop in performance compared with the training data. In contrast, the regularized models maintain nearly identical errors across training and test sets. LASSO and Elastic Net both achieve MAE around 1.57 and RMSE near 1.95, while Ridge performs slightly worse but still better than OLS. This stability across datasets indicates that the regularization terms have successfully reduced overfitting, producing models that generalize better to new observations.
+
+Beyond predictive accuracy, each method differs in **interpretability** and in how easily its results can be communicated. OLS is the simplest to interpret: every coefficient represents the independent effect of a predictor on the outcome, assuming all other variables are fixed. However, in high-dimensional data such as gene-expression studies, OLS becomes unstable and hard to explain because of multicollinearity and noise. LASSO improves interpretability by setting many coefficients exactly to zero, leaving only a small, focused subset of relevant predictors that can be examined biologically or clinically. Ridge, by contrast, keeps all variables but shrinks their effects toward zero, which stabilizes the estimates but makes it harder to identify a small list of “important” predictors. Elastic Net combines both approaches, preserving correlated groups of variables while still performing selection, offering a compromise between the simplicity of LASSO and the robustness of Ridge.
+
+In practical terms, these results illustrate the trade-off between fit, generalization, and interpretability. OLS fits training data best but generalizes poorly. Ridge and Elastic Net offer more stable and realistic predictions in complex, high-dimensional problems. LASSO and Elastic Net, in particular, produce more interpretable models that highlight a concise subset of genes and clinical variables that drive tumor response, making them easier to communicate in biomedical contexts where explanation is as important as prediction.
+
+```{r}
+
+# ---- 8) Side-by-side performance tables (MAE and RMSE)   now with Elastic Net ----
+# Assumes you already computed:
+#   pred_ols_train,  pred_ols_test
+#   pred_lasso_train, pred_lasso_test
+#   pred_ridge_train, pred_ridge_test
+#   pred_enet_train,  pred_enet_test
+# And (optionally) best_alpha, best_lambda_min from your Elastic Net CV
+
+# Helper: safely carry alpha/lambda for ENet if they exist
+alpha_enet  <- if (exists("best_alpha")) best_alpha else NA_real_
+lambda_enet <- if (exists("best_lambda_min")) best_lambda_min else NA_real_
+
+# Build TRAIN table
+metrics_train <- tibble(
+  Model = c("OLS", "LASSO (λ.min)", "Ridge (λ.min)", "Elastic Net")
+) |>
+  bind_cols(
+    dplyr::bind_rows(
+      eval_perf(y_train, pred_ols_train),
+      eval_perf(y_train, pred_lasso_train),
+      eval_perf(y_train, pred_ridge_train),
+      eval_perf(y_train, pred_enet_train)
+    )
+  ) |>
+  mutate(Alpha = c(NA, 1.00, 0.00, alpha_enet),
+         Lambda = c(NA, NA, NA, lambda_enet))
+
+# Build TEST table
+metrics_test <- tibble(
+  Model = c("OLS", "LASSO (λ.min)", "Ridge (λ.min)", "Elastic Net")
+) |>
+  bind_cols(
+    dplyr::bind_rows(
+      eval_perf(y_test, pred_ols_test),
+      eval_perf(y_test, pred_lasso_test),
+      eval_perf(y_test, pred_ridge_test),
+      eval_perf(y_test, pred_enet_test)
+    )
+  ) |>
+  mutate(Alpha = c(NA, 1.00, 0.00, alpha_enet),
+         Lambda = c(NA, NA, NA, lambda_enet))
+
+# Print results
+metrics_train
+metrics_test
+
+
+```
+
+| Model | Penalty norm | Variable selection/Regularization | Explanation |
+|----|----|----|----|
+| OLS |  | No | No regularization , all variables retained. |
+| Ridge | L2 | No | Shrinks coefficients but keeps all variables. |
+| Lasso | L1 | **Yes** | L1 penalty can drive some coefficients to exactly zero. |
+| Elastic Net | L1 + L2 (mix) | **Partial** | Combines both effects some zeroing, some shrinkage. |
+
+## Organizing our study questions
+
+### Main treatment effect
+
+In order to answer the first study question we use the following code:
+
+```{r}
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(broom)
+  library(stringr)
+  library(tibble)
+  
+})
+
+# OLS: adjusted main effect of treatment (chemo vs reference)
+
+coef_ols <- tidy(mod_ols, conf.int = TRUE) %>%
+filter(grepl("^treatment", term))
+coef_ols
+
+# Regularized models: report the treatment coefficient (main effect)
+grab_coef <- function(m, name) {
+b <- as.matrix(coef(m))
+if (!name %in% rownames(b)) return(NA_real_)
+as.numeric(b[name, 1])
+}
+
+main_effects_tbl <- tibble(
+Model = c("OLS","LASSO","Ridge","Elastic Net"),
+Treatment_Beta = c(
+coef(mod_ols)[["treatmentchemo"]],
+grab_coef(mod_lasso, "treatmentchemo"),
+grab_coef(mod_ridge, "treatmentchemo"),
+grab_coef(mod_enet,  "treatmentchemo")
+)
+)
+main_effects_tbl
+```
+
+The last table reports the estimated main treatment effect the adjusted average difference in tumor shrinkage between patients who received chemotherapy and those who did not across four models. The OLS estimate of 3.47 percentage points suggests a clear benefit of chemotherapy after accounting for other covariates. Introducing L1 regularization with LASSO yields a slightly smaller effect of 3.11, consistent with the tendency of sparsity penalties to dampen coefficients in the presence of multicollinearity or weak predictors. Ridge regression, which applies an L2 penalty but retains all variables, produces a larger estimate of 5.03, indicating that when correlated predictors are jointly shrunk rather than selected away, the treatment signal can be expressed more strongly. Elastic Net, blending L1 and L2 penalties, returns 3.49 essentially aligning with OLS while offering greater stability than an unpenalized fit. Taken together, the results are directionally consistent and clinically coherent given the fact that regardless of modeling strategy, chemotherapy is associated with higher average tumor reduction, with the magnitude ranging from roughly three to five percentage points depending on how the method handles correlation and complexity in the predictors.
+
+### Clinical covariates:
+
+What are the main-effect associations of age, tumor grade, and performance score with tumor shrinkage, controlling for treatment?
+
+To answer this question we run the code below which helps us to extract the parameters associated with the variables of interest.
+
+```{r}
+# --- Clinical (no interactions): OLS + LASSO + RIDGE + ENET ------------------
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(broom)
+  library(stringr)
+  library(tibble)
+})
+
+# Helper: make a regex that matches `patient age` with or without backticks (case-insensitive)
+age_regex <- regex("^`?patient_age`?$", ignore_case = TRUE)
+
+# 1) OLS clinical table (with CIs and p-values)
+#    Keep: patient age, performance_score, and ALL tumor_grade dummies
+ols_tidy <- tidy(mod_ols, conf.int = TRUE)
+
+ols_clinical <- ols_tidy %>%
+  filter(
+    str_detect(term, age_regex) |
+    term == "performance_score" |
+    str_detect(term, "^tumor_grade")
+  ) %>%
+  arrange(p.value) %>%
+  rename(
+    beta_ols   = estimate,
+    se_ols     = std.error,
+    t_ols      = statistic,
+    p_ols      = p.value,
+    ci_low_ols = conf.low,
+    ci_high_ols= conf.high
+  )
+
+# 2) Helper to extract glmnet coefficients by term ----------------------------
+get_glmnet_coefs <- function(mod_glmnet, keep_regex = NULL, keep_exact_regex = NULL, colname = "beta"){
+  B <- as.matrix(coef(mod_glmnet))
+  tab <- tibble(term = rownames(B), !!colname := as.numeric(B[, 1])) %>%
+    filter(term != "(Intercept)")
+  tab %>%
+    filter(
+      (if (!is.null(keep_exact_regex)) str_detect(term, keep_exact_regex) else FALSE) |
+      (if (!is.null(keep_regex))       str_detect(term, keep_regex)       else FALSE)
+    )
+}
+
+# Keep exactly patient age (with/without backticks) and performance_score;
+# plus everything that starts with tumor_grade
+keep_exact_regex <- paste0("(", paste(c("performance_score", age_regex), collapse="|"), ")")
+keep_regex_grade <- "^tumor_grade"
+
+lasso_tab <- get_glmnet_coefs(mod_lasso, keep_regex = keep_regex_grade,
+                              keep_exact_regex = keep_exact_regex, colname = "beta_lasso")
+ridge_tab <- get_glmnet_coefs(mod_ridge, keep_regex = keep_regex_grade,
+                              keep_exact_regex = keep_exact_regex, colname = "beta_ridge")
+enet_tab  <- get_glmnet_coefs(mod_enet,  keep_regex = keep_regex_grade,
+                              keep_exact_regex = keep_exact_regex, colname = "beta_enet")
+
+# 3) Join everything by term --------------------------------------------------
+clin_compare <- ols_clinical %>%
+  select(term, beta_ols, se_ols, t_ols, p_ols, ci_low_ols, ci_high_ols) %>%
+  left_join(lasso_tab, by = "term") %>%
+  left_join(ridge_tab, by = "term") %>%
+  left_join(enet_tab,  by = "term") %>%
+  mutate(
+    beta_lasso = coalesce(beta_lasso, 0),
+    beta_ridge = coalesce(beta_ridge, 0),
+    beta_enet  = coalesce(beta_enet,  0)
+  )
+
+data.frame(clin_compare)
+
+```
+
+The last table compares the estimated effects of key clinical predictors on tumor response across four regression approaches ordinary least squares (OLS), LASSO, Ridge, and Elastic Netfocusing on main effects. The coefficients represent how much the tumor shrinkage percentage is expected to change for a one-unit increase in each variable, holding all others constant. The OLS model serves as a baseline reference. The coefficient for patient_age is positive (0.017 ± 0.0016, p ≈ 3.6 × 10⁻²⁷), indicating that, on average, each additional year of age is associated with roughly a 0.017 percentage-point increase in tumor shrinkage. Although small in magnitude, this effect is highly significant, suggesting a subtle but consistent relationship between age and treatment response. The performance_score shows a strong negative association (β = –0.40, p ≈ 5.5 × 10⁻²²), implying that patients with poorer functional status tend to experience smaller reductions in tumor size. Tumor grade, in contrast, shows clear positive effects: compared with the reference category (grade 1), both grade 2 (β = 0.24, p ≈ 3.8 × 10⁻⁴) and grade 3 (β = 0.69, p ≈ 1.9 × 10⁻²⁰) are associated with progressively greater shrinkage, consistent with more aggressive tumors responding more markedly to treatment. When regularization is introduced, the three penalized methods yield broadly similar patterns but with slightly shrunk coefficients. LASSO reduces effect magnitudes toward zero, particularly for performance_score (–0.29) and tumor_gradeG2 (0.13), reflecting its tendency to suppress weaker signals. Ridge regression, which applies a smooth L2 penalty, retains all variables and yields somewhat larger estimates (e.g., tumor_gradeG3 = 0.95), showing how correlated predictors can share information without being zeroed out. Elastic Net, which blends LASSO and Ridge penalties, produces intermediate values that balance sparsity and stability (e.g., performance_score = –0.32, tumor_gradeG3 = 0.61). Across all models, the direction of effects remains stable: older age and higher tumor grade predict better tumor shrinkage, while poorer performance status predicts worse response. Regularization mainly reduces the absolute size of coefficients but does not alter their interpretation. These results reinforce the robustness of the main clinical signals age, performance status, and tumor grade as reliable determinants of treatment response, even under different modeling assumptions and penalty schemes.
+
+```{r}
+# --- Q3. Molecular biomarkers: which genes are associated with response? ----
+# Goal: identify gene predictors associated with continuous response (response_percent)
+# Models used: OLS (with p-values and BH-FDR), LASSO, Ridge, Elastic Net (coefficients)
+# Assumptions:
+#   - Genes are encoded as columns whose names start with "gene_" in X_train/X_test
+#   - No interactions in the model
+#   - mod_ols was fit with response_percent ~ clinical + genes (no interactions)
+#   - mod_lasso, mod_ridge, mod_enet were fit with glmnet on (X_train, y_train)
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(stringr)
+  library(tibble)
+  library(broom)
+  library(purrr)
+})
+
+# 0) Identify gene columns from the model matrix you used to fit glmnet
+gene_terms <- colnames(X_train)[str_detect(colnames(X_train), "^gene_")]
+
+# --- Helper to extract glmnet coefs for a list of terms ----------------------
+get_glmnet_coefs <- function(mod_glmnet, terms_keep, colname = "beta") {
+  B <- as.matrix(coef(mod_glmnet))
+  tibble(term = rownames(B), !!colname := as.numeric(B[, 1])) %>%
+    filter(term != "(Intercept)", term %in% terms_keep)
+}
+
+# 1) OLS gene table with t-stat and FDR ---------------------------------------
+ols_genes <- tidy(mod_ols, conf.int = TRUE) %>%
+  filter(term %in% gene_terms) %>%
+  mutate(
+    beta_ols = estimate,
+    se_ols   = std.error,
+    t_ols    = statistic,
+    p_ols    = p.value,
+    fdr_bh   = p.adjust(p_ols, method = "BH"),
+    imp_ols  = abs(t_ols)             # importance = |t|
+  ) %>%
+  select(term, beta_ols, se_ols, t_ols, p_ols, fdr_bh, imp_ols)
+
+top10_ols <- ols_genes %>%
+  arrange(desc(imp_ols)) %>%
+  slice_head(n = 10) %>%
+  mutate(Model = "OLS") %>%
+  select(Model, term, beta = beta_ols, importance = imp_ols, t_ols, p_ols, fdr_bh)
+
+# 2) LASSO / Ridge / Elastic Net gene coefficients (importance = |beta|) ------
+lasso_genes <- get_glmnet_coefs(mod_lasso, gene_terms, colname = "beta_lasso") %>%
+  mutate(imp_lasso = abs(beta_lasso))
+ridge_genes <- get_glmnet_coefs(mod_ridge, gene_terms, colname = "beta_ridge") %>%
+  mutate(imp_ridge = abs(beta_ridge))
+enet_genes  <- get_glmnet_coefs(mod_enet,  gene_terms, colname = "beta_enet")  %>%
+  mutate(imp_enet  = abs(beta_enet))
+
+top10_lasso <- lasso_genes %>%
+  arrange(desc(imp_lasso)) %>%
+  slice_head(n = 10) %>%
+  mutate(Model = "LASSO") %>%
+  select(Model, term, beta = beta_lasso, importance = imp_lasso)
+
+top10_ridge <- ridge_genes %>%
+  arrange(desc(imp_ridge)) %>%
+  slice_head(n = 10) %>%
+  mutate(Model = "Ridge") %>%
+  select(Model, term, beta = beta_ridge, importance = imp_ridge)
+
+top10_enet <- enet_genes %>%
+  arrange(desc(imp_enet)) %>%
+  slice_head(n = 10) %>%
+  mutate(Model = "Elastic Net") %>%
+  select(Model, term, beta = beta_enet, importance = imp_enet)
+
+# 3) Combine into a single tidy table -----------------------------------------
+top10_all_models <- bind_rows(
+  top10_ols,
+  top10_lasso,
+  top10_ridge,
+  top10_enet
+) %>%
+  # rank within model by importance (1 = most important)
+  group_by(Model) %>%
+  arrange(desc(importance), .by_group = TRUE) %>%
+  mutate(rank = row_number()) %>%
+  ungroup()
+
+# View the result (one long table with 10 rows per model)#
+#top10_all_models
+
+# Optional: a wide, side-by-side comparison (terms only) ----------------------
+top10_wide_terms <- top10_all_models %>%
+  arrange(Model, rank) %>%
+  select(Model, rank, term) %>%
+  tidyr::pivot_wider(names_from = Model, values_from = term)
+
+data.frame(top10_wide_terms)
+
+# Optional: barplot for a quick visual per model ------------------------------
+# (Make sure ggplot2 is loaded.)
+# ggplot(top10_all_models, aes(x = reorder(term, importance), y = importance)) +
+#   geom_col() +
+#   coord_flip() +
+#   facet_wrap(~ Model, scales = "free_y") +
+#   labs(x = "Gene", y = "Importance (|t| for OLS; |β| for penalized models)",
+#        title = "Top 10 genes by model") +
+#   theme_minimal(base_size = 12)
+
+```
+
+The last table compares the top ten genes most strongly associated with tumor response according to four regression models OLS, LASSO, Ridge, and Elastic Net based on the magnitude of each gene’s estimated effect. While the specific coefficient values are not shown here, the ranking reveals how different modeling strategies emphasize or penalize predictors in slightly distinct ways. A clear pattern emerges across all methods: several genes consistently appear among the most influential. gene_19, gene_08, gene_14, gene_05, gene_01, and gene_12 are common to nearly every model, suggesting that these markers carry robust predictive information about treatment response. Their presence across OLS (which estimates effects freely), LASSO and Elastic Net (which perform variable selection), and Ridge (which shrinks but retains all coefficients) indicates that these signals are not artifacts of a particular modeling assumption but stable features of the dataset. The agreement among Elastic Net and LASSO is especially notable. Both methods rely on sparsity-inducing penalties, and they rank genes gene_19, gene_08, gene_14, gene_05, gene_01, and gene_12 in nearly identical order. This consistency supports the interpretation that these genes represent the core set most predictive of tumor shrinkage. The few differences such as the inclusion of gene_1976 or gene_1241 in the Elastic Net list reflect the method’s ability to keep correlated predictors that LASSO might exclude. The Ridge model, which shrinks coefficients without setting any to zero, yields a slightly more diverse list. It retains the same leading genes (gene_14, gene_19, gene_08, gene_05, gene_01, gene_12) but also highlights additional candidates such as gene_1419, gene_1506, gene_1976, and gene_907. This broader selection reflects Ridge’s tendency to distribute importance among correlated features, capturing groups of genes that may be co-expressed or functionally linked. Finally, OLS, which lacks regularization, identifies a very similar top tier dominated by gene_14, gene_08, and gene_19. Its overlap with the penalized models suggests that these genes have both strong individual associations and stability under penalization key indicators of biological and statistical relevance. In summary, despite methodological differences, all models converge on a common biological signature: a small set of genes (notably gene_19, gene_08, gene_14, gene_05, gene_01, and gene_12) emerge as consistent predictors of tumor response. The regularized approaches (especially Elastic Net) reinforce their robustness while reducing noise from less informative or redundant variables. Together, these findings highlight a reproducible molecular profile potentially linked to therapeutic sensitivity.
+
+### Predictive modeling:
+
+Given a patient's main-effect clinical and molecular profile, how well do OLS, Ridge, LASSO, and Elastic Net predict tumor shrinkage (MAE/RMSE on train/test).
+
+The answert to this question relates directly with the comparison we did regarding OLS, Rige, LASSO and Elastic net MAE and RMSEs.
+
+```{r}
+# Print results
+metrics_train
+metrics_test
+```
+
+## Logistic Regression
+
+Logistic regression models the probability that a patient is a high responder using a logistic ( S -shaped) link. Instead of predicting a continuous shrinkage value, we now predict $P(Y=1 \mid X)$, where $Y=1$ means a clinically meaningful tumor reduction. The model is linear on the log-odds scale:
+
+$$
+\operatorname{Pr}(Y=1 \mid X)=\frac{1}{1+\exp \left\{-\left(w_0+w_1 x_1+\cdots+w_p x_p\right)\right\}}
+$$
+
+Coefficients remain interpretable: a positive $w_j$ increases the log-odds, which increases the probability of high response, holding other variables fixed. We will fit a clean, leakage-free specification that excludes identifiers and any variables used to compute the continuous outcome.
+
+An alternative representation for a logistic regression model is the following diagram that has a structure of a network. We will come back this in later chapters. Can you guess which kind of networks is this?
+
+```{mermaid}
+flowchart LR
+    x1["x₁"] --> w1["× w₁"]
+    x2["x₂"] --> w2["× w₂"]
+    xp["xₚ"] --> wp["× wₚ"]
+
+    w1 --> SUM
+    w2 --> SUM
+    wp --> SUM
+
+    SUM["Σ (wⱼ xⱼ + b)"] --> ACT["σ ( · )  (sigmoid)"]
+    ACT --> y["ŷ"]
+
+```
+
+Metrics we will use to compare models We will evaluate models with threshold-based metrics and threshold-free curves.
+
+-   Accuracy: fraction of correct classifications.
+
+-   Sensitivity (recall): fraction of true positives captured.
+
+-   Specificity: fraction of true negatives correctly rejected.
+
+-   Precision (PPV): among predicted positives, fraction that are truly positive.
+
+-   F1: harmonic mean of precision and recall.
+
+-   ROC and AUC: trade-off between TPR and FPR across all thresholds; AUC summarizes discrimination from 0.5 (random) a 1.0 (perfeito).
+
+-   Precision-Recall and AUC-PR: useful when we have unbalanced data, focus on performance in the rare set.
+
+### Understanding ROC and AUC through examples
+
+The ROC curve (Receiver Operating Characteristic) and the AUC (Area Under the Curve) are fundamental tools for evaluating binary classification models. The series of plots generated by the next blocks of code illustrates how ROC curves behave under different modeling situations, helping us understand what a “good,” “bad,” or “misleading” model looks like. The examples are from simulated data and not related to our motivational context.
+
+Each plot shows sensitivity (true positive rate) on the vertical axis and 1 – specificity (false positive rate) on the horizontal axis. A diagonal line represents the performance of a random classifier. Curves that rise sharply toward the upper-left corner correspond to models that discriminate well between positive and negative cases. The AUC value, printed in the title of each facet, summarizes this ability numerically.
+
+In the first scenario, labeled Excellent model, the two classes are highly separable. T
+
+The name “logistic” comes from the **logit**, or **log-odds**, transformation that the model uses. Instead of modeling the probability itself, it models the *log of the odds* of success (for example, the log of the odds of being a high responder). This logit is linear in the predictors, which means we can still use familiar regression ideas while keeping the predictions bounded between 0 and 1
+
+### Logistic Regression in our motivating example
+
+Our response variable is now `high_response` (binary, 0/1): equal to 1 if `response_percent ≥ 30`(similar to RECIST clinical criteria) @eisenhauer2009recist.
+
+The next chunk of code makes sure that the response is binary, and prepare the datasets for analysis and the formula we will use in the R function \`glm\` that will fit the logistic regression for us.
+
+In logistic regression, the model does not minimize squared errors like ordinary least squares does. Instead, it estimates the coefficients $\boldsymbol{\beta}$ that make the observed data most probable under the assumed binomial distribution, a distribution that models binary outcomes. This is achieved through Maximum Likelihood Estimation (MLE). In essence, MLE finds the set of parameters $\beta$ that maximize the log-likelihood function, which measures how well the model's predicted probabilities align with the actual outcomes. For each observation, the model computes the probability of belonging to class 1 (success) as $\hat{p}_i=\frac{1}{1+e^{-\left(x_i^T w\right)}}$; the log-likelihood then accumulates the logarithm of these probabilities across all samples. Maximizing this quantity ensures that the estimated coefficients produce predicted probabilities that are as consistent as possible with the observed binary responses.
+
+### ROC and AUC
+
+Before moving to the code that implements these methods, it is useful to understand two fundamental concepts for evaluating the performance of binary classification models: the **Receiver Operating Characteristic (ROC) curve** and the **Area Under the Curve (AUC)**.
+
+When a model predicts probabilities such as the likelihood that a patient will show a high tumor response it is not limited to a single classification threshold (for example, 0.5). Instead, the threshold can vary. For each possible threshold, the model produces a different balance between **sensitivity** (the proportion of true responders correctly identified) and **specificity** (the proportion of non-responders correctly rejected).
+
+The ROC curve visualizes this trade-off. It plots **sensitivity** on the vertical axis against **1 – specificity** on the horizontal axis, across all thresholds from 0 to 1. Each point on the curve represents a possible decision rule. A model that predicts perfectly has a curve that rises immediately to the top-left corner of the plot (sensitivity = 1, specificity = 1). A model that performs no better than random chance follows the diagonal line from (0, 0) to (1, 1).
+
+The **Area Under the ROC Curve (AUC)** condenses this information into a single number between 0 and 1. An AUC of 1 indicates perfect discrimination: the model always ranks true responders above non-responders. An AUC of 0.5 corresponds to random guessing. Values between 0.7 and 0.8 are generally considered acceptable, 0.8 to 0.9 good, and above 0.9 excellent, though interpretation depends on the context and the consequences of errors.
+
+In the context of our clinical trial, the ROC curve tells us how well the logistic regression model can distinguish patients who achieve a meaningful tumor reduction from those who do not. The AUC gives an overall summary of this discrimination ability, independent of any specific threshold. It is particularly useful in medicine, where the decision threshold may later be adjusted to achieve a desired balance between missing true responders (false negatives) and incorrectly labeling non-responders as high responders (false positives).
+
+he ROC curve quickly approaches the top-left corner, and the AUC is close to 1. This means the model ranks nearly all true responders above non-responders, providing excellent discrimination.
+
+In the second panel, *Reasonable model*, the curve still bows above the diagonal, but less dramatically. The AUC is around 0.8–0.9, which is common in real clinical prediction problems. This represents a solid model that balances sensitivity and specificity reasonably well.
+
+The third example, *Near random*, has an ROC curve close to the diagonal with an AUC around 0.5. This model is essentially guessing; its predictions carry no discriminative information beyond random chance.
+
+The fourth panel, *Inverted score*, shows a curve that falls below the diagonal. Here the model systematically reverses the ordering of cases high probabilities are assigned to negatives and low probabilities to positives. In practice, such a model can be “fixed” simply by reversing its decision rule, but its presence is a clear sign that something in the data or labeling is inverted.
+
+The fifth case, *Imbalanced classes*, demonstrates a subtle but important limitation of the ROC curve. Even with a heavily skewed dataset (for example, many more non-responders than responders), the ROC may still appear fairly high. However, when the number of positive cases is small, **precision** the proportion of predicted positives that are correct can drop sharply even if the ROC looks good. For this reason, the code also produces **Precision–Recall (PR)** curves, which tend to give a clearer picture when class imbalance is severe. In these PR plots, precision is shown against recall, and a high-quality model maintains both values simultaneously at high levels.
+
+The final figure illustrates the effect of changing the decision **threshold**. Each dot along the ROC curve corresponds to a different cutoff value for the predicted probability. Lowering the threshold increases sensitivity (the model captures more true responders) but also raises the false positive rate. Raising the threshold has the opposite effect: fewer false alarms, but more missed responders. Choosing the “best” threshold depends on clinical priorities whether we prefer to err on the side of overtreatment (high sensitivity) or undertreatment (high specificity).
+
+Taken together, these plots demonstrate that ROC curves and AUC values offer a concise but nuanced summary of model discrimination. A high AUC indicates that the model generally ranks positive cases above negative ones, but the exact trade-off between sensitivity and specificity still depends on how we set the classification threshold. Complementing ROC and AUC with PR curves and context-specific thresholds ensures a more complete understanding of predictive performance, especially in medical settings where the balance between false positives and false negatives carries real clinical implications.
+
+```{r, echo=FALSE, include=TRUE, warning=FALSE}
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(ggplot2)
+  library(pROC)     # ROC, AUC, ggroc
+  # install.packages("PRROC") # if needed
+  suppressWarnings(require(PRROC))  # for PR curves (optional)
+})
+
+set.seed(123)
+
+# Helper to simulate probabilities and labels under different scenarios
+sim_scores <- function(n_pos, n_neg, pos_mean, neg_mean, sd = 1, inv = FALSE) {
+  # Generate a latent score ~ Normal; higher = more likely positive
+  s_pos <- rnorm(n_pos, mean = pos_mean, sd = sd)
+  s_neg <- rnorm(n_neg, mean = neg_mean, sd = sd)
+  # Map to probabilities via logistic
+  p_pos <- 1 / (1 + exp(-s_pos))
+  p_neg <- 1 / (1 + exp(-s_neg))
+  if (inv) {  # deliberately flip for a pathological case
+    p_pos <- 1 - p_pos
+    p_neg <- 1 - p_neg
+  }
+  tibble(
+    y    = c(rep(1, n_pos), rep(0, n_neg)),
+    prob = c(p_pos, p_neg)
+  )
+}
+
+# Scenarios
+n <- 2000
+dat_good       <- sim_scores(n_pos = n,    n_neg = n,    pos_mean = 2.0,  neg_mean = -2.0)   # very separable
+dat_ok         <- sim_scores(n_pos = n,    n_neg = n,    pos_mean = 1.0,  neg_mean = -0.8)   # decent
+dat_random     <- sim_scores(n_pos = n,    n_neg = n,    pos_mean = 0.0,  neg_mean = 0.0)    # random
+dat_inverted   <- sim_scores(n_pos = n,    n_neg = n,    pos_mean = 2.0,  neg_mean = -2.0, inv = TRUE)  # wrong direction
+dat_imbalanced <- sim_scores(n_pos = 200,  n_neg = 3800, pos_mean = 0.6,  neg_mean = 0.0)    # heavy class imbalance
+
+# Compute ROC objects and AUCs
+roc_list <- list(
+  "A) Excellent model" = roc(dat_good$y, dat_good$prob, quiet = TRUE),
+  "B) Reasonable model" = roc(dat_ok$y, dat_ok$prob, quiet = TRUE),
+  "C) Near random" = roc(dat_random$y, dat_random$prob, quiet = TRUE),
+  "D) Inverted score" = roc(dat_inverted$y, dat_inverted$prob, quiet = TRUE),
+  "E) Imbalanced classes" = roc(dat_imbalanced$y, dat_imbalanced$prob, quiet = TRUE)
+)
+
+# Build a data frame for ggplot with per-curve AUC in the facet titles
+roc_df <- bind_rows(lapply(names(roc_list), function(lbl) {
+  r <- roc_list[[lbl]]
+  coords <- coords(r, "all", ret = c("specificity", "sensitivity"))
+  tibble(
+    label = paste0(lbl, sprintf("  (AUC = %.3f)", as.numeric(auc(r)))),
+    specificity = coords$specificity,
+    sensitivity = coords$sensitivity
+  )
+}), .id = NULL)
+
+# Plot ROC curves (faceted)
+p_roc <- ggplot(roc_df, aes(x = 1 - specificity, y = sensitivity)) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+  geom_line(size = 1) +
+  coord_equal() +
+  labs(
+    x = "False positive rate (1 - specificity)",
+    y = "True positive rate (sensitivity)",
+    title = "ROC examples: good, bad, and pathological cases"
+  ) +
+  facet_wrap(~ label, ncol = 2) +
+  theme_minimal(base_size = 12)
+p_roc
+
+# Optional: Precision–Recall curves to show the imbalance caveat
+if ("PRROC" %in% .packages()) {
+  pr_build <- function(dat, lbl) {
+    fg <- dat$prob[dat$y == 1]  # scores for positives
+    bg <- dat$prob[dat$y == 0]  # scores for negatives
+    pr <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = TRUE)
+    tibble(
+      label = paste0(lbl, sprintf("  (AUC-PR = %.3f)", pr$auc.integral)),
+      recall = pr$curve[, 1],
+      precision = pr$curve[, 2]
+    )
+  }
+  pr_df <- bind_rows(
+    pr_build(dat_good,       "A) Excellent model"),
+    pr_build(dat_ok,         "B) Reasonable model"),
+    pr_build(dat_random,     "C) Near random"),
+    pr_build(dat_inverted,   "D) Inverted score"),
+    pr_build(dat_imbalanced, "E) Imbalanced classes")
+  )
+  p_pr <- ggplot(pr_df, aes(x = recall, y = precision)) +
+    geom_line(size = 1) +
+    labs(
+      x = "Recall (sensitivity)",
+      y = "Precision (PPV)",
+      title = "Precision–Recall curves highlight class imbalance effects"
+    ) +
+    facet_wrap(~ label, ncol = 2) +
+    theme_minimal(base_size = 12)
+  p_pr
+}
+
+# Also show how threshold choice affects a single model
+# Pick the “reasonable” model and mark a few thresholds
+r_ok <- roc_list[["B) Reasonable model"]]
+coords_ok <- coords(r_ok, x = seq(0, 1, by = 0.1), input = "threshold",
+                    ret = c("threshold", "specificity", "sensitivity"))
+thresh_df <- tibble(
+  FPR = 1 - coords_ok$specificity,
+  TPR = coords_ok$sensitivity,
+  threshold = round(coords_ok$threshold, 2)
+)
+ggplot() +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+  geom_line(data = roc_df %>% filter(grepl("^B\\)", label)),
+            aes(x = 1 - specificity, y = sensitivity), size = 1) +
+  geom_point(data = thresh_df, aes(x = FPR, y = TPR), size = 2) +
+  geom_text(data = thresh_df, aes(x = FPR, y = TPR, label = threshold),
+            nudge_y = 0.04, size = 3) +
+  coord_equal() +
+  labs(
+    x = "False positive rate",
+    y = "True positive rate",
+    title = "Threshold choice along the ROC curve (Reasonable model)"
+  ) +
+  theme_minimal(base_size = 12)
+
+```
+
+### Penalized logistic models: LASSO, Ridge, and Elastic Net
+
+High dimensionality and correlated features make it hard to interpret thousands of coefficients and can hurt generalization. Penalized logistic regression addresses this by shrinking coefficients. Ridge (L2) shrinks all coefficients toward zero without removing variables. LASSO (L1) can set some coefficients exactly to zero, performing embedded feature selection. Elastic Net blends both penalties and is helpful when many predictors are correlated. We fit all three using the binomial family so the comparison with logistic regression is fair. We always evaluate probabilities from these models in ROC and PR calculations.
+
+### Fitting Logistic Regression and equivalent LASSO, RIDGE,and Elastic Net Approaches
+
+To make the results reproducible by users with any kind of machine we will first create a smaller version of our dataset containing only 100 genes.
+
+```{r, include=FALSE, echo=FALSE}
+# # === BUILD AND SAVE A SMALLER DATASET (ct_reduced) ============================
+# suppressPackageStartupMessages({
+#   library(dplyr)
+#   library(stringr)
+# })
+# 
+# # 0) Load the full dataset -----------------------------------------------------
+# full_path <- "data/trial_ct_chemo_cont.rds"
+# if (!file.exists(full_path)) stop("File not found: ", full_path)
+# trial_ct <- readRDS(full_path)
+# dim(trial_ct)
+# # 1) Ensure binary target (RECIST-like 30% rule) -------------------------------
+# if (!"high_response" %in% names(trial_ct)) {
+#   if (!"response_percent" %in% names(trial_ct)) {
+#     stop("`response_percent` not found to derive `high_response`.")
+#   }
+#   trial_ct <- trial_ct %>%
+#     mutate(high_response = as.integer(response_percent >= 30))
+# }
+# 
+# # 2) Identify gene columns (gene_1, gene_2, ..., gene_2000) -------------------
+# gene_cols <- names(trial_ct)[grepl("^gene_\\d+$", names(trial_ct), perl = TRUE)]
+# if (length(gene_cols) == 0) stop("No gene columns matched '^gene_\\d+$'.")
+# 
+# # 3) Select 100 genes: top-by-variance + random extras -------------------------
+# target_total_genes <- 100L   # change if you want fewer/more
+# top_k_fraction     <- 0.8    # 80% by variance, 20% random
+# top_k_var          <- max(1L, as.integer(target_total_genes * top_k_fraction))
+# add_k_rand         <- max(0L, target_total_genes - top_k_var)
+# 
+# # Variance computed on the full dataset (unsupervised → no label leakage)
+# gene_var <- sapply(trial_ct[gene_cols], stats::var, na.rm = TRUE)
+# 
+# top_var_genes <- names(sort(gene_var, decreasing = TRUE))[
+#   seq_len(min(top_k_var, length(gene_var)))
+# ]
+# 
+# set.seed(42)
+# remaining_genes <- setdiff(gene_cols, top_var_genes)
+# rand_genes <- if (length(remaining_genes) > 0 && add_k_rand > 0) {
+#   sample(remaining_genes, size = min(add_k_rand, length(remaining_genes)))
+# } else character(0)
+# 
+# sel_genes <- union(top_var_genes, rand_genes)
+# 
+# # 4) Choose non-gene predictors and drop leakage/IDs ---------------------------
+# leak_or_id <- c("patient_id", "response_percent", "baseline_tumor_mm", "post_tumor_mm")
+# 
+# non_gene_predictors <- setdiff(
+#   names(trial_ct),
+#   c(leak_or_id, gene_cols, "high_response")
+# )
+# 
+# # Keep only: non-gene predictors + selected genes + target
+# keep_cols <- intersect(c(non_gene_predictors, sel_genes, "high_response"), names(trial_ct))
+# ct_reduced <- trial_ct %>% select(all_of(keep_cols))
+# 
+# # Optional provenance stamps
+# attr(ct_reduced, "created_with") <- paste0(
+#   "variance+random gene selection (", length(top_var_genes), "+", length(rand_genes),
+#   "), target_total_genes=", target_total_genes
+# )
+# attr(ct_reduced, "created_at") <- Sys.time()
+# 
+# # 5) Save next to the full dataset --------------------------------------------
+# data_dir <- dirname(full_path)   # "data"
+# dir.create(data_dir, recursive = TRUE, showWarnings = FALSE)
+# 
+# version_tag <- "v1"
+# rds_path <- file.path(data_dir, sprintf("ct_reduced_%s.rds", version_tag))
+# csv_path <- file.path(data_dir, sprintf("ct_reduced_%s.csv", version_tag))
+# 
+# saveRDS(ct_reduced, rds_path)
+# if (requireNamespace("readr", quietly = TRUE)) {
+#   readr::write_csv(ct_reduced, csv_path)
+# } else {
+#   write.csv(ct_reduced, csv_path, row.names = FALSE)
+# }
+# 
+# message(
+#   "ct_reduced created with ", ncol(ct_reduced), " columns (",
+#   length(sel_genes), " genes + ", length(non_gene_predictors), " non-gene predictors + target).",
+#   "\nSaved to:\n- ", normalizePath(rds_path), "\n- ", normalizePath(csv_path)
+# )
+
+```
+
+The next chunk reads the smaller version of the data. In this dataset we have a subset of the 1000 genes, this is the reason for genes names not being 1....2000.
+
+```{r}
+# === Load the reduced dataset and quick checks ================================
+suppressPackageStartupMessages({
+  library(dplyr)
+})
+
+ct_reduced <- readRDS("~/att_ai_ml/data/ct_reduced_v1.rds")
+
+# Basic sanity checks
+dim(ct_reduced)
+names(ct_reduced)[1:min(20, ncol(ct_reduced))]
+str(ct_reduced)
+
+```
+
+First we force the data to be binary
+
+```{r}
+# === Ensure binary target and remove any accidental leakage ===================
+# ct_reduced SHOULD already include 'high_response' (0/1). We enforce 0/1 safely.
+
+to_binary01 <- function(x) {
+  if (is.logical(x)) return(as.integer(x))
+  if (is.factor(x))  return(as.integer(as.numeric(x) == max(as.numeric(x))))
+  as.integer(x)
+}
+
+if (!"high_response" %in% names(ct_reduced)) {
+  stop("`high_response` is not in ct_reduced. Recreate ct_reduced with the target.")
+}
+
+ct_reduced <- ct_reduced %>%
+  mutate(high_response = to_binary01(high_response))
+
+# If any of these exist, drop them for modeling as potential leakage/IDs.
+leak_or_id <- intersect(
+  c("patient_id", "response_percent", "baseline_tumor_mm", "post_tumor_mm"),
+  names(ct_reduced)
+)
+if (length(leak_or_id)) {
+  message("Dropping potential leakage/ID columns: ", paste(leak_or_id, collapse = ", "))
+  ct_reduced <- dplyr::select(ct_reduced, -all_of(leak_or_id))
+}
+
+# Optional: remove zero-variance predictors (defensive)
+nzv <- function(x) is.numeric(x) && (sd(x, na.rm = TRUE) == 0)
+drop_nzv <- names(ct_reduced)[vapply(ct_reduced, nzv, logical(1))]
+if (length(drop_nzv)) {
+  message("Dropping zero-variance numeric columns: ", paste(drop_nzv, collapse = ", "))
+  ct_reduced <- dplyr::select(ct_reduced, -all_of(drop_nzv))
+}
+
+```
+
+After reading and preparing the data we proceed with the division of the dataset into training and testing dataset.\
+\
+
+```{r}
+# === Stratified train/test split (e.g., 70/30) ================================
+set.seed(42)
+prop_train <- 0.70
+
+idx_train <- ct_reduced %>%
+  mutate(row_id = dplyr::row_number()) %>%
+  group_by(high_response) %>%
+  slice_sample(prop = prop_train) %>%
+  ungroup() %>%
+  pull(row_id)
+
+train_df <- ct_reduced[idx_train, , drop = FALSE]
+test_df  <- ct_reduced[-idx_train, , drop = FALSE]
+
+# Quick balance check
+table_train <- table(train_df$high_response)
+table_test  <- table(test_df$high_response)
+table_train; table_test
+
+```
+
+Now we will build the model formula to be used by R
+
+```{r}
+# === Build the modeling formula (use everything except the target) ============
+predictors <- setdiff(names(train_df), "high_response")
+rhs <- paste(predictors, collapse = " + ")
+f_logit <- as.formula(paste("high_response ~", rhs))
+f_logit
+
+```
+
+### Fitting logistic regression
+
+In order to fit the logistic regression we use the R function \``glm`\` that is the short for generalized linear models, a generic type of models from which logistic regression is a specific example.\
+\
+
+```{r}
+# === Fit logistic regression (glm) and get predictions =======================
+suppressPackageStartupMessages({
+  library(broom)   # tidy output
+})
+
+mod_logit <- glm(f_logit,
+                 data   = train_df,
+                 family = binomial(),
+                 control = glm.control(maxit = 100))  # a few more iterations can help
+
+# Predicted probabilities
+p_train <- predict(mod_logit, newdata = train_df, type = "response")
+p_test  <- predict(mod_logit, newdata = test_df,  type = "response")
+
+# Class predictions at a default 0.5 threshold (tune later as needed)
+thr <- 0.5
+y_train <- train_df$high_response
+y_test  <- test_df$high_response
+yhat_train <- as.integer(p_train >= thr)
+yhat_test  <- as.integer(p_test  >= thr)
+
+```
+
+Now we create some helper functions to get metrics from the model
+
+```{r}
+# === Metrics helpers (confusion-matrix stats, ROC AUC, PR AUC) ===============
+suppressPackageStartupMessages({
+  library(pROC)       # ROC/AUC
+  suppressWarnings(require(PRROC))  # PR curves (optional)
+  library(tidyr)
+  library(ggplot2)
+})
+
+cm_metrics <- function(y, yhat) {
+  tp <- sum(y == 1 & yhat == 1)
+  tn <- sum(y == 0 & yhat == 0)
+  fp <- sum(y == 0 & yhat == 1)
+  fn <- sum(y == 1 & yhat == 0)
+  acc  <- (tp + tn) / (tp + tn + fp + fn)
+  sens <- ifelse((tp + fn) > 0, tp / (tp + fn), NA_real_)  # recall
+  spec <- ifelse((tn + fp) > 0, tn / (tn + fp), NA_real_)
+  prec <- ifelse((tp + fp) > 0, tp / (tp + fp), NA_real_)  # PPV
+  f1   <- ifelse((prec + sens) > 0, 2 * prec * sens / (prec + sens), NA_real_)
+  dplyr::tibble(TP = tp, TN = tn, FP = fp, FN = fn,
+                Accuracy = acc, Sensitivity = sens, Specificity = spec,
+                Precision = prec, F1 = f1)
+}
+
+auc_roc <- function(labels, scores) {
+  as.numeric(pROC::auc(pROC::roc(labels, scores, quiet = TRUE)))
+}
+
+auc_pr <- function(labels, scores, positive_class = 1) {
+  if (!"PRROC" %in% .packages()) return(NA_real_)
+  s <- as.numeric(scores); y <- as.integer(labels)
+  fg <- s[y == positive_class]
+  bg <- s[y != positive_class]
+  out <- PRROC::pr.curve(scores.class0 = fg, scores.class1 = bg, curve = FALSE)
+  as.numeric(out$auc.integral)
+}
+
+```
+
+Lets calculate metrics of true positives true negatives false positives and false negatives for our example.
+
+```{r}
+# === Metrics table for glm on TRAIN/TEST ======================================
+logit_train_metrics <- cm_metrics(y_train, yhat_train) %>%
+  mutate(Model = "Logistic (glm)", Dataset = "Train",
+         AUC_ROC = auc_roc(y_train, p_train),
+         AUC_PR  = auc_pr(y_train,  p_train))
+
+logit_test_metrics <- cm_metrics(y_test, yhat_test) %>%
+  mutate(Model = "Logistic (glm)", Dataset = "Test",
+         AUC_ROC = auc_roc(y_test, p_test),
+         AUC_PR  = auc_pr(y_test,  p_test))
+
+dplyr::bind_rows(logit_train_metrics, logit_test_metrics)
+
+```
+
+Moving we can construct the ROC and AUC curves for our example\
+\
+
+```{r}
+# === ROC curves for glm (downsampled for plotting stability) ==================
+roc_train <- pROC::roc(y_train, p_train, quiet = TRUE)
+roc_test  <- pROC::roc(y_test,  p_test,  quiet = TRUE)
+
+roc_df <- dplyr::bind_rows(
+  tibble::tibble(FPR = 1 - roc_train$specificities, TPR = roc_train$sensitivities, Dataset = "Train"),
+  tibble::tibble(FPR = 1 - roc_test$specificities,  TPR = roc_test$sensitivities,  Dataset = "Test")
+) %>%
+  dplyr::group_by(Dataset) %>%
+  dplyr::slice( unique(round(seq(1, dplyr::n(), length.out = pmin(400L, dplyr::n())))) ) %>%
+  dplyr::ungroup()
+
+ggplot(roc_df, aes(x = FPR, y = TPR, linetype = Dataset)) +
+  geom_abline(slope = 1, intercept = 0, alpha = 0.4) +
+  geom_line(linewidth = 1) +
+  coord_equal() +
+  labs(
+    title = "ROC curves    Logistic regression",
+    subtitle = sprintf("AUC Train = %.3f, AUC Test = %.3f",
+                       as.numeric(pROC::auc(roc_train)), as.numeric(pROC::auc(roc_test))),
+    x = "False Positive Rate", y = "True Positive Rate"
+  ) +
+  theme_minimal()
+
+```
+
+\
+Optionally we can create a PR curve\
+\
+
+```{r}
+# === Optional PR curves for glm ===============================================
+if ("PRROC" %in% .packages()) {
+  fg_train <- p_train[y_train == 1]; bg_train <- p_train[y_train == 0]
+  fg_test  <- p_test[y_test  == 1];  bg_test  <- p_test[y_test  == 0]
+  pr_train <- PRROC::pr.curve(scores.class0 = fg_train, scores.class1 = bg_train, curve = TRUE)
+  pr_test  <- PRROC::pr.curve(scores.class0 = fg_test,  scores.class1 = bg_test,  curve = TRUE)
+
+  pr_df <- dplyr::bind_rows(
+    tibble::tibble(recall = pr_train$curve[,1], precision = pr_train$curve[,2],
+                   Dataset = paste0("Train (AUC-PR = ", sprintf("%.3f", pr_train$auc.integral), ")")),
+    tibble::tibble(recall = pr_test$curve[,1],  precision = pr_test$curve[,2],
+                   Dataset = paste0("Test (AUC-PR = ",  sprintf("%.3f", pr_test$auc.integral), ")"))
+  )
+
+  ggplot(pr_df, aes(x = recall, y = precision, color = Dataset)) +
+    geom_line(linewidth = 1) +
+    labs(title = "Precision–Recall curves    Logistic regression",
+         x = "Recall (Sensitivity)", y = "Precision (PPV)") +
+    theme_minimal()
+}
+
+```
+
+\
+and get the coefficients from the models
+
+```{r}
+# === Coefficient table with Wald-style CIs (robust to confint() failures) =====
+coef_tbl_logit <- broom::tidy(mod_logit) %>%
+  mutate(
+    conf.low  = estimate - qnorm(0.975) * std.error,
+    conf.high = estimate + qnorm(0.975) * std.error
+  ) %>%
+  arrange(estimate)
+
+print(coef_tbl_logit, n = min(25, nrow(coef_tbl_logit)))
+
+```
+
+### Understanding Log-Odds and Coefficient Interpretation in Logistic Regression
+
+In linear regression, we predict a *continuous* outcome. In logistic regression, the outcome is *binary* (e.g., `high_response = 1` for “high responder” vs `0` for “low responder”). To keep predicted probabilities between 0 and 1, we model the **logarithm of the odds** (the *logit*) of being a responder.
+
+#### Odds and Logit
+
+The **odds** of success are: \$\[ \text{odds} = \frac{p}{1-p} \] \$If (p=0.75), then (\text{odds}=0.75/0.25=3) (three-to-one).
+
+The **logit** (log-odds) is: $\[ \text{logit}(p) = \log!\left(\frac{p}{1-p}\right) \]$
+
+Logistic regression is linear in the log-odds: $\[ \log!\left(\frac{p}{1-p}\right)=w_0+w_1 x_1+\cdots+w_k x_k \]$
+
+Each coefficient ( \$w_j \$) is the change in **log-odds** for a one-unit increase in (x_j), holding other variables fixed.
+
+#### Odds Ratios
+
+Exponentiating a coefficient yields an **odds ratio** (OR): $\[ \text{OR}\_j = e\^{w_j} \] - (\text{OR}\_j \> 1)$: increasing (x_j) raises the odds of response\
+- ($\text{OR}\_j < 1$): increasing (x_j) lowers the odds of response\
+- ($\text{OR}\_j = 1$): no change in odds
+
+Example interpretations: - $( \w=+0.80 \Rightarrow \text{OR}=e\^{0.80}\approx 2.22)$: odds a bit more than double per unit increase.\
+- $( w=-0.50 \Rightarrow \text{OR}\approx 0.61)$: odds drop by $\~39%$ per unit increase.
+
+#### From Log-Odds Back to Probability
+
+$\[ p=\frac{1}{1+e^{-(w_0+w_1 x_1+\cdots+w_k x_k)}} \]$ If log-odds = (1.5), then (p\approx 0.82). If log-odds = (-1.5), then (p\approx 0.18).
+
+### Compute Odds Ratios from the Fitted Model
+
+```{r}
+# Build odds–ratio table from the fitted model
+# (uses normal-approx CI; avoids profile-likelihood warnings/slowdowns)
+library(dplyr)
+library(broom)
+
+zcrit <- qnorm(0.975)  # 1.96
+
+or_tbl <- broom::tidy(mod_logit) %>%
+  filter(term != "(Intercept)") %>%
+  mutate(
+    OR      = exp(estimate),
+    OR_low  = exp(estimate - zcrit * std.error),
+    OR_high = exp(estimate + zcrit * std.error)
+  ) %>%
+  arrange(desc(abs(estimate)))
+
+# --- Ways to *see* the OR columns clearly ---
+
+# A) Select and print only the columns you care about
+or_tbl %>%
+  select(term, estimate, std.error, statistic, p.value, OR, OR_low, OR_high) %>%
+  slice_head(n = 12)
+
+# B) Print all columns without truncation
+print(or_tbl, n = 12, width = Inf)
+
+# C) Nicely formatted table (if in a report)
+# knitr::kable(
+#   or_tbl %>%
+#     transmute(
+#       term,
+#       `Estimate (β)` = estimate,
+#       `Std. Error`    = std.error,
+#       `z`             = statistic,
+#       `p`             = p.value,
+#       `OR = exp(β)`   = OR,
+#       `OR low`        = OR_low,
+#       `OR high`       = OR_high
+#     ) %>%
+#     slice_head(n = 12),
+#   digits = 3, align = "lrrrrrrr",
+#   caption = "Top coefficients by |β| with odds ratios and 95% CI"
+# )
+
+# D) If you want rounded values for readability
+or_tbl_rounded <- or_tbl %>%
+  mutate(
+    across(c(estimate, std.error, statistic), ~round(.x, 3)),
+    across(c(p.value), ~signif(.x, 3)),
+    across(c(OR, OR_low, OR_high), ~round(.x, 2))
+  )
+
+or_tbl_rounded %>%
+  select(term, estimate, std.error, statistic, p.value, OR, OR_low, OR_high) %>%
+  slice_head(n = 12)
+
+```
+
+The **treatment variable (chemo vs. no_chemo)** shows by far the strongest association, with an estimated coefficient of 6.78, corresponding to an odds ratio (OR) of approximately 885. This means that, holding other predictors constant, patients who received chemotherapy had odds of achieving a high tumor response nearly 900 times greater than those who did not receive it.
+
+The **dose_intensity** variable also exerts a very large positive effect (w = 3.74; OR ≈ 42). Each one-unit increase in dose intensity multiplies the odds of response by roughly 42, indicating a steep dose–response relationship.
+
+Tumor-related characteristics also influence response probability. A higher **tumor_grade** (e.g., G2 or G3 relative to the baseline category) is associated with an estimated b of 1.24 (OR ≈ 3.46), suggesting about a three-and-a-half-fold increase in the odds of response. A smaller positive contrast (w = 0.40; OR ≈ 1.49) indicates that other grade categories also contribute modestly to improved response rates.
+
+In contrast, **performance_score** has a negative coefficient (w = −0.676; OR ≈ 0.51), meaning that each additional point on this score reflecting poorer clinical performance reduces the odds of a favorable response by about half.
+
+Several genes show smaller but biologically interesting effects. **gene_1598** (w = +0.45; OR ≈ 1.57) and **gene_1551** (w = +0.44; OR ≈ 1.55) both display modest positive associations, where higher expression slightly increases the probability of response. **gene_779** (w = +0.36; OR ≈ 1.43) and **gene_588** (w = +0.29; OR ≈ 1.34) show similarly mild but consistent trends toward higher response odds.
+
+Conversely, **gene_565** (w = −0.34; OR ≈ 0.71), **gene_323** (w = −0.34; OR ≈ 0.72), and **gene_1183** (w = −0.31; OR ≈ 0.74) are negatively associated with high response, suggesting that higher expression of these genes slightly decreases the odds of tumor reduction, possibly reflecting resistance pathways.
+
+```{r, include=FALSE, echo=FALSE}
+# logit_to_prob <- function(eta) 1 / (1 + exp(-eta))
+# c(`log-odds =  1.5` = logit_to_prob(1.5),
+# `log-odds = -1.5` = logit_to_prob(-1.5))
+
+```
+
+### Benchmarking Logistic regression with LASSO, RIDGE and ELASTIC NET counterparts
+
+```{r}
+# === Penalized logistic: LASSO, Ridge, Elastic Net ============================
+suppressPackageStartupMessages({
+  library(glmnet)
+})
+
+# Freeze factor levels/dummies using the TRAIN design implied by f_logit
+mf_train  <- model.frame(f_logit, data = train_df)
+terms_log <- terms(mf_train)
+
+X_train <- model.matrix(terms_log, data = train_df)[, -1, drop = FALSE]
+X_test  <- model.matrix(terms_log, data = test_df)[,  -1, drop = FALSE]
+
+y_train <- train_df$high_response
+y_test  <- test_df$high_response
+
+set.seed(42)
+
+# LASSO (alpha = 1)
+cv_lasso  <- cv.glmnet(X_train, y_train, family = "binomial", alpha = 1, nfolds = 10)
+mod_lasso <- glmnet(X_train, y_train, family = "binomial", alpha = 1, lambda = cv_lasso$lambda.min)
+p_lasso_train <- as.numeric(predict(mod_lasso, newx = X_train, type = "response"))
+p_lasso_test  <- as.numeric(predict(mod_lasso, newx = X_test,  type = "response"))
+
+# Ridge (alpha = 0)
+cv_ridge  <- cv.glmnet(X_train, y_train, family = "binomial", alpha = 0, nfolds = 10)
+mod_ridge <- glmnet(X_train, y_train, family = "binomial", alpha = 0, lambda = cv_ridge$lambda.min)
+p_ridge_train <- as.numeric(predict(mod_ridge, newx = X_train, type = "response"))
+p_ridge_test  <- as.numeric(predict(mod_ridge, newx = X_test,  type = "response"))
+
+# Elastic Net (alpha = 0.15 as an example)
+alpha_en   <- 0.15
+cv_enet    <- cv.glmnet(X_train, y_train, family = "binomial", alpha = alpha_en, nfolds = 10)
+mod_enet   <- glmnet(X_train, y_train, family = "binomial", alpha = alpha_en, lambda = cv_enet$lambda.min)
+p_enet_train <- as.numeric(predict(mod_enet, newx = X_train, type = "response"))
+p_enet_test  <- as.numeric(predict(mod_enet, newx = X_test,  type = "response"))
+
+```
+
+Let's now compare the models\
+\
+
+```{r}
+# === Compare models on TEST ====================================================
+compare_test <- tibble::tibble(
+  Model = c("Logistic (glm)", "LASSO-logit", "Ridge-logit", "ElasticNet-logit"),
+  Prob  = list(p_test,        p_lasso_test,  p_ridge_test,  p_enet_test)
+) %>%
+  dplyr::rowwise() %>%
+  dplyr::mutate(
+    yhat    = list(as.integer(unlist(Prob) >= 0.5)),
+    Metrics = list(cm_metrics(y_test, unlist(yhat))),
+    AUC_ROC = auc_roc(y_test, unlist(Prob)),
+    AUC_PR  = auc_pr(y_test,  unlist(Prob))
+  ) %>%
+  tidyr::unnest(Metrics) 
+
+compare_test
+
+```
+
+and plot metrics of performance\
+\
+
+```{r}
+# === Faceted ROC across models (TEST) =========================================
+roc_facets <- function(models, labels,
+                       suptitle = "ROC curves by model (TEST)",
+                       xlaw = "False positive rate (1 - specificity)",
+                       ylaw = "True positive rate (sensitivity)",
+                       caption = NULL) {
+  df_list <- vector("list", length(models))
+  model_names <- names(models)
+  if (is.null(model_names)) model_names <- paste0("Model ", seq_along(models))
+  for (i in seq_along(models)) {
+    roc_i <- pROC::roc(labels, models[[i]], quiet = TRUE)
+    auc_i <- as.numeric(pROC::auc(roc_i))
+    pts   <- tibble::tibble(
+      fpr   = 1 - roc_i$specificities,
+      tpr   = roc_i$sensitivities,
+      model = sprintf("%s (AUC = %.3f)", model_names[i], auc_i)
+    )
+    df_list[[i]] <- pts
+  }
+  roc_df <- dplyr::bind_rows(df_list)
+
+  ggplot(roc_df, aes(x = fpr, y = tpr)) +
+    geom_path(linewidth = 1) +
+    geom_abline(slope = 1, intercept = 0, linetype = 2) +
+    facet_wrap(~ model) +
+    labs(title = suptitle, x = xlab, y = ylab, caption = caption) +
+    theme_minimal(base_size = 12)
+}
+
+models_scores <- list(
+  "Logistic (glm)" = p_test,
+  "LASSO-logit"    = p_lasso_test,
+  "Ridge-logit"    = p_ridge_test,
+  "ENet-logit"     = p_enet_test
+)
+
+roc_facets(models_scores, labels = y_test,
+           suptitle = "ROC by model on TEST (ct_reduced)")
+
+```
+
+```{r}
+# === Faceted PR across models (TEST, optional) ================================
+if ("PRROC" %in% .packages()) {
+  pr_facets <- function(models, labels,
+                        positive_class = 1,
+                        suptitle = "Precision–Recall curves by model (TEST)",
+                        caption = NULL) {
+    df_list <- vector("list", length(models))
+    model_names <- names(models)
+    if (is.null(model_names)) model_names <- paste0("Model ", seq_along(models))
+    for (i in seq_along(models)) {
+      s <- as.numeric(models[[i]])
+      y <- as.integer(labels)
+      s_pos <- s[y == positive_class]
+      s_neg <- s[y != positive_class]
+      pr <- PRROC::pr.curve(scores.class0 = s_pos, scores.class1 = s_neg, curve = TRUE)
+      tmp <- tibble::tibble(
+        recall    = pr$curve[, 1],
+        precision = pr$curve[, 2],
+        model     = sprintf("%s (AUC-PR = %.3f)", model_names[i], pr$auc.integral)
+      )
+      df_list[[i]] <- tmp
+    }
+    pr_df <- dplyr::bind_rows(df_list)
+
+    ggplot(pr_df, aes(recall, precision)) +
+      geom_path(linewidth = 1) +
+      facet_wrap(~ model) +
+      labs(title = suptitle, x = "Recall (sensitivity)", y = "Precision (PPV)", caption = caption) +
+      theme_minimal(base_size = 12)
+  }
+
+  pr_facets(models_scores, labels = y_test,
+            suptitle = "Precision–Recall by model on TEST (ct_reduced)")
+}
+
+```

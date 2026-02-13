@@ -1,0 +1,1953 @@
+---
+title: "Supervised Learning: Tree Methods"
+bibliography: references.bib
+cite-method: citeproc
+link-citations: true
+editor_options:
+  chunk_output_type: console
+format: html
+---
+
+## Setting up R
+
+```{r}
+#| label: setup-install-packages-aula03-trees
+#| message: false
+#| warning: false
+
+# Core data/plot
+req_pkgs <- c(
+  "dplyr", "ggplot2", "tidyr", "readr", "tibble", "gridExtra",
+  # Trees
+  "rpart", "rpart.plot", "partykit",
+  # Random Forests (pick one or use both)
+  "ranger",        # fast RF (recommended)
+  "randomForest",  # classic RF implementation
+  # Gradient Boosting
+  "xgboost", "Matrix",  # Matrix for sparse design matrices
+  # Model interpretation (optional but handy)
+  "vip",   # variable importance plots
+  "pdp",   # partial dependence
+  "iml"    # ICE/SHAP-like tools (optional)
+)
+
+# Install any missing
+to_install <- setdiff(req_pkgs, rownames(installed.packages()))
+if (length(to_install) > 0) {
+  install.packages(to_install, dependencies = TRUE)
+}
+
+# Load all (silently)
+invisible(lapply(req_pkgs, require, character.only = TRUE))
+
+
+
+```
+
+## Recalling
+
+In the last chapter we studied models that allow us to perform supervised learning regression tasks. We used linear models and different approaches for estimation including OLS, LASSO, Ridge and Elastic Net to predict labels of interest. We did that using an example of a clinical trial in which patients were randomized to receive or not chemotherapy. In the experiment we also collected other features and the expression of 2000 gens. We then fitted and compared OLS, LASSO, Ridge and Elastic Net models and compared regarding model outputs and prediction capacity. In this chapter we will still use the chemotherapy trial example to learn the concept of trees, random forests and XGboost techniques.
+
+## Reading the dataset
+
+```{r}
+# ================================
+# Read and prepare TRAIN/TEST (no saving)
+# ================================
+# 0) Load
+trial_ct <- readRDS("~/att_ai_ml/data/trial_ct_chemo_cont.rds")
+str(trial_ct[, 1:15])   # quick peek
+
+```
+
+Let's divide the dataset into training and testing like we did in the chapter about regression tasks.
+
+```{r}
+# 2) Stratified 70/30 split by treatment
+set.seed(42)
+split_strat <- function(df, strat_col, p_train = 0.7) {
+  idx_tr <- unlist(tapply(seq_len(nrow(df)), df[[strat_col]], function(ix) {
+    sample(ix, size = floor(p_train * length(ix)))
+  }))
+  list(train = sort(idx_tr), test = setdiff(seq_len(nrow(df)), idx_tr))
+}
+
+sp <- split_strat(trial_ct, strat_col = "treatment", p_train = 0.7)
+train <- trial_ct[sp$train, , drop = FALSE]
+test  <- trial_ct[sp$test,  , drop = FALSE]
+```
+
+The next chunk will make sure we will use only the columns that make sense.
+
+```{r}
+# 3) Drop columns that should NOT enter models
+#    - patient_id: identifier only
+#    - high_response: binary version of the outcome (leakage if modeling response_percent)
+#    - baseline_tumor_mm, post_tumor_mm: strongly deterministically related to response_percent
+drop_cols <- intersect(
+  names(train),
+  c("patient_id", "high_response", "baseline_tumor_mm", "post_tumor_mm")
+)
+train_nopii <- dplyr::select(train, -dplyr::all_of(drop_cols))
+test_nopii  <- dplyr::select(test,  -dplyr::all_of(drop_cols))
+
+# 4) Check outcome presence
+#stopifnot("response_percent" %in% names(train_nopii))
+```
+
+Now that we have the training and testing datasets organized we will create the matrices required for running models later. We will keep the same strategy we used for the previous chapters so we can compare the results of today with the ones of that class.
+
+```{r}
+# 5) Build a consistent design (for glmnet / xgboost, etc.)
+#    Use TRAIN to “freeze” factor levels and dummy columns
+f_ols   <- response_percent ~ .
+ols_tmp <- lm(f_ols, data = train_nopii)
+ols_terms <- terms(ols_tmp)
+
+# Model matrices (no intercept column)
+X_train <- model.matrix(ols_terms, data = train_nopii)[, -1, drop = FALSE]
+X_test  <- model.matrix(ols_terms, data = test_nopii)[,  -1, drop = FALSE]
+y_train <- train_nopii$response_percent
+y_test  <- test_nopii$response_percent
+
+```
+
+## Loading some helper functions
+
+As in the other chapter
+
+```{r}
+# 6) Small helpers for later evaluations
+mae  <- function(y, yhat) mean(abs(y - yhat))
+rmse <- function(y, yhat) sqrt(mean((y - yhat)^2))
+eval_perf <- function(y_true, y_pred) {
+  tibble::tibble(MAE = mae(y_true, y_pred), RMSE = rmse(y_true, y_pred))
+}
+```
+
+Before reading the rest of the chapter make sure you have the following objects loaded in your R environment
+
+```{r}
+# ---- Objects now available (in-memory) ----
+# train, test                      # full splits (for inspection/plots)
+# train_nopii, test_nopii          # safe for tree models (RF) with data.frame API
+# X_train, X_test, y_train, y_test # matrices for glmnet / xgboost
+# eval_perf(), mae(), rmse()       # metric helpers
+```
+
+## Model
+
+I the previous classes we learn that predictive AI, also named, machine learning can help us to predict labels using explanatory features, in simple mathematical terms we will have
+
+$$
+Y=f(X)+\epsilon 
+$$
+
+$$Y=f(x1,x2,...,xn)+error$$
+
+In the previous chapter we explored models in which f is said to have a linear behaviour
+
+$$Y= \mu + b1 * x1 +.... bn *xn+ \epsilon$$ {#eq-linear}
+
+when using the explanatory features to predict the responses.
+
+In this chapter we will learn models that learn the function $f(X)$ via (decision trees and their ensembles), named Random Forests and XGboost. The trees will be performing regression tasks or classification tasks.
+
+## Trees
+
+Before applying tree-based models to real clinical data, it is useful to build intuition with a simple synthetic example. Decision trees are, at their core, collections of if-else rules that partition the feature space into smaller, homogeneous regions. Each region (or leaf) represents a group of observations that share similar predicted values. To understand how such rules emerge from data, we will simulate a small dataset where the true underlying relationship between predictors and the outcome is explicitly governed by ifelse logic.
+
+In this example, we create two explanatory variables- $X_1$ and $X_2$-and one response variable $Y$. The response depends on threshold-based rules involving these features, plus a small amount of random noise:
+
+$$
+Y= \begin{cases}5+\varepsilon, & \text { if } X_1 \leq 4 \\ 10+\varepsilon, & \text { if } X_1>4 \text { and } X_2 \leq 0 \\ 14+\varepsilon, & \text { if } X_1>4 \text { and } X_2>0\end{cases}
+$$
+
+where $\varepsilon \sim \mathcal{N}\left(0,0.8^2\right)$ adds a small random deviation around each mean value. This structure defines three regions in the predictor space-each corresponding to one "rule" that determines the value of $Y$.
+
+The following R code generates this dataset:
+
+```{r}
+# ===== 1) TOY EXAMPLE: a small, interpretable tree =====
+# Two features with threshold structure, plus noise
+n <- 200
+X1 <- runif(n, 0, 10)            # e.g., "age-like"
+X2 <- rnorm(n, 0, 1)             # e.g., "biomarker-like"
+# Piecewise rule used to generate y (ground truth if/else)
+# IF X1 <= 4      THEN y ~  5 + noise
+# ELSE IF X2 <= 0 THEN y ~ 10 + noise
+# ELSE                 y ~ 14 + noise
+y  <- ifelse(X1 <= 4, 5, ifelse(X2 <= 0, 10, 14)) + rnorm(n, 0, 0.8)
+toy <- tibble::tibble(X1 = X1, X2 = X2, y = y)
+head(toy)
+```
+
+The resulting dataset toy contains 200 simulated observations, each described by two predictors ( X1 , X2 ) and a numeric outcome ( y ). The piecewise constant nature of the data mimics a situation where a target variable depends on threshold effects-for instance, a biomarker that changes behavior only above a certain age or concentration level.
+
+This simple simulation is pedagogically powerful: when we fit a decision tree to these data, the model will recover rules very similar to the ones used to generate $Y$. Each split in the tree corresponds to a decision node, where the algorithm asks a question of the form "Is $X_j \leq s$ ?". Depending on the answer, the observation moves to a child node on either the left or right branch. The process continues until no further improvement in prediction can be achieved, producing terminal nodes (leaves) that store the average predicted value of $Y$ for that region.
+
+By visualizing and interpreting this tree, we can clearly see how decision trees learn and represent piecewise-constant approximations of complex, nonlinear relationships using only simple, interpretable rules.
+
+In this chapter we will learn how to represent datasets like this in the form of the next figure
+
+```{r, include=FALSE,echo=FALSE}
+# Fit a small regression tree (will try to recover the hidden if/else rules)
+toy_tree <- rpart(
+  y ~ X1 + X2,
+  data = toy,
+  method = "anova",
+  control = rpart.control(cp = 0.0, maxdepth = 3, minsplit = 15)
+)
+
+# Visualize: root, internal nodes (splits), branches, leaves (predictions)
+rpart.plot(
+  toy_tree,
+  type = 2, extra = 101, box.palette = "Blues", shadow.col = "gray",
+  main = "Toy regression tree (rules as if/else)"
+)
+
+# Show the CP (complexity) table and prune by 1-SE (often overkill here, but illustrative)
+printcp(toy_tree)
+plotcp(toy_tree, main = "Toy tree: CP plot")
+
+best_row <- which.min(toy_tree$cptable[, "xerror"])
+xerr_min <- toy_tree$cptable[best_row, "xerror"]
+xstd_min <- toy_tree$cptable[best_row, "xstd"]
+cp_1se   <- toy_tree$cptable[toy_tree$cptable[, "xerror"] <= xerr_min + xstd_min, "CP"][1]
+toy_pruned <- prune(toy_tree, cp = cp_1se)
+
+# Extract human-readable IF/ELSE rules
+# (Each path corresponds to a branch from root to a leaf)
+rpart.plot::rpart.rules(toy_pruned, style = "tallw")
+
+# Quick check: observed vs predicted on the toy set
+toy$pred <- predict(toy_pruned, newdata = toy)
+
+
+```
+
+One possibility could be approximating the y values using the if else rules expressed in the tree
+
+```{r, include=T,echo=F}
+rpart.plot::rpart.rules(toy_pruned, style = "tallw")
+```
+
+Which can be visualised as with the usage of the Figure
+
+```{r, include=T,echo=F}
+rpart.plot(
+  toy_pruned, type = 2, extra = 101, box.palette = "GnBu", shadow.col = "gray",
+  main = "Toy regression tree (pruned, 1-SE rule)"
+)
+```
+
+This means the fitted model partitions the predictor space into three rectangular regions, each defined by simple threshold conditions on $X_1$ and $X_2$ : 1. Region 1 (Left branch):
+
+When $X_1<4$, the model predicts $\hat{y}=5.0$. This corresponds to the "younger" or "low-X1" group in our simulation, and reproduces the first rule of the data-generating process. 2. Region 2 (Middle branch):
+
+When $X_1 \geq 4$ and $X_2<-0.03$, the model predicts $\hat{y}=9.8$. This reflects the second rule-if $X_1$ is large but the second biomarker is low, $y$ is around 10 . 3. Region 3 (Right branch):
+
+When $X_1 \geq 4$ and $X_2 \geq-0.03$, the model predicts $\hat{y}=14.0$. This captures the third rule-both features are high, so the predicted outcome rises further. Each "when" statement defines a path from the root to a leaf, and each leaf holds the average of the training responses that fall into that region. In this simple example, the regression tree recovered the same three rules used to generate the data, showing how trees naturally express models as collections of logical conditions (if/else) rather than algebraic equations.
+
+### Non vegetable anatomy of a tree
+
+The following annotated @fig-anat depicts the anatomy of a computer science (algorithm) trees
+
+![](images/tree_notes.png){#fig-notated_tree}
+
+A decision tree is composed of a small number of fundamental building blocks that work together to partition the predictor space and generate predictions. The annotated figure highlights six key elements each serving a distinct role in the tree’s logic and interpretability.
+
+The **root node** is the starting point of the tree and contains the entire dataset below it. It summarises the outcome distribution before any splitting occurs and represents the baseline prediction if no further structure were learned. All decision paths originate from this node.
+
+An **internal node** is any node that performs a further split. It contains a rule such as *X1 \< 4* or *X2 ≥ –0.03*, chosen to maximize homogeneity in the resulting subgroups. These nodes divide the data into more refined regions and define the hierarchical structure of the model.
+
+Between every parent and child node lies a **splitting rule**, which acts as the conditional logic directing observations left or right. This is the “if–else” mechanism of the tree.\
+
+Between-node rules partition the feature space and determine how each observation flows through the model, creating a sequence of decisions that progressively increases predictive precision. Each node contains a compact summary of the data reaching that point, typically including:
+
+-   the predicted value (in regression),
+
+-   the number of observations in the node, and
+
+-   the percentage of the sample represented. This **within-node information** describes the characteristics of the subgroup created by previous splits and forms the foundation for the node’s prediction.
+
+A **leaf node** is a node with no further splits.\
+
+Leaf nodes provide the model’s final predictions. They correspond to the most homogeneous subgroups discovered during training, each representing a rule-defined region of the predictor space. In regression trees, the leaf value is the mean outcome of that subgroup. Every split produces two **child nodes**, each inheriting all conditions from its ancestors.\
+
+These nodes represent progressively more detailed subdivisions of the dataset.\
+
+A child node can either become another internal node (if it contains meaningful further structure) or a leaf node (if splitting stops).
+
+### Attributes of trees
+
+Decision trees are among the most intuitive and versatile models in machine learning. They combine the logic of if-else reasoning with the ability to approximate complex, nonlinear functions. The structure of a tree provides both a visual and conceptual bridge between human decision-making and predictive modeling.
+
+Hierarchical and rule-based structure
+
+A decision tree represents a sequence of binary decisions. At each internal node, the algorithm tests a condition of the form
+
+$$
+x_j \leq s,
+$$
+
+where $x_j$ is one explanatory variable and $s$ is a threshold chosen to maximize predictive homogeneity the resulting subgroups.
+
+Each path from the root to a leaf corresponds to a complete logical rule that defines a rectangular region of the predictor space. Leaves store a single value (for regression) or a class probability (for classification), so the tree acts as a collection of piecewise rules.
+
+Other important attributes include the following items:
+
+Local modeling and nonlinearity:
+
+Unlike linear regression, which assumes a single global relationship between predictors and the response, trees build local models. Each branch captures relationships that may differ across subsets of the data. This allows trees to represent sharp thresholds, discontinuities, and strong interactions between variables without explicitly defining them in advance.
+
+Automatic handling of interactions:
+
+Because each new split is conditional on previous $\bigcirc$ s, trees naturally model interactions between predictors.
+
+For example, a second-level split on $X_2$ applies only to observations that already satisfy a condition on $X_1$. This hierarchical conditioning is equivalent to including interaction terms in a regression model, but it emerges automatically from the recursive partitioning process.
+
+Scale and data type robustness:
+
+Decision trees are invariant to feature scaling-splits depend only on ordering, not on variable magnitude. They also handle both numeric and categorical variables seamlessly. In many implementations, missing values can be directed through surrogate splits, allowing a model to make predictions even with incomplete data.
+
+Interpretability and transparency: Each decision path can be read as an explicit rule such as "if tumor size $<3 \mathrm{~cm}$ and biomarker $\geq 1.2$ then predict high response." This makes trees particularly appealing in health and life-science contexts, where interpretability is essential for clinical validation and regulatory transparency. A tree's visual representation helps communicate how specific variables drive predictions in different patient subgroups.
+
+Despite their interpretability, single trees can be unstable: small perturbations in the data may change the chosen splits and produce very different trees. Their predictions are also piecewise constant, creating abrupt jumps between regions. To improve stability and predictive accuracy, modern practice often aggregates many trees into ensembles such as Random Forests or Gradient I $\downarrow$ sted Trees, which we will explore next.
+
+### A very short introduction to interactions
+
+In predictive modeling, an interaction occurs when the effect of one explanatory variable on the outcome depends on the value of another variable. Formally, two variables $X_1$ and $X_2$ interact if the change in the response $Y$ associated with $X_1$ varies according to the level of $X_2$.
+
+In linear models, this relationship must be specified explicitly by adding a product term (e.g., $\beta_3 X_1 X_2$ ). In decision trees, interactions emerge automatically: each split is conditional on previous decisions, so the model can represent different relationships between $X_1$ and $Y$ depending on the branch defined by $X_2$.
+
+In other words, trees learn interactions hierarchically rather than algebraically-each branch of the tree corresponds to a different interaction context.
+
+Examples of interactions include:
+
+1.  Clinical example - drug efficacy and age
+
+The effectiveness of a chemotherapy drug ( $X_1$ ) may depend on the patient's age ( $X_2$ ). The treatment might be highly effective in younger patients but less so in older ones due to metabolism or organ function.
+
+In this case, the effect of the drug is conditional on age - an interaction between treatment and age. 2. Biomarker example - gene expression and tumor grade
+
+A specific gene expression score ( $X_1$ ) could predict tumor response only for patients with highgrade tumors ( $X_2$ ). For low-grade tumors, the same biomarker might have little to no effect. This represents a biological interaction: the prognostic value of the biomarker changes across tumor grades. 3. Behavioral or physiological example - dose and physical condition
+
+The relationship between drug dose ( $X_1$ ) and therapeutic response ( $Y$ ) may differ between patients with good and poor performance status ( $X_2$ ). The slope of the dose-response curve is steeper in one group and flatter in the other, illustrating an interaction between dose intensity and baseline health.
+
+4.  Generic data-science example - temperature and humidity
+
+In environmental modeling, the effect of temperature ( $X_1$ ) on energy consumption ( $Y$ ) depends on humidity ( $X_2$ ).
+
+High temperatures increase consumption only when humidity is also high, due to greater airconditioning load - another clear interaction.
+
+5.  Genotype by environment interactions
+
+In genetics usually its important to understand how the interaction between genomic and environmental information defines a given phenotype.
+
+We learnt what trees are and their characteristics. We will now understand how to implement them with R and how they learn the if else rules.
+
+Interactions can be explored graphically with the usage of interaction plots.\
+\
+In the case of no interactions the graphic will be like the one shown in @fig-no_int, in which the lines connecting the mean response by dose intensity level are parallel, meaning that the means response does not change when we change the dose intensity level.
+
+```{r, echo=F,include=F}
+#| label: no-interaction-sim
+# ============================================================
+# Simulated data with NO interaction
+# ============================================================
+
+set.seed(123)
+
+# Simulate factors
+n <- 600
+dose_intensity <- rep(c("Low", "Moderate", "High"), each = 200)
+tumor_grade    <- rep(c("G1", "G2"), times = 300)
+
+# Create a response with NO interaction:
+# - Additive effects only (parallel lines)
+# - Effect of dose is the same for all grades
+# - Effect of grade is constant regardless of dose
+dose_effect <- c(Low = 15, Moderate = 25, High = 35)
+grade_effect <- c(G1 = 0, G2 = 5)
+
+response <- 
+  dose_effect[dose_intensity] +
+  grade_effect[tumor_grade] +
+  rnorm(n, mean = 0, sd = 3)   # noise
+
+dat_no_inter <- data.frame(
+  dose_intensity = factor(dose_intensity, levels = c("Low","Moderate","High")),
+  tumor_grade    = factor(tumor_grade, levels = c("G1","G2")),
+  response       = response
+)
+
+# ============================================================
+# Build aggregated means for interaction plot
+# ============================================================
+
+library(dplyr)
+library(ggplot2)
+
+agg_no_inter <- dat_no_inter %>%
+  group_by(dose_intensity, tumor_grade) %>%
+  summarise(mean_resp = mean(response), .groups = "drop")
+
+# ============================================================
+# Interaction-style plot (NO interaction)
+# ============================================================
+
+
+```
+
+```{r}
+#| label: fig-no_int
+
+ggplot(
+  agg_no_inter,
+  aes(dose_intensity, mean_resp, color = tumor_grade, group = tumor_grade)
+) +
+  geom_line(linewidth = 1.3) +
+  geom_point(size = 3) +
+  labs(
+    title = "Interaction Plot (NO Interaction Example)",
+    subtitle = "Parallel lines → effect of dose is the same across tumor grades",
+    x = "Dose intensity",
+    y = "Mean response (%)",
+    color = "Tumor grade"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+On the other hand when we have the presence of an interaction, like in our chemotherapy example, we can produce the interaction plot using the following code. We can see that the lines in the interaction plot are not parallel indicating the presence of interaction, in other words, the level o mean tumor response changes according to the level of dose intensity. This is shown in FIgure @fig-interaction
+
+```{r, include=F, echo=F}
+## Select variables
+dat_int <- trial_ct %>%
+  select(dose_intensity, tumor_grade, response_percent) %>%
+  mutate(
+    tumor_grade = factor(tumor_grade, levels = c("G1", "G2", "G3"))
+  )
+
+# Ensure no NA values cause problems
+dat_int <- dat_int %>% tidyr::drop_na(dose_intensity, tumor_grade, response_percent)
+
+# Create equal-frequency bins:
+# Using unique quantiles to avoid identical cutpoints
+q <- unique(quantile(dat_int$dose_intensity, probs = seq(0, 1, 0.25)))
+
+dat_int <- dat_int %>%
+  mutate(
+    dose_bin = cut(
+      dose_intensity,
+      breaks = q,
+      include.lowest = TRUE,
+      labels = c("Low", "Moderate", "High", "Very High")[1:(length(q)-1)]
+    )
+  )
+
+# Compute observed means per bin × grade
+agg <- dat_int %>%
+  group_by(dose_bin, tumor_grade) %>%
+  summarise(
+    mean_resp = mean(response_percent),
+    n = n(),
+    .groups = "drop"
+  )
+
+
+```
+
+```{r}
+#| label: fig-interaction
+# Interaction-style plot
+ggplot(agg, aes(dose_bin, mean_resp, color = tumor_grade, group = tumor_grade)) +
+  geom_line(linewidth = 1.3) +
+  geom_point(size = 3) +
+  labs(
+    title = "Interaction Plot (Observed Data Only)",
+    subtitle = "How tumor grade modifies the dose–response pattern",
+    x = "Dose intensity (binned)",
+    y = "Mean tumor response (%)",
+    color = "Tumor grade"
+  ) +
+  theme_minimal(base_size = 14)
+
+```
+
+#### How a tree is built
+
+A regression tree approximates the unknown function $f(\mathbf{X})$ by a piecewise-constant model:
+
+$$
+\hat{f}(\mathbf{X})=\sum_{m=1}^M c_m \mathbf{1}\left\{\mathbf{X} \in R_m\right\},
+$$
+
+where each leaf (region $R_m$ ) predicts a constant $c_m$ (usually the mean $y$ in that region).
+
+This formulation shows that, although trees are non-linear in the inputs, they are linear in the indicator functions that define the regions. In other words, a tree can be viewed as a linear model on a transformed feature space-one where the original variables have been replaced by a collection of binary indicators representing the hierarchical if-else splits.
+
+$$
+\hat{f}(X)=c_1 \mathbf{1}_{R_1}(X)+c_2 \mathbf{1}_{R_2}(X)+\cdots+c_M \mathbf{1}_{R_M}(X) .
+$$
+
+From this perspective, decision trees extend the concept of a linear model by allowing the basis functions ( $\mathbf{1}_{R_m}$ ) to be learned from data rather than predefined. Each new split creates a new "basis" that isolates a subset of the data with distinct local behavior.
+
+We can compare linear and tree models regarding some geometrical and conceptual interpretation:
+
+-   In a linear model, the function $f(X)$ defines a single plane (or hyperplane) across the feature space. Predictions vary smoothly and continuously with $X$.
+-   In a decision tree, the feature space is divided into rectangular regions, within which predictions are constant. The function $f(X)$ therefore takes a piecewise-constant form, producing a step-like approximation to the true relationship.
+
+Visually, a tree can be seen as a function that "jumps" at each decision boundary, instead of tilting like a plane. This enables trees to capture sharp thresholds, nonlinearities, and interactions that linear models cannot express without manual feature engineering.
+
+Learning = splitting to reduce impurity. At a node containing samples $S$, the CART algorithm chooses a feature $j$ and threshold $s$ that minimize the total squared error after splitting:
+
+$$
+\left(j^*, s^*\right)=\arg \min _{j, s}\left[\sum_{i \in S_L}\left(y_i-\bar{y}_L\right)^2+\sum_{i \in S_R}\left(y_i-\bar{y}_R\right)^2\right],
+$$
+
+equivalently maximizing variance reduction:
+
+$$
+\Delta I=I(S)-\frac{\left|S_L\right|}{|S|} I\left(S_L\right)-\frac{\left|S_R\right|}{|S|} I\left(S_R\right), \quad I(S)=\frac{1}{|S|} \sum_{i \in S}\left(y_i-\bar{y}_S\right)^2 .
+$$
+
+#### Choosing the best split: impurity and information gain
+
+At every node, the tree algorithm searches for the feature and cut-point that most reduce the node’s *impurity* that is, the heterogeneity of responses within the node.
+
+For regression tasks such as predicting `response_percent`, impurity is measured by the within-node variance:
+
+$$
+I(S) = \frac{1}{|S|} \sum_{i \in S} (y_i - \bar{y}_S)^2 .
+$$
+
+The chosen split $(j^*, s^*)$ maximizes the **reduction in impurity**:
+
+$$
+\Delta I = I(\text{parent})
+ - \frac{n_L}{n_{\text{parent}}} I(\text{left})
+ - \frac{n_R}{n_{\text{parent}}} I(\text{right}).
+$$
+
+Intuitively, the algorithm prefers splits that make the child nodes more homogeneous in `response_percent`.\
+For classification tasks, `rpart()` uses the *Gini index* or *entropy* instead of variance.
+
+### Continuous vs. categorical predictors in rpart
+
+rpart handles numeric and factor variables differently when proposing binary splits at a node. Continuous predictors (e.g., dose_intensity , gene_14) - Procedure: sort unique values of $x_j$; evaluate candidate thresholds at midpoints between adjacent values.
+
+-   For each threshold $s$, form left/right nodes $\left(x_j \leq s\right)$ vs. $\left(x_j>s\right)$ and compute the impurity reduction (variance for regression; Gini/entropy for classification).
+
+-   Choose the $s$ that maximizes $\Delta I$.
+
+-   Consequences: no scaling needed (splits depend on order, not magnitude); trees naturally create step-functions and thresholds (e.g., a cut at gene_14 $\geq 0.98$ in our chemo example).
+
+Categorical predictors (e.g., treatment $\in\{$ no_chemo , chemo $\}$, tumor_grade $\in\{\mathrm{G} 1, \mathrm{G} 2, \mathrm{G} 3\}$ )
+
+-   Binary factors: trivial split (one level left, the other right).
+
+-   Multi-level factors: in principle there are $2^{m-1}-1$ groupings of $m$ levels; rpart avoids brute force by ordering levels by their node statistics and then testing only adjacent two-group splits along that order:
+
+-   Classification: order levels by class composition; test adjacent partitions; pick the one with largest Gini/entropy reduction.
+
+-   Regression: order levels by the mean response; test adjacent partitions; pick the best variance reduction.
+
+-   Result: efficient search that still finds strong groupings (e.g., tumor_grade $\in\{G 2, G 3\}$ vs. $\{G 1\}$ if those two higher grades share similar response patterns).
+
+Ordered factors
+
+-   If a variable is an ordered factor, rpart treats it like a numeric rank and proposes threshold splits along that order (behaves like a continuous variable).
+
+Missing values $\&$ surrogates
+
+-   If the primary split variable is missing for a case (e.g., missing gene_14), rpart can route it using surrogate splits-backup variables that mimic the primary partition (controlled by usesurrogate, maxsurrogate).
+
+Practical notes for our dataset
+
+-   Keep true categorical variables as factors (e.g., treatment , tumor_grade ), and keep gene expression and doses numeric.
+-   High-cardinality categorical variables can make splits unstable; if you have such variables, consider sensible grouping beforehand.
+-   No need for one-hot encoding or scaling; rpart handles both types natively.
+
+#### Stopping & pruning.
+
+To avoid overfitting, trees stop growing (e.g., maxdepth , minsplit ) and/or are pruned via costcomplexity:
+
+$$
+\operatorname{Score}(T)=\operatorname{RSS}(T)+\alpha|T|, \quad \alpha \geq 0,
+$$
+
+selecting the smallest subtree within 1-SE of the minimum cross-validated error.
+
+The model is built by recursively partitioning the feature space into smaller and more homogeneous regions.
+
+Each split introduces a new if-else rule, and the process continues until no further improvement is possible or a stopping rule is reached.
+
+In some future sections we will see the concept of ensembles and Link trees to ensembles. When we combine many trees-as in Random Forests and Gradient Boosted Trees (XGBoost)-the model becomes a sum of multiple tree functions:
+
+$$
+\hat{f}(X)=\sum_{b=1}^B \hat{f}_b(X),
+$$
+
+where each $\hat{f}_b(X)$ is a tree trained on a different subset or residual of the data. This ensemble structure restores smoothness and reduces variance while keeping the interpretability and flexibility of the tree-based representation.
+
+#### Bias–variance perspective
+
+A fully grown tree fits every training case perfectly but generalizes poorly its variance is high.\
+Pruning or using constraints (`minsplit`, `cp`, `maxdepth`) increases bias slightly but drastically reduces variance, improving predictive stability.\
+In the chemotherapy trial, an unpruned tree would memorize gene-expression idiosyncrasies of a few patients, giving near-zero error in training but poor test performance.\
+The pruned tree achieves a better **bias–variance balance**, capturing major response patterns while ignoring random noise.
+
+#### Stages to build a tree
+
+The construction of a tree can be described in several stages: initialization, growing, splitting, stopping, pruning, and prediction.
+
+1.  Initialization
+
+-   Start with the full training dataset at the root node.
+
+Every observation belongs to this node, and the model computes a simple summary: - for regression: the mean response $\bar{y}$; - for classification: the most frequent class. - This initial value is the baseline prediction before any split occurs.
+
+2.  Searching for the best split (growing phase)
+
+At each step, the algorithm evaluates all possible binary splits of all features. For a numeric variable $x_j$, it considers thresholds $s$ such that the data are divided into
+
+$$
+\text { Left: } x_j \leq s, \quad \text { Right: } x_j>s .
+$$
+
+For categorical features, the split divides categories into two subsets.
+
+For each candidate split, the algorithm calculates the impurity reduction, which measures how much the new partition improves the homogeneity of the outcome:
+
+$$
+\Delta I=I(\text { parent })-\frac{n_L}{n_{\text {parent }}} I(\text { left })-\frac{n_R}{n_{\text {parent }}} I(\text { right }),
+$$
+
+where $I(\cdot)$ is the impurity index: - variance for regression, - Gini or entropy for classification.
+
+The split that yields the largest reduction in impurity is selected. 3. Creating new nodes (splitting)
+
+Once the best feature and threshold are chosen: - The parent node is replaced by two child nodes (left and right). - Each child node now represents a subset of the data that satisfies one side of the if/else rule. - The prediction for each child node is recalculated as the mean (regression) or class proportion (classification).
+
+This process is repeated recursively for each child node. At each step, the algorithm searches again for the best local split to further reduce impurity within that node.
+
+4.  Stopping criteria (when to stop growing)
+
+The tree keeps expanding until one or more stopping conditions are met: - The node contains fewer than a minimum number of observations ( minsplit , minbucket ). - The reduction in impurity from a new split is below a threshold ( cp in rpart ). - The tree has reached a maximum depth ( maxdepth ). - All observations in the node have identical responses.
+
+When a node can no longer be split under these rules, it becomes a terminal node or leaf. 5. Cost-complexity pruning (simplifying the tree)
+
+Fully grown trees tend to overfit: they capture noise as if it were signal. To restore generalization, CART uses cost-complexity pruning. This involves fitting a large tree first, then sequentially removing the least useful branches according to the criterion
+
+$$
+R_\alpha(T)=\operatorname{RSS}(T)+\alpha|T|,
+$$
+
+where $|T|$ is the number of terminal nodes and $\alpha \geq 0$ penalizes complexity. Cross-validation identifies the optimal penalty $\alpha^*$. The 1-SE rule then selects the smallest subtree whose error is within one standard error of the minimum, balancing accuracy and simplicity. 6. Prediction
+
+Once the tree is built (and possibly pruned), prediction for a new observation is simple: 1. Start at the root. 2. Follow the if/else path defined by its feature values (e.g., "if dose_intensity \< 0.9 go left, else go right"). 3. When a leaf is reached, return the value stored there: - for regression: the mean response in that region; - for classification: the majority class or probability.
+
+This process is deterministic and interpretable: each prediction can be traced to a specific logical path. 7. Visual summary of the process
+
+| Stage | Description | Typical R function element |
+|:---|:---|:---|
+| **Initialization** | Root node with all data | automatic in `rpart()` |
+| **Growing** | Repeatedly searches for the split minimizing node impurity | controlled by `minsplit`, `maxdepth`, `cp` |
+| **Splitting** | Partitions data and creates left/right child nodes | recursive calls within `rpart()` |
+| **Stopping** | Halts if no improvement or nodes are too small | `minbucket`, `cp` threshold |
+| **Pruning** | Removes overfitted branches using cost–complexity pruning | `prune()` + cross-validation |
+| **Prediction** | Applies learned rules to new data | `predict()` |
+
+**Note:** Single decision trees can easily overfit the training data; we’ll use pruning (and later ensembles) to control this.
+
+## Trees for regression and classification (CART)
+
+Decision trees can solve both regression and classification tasks within a single framework historically called CART (Classification and Regression Trees). CART is a trademark. The idea is to approximate the unknown function $f(\mathbf{X})$ by splitting the feature space into rectangular regions and predicting a constant within each region (a leaf).
+
+For regression, as in our chemotherapy example where the response is continuous ( response_percent ), the tree chooses splits that reduce the within-node variance. If a node contains samples $S$, its impurity is
+
+$$
+I_{\mathrm{reg}}(S)=\frac{1}{|S|} \sum_{i \in S}\left(y_i-\bar{y}_S\right)^2,
+$$
+
+and the "best" split is the one that maximizes the reduction in impurity (variance) after partitioning $S$ into left/right children.
+
+For classification, e.g., if we instead predict the binary label high_response ( $\geq 30 \% \mathrm{vs}<30 \%$ ), CART typically measures impurity using the Gini index (or entropy). If a node has class proportions $\left\{p_k\right\}_{k=1}^K$,
+
+$$
+I_{\mathrm{cls}}^{\mathrm{Gini}}(S)=1-\sum_{k=1}^K p_k^2, \quad I_{\mathrm{cls}}^{\mathrm{Ent}}(S)=-\sum_{k=1}^K p_k \log _2 p_k .
+$$
+
+The algorithm selects the feature and threshold that yield the largest impurity reduction (a.k.a. information gain for entropy, Gini gain for Gini). Although trees are nonlinear in the inputs, they are linear in indicator functions of regions:
+
+$$
+\hat{f}(\mathbf{X})=\sum_{m=1}^M c_m \mathbf{1}\left\{\mathbf{X} \in R_m\right\}
+$$
+
+with one constant $c_m$ per leaf $R_m$. In our context, each path ("if dose_intensity $\leq 0.9$ and gene_14 $>$ 1.0 then ...") maps to a region with a clinically interpretable average prediction-mean tumor shrinkage for regression, or class probability for classification.
+
+### How the rpart algorithm learns a tree
+
+How the rpart algorithm learns a tree The rpart algorithm (recursive partitioning) is an open-source implementation of the CART family. It learns a tree greedily, one split at a time, choosing at each node the feature and cut-point that most improve node purity.
+
+Split selection (objective). At a node with samples $S$, rpart scans all predictors $x_j$ and candidate split points $s$, evaluates the impurity of the left child $S_L=\left\{i: x_{i j} \leq s\right\}$ and right child $S_R=\left\{i: x_{i j}>s\right\}$, and picks $\left(j^*, s^*\right)$ that maximizes the impurity reduction
+
+$$
+\Delta I=I(S)-\frac{\left|S_L\right|}{|S|} I\left(S_L\right)-\frac{\left|S_R\right|}{|S|} I\left(S_R\right) .
+$$
+
+-   For regression (our response_percent target), $I(\cdot)$ is variance.
+-   For classification (e.g., high_response), $I(\cdot)$ is usually Gini (default) or entropy.
+
+Continuous vs. categorical predictors. - Continuous variables (e.g., dose_intensity , gene_14 ) are split at thresholds. Practically, rpart considers cut-points at midpoints between sorted unique values; each candidate produces a left/right partition, and the best $\Delta I$ wins. - Categorical variables (e.g., tumor_grade with levels G1/G2/G3) are handled by creating a binary partition of levels. rpart orders levels by class composition (for classification) or node means (for regression) and evaluates adjacent two-group splits without trying all $2^{m-1}-1$ combinations. - No scaling is required: decisions depend on orderings, not magnitudes.
+
+From our examples. - In the toy regression, the true rule is: if $X_1 \leq 4$ then $y \approx 5$; else if $X_2 \leq 0$ then $y \approx 10$; else $y \approx$ 14. rpart rediscovers this by choosing the vari $\downarrow$, e-reducing thresholds on $X_1$ and $X_2$. - In the clinical dataset, rpart selected thresholds on gene_14, gene_08, and gene_19 that create leaves whose means trace a clinically plausible gradient of tumor shrinkage.
+
+Stopping and pruning. Left unchecked, greedy splitting makes overly deep, high-variance trees. rpart controls complexity in two ways: - Top-down stops: hyperparameters such as minsplit , minbucket , and maxdepth prevent tiny or overly deep nodes. - Cost-complexity pruning: rpart grows a large tree, computes a sequence of subtrees indexed by the complexity parameter cp , and uses internal cross-validation to estimate the error ( printcp , plotcp). Selecting the 1-SE cp yields a simpler subtree whose error is within one standard error of the minimum, improving generalization.
+
+Missing data & surrogate splits. If a case is missing the variable used at a node (say gene_14 ), rpart can route it using surrogate splits -backup variables that tend to make the same partition (controlled by usesurrogate, maxsurrogate ). This is practical in clinical datasets with sporadic biomarker gaps.
+
+Why this matters for our course.
+
+-   For regression (our primary task), trees optimize variance reduction, giving piecewise-constant predictions that capture thresholds and interactions without manual feature engineering.
+
+-   For classification (secondary task with high_response), trees optimize Gini/entropy, naturally handling multi-class extensions and unscaled predictors.
+
+-   Understanding rpart's split logic (variance, Gini), candidate generation (midpoints, level partitions), and pruning (cp & 1-SE) demystifies how the if/else rules are learned from data.
+
+### Hyperparameters for decision trees (rpart): what, why, how
+
+Tree growth is intentionally greedy and, left unconstrained, will overfit. In rpart, model complexity is governed by a small set of `hyperparameters-values` that control learning but are not learned from the data. Tuning them is crucial for generalization.
+
+Consider again the equation
+
+$$Y=f\left(x_1, x_2, \ldots, x_n\right)+ error$$
+
+A hyperparameter is a setting that controls how $f$ is learned, not something learned directly from the data by the usual fitting step. Hyperparameters define the shape/complexity of the function class you allow and how aggressively you search within it. They live outside $f$, but they constrain and guide the learning of $f$.
+
+What they control (regression $\&$classification)
+
+-   minsplit
+
+Minimum number of cases required in a node to consider a split. Larger values make the tree more conservative (fewer splits). - minbucket
+
+Minimum number of cases in each terminal node (leaf). Often set near floor(minsplit/3). - maxdepth
+
+Maximum number of splits along any root-to-leaf path (tree height). Caps interactions/complexity. - cp (complexity parameter)
+
+Minimum relative improvement required to add a split. Also indexes the cost-complexity pruning sequence (printcp , plotcp). - xval
+
+Number of folds for rpart's internal cross-validation to estimate out-of-sample error along the pruning path. - parms (classification only)
+
+Split criterion: parms = list(split = "gini") (default) or parms = list(split = "information") (entropy). - usesurrogate, maxsurrogate
+
+Handling of missing data via surrogate splits (useful in clinical/omics tables with sporadic NAs).
+
+Which impurity? - Regression ( method = "anova" ): variance reduction. - Classification ( method = "class" ): Gini (default) or entropy via parms.
+
+## Running a tree for our chemotherapy example
+
+We will use the function `rpart` of the rpart package to implement the tree for our chemothreapy case. Recall that we will be explaining response_percente in terms of the all other variables in the data that are of our interest `response_percent ~ .`
+
+The code in the next two chunks first grows a CART regression tree to predict response_percent from all available predictors in train_nopii. We use method = "anova", which means each split is chosen to reduce within-node variance of the continuous outcome. The control list sets three guardrails that shape the initial tree: cp = 0.001 allows the tree to keep growing as long as each additional split reduces the resubstitution error by at least 0.1%; maxdepth = 8 caps the number of successive decisions along any root-to-leaf path; and minsplit = 30 prevents the algorithm from splitting nodes that hold fewer than 30 training cases. With these settings the model is encouraged to discover structure but not to chase tiny, sample-specific patterns. After fitting, printcp(ct_tree) reports the cost–complexity pruning path. Each row summarizes a candidate subtree obtained by pruning the large tree at a given complexity parameter CP CP. The columns have specific meanings. nsplit is the number of internal splits in that subtree. rel error is the training (resubstitution) error of that subtree relative to the root node error. xerror is the cross-validated error (here from rpart’s built-in K-fold procedure), again on the same relative scale, and xstd is its standard error across folds. In your run, the root node error is shown at the top (“Root node error: 2448864/6999 = 349.89”), which is simply the total sum of squared residuals divided by n n when predicting the overall mean. As the tree grows from nsplit = 0 to nsplit = 13, rel error falls monotonically, while xerror drops quickly and then flattens, indicating diminishing returns from additional complexity. To select a final model that favors parsimony without sacrificing predictive accuracy, the code applies the 1-SE rule. It locates the row with the minimum cross-validated error (xerr_min) and then chooses the smallest subtree whose xerror is within one standard error (xstd_min) of that minimum. The corresponding CP value (cp_1se) defines how aggressively the tree is pruned. prune(ct_tree, cp = cp_1se) returns this compact subtree as ct_pruned. Conceptually, this step trims away branches that improve apparent fit on the training set but do not demonstrably improve out-of-sample performance beyond sampling variability. The two rpart.plot calls draw the grown and pruned trees. Internal nodes display the chosen split conditions; leaves display the predicted outcome (the mean response_percent among training cases in that terminal region) and support counts. Comparing the “grown” and “pruned” plots makes the effect of pruning tangible: superfluous lower-level branches disappear, leaving a smaller set of clinically interpretable rules. For a human-readable summary of those rules, rpart.rules(ct_pruned, style = "tallw") prints each root-to-leaf path as a nested “when … then …” statement. Your output shows that the pruned tree uses three molecular predictors gene_14, gene_08, and gene_19 to partition the cohort. Thresholds on these continuous features define rectangular regions of the predictor space, and each region has an associated predicted response. For example, when gene_14 \< -0.728 and gene_19 \< -0.65, the model predicts a mean shrinkage of about 0.97 percentage points; when gene_14 ≥ 0.977 and gene_08 ≥ 2.03, it predicts about 62.68 percentage points. The intermediate leaves trace a graded pattern: as gene_14 and gene_08 thresholds increase and gene_19 crosses its cut-points the predicted response_percent rises through roughly 6.31, 12.83, 20.28, 28.76, 37.38, 47.20, and 53.02 before reaching the top stratum. This staircase behavior reflects the piecewise-constant nature of a regression tree: within each leaf the prediction is constant, and it jumps at the learned split boundaries. Finally, the evaluation chunk applies the pruned tree to both training and test data and summarizes predictive error via MAE and RMSE. The training set errors (MAE ≈ 2.31, RMSE ≈ 3.03) and the held-out test set errors (MAE ≈ 2.43, RMSE ≈ 3.21) are close in magnitude, which is the hallmark of a model that generalizes reasonably well without obvious overfitting. The slight increase on the test set is expected; the absence of a large gap suggests that the 1-SE pruning achieved a good bias–variance balance for this dataset. These results can be obtained running the next chunks.
+
+```{r}
+#| label: ct-tree-fit
+#| message: false
+#| warning: false
+# Grow a CART regression tree
+ct_tree <- rpart(
+  response_percent ~ .,
+  data = train_nopii,
+  method = "anova",
+  control = rpart.control(cp = 0.001, maxdepth = 8, minsplit = 30)
+)
+
+# Prune via 1-SE rule
+printcp(ct_tree)
+best_row <- which.min(ct_tree$cptable[,"xerror"])
+xerr_min <- ct_tree$cptable[best_row, "xerror"]
+xstd_min <- ct_tree$cptable[best_row, "xstd"]
+cp_1se   <- ct_tree$cptable[ct_tree$cptable[,"xerror"] <= xerr_min + xstd_min, "CP"][1]
+ct_pruned <- prune(ct_tree, cp = cp_1se)
+
+# Human-readable rules (if/else)
+rpart.plot::rpart.rules(ct_pruned, style = "tallw")
+
+```
+
+### Printing the trees
+
+```{r}
+# Visualize grown and pruned trees
+rpart.plot(ct_tree, type = 2, extra = 101, box.palette = "Blues",
+           main = "Clinical trial tree (grown)")
+rpart.plot(ct_pruned, type = 2, extra = 101, box.palette = "GnBu",
+           main = "Clinical trial tree (pruned, 1-SE)")
+
+
+```
+
+#### Interpreting the grown and pruned trees
+
+The two plots visualize successive stages of the same model. The first represents the grown tree-the full structure obtained when the algorithm keeps splitting the data as long as it finds any measurable reduction in node impurity. The second shows the pruned tree, obtained after applying the 1-SE rule of cost-complexity pruning, which removes branches that do not materially improve cross-validated performance.
+
+In the grown tree, the structure is deeper and more branched. Each internal node corresponds to a binary decision of the form "Is gene ${ }_{(\mathrm{j})} \leq \mathrm{s}$ ?", and each terminal node (leaf) stores the mean value of response_percent among observations satisfying that sequence of conditions. The abundance of splits reflects the model's flexibility: by recursively partitioning the data into small, homogeneous subsets, the tree can achieve very low training error. However, such detailed partitioning often adapts to random noise or idiosyncratic fluctuations in the sample-a phenomenon known as overfitting. The grown tree therefore fits the training set extremely well but may generalize poorly to new patients.
+
+The pruned tree, by contrast, is shallower and more compact. Pruning starts from the large tree and iteratively removes branches that contribute the least to predictive accuracy, as measured by crossvalidated error. The 1-SE rule selects the simplest subtree whose error is within one standard error of the minimum observed, trading a negligible increase in bias for a substantial reduction in variance. In practice, this yields a model that performs almost as well on unseen data but is far more stable and interpretable. In the chemotherapy dataset, the pruned tree retains only the strongest and most reproducible thresholds-those involving, for example, gene_14 , gene_08 , and gene_19 -which together define a hierarchy of molecular conditions associated with different levels of tumor response.
+
+Each box in the plots displays the predicted mean (the constant $\hat{y}$ for that region) and the number of cases supporting that leaf. In the pruned tree, leaves are larger (more patients per region) and predictions vary more smoothly, reflecting a coarser but more reliable partition of the predictor space. The disappearance of lower-level branches illustrates how pruning merges overly specific regions back into their parents, simplifying the decision rules.
+
+The human-readable output produced by
+
+```         
+rpart.rules(ct_pruned, style = "tallw")
+```
+
+translates each root-to-leaf path into an explicit if-else statement, such as:
+
+When gene_14 \< -0.73 and gene_19 \< -0.65, predict response_percent $\approx 1.0$; when gene_14 $\geq 0.98$ and gene_08 $\geq 2.03$, predict $\approx 62.7$.
+
+These rules correspond exactly to the leaves of the pruned tree and can be read as localized predictive statements: each describes a subpopulation with a characteristic mean response.
+
+In summary, the grown tree shows everything the recursive partitioning algorithm could learn from the data, while the pruned tree shows what it should retain to balance interpretability and predictive reliability. The pruned version embodies the principle of parsimonious generalization-capturing the dominant structure in the data without chasing noise-an essential practice in applying machinelearning models to clinical and therapeutic contexts.
+
+```{r}
+#| label: ct-tree-eval
+#| message: false
+#| warning: false
+pred_tr <- predict(ct_pruned, newdata = train_nopii)
+pred_te <- predict(ct_pruned, newdata = test_nopii)
+
+perf <- dplyr::bind_rows(
+  tibble(Split="Train", MAE=mae(train_nopii$response_percent, pred_tr),
+         RMSE=rmse(train_nopii$response_percent, pred_tr)),
+  tibble(Split="Test",  MAE=mae(test_nopii$response_percent,  pred_te),
+         RMSE=rmse(test_nopii$response_percent,  pred_te))
+)
+perf
+
+```
+
+It is useful to build the following graphic about the model too
+
+```{r}
+#| label: ct-tree-obs-vs-pred
+#| fig-width: 6
+#| fig-height: 5
+ggplot(
+  tibble(truth = test_nopii$response_percent, pred = pred_te),
+  aes(truth, pred)
+) +
+  geom_point(alpha = 0.35) +
+  geom_abline(slope = 1, intercept = 0, linetype = 2) +
+  labs(x = "Observed response_percent", y = "Tree prediction",
+       title = "Pruned tree: observed vs predicted (test)") +
+  theme_minimal()
+
+```
+
+The diagonal dashed line marks perfect calibration. The cloud of points hugging this line indicates that, on average, the pruned tree predicts within a small error margin on unseen data, consistent with the MAE/RMSE reported earlier. The horizontal bands are characteristic of regression trees: within each leaf the prediction is a single constant, so many cases share the same ŷ even when their observed values differ; each band corresponds to one leaf’s mean response. Vertical spread around the diagonal within a band reflects the within-leaf variance (irreducible noise plus any misspecification). At low and high ends you may notice slight deviations due to boundary effects (responses constrained near 0 or high shrinkage). Overall, proximity to the 45° line and relatively balanced dispersion across the range suggest the pruned tree achieves a good bias–variance trade-off on the test set.
+
+## Solutions for trees problems
+
+Decision trees are among the most intuitive predictive models in machine learning. They partition the predictor space using simple, rule-based splits, producing a structure that is easy to interpret and explain. This transparency makes trees attractive in settings where clarity and decision logic matter such as clinical environments, quality assurance, or regulatory discussions. However, the strengths of a single tree are also its weaknesses. Trees are unstable: small fluctuations in the training data can lead to large changes in the learned structure. A model that splits first on tumour grade in one sample might split first on age or dose intensity in another, even if the underlying population signal is the same. Decision trees are also prone to overfitting, especially when grown deep. They can “memorize” noise, rare patterns, or outliers, achieving excellent accuracy on the training set while generalizing poorly to new patients. These limitations appear clearly in our running example: predicting response_percent in a chemotherapy trial using clinical covariates plus approximately 2,000 gene expression variables (after removing the columns you excluded earlier). A single tree can indeed learn meaningful rules dose intensity thresholds, gene expression activation points, or interactions between tumour grade and age but it may also capture highly specific patterns that do not repeat in unseen data. As complexity grows, the risk increases that the tree fits patient-specific noise rather than biologically grounded structure. A powerful solution is to move from relying on one tree to combining many. This shift from a solitary model to a coordinated collection of models is known as ensemble learning. Ensembles reduce instability, limit overfitting, and yield predictions that are more reliable and accurate. They leverage the simple idea that while individual trees may be noisy or inconsistent, the aggregate of many trees can reveal the true underlying signal.
+
+## Ensemble techniques
+
+Ensemble methods are a family of strategies in which multiple models often weak, unstable, or low-capacity learners are trained and then combined to produce a stronger predictor. The guiding principle is straightforward:
+
+> Instead of trusting a single model’s view of the data, we consult many models and integrate their insights.
+
+This idea mirrors how groups often make decisions: diverse perspectives, when aggregated sensibly, tend to outperform any single viewpoint. In machine learning, ensembles achieve this by reducing variance, reducing bias, or exploiting complementary strengths across different algorithms.
+
+While ensemble learning can be applied to any type of model, trees are particularly well suited for it. Their instability makes them ideal candidates: many slightly different trees, trained on varied samples or focused on different aspects of the data, can collectively smooth out one another’s mistakes.
+
+A central tool behind many ensemble methods is **bootstrapping** drawing multiple datasets by sampling with replacement from the original training data. Each bootstrap sample contains a slightly different mix of observations: some patients appear multiple times, some not at all. Training a model on each of these bootstrap samples produces a collection of slightly different learners. When we **aggregate** their predictions (for example, by averaging in regression), random fluctuations tend to cancel out, and the ensemble becomes more stable than any single model.
+
+This combination of **bootstrap sampling** and **aggregation** is known as **bootstrap aggregating**, or **bagging**. Bagging is particularly effective for high-variance models such as decision trees: instead of one tree that may overreact to idiosyncrasies in the data, we obtain many trees, each seeing a slightly different world, and we average their predictions to reduce variance.
+
+Ensemble strategies come in several forms, with three major families commonly used in practice:
+
+-   **Bagging**, which uses bootstrap sampling to create many resampled versions of the training set, trains a separate model on each, and then aggregates their predictions. This primarily reduces **variance**, stabilizing unstable learners such as trees. This approach is used by random forest models.
+
+-   **Boosting**, which reduces **bias** (and often variance) by training models sequentially, each one focusing on the errors or residuals of the current ensemble and gradually improving performance.
+
+-   **Stacking**, which learns how to combine the predictions of **diverse algorithms** through a meta-model that takes their outputs as inputs and learns an optimal way to blend them.
+
+Before exploring these families in detail, it is crucial to understand that all ensemble methods share the same foundational principle: multiple models, when combined thoughtfully, can achieve higher accuracy, greater stability, and better generalization than any single model acting alone. Bootstrapping and aggregation in bagging provide a concrete and widely used example of how this principle is implemented in practice.
+
+### Training models on sampled data: Bootstrap Aggregating (Bagging)
+
+Machine learning models especially decision trees can be sensitive to noise, outliers, and small sampling fluctuations. In clinical and biomedical datasets, this instability becomes even more pronounced: measurement error, biological heterogeneity, and uneven sampling across patient subgroups can all lead a single model to overfit.
+
+In our running example, where we aim to predict **response_percent** using clinical covariates and approximately **2,000 gene expression features**, a single decision tree may latch onto idiosyncratic patterns that do not generalize beyond the training patients.
+
+**Bootstrap aggregating**, or **bagging**, is a technique designed to address this problem. The idea is straightforward: instead of training one model on one dataset, we train many variations of the same model on many slightly different datasets, each created by a random resampling technique named bootstrap, and then combine (aggregate) their outputs. By averaging over many high-variance learners, bagging produces predictions that are more stable, more accurate, and less sensitive to noise.
+
+![Schematic explanation on bagging.](images/bagging_1.png){#bagging}
+
+### **How bagging works**
+
+The bagging workflow can be summarized in five steps:
+
+1.  **Choose how many sub-models to train** (for example, 200 trees).
+
+2.  **Draw a bootstrap sample** for each sub-model by sampling patients *with replacement* from the training set until the sample is the same size as the original training data.
+
+    -   Some patients appear multiple times.
+
+    -   Some are not selected at all.
+
+3.  **Train a sub-model on each bootstrap sample.**
+
+    -   In our setting: a decision tree trained on a resampled set of patients with resampled gene expression profiles.
+
+4.  **Generate predictions for new data using every sub-model.**
+
+5.  **Aggregate the predictions.**
+
+    -   For regression (our task): take the **mean** of the predicted values.
+
+    -   For classification: take the **majority vote**.
+
+The critical mechanism is the **bootstrap sampling** itself. When sampling with replacement, cases near the center of the data distribution tend to be selected more frequently than rare or extreme observations. Some bootstrap datasets will contain more extreme cases than others; some trees will fit these extremes poorly. But when aggregated, these idiosyncrasies tend to cancel out. The ensemble prediction is effectively an **average across many plausible models**, each capturing different aspects of the training data.
+
+The net effect is a substantial **reduction in variance** the component of prediction error driven by model instability.
+
+### **Why bagging helps in our chemotherapy-trial case study**
+
+In the chemotherapy response dataset, decision trees face three major challenges:
+
+-   **High dimensionality:** thousands of gene expressions.
+
+-   **Measurement noise:** assay variability, heterogeneous tumour biology.
+
+-   **Complex interactions:** clinical and molecular variables interact in ways that are hard to model with a single tree.
+
+A single deep tree may overfit heavily detecting spurious splits driven by noisy gene measurements or by small patient subgroups. Bagging mitigates this risk by averaging many such trees, each trained on a slightly different bootstrap sample. Trees that “overreact” to particular patients or gene-expression artefacts have their influence diminished when averaged with hundreds of others.
+
+For this reason, a bagged ensemble of trees often forms a far more robust predictor than any individual tree, especially in biomedical datasets where high-variance learning is a known challenge.
+
+As you will see later, the Random Forest algorithm builds directly on this idea: it is essentially bagging with an additional layer of randomness, making it one of the most powerful and widely used tree-based ensemble models in modern machine learning.
+
+### Learning from Previous Models' Mistakes: Boosting
+
+Where bagging creates many models in parallel and averages their predictions to reduce variance, boosting takes a different approach. Boosting also builds an ensemble of models, but does so sequentially, allowing each new model to focus specifically on the errors left behind by the models that came before it. The core idea is simple: start with a rough model, identify where it performs poorly, and train the next model to correct those mistakes. Repeating this process many times gradually produces a highly accurate and flexible predictor.
+
+Just as bagging can be applied to a wide range of supervised learning algorithms, boosting is also a general framework. However, it is especially effective when using weak learners-models that are individually simple and only slightly better than random guessing. In practice, this typically means shallow decision trees, often trees with only a few levels of depth or even trees with a single split. These minimal trees are fast to train, easy to update, and-when used in large numbers-combine to form surprisingly powerful models.
+
+The motivation for using weak learners is efficiency: boosting does not benefit from repeatedly training deep, complex trees. The strength of the ensemble comes from the sequence of corrections, not from any individual model. In our chemotherapy-response example, using shallow trees allows the boosting algorithm to slowly uncover clinical or molecular patterns-first correcting broad systematic errors, then gradually refining more subtle relationships among dose intensity, tumour characteristics, and geneexpression features.
+
+![](images/boosting.png)
+
+Boosting methods differ in how they decide which mistakes to correct. Two major families exist:
+
+-   Adaptive boosting, which increases the influence of cases that have been misclassified (or poorly predicted) so that subsequent models pay more attention to them. Diagram in @fig-adaboost-diagram represents adaptive boosting visually.
+
+```{r, echo=F,include=T, message=F}
+#| label: fig-adaboost-diagram
+#| fig-cap: "Schematic of AdaBoost: case weights are updated at each step, and models vote with weights in the final ensemble."
+
+library(DiagrammeR)
+
+grViz("
+digraph adaboost {
+graph [rankdir = LR]
+
+node [shape = box, style = rounded, fontsize = 11]
+
+# Nodes
+
+data   [label = 'Original data\n(X, y)\n(initial equal weights)',
+fillcolor = '#e8f3ff', style = 'filled,rounded']
+
+m1     [label = 'Weak learner 1\n(shallow tree)']
+w_up1  [label = 'Update case weights:\nmisclassified ↑,\ncorrect ↓']
+
+m2     [label = 'Weak learner 2\ntrained on\nreweighted data']
+w_up2  [label = 'Update case weights\nagain']
+
+m3     [label = 'Weak learner 3\ntrained on\nupdated weights']
+
+final  [label = 'Final prediction\n(weighted vote of\nall learners)',
+fillcolor = '#fff3e8', style = 'filled,rounded']
+
+# Edges
+
+data -> m1           [label = ' sample with\ninitial weights ']
+m1   -> w_up1        [label = ' misclassified\ncases identified ']
+w_up1 -> m2          [label = ' sample with\nnew weights ']
+m2   -> w_up2        [label = ' errors of\nensemble so far ']
+w_up2 -> m3          [label = ' sample with\nupdated weights ']
+
+# All learners vote in the end (weighted)
+
+m1 -> final          [label = ' vote\n(weight ~ accuracy) ']
+m2 -> final
+m3 -> final
+}
+")
+
+```
+
+-   Gradient boosting, which directly models the residual errors of the current ensemble, effectively learning a sequence of corrections that push predictions closer to the true values. The diagram in @fig-boosting-diagram represents a gradient boosting strategy.
+
+```{r, echo=F,include=T, message=F}
+#| label: fig-boosting-diagram
+#| fig-cap: "Schematic of boosting: weak learners are added sequentially, each correcting the errors of the current ensemble."
+
+library(DiagrammeR)
+
+grViz("
+digraph boosting {
+graph [rankdir = LR]
+
+node [shape = box, style = rounded, fontsize = 11]
+
+# Nodes
+
+data   [label = 'Original data\n(X, y)', fillcolor = '#e8f3ff', style = 'filled,rounded']
+
+w1     [label = 'Weak learner 1\n(shallow tree)']
+err1   [label = 'Errors / residuals\nfrom model 1']
+
+w2     [label = 'Weak learner 2\ntrained on residuals']
+err2   [label = 'Remaining errors\nfrom models 1 + 2']
+
+w3     [label = 'Weak learner 3\nfurther correction']
+
+final  [label = 'Boosted prediction\n(ŷ)', fillcolor = '#fff3e8',
+style = 'filled,rounded']
+
+# Edges: data -> first learner
+
+data -> w1
+
+# First learner -> residuals -> next learner
+
+w1   -> err1 [label = ' compute\nresiduals ']
+err1 -> w2  [label = ' fit on\nresiduals ']
+
+# Second learner -> new residuals -> next learner
+
+w2   -> err2 [label = ' updated\nerrors ']
+err2 -> w3  [label = ' fit on\nremaining\nresiduals ']
+
+# All learners contribute to final prediction
+
+w1 -> final [label = ' small\nupdate ']
+w2 -> final [label = ' small\nupdate ']
+w3 -> final [label = ' small\nupdate ']
+}
+")
+
+```
+
+### Stacking
+
+```{r, echo=F,include=T, message=F}
+#| label: fig-stacking-diagram
+#| fig-cap: "Schematic of stacking: multiple base learners feed their predictions into a meta-model."
+
+library(DiagrammeR)
+
+grViz("
+digraph stacking {
+graph [rankdir = LR]
+
+node [shape = box, style = rounded, fontsize = 11]
+
+# Original data
+
+data   [label = 'Original data\n(X, y)', fillcolor = '#e8f3ff', style = 'filled,rounded']
+
+# Base learners
+
+lm     [label = 'Base model 1:\nPenalized linear model']
+rf     [label = 'Base model 2:\nRandom forest']
+gbm    [label = 'Base model 3:\nGradient boosting']
+
+# Meta-learner
+
+meta   [label = 'Meta-model\n(learnt on\nbase predictions)', fillcolor = '#e8ffe8', style = 'filled,rounded']
+
+# Final prediction
+
+yhat   [label = 'Final prediction\n(ŷ)', 
+ fillcolor = '#fff3e8', 
+ style = 'filled,rounded']
+
+
+# Edges: data -> base models
+
+data -> lm
+data -> rf
+data -> gbm
+
+# Edges: base models -> meta-model
+
+lm  -> meta [label = ' ŷ₁ ']
+rf  -> meta [label = ' ŷ₂ ']
+gbm -> meta [label = ' ŷ₃ ']
+
+# Meta-model -> final prediction
+
+meta -> yhat
+}
+")
+
+
+```
+
+## Setting up test and train datasets
+
+We already learnt the importance of using training and testing datasets in our modelling procedures. In this section we will prepare the such datasets to be used then to fit random forests and XGboost analysis.
+
+```{r}
+#| label: setup-train-test
+#| message: false
+#| warning: false
+
+set.seed(2025)
+
+library(dplyr)
+
+# 1) Train/test split (70/30) -------------------------
+n <- nrow(trial_ct)
+idx_train <- sample(seq_len(n), size = 0.7 * n)
+
+train <- trial_ct[idx_train, ]
+test  <- trial_ct[-idx_train, ]
+
+# 2) True outcomes ------------------------------------
+y_train <- train$response_percent
+y_test  <- test$response_percent
+
+```
+
+## Random Forests
+
+**Random Forests** generalize bootstrap aggregating by introducing *feature-level stochasticity* during tree construction. Each tree is trained on a bootstrap sample of the data, and at every split the algorithm selects the best partition only from a randomly drawn subset of predictors (of size mtrym\_{\text{try}}mtry​). This mechanism reduces the correlation between trees, which in turn lowers the variance of the aggregated ensemble estimator. Random Forests are consistent for both regression and classification, provide unbiased estimates of generalization error via out-of-bag predictions, and incorporate variable importance metrics based on impurity reduction or permutation. Their ability to approximate complex interaction structures without explicit feature engineering, combined with robustness to high-dimensional predictors and noisy inputs, makes them a powerful nonparametric baseline for tabular biomedical data. Despite limited interpretability relative to single trees, Random Forests offer strong predictive performance and stability across heterogeneous clinical settings.
+
+With the following lines of code we will learn how to run a random forest example in our chemoterapy case. This code fits a Random Forest regression model to predict **tumour response percentage** from a collection of clinical and molecular features. The model is built using the *ranger* package, a fast and scalable implementation designed for high-dimensional datasets such as ours, which contains thousands of gene-expression variables. The formula `response_percent ~ .` specifies that all available predictors should be used, but four variables are explicitly removed from the model: *patient_id* (an identifier), *high_response* (a derived binary outcome that would leak information), and the tumour measurements *baseline_tumor_mm* and *post_tumor_mm*, which are deterministically related to the response and would therefore artificially inflate model performance.
+
+The call to `ranger()` constructs an ensemble of 500 decision trees. At each split, instead of evaluating all predictors, the algorithm considers only a random subset whose size is defined by `mtry`. Here, `mtry` is set to the square root of the effective number of predictors, a widely used heuristic that helps decorrelate the trees and therefore reduce variance in the final ensemble. The model also computes impurity-based variable importance, which allows later examination of which genes or clinical features contributed most strongly to the predictions.
+
+Once the forest has been trained, the model is applied to both the training and test sets to obtain predicted tumour-response percentages. These predictions are extracted via the `$predictions` element of the output returned by `predict()`. The final section evaluates model performance by computing mean absolute error (MAE) and root-mean-square error (RMSE) using the helper function `eval_perf()`. Computing performance on the training set allows us to assess whether the forest has fit the data effectively, whereas evaluating on the test set quantifies generalization to unseen patients a crucial step in understanding whether the model can support predictive decision-making in a clinical or therapeutic context.
+
+```{r}
+#| label: fit-rf
+#| message: false
+#| warning: false
+
+library(ranger)
+
+rf_fit <- ranger(
+  response_percent ~ . 
+    - patient_id 
+    - high_response 
+    - baseline_tumor_mm 
+    - post_tumor_mm,
+  data       = train,
+  num.trees  = 500,
+  mtry       = floor(sqrt(ncol(train) - 5)),  # approx: drop 4 predictors + outcome
+  importance = "impurity"
+)
+
+# Predictions ------------------------------------------------------
+
+rf_pred_train <- predict(rf_fit, data = train)$predictions
+rf_pred_test  <- predict(rf_fit, data = test)$predictions
+
+# Performance ------------------------------------------------------
+
+rf_perf_train <- eval_perf(y_train, rf_pred_train)
+rf_perf_test  <- eval_perf(y_test,  rf_pred_test)
+
+rf_perf_train
+rf_perf_test
+
+```
+
+## XGboost
+
+Gradient boosting is one of the most powerful ideas in modern machine learning. While Random Forests reduce variance by averaging many decorrelated trees, boosting takes the opposite approach: it builds trees **sequentially**, where each new tree attempts to correct the errors of the ensemble so far. XGBoost (Extreme Gradient Boosting) is a highly optimized implementation of this idea and has become the dominant algorithm for tabular biomedical prediction, especially in high-dimensional settings with complex nonlinear relationships, such as gene-expression data in therapeutic studies.
+
+In boosting, the model begins with a simple prediction often the mean value of the outcome and then iteratively adds small regression trees. Each new tree is fitted to the *residuals* (the mistakes) of the current model. Because each tree is intentionally shallow, it captures only a small part of the remaining structure. However, when hundreds of these trees are combined, the model can approximate highly intricate interactions, nonlinearities, and threshold behaviours. Crucially, XGBoost incorporates additional mechanisms that make it robust and scalable: **L1 and L2 regularization**, **learning-rate shrinkage**, **column and row subsampling**, and efficient handling of sparse matrices. Together, these features make XGBoost far less prone to overfitting than naïve boosting methods, even with thousands of predictors.
+
+The code below shows how XGBoost is trained to predict tumour-response percentage using the chemotherapy dataset.
+
+First, we construct the predictor matrices for training and test sets. Because XGBoost expects purely numeric input, we use `model.matrix()` to convert categorical variables into dummy indicators and to ensure the same set of columns is used across both datasets. All leakage-prone variables (`patient_id`, `high_response`, `baseline_tumor_mm`, `post_tumor_mm`, and the outcome `response_percent`) are removed from the predictor matrix. The remaining clinical and molecular features form a high-dimensional design matrix with potentially thousands of columns, which XGBoost handles naturally.
+
+Next, the data are converted into `xgb.DMatrix` objects. This format stores the matrix efficiently and allows XGBoost to apply internal optimizations such as sparse-feature handling and fast column access. Labels (the continuous response values) are attached here.
+
+The hyperparameters defined in `xgb_params` specify the behaviour of the boosting process. We use `objective = "reg:squarederror"` because this is a continuous regression task. The parameter `eta` controls the learning rate: each tree only makes a small correction to the existing model, which stabilizes training. The arguments `max_depth`, `subsample`, and `colsample_bytree` restrict the complexity of individual trees and the diversity of information they see, thereby preventing overfitting and encouraging generalization.
+
+Training occurs through `xgb.train()`, which iteratively builds 300 boosting rounds. Each iteration grows a shallow tree tailored to the current residuals. Because the watchlist contains the training set, XGBoost can report internal diagnostics (here suppressed with `verbose = 0`).
+
+Finally, predictions on both training and test data are obtained with `predict()`. These predicted continuous response values are evaluated using MAE and RMSE, allowing direct comparison with linear models, trees, and Random Forests. Typically, XGBoost provides the strongest performance in this type of biological regression setting, as it captures subtle gene–gene interactions, nonlinear dose effects, and patient heterogeneity more effectively than any single model family.
+
+```{r}
+#| label: fit-xgb
+#| message: false
+#| warning: false
+
+library(xgboost)
+
+# 1) Build predictor matrices -------------------------------------
+
+cols_to_drop <- c(
+  "patient_id",
+  "high_response",
+  "baseline_tumor_mm",
+  "post_tumor_mm",
+  "response_percent"   # outcome must also be removed from X
+)
+
+X_train <- model.matrix(
+  ~ .,
+  data = train |> select(-all_of(cols_to_drop))
+)
+
+X_test <- model.matrix(
+  ~ .,
+  data = test  |> select(-all_of(cols_to_drop))
+)
+
+# Optional: check dimensions
+dim(X_train)
+dim(X_test)
+
+# 2) Convert to DMatrix -------------------------------------------
+
+dtrain <- xgb.DMatrix(data = X_train, label = y_train)
+dtest  <- xgb.DMatrix(data = X_test,  label = y_test)
+
+# 3) Basic XGBoost hyperparameters --------------------------------
+
+xgb_params <- list(
+  objective        = "reg:squarederror",
+  eta              = 0.05,   # learning rate
+  max_depth        = 4,
+  subsample        = 0.7,    # row subsampling
+  colsample_bytree = 0.7     # column subsampling
+)
+
+# 4) Train XGBoost model ------------------------------------------
+
+xgb_fit <- xgb.train(
+  params    = xgb_params,
+  data      = dtrain,
+  nrounds   = 300,
+  watchlist = list(train = dtrain),
+  verbose   = 0
+)
+
+# 5) Predictions ---------------------------------------------------
+
+xgb_pred_train <- predict(xgb_fit, dtrain)
+xgb_pred_test  <- predict(xgb_fit, dtest)
+
+# 6) Performance ---------------------------------------------------
+
+xgb_perf_train <- eval_perf(y_train, xgb_pred_train)
+xgb_perf_test  <- eval_perf(y_test,  xgb_pred_test)
+
+xgb_perf_train
+xgb_perf_test
+
+
+```
+
+## Comparison Random Forests and XGboost for our data
+
+After fitting both a Random Forest and an XGBoost model to the clinical trial dataset, we evaluate their predictive performance on the test set using the same metrics employed throughout the chapter mean absolute error (MAE) and root mean squared error (RMSE). The following code constructs a simple comparison table:
+
+```{r}
+#| label: compare-rf-xgb
+#| message: false
+#| warning: false
+
+library(dplyr)
+
+rf_xgb_compare <- bind_rows(
+  "Random Forest" = rf_perf_test,
+  "XGBoost"       = xgb_perf_test,
+  .id = "Model"
+)
+
+rf_xgb_compare
+
+```
+
+This comparison highlights a substantial difference in predictive accuracy between the two ensemble methods. The Random Forest, which aggregates many decorrelated decision trees built on bootstrap samples, provides solid performance with **MAE = 5.58** and **RMSE = 6.84** on the test set values typical of a stable but variance-oriented ensemble. In contrast, the XGBoost model achieves dramatically lower error, with **MAE = 1.37** and **RMSE = 1.82**, reducing both metrics by more than a factor of three.
+
+This improvement reflects the fundamental difference in how the two algorithms learn. Random Forests reduce variance by averaging many deep, high-variance trees grown independently; XGBoost, instead, builds trees sequentially, with each tree correcting the residuals of the previous ensemble. The combination of a small learning rate, explicit L1/L2 regularization, and shallow trees allows XGBoost to capture nonlinear and interaction patterns more efficiently and with greater stability.
+
+In this dataset characterized by nonlinear dose–response relationships, interactions between tumour grade and gene-expression features, and substantial patient heterogeneity the gradient-boosting strategy produces a far more accurate approximation of the underlying biological response function. This illustrates why boosted tree models often outperform bagging-based methods in biomedical prediction tasks where subtle patterns, thresholds, and gene-level interactions play a central role.
+
+## Comparing Random Forests and XGboost with OLS, LASSO, Ridge and Elastic NET
+
+```{r}
+#| label: fit-ols
+#| message: false
+#| warning: false
+
+# Columns we do NOT want as predictors
+cols_to_drop <- c("patient_id", "high_response", "baseline_tumor_mm", "post_tumor_mm")
+
+# Create reduced train/test data frames for modeling
+train_lm <- train |>
+  dplyr::select(-all_of(cols_to_drop))
+
+test_lm <- test |>
+  dplyr::select(-all_of(cols_to_drop))
+
+# Ordinary Least Squares (no regularization)
+ols_fit <- lm(
+  response_percent ~ .,
+  data = train_lm
+)
+
+ols_pred_train <- predict(ols_fit, newdata = train_lm)
+ols_pred_test  <- predict(ols_fit, newdata = test_lm)
+
+ols_perf_train <- eval_perf(y_train, ols_pred_train)
+ols_perf_test  <- eval_perf(y_test,  ols_pred_test)
+
+ols_perf_test
+
+
+```
+
+```{r}
+#| label: fit-glmnet
+#| message: false
+#| warning: false
+
+library(glmnet)
+
+# Ridge regression (alpha = 0) ----------------------------
+
+ridge_cv <- cv.glmnet(
+  x = X_train,
+  y = y_train,
+  alpha = 0
+)
+
+ridge_pred_train <- as.numeric(predict(ridge_cv, newx = X_train, s = "lambda.min"))
+ridge_pred_test  <- as.numeric(predict(ridge_cv, newx = X_test,  s = "lambda.min"))
+
+ridge_perf_train <- eval_perf(y_train, ridge_pred_train)
+ridge_perf_test  <- eval_perf(y_test,  ridge_pred_test)
+
+# Lasso regression (alpha = 1) ---------------------------
+
+lasso_cv <- cv.glmnet(
+  x = X_train,
+  y = y_train,
+  alpha = 1
+)
+
+lasso_pred_train <- as.numeric(predict(lasso_cv, newx = X_train, s = "lambda.min"))
+lasso_pred_test  <- as.numeric(predict(lasso_cv, newx = X_test,  s = "lambda.min"))
+
+lasso_perf_train <- eval_perf(y_train, lasso_pred_train)
+lasso_perf_test  <- eval_perf(y_test,  lasso_pred_test)
+
+# Elastic Net (alpha between 0 and 1) --------------------
+
+elastic_cv <- cv.glmnet(
+  x = X_train,
+  y = y_train,
+  alpha = 0.5   # 0.5 = equal mix of L1 and L2; you can tune this
+)
+
+elastic_pred_train <- as.numeric(predict(elastic_cv, newx = X_train, s = "lambda.min"))
+elastic_pred_test  <- as.numeric(predict(elastic_cv, newx = X_test,  s = "lambda.min"))
+
+elastic_perf_train <- eval_perf(y_train, elastic_pred_train)
+elastic_perf_test  <- eval_perf(y_test,  elastic_pred_test)
+
+
+```
+
+```{r}
+benchmark_tbl <- dplyr::bind_rows(
+  "OLS"           = ols_perf_test,
+  "Ridge"         = ridge_perf_test,
+  "Lasso"         = lasso_perf_test,
+  "Elastic Net"   = elastic_perf_test,
+  "Random Forest" = rf_perf_test,
+  "XGBoost"       = xgb_perf_test,
+  .id = "Model"
+)
+
+benchmark_tbl
+
+```
+
+To evaluate how different modelling strategies behave in our example, we compared six regression models OLS, Lasso, Ridge, Elastic Net, Random Forest, and XGBoost on the same task: predicting *response_percent*, a continuous measure of tumour shrinkage in a chemotherapy trial. All models were trained on the same 70% split and evaluated on the same 30% test set using identical predictors: clinical variables and approximately 2,000 gene-expression features (after excluding identifiers and tumour-size measurements).
+
+### Linear Models with and without Regularization
+
+OLS offers a transparent baseline but performs poorly with thousands of correlated gene features, leading to unstable coefficients and weak generalization (MAE ≈ 1.83; RMSE ≈ 2.28)
+
+Ridge stabilizes coefficients through L2 shrinkage, producing modest gains but preserving all predictors, which limits interpretability.
+
+Lasso substantially improves performance (MAE ≈ 1.53; RMSE ≈ 1.92) by selecting a sparse subset of informative genes, making it both predictive and biologically interpretable.
+
+Elastic Net, combining L1 and L2 penalties, achieves the best performance among linear models (MAE ≈ 1.52; RMSE ≈ 1.91), particularly well-suited for groups of correlated genes commonly found in expression data.
+
+### Tree-Based Ensemble Models
+
+Random Forest performs unexpectedly poorly in this ultra-high-dimensional setting (MAE ≈ 5.61; RMSE ≈ 6.87). With so many predictors, random subsets rarely contain strong signals, leading to noisy splits and poor generalization.
+
+XGBoost delivers the strongest predictive performance overall (MAE ≈ 1.32; RMSE ≈ 1.78). Its sequential boosting mechanism targets residual structure directly, while regularization (L1 + L2), subsampling, and shallow trees help control overfitting. This allows XGBoost to recover nonlinear relationships and interaction effects that Random Forest fails to capture.
+
+## Trees for classification tasks
+
+In the previous section, we used trees to predict a continuous response (`response_percent`). Decision trees, however, can also be used for **classification tasks**, where the goal is to predict a categorical outcome such as `high_response` (1 = high responder, 0 = low responder).\
+
+This type of model belongs to the **Classification and Regression Tree (CART)** family the same general framework we used for regression trees, but with a different impurity measure and output interpretation.
+
+In a **classification tree**, each node represents a subset of the data that is more or less “pure” with respect to the outcome classes. The tree is built by recursively splitting the data into increasingly homogeneous groups, using thresholds on explanatory variables (e.g., gene expression, dose intensity, tumor grade).
+
+### Model setup
+
+We will use the same chemotherapy trial dataset as before, but now we define the binary target `high_response` (1 = tumor reduction ≥ 30%) and use the function `rpart()` with `method = "class"`.
+
+```{r}
+#| label: ct-class-tree-fit
+#| message: false
+#| warning: false
+
+library(rpart)
+library(rpart.plot)
+library(dplyr)
+
+# 1) Make sure the binary target exists
+
+trial_ct <- readRDS("~/att_ai_ml/data/trial_ct_chemo_cont.rds")
+
+trial_ct <- trial_ct %>%
+mutate(high_response = as.integer(response_percent >= 30))
+
+# 2) Drop ID and leakage columns
+
+cols_drop <- c("patient_id", "response_percent", "baseline_tumor_mm", "post_tumor_mm")
+trial_ct <- trial_ct %>% select(-any_of(cols_drop))
+
+# 3) Train/test split (70/30)
+
+set.seed(123)
+n <- nrow(trial_ct)
+idx_train <- sample(seq_len(n), size = 0.7 * n)
+train_cls <- trial_ct[idx_train, ]
+test_cls  <- trial_ct[-idx_train, ]
+
+# 4) Fit classification tree
+
+ctree_cls <- rpart(
+high_response ~ .,
+data = train_cls,
+method = "class",
+control = rpart.control(cp = 0.001, maxdepth = 8, minsplit = 30)
+)
+
+```
+
+### Inspecting and pruning the tree
+
+The complexity parameter (`cp`) controls how aggressively the tree grows. As before, we inspect the cost-complexity table to identify the optimal pruning point via the *1-SE rule*.
+
+```{r}
+# Examine complexity parameter (cost-complexity table)
+
+printcp(ctree_cls)
+plotcp(ctree_cls, main = "Classification tree: CP plot")
+
+# Apply 1-SE rule for pruning
+
+best_row  <- which.min(ctree_cls$cptable[, "xerror"])
+xerr_min  <- ctree_cls$cptable[best_row, "xerror"]
+xstd_min  <- ctree_cls$cptable[best_row, "xstd"]
+cp_1se    <- ctree_cls$cptable[ctree_cls$cptable[, "xerror"] <= xerr_min + xstd_min, "CP"][1]
+ctree_pruned <- prune(ctree_cls, cp = cp_1se)
+
+```
+
+### Visualizing grown and pruned trees
+
+```{r}
+rpart.plot(ctree_cls, type = 2, extra = 104, box.palette = "Blues",
+main = "Classification Tree (grown)")
+rpart.plot(ctree_pruned, type = 2, extra = 104, box.palette = "GnBu",
+main = "Classification Tree (pruned, 1-SE rule)")
+
+```
+
+Each internal node displays the variable and threshold that best separates responders from non-responders. Each leaf (terminal node) reports the predicted class, the probability of `high_response`, and the number of patients in that subgroup.
+
+For example, a path like:If `gene_14 ≥ 0.98` and `gene_08 ≥ 2.03` → predict *High response (p = 0.93)*
+
+shows that patients with high expression of those two genes have about a 93 % probability of meaningful tumor shrinkage.
+
+In regression trees, we minimized the within-node variance.\
+
+In classification trees, we minimize the **impurity** of the node, typically measured by the **Gini index**:
+
+$$
+I_{\text {Gini }}(S)=1-\sum_{k=1}^K p_k^2
+$$
+
+where $p_k$ is the proportion of observations in class $k$ within node $S$.
+
+A node is pure (impurity $=0$ ) if all observations belong to the same class, and most impure (maximum) when classes are evenly mixed.
+
+Each split is chosen to maximize impurity reduction:
+
+$$
+\Delta I=I(\text { parent })-\frac{n_L}{n_{\text {parent }}} I(\text { left })-\frac{n_R}{n_{\text {parent }}} I(\text { right })
+$$
+
+rpart() performs this optimization automatically, evaluating all candidate thresholds for numeric variables and the best grouping for categorical ones.
+
+### Predictions and confusing matrix
+
+Once the pruned tree is finalized, we can generate predictions and evaluate its performance on the test set.
+
+```{r}
+# Predictions on test data
+
+pred_prob <- predict(ctree_pruned, newdata = test_cls, type = "prob")[, 2]
+pred_class <- as.integer(pred_prob >= 0.5)
+
+# True labels
+
+y_true <- test_cls$high_response
+
+# Confusion matrix
+
+cm <- table(Predicted = pred_class, True = y_true)
+cm
+
+# Accuracy, sensitivity, specificity
+
+accuracy  <- sum(diag(cm)) / sum(cm)
+sensitivity <- cm["1", "1"] / sum(cm[, "1"])  # recall
+specificity <- cm["0", "0"] / sum(cm[, "0"])
+c(Accuracy = accuracy, Sensitivity = sensitivity, Specificity = specificity)
+
+```
+
+### ROC and AUC for the classification tree
+
+The ROC curve visualizes the trade-off between sensitivity and specificity as we vary the decision threshold on the predicted probability.
+
+```{r}
+#| label: ct-class-tree-roc
+#| message: false
+#| warning: false
+
+library(pROC)
+roc_tree <- roc(y_true, pred_prob)
+plot(roc_tree, col = "#2b8cbe", lwd = 2,
+main = sprintf("ROC curve (AUC = %.3f)", auc(roc_tree)))
+abline(a = 0, b = 1, lty = 2, col = "gray")
+
+```
+
+An AUC close to 1 indicates strong discrimination between high and low responders.\
+
+In clinical prediction tasks, AUC values between 0.8 and 0.9 are considered good, and above 0.9 excellent.
+
+### Interpreting the classification trees
+
+The **grown tree** explores all possible splits that reduce impurity, achieving near-perfect fit on training data but risking overfitting.\
+
+The **pruned tree**, selected by the 1-SE rule, retains only the most stable, clinically interpretable decision rules.
+
+Each path from root to leaf forms an explicit “if–then” rule linking biological and clinical features to treatment response.\
+
+This interpretability is valuable in medicine: unlike logistic regression coefficients, tree rules are easily read and discussed with clinicians.
+
+Although a single classification tree is highly interpretable, it has important limitations:
+
+A first limitation is **high variance**. Small changes in the data may lead the tree to choose very different splitting variables, thresholds, and rule structures. The model therefore tends to overfit training data and generalize poorly to unseen patients.
+
+A second limitation is that the tree can capture only one hierarchy of interactions at a time. If multiple patterns or gene combinations can predict response, the tree must choose between them, discarding alternative useful pathways.
+
+A third limitation is **instability in high-dimensional settings**. In our dataset of more than 2,000 gene expression variables, many predictors are only weakly informative. The greedy splitting process may select noise variables simply because they provide small, random decreases in impurity. For these reasons, while a pruned tree is clinically interpretable, it rarely matches the predictive performance of modern ensemble methods.
+
+### Ensemble methods for classification: Random Forest and XGBoost
+
+In the previous section, we fitted a **single classification tree** to predict the probability of high response (`high_response`). Although interpretable, single trees tend to have **high variance** they fit training data too well and generalize poorly. Two powerful ensemble methods **Random Forest** and **XGBoost** can dramatically improve performance by combining the predictions of many trees.
+
+### Random Forest classifier
+
+Random Forest (RF) builds many trees, each trained on a **bootstrap sample** of the training data and a **random subset of predictors** at each split. Each tree votes for the predicted class, and the forest aggregates these votes.
+
+```{r}
+#| label: rf-class-fit
+#| message: false
+#| warning: false
+
+library(ranger)
+library(dplyr)
+
+# Make sure the outcome is a factor with levels 0 and 1
+train_cls <- train_cls %>% mutate(high_response = factor(high_response, levels = c(0, 1)))
+test_cls  <- test_cls  %>% mutate(high_response = factor(high_response, levels = c(0, 1)))
+
+set.seed(123)
+
+# Fit the random forest classifier
+rf_class <- ranger(
+  high_response ~ .,
+  data = train_cls,
+  num.trees = 800,
+  mtry = floor(sqrt(ncol(train_cls) - 1)),
+  min.node.size = 5,
+  importance = "impurity",
+  probability = TRUE,      # ensures probability predictions
+  oob.error = TRUE
+)
+
+rf_class
+
+# OOB error (classification): use sqrt only for regression. For classification:
+rf_class$prediction.error   # OOB misclassification error
+
+# Predict on test data
+pred_obj <- predict(rf_class, data = test_cls)
+
+# Examine the structure if curious:
+# str(pred_obj$predictions)
+
+# Extract probability for class "1"
+# If the column has names "0" and "1", use them:
+pred_rf_prob <- pred_obj$predictions[, "1"]
+
+# Convert probabilities into class predictions
+pred_rf_class <- ifelse(pred_rf_prob >= 0.5, 1, 0)
+
+# Confusion matrix
+cm_rf <- table(
+  Predicted = pred_rf_class,
+  True = test_cls$high_response
+)
+
+cm_rf
+
+```
+
+Random Forest performs well in many clinical applications because it averages hundreds of decorrelated trees, reducing the variance inherent in single-tree models. The bootstrap sampling at the tree level and the random subset of predictors at each split ensure that individual trees explore different parts of the feature space.
+
+However, in ultra–high-dimensional settings such as our chemotherapy trial, several challenges emerge:
+
+First, when the number of predictors is extremely large (more than 2,000 gene features), the chance of selecting truly informative predictors at each split becomes small. The majority of splits may involve irrelevant variables, weakening each individual tree.
+
+Second, if the data contain many weak or noisy predictors, Random Forest tends to produce noisy decision boundaries. Averaging many weak learners helps, but does not completely overcome this issue.
+
+Third, even though Random Forest reduces variance, it does not reduce bias. When the signal requires subtle, multi-variable interactions, shallow random subtrees may not capture those interactions efficiently.
+
+Nevertheless, in our classification task the Random Forest performs remarkably well, achieving an AUC close to 0.996 largely because the signal-to-noise ratio for the binary target is far higher than for the continuous regression outcome studied earlier.
+
+### XGboost for classification
+
+Random forests reduce variance by averaging many decorrelated trees, but they do not directly address model **bias**. Boosting methods particularly *gradient boosting* take the opposite strategy: build many trees **sequentially**, where each new tree tries to correct the mistakes (the residuals) of the ensemble so far.
+
+XGBoost (*Extreme Gradient Boosting*) is the most widely used implementation of gradient boosting for tabular data. It fits many shallow trees, each one focusing on the patterns the previous trees failed to capture. The final model is a weighted sum of these trees, typically yielding excellent predictive performance.
+
+For binary classification (our *high_response* task), XGBoost builds trees that predict the **log-odds** of response and uses a differentiable loss function (usually logistic loss) to guide the sequence of improvements.
+
+Boosting follows this conceptual sequence:
+
+1.  Start with a simple model, usually predicting the average log-odds of class 1 .
+2.  Compute residuals, which for classification are the gradients of logistic loss.
+3.  Grow a small tree that best predicts these residuals.
+4.  Add the tree to the model, scaled by a "learning rate".
+5.  Repeat hundreds of times, gradually refining the model.
+
+The trees are intentionally shallow ( $2-6$ splits) so that each one captures only simple interactions; the strength comes from the accumulation of many small improvements.
+
+#### Preparing the data to run XGboost
+
+XGBoost requires: - the outcome encoded as 0/1 numeric - predictors in a numeric matrix (no factors)
+
+We therefore recode the data consistently.
+
+```{r}
+# Convert outcome to numeric 0/1
+train_xgb <- train_cls %>%
+  mutate(high_response = as.numeric(as.character(high_response)))
+
+test_xgb <- test_cls %>%
+  mutate(high_response = as.numeric(as.character(high_response)))
+
+# Convert predictors to a numeric matrix
+y_train <- train_xgb$high_response
+X_train <- model.matrix(high_response ~ . - 1, data = train_xgb)
+
+y_test  <- test_xgb$high_response
+X_test  <- model.matrix(high_response ~ . - 1, data = test_xgb)
+
+```
+
+### Fitting XGboost
+
+```{r}
+library(xgboost)
+
+set.seed(123)
+
+xgb_fit <- xgboost(
+  data = X_train,
+  label = y_train,
+  objective = "binary:logistic",
+  nrounds = 150,
+  eta = 0.1,             # learning rate
+  max_depth = 4,
+  min_child_weight = 3,
+  subsample = 0.8,
+  colsample_bytree = 0.6,
+  eval_metric = "logloss",
+  verbose = 0
+)
+
+```
+
+```{r}
+# Predict probabilities on the test set
+pred_xgb_prob <- predict(xgb_fit, newdata = X_test)
+
+# Convert to classes
+pred_xgb_class <- ifelse(pred_xgb_prob >= 0.5, 1, 0)
+
+# Confusion matrix
+cm_xgb <- table(
+  Predicted = pred_xgb_class,
+  True = y_test
+)
+cm_xgb
+
+```
+
+### Prediction and Evaluation
+
+```{r}
+# Predict probabilities on the test set
+pred_xgb_prob <- predict(xgb_fit, newdata = X_test)
+
+# Convert to classes
+pred_xgb_class <- ifelse(pred_xgb_prob >= 0.5, 1, 0)
+
+# Confusion matrix
+cm_xgb <- table(
+  Predicted = pred_xgb_class,
+  True = y_test
+)
+cm_xgb
+
+```
+
+```{r}
+library(pROC)
+auc_xgb <- roc(y_test, pred_xgb_prob)$auc
+auc_xgb
+
+```
+
+XGBoost consistently achieves state-of-the-art performance in tasks involving complex interactions and high dimensionality. Several characteristics make it particularly effective for clinical biomarker modelling:
+
+The first characteristic is the use of **gradient boosting**, where each tree is trained to correct the errors of the previous ensemble. This iterative refinement allows the model to approximate highly nonlinear decision boundaries.
+
+A second strength is **regularization**, both L1 (sparsity) and L2 (shrinkage), which prevents overfitting even when thousands of predictors are available.
+
+A third advantage is **column and row subsampling**, which improves generalization and stabilizes tree structure in datasets dominated by noisy features.
+
+In practice, XGBoost reliably identifies subtle combinations of gene expression patterns that predict tumour response. In our benchmark, it achieves the highest AUC (≈0.998), outperforming both Random Forest and all linear models.
+
+### Re-fitting the logistic regression model
+
+```{r}
+
+# Ensure high_response is a factor with correct levels
+train_cls <- train_cls %>% 
+  mutate(high_response = factor(high_response, levels = c(0,1)))
+
+test_cls <- test_cls %>% 
+  mutate(high_response = factor(high_response, levels = c(0,1)))
+
+# Fit logistic regression using all predictors
+glm_logit <- glm(
+  high_response ~ .,
+  data = train_cls,
+  family = binomial(link = "logit")
+)
+
+summary(glm_logit)
+```
+
+```{r}
+# Predicted probabilities
+pred_logit_prob <- predict(glm_logit, newdata = test_cls, type = "response")
+
+# Predicted classes
+pred_logit_class <- ifelse(pred_logit_prob >= 0.5, 1, 0)
+
+# Confusion matrix
+cm_logit <- table(
+  Predicted = pred_logit_class,
+  True = test_cls$high_response
+)
+
+cm_logit
+
+```
+
+```{r}
+library(pROC)
+auc_logit <- roc(test_cls$high_response, pred_logit_prob)$auc
+auc_logit
+
+```
+
+### Unified comparison
+
+```{r}
+# =======================================================
+# Libraries
+# =======================================================
+library(pROC)
+library(tibble)
+library(dplyr)
+library(rpart)
+library(rpart.plot)
+
+# =======================================================
+# 0) Ensure outcome is coded correctly
+# =======================================================
+
+train_cls <- train_cls %>% 
+  mutate(high_response = factor(high_response, levels = c(0,1)))
+
+test_cls <- test_cls %>% 
+  mutate(high_response = factor(high_response, levels = c(0,1)))
+
+# =======================================================
+# 1) LOGISTIC REGRESSION
+# =======================================================
+
+pred_logit_prob  <- predict(glm_logit, newdata = test_cls, type = "response")
+pred_logit_class <- ifelse(pred_logit_prob >= 0.5, 1, 0)
+
+auc_logit <- roc(test_cls$high_response, pred_logit_prob)$auc
+cm_logit  <- table(Predicted = pred_logit_class, True = test_cls$high_response)
+
+# =======================================================
+# 2) CART CLASSIFICATION TREE (PRUNED)
+# =======================================================
+
+# Build a proper classification tree
+ct_class <- rpart(
+  high_response ~ .,
+  data = train_cls,
+  method = "class",
+  control = rpart.control(cp = 0.001, maxdepth = 8, minsplit = 30)
+)
+
+# Prune using 1-SE rule
+printcp(ct_class)
+best_row <- which.min(ct_class$cptable[,"xerror"])
+xerr_min <- ct_class$cptable[best_row, "xerror"]
+xstd_min <- ct_class$cptable[best_row, "xstd"]
+cp_1se   <- ct_class$cptable[ct_class$cptable[,"xerror"] <= xerr_min + xstd_min, "CP"][1]
+
+ct_pruned_cls <- prune(ct_class, cp = cp_1se)
+
+# Predict probabilities and classes
+pred_tree_prob  <- predict(ct_pruned_cls, newdata = test_cls, type = "prob")[, "1"]
+pred_tree_class <- ifelse(pred_tree_prob >= 0.5, 1, 0)
+
+auc_tree <- roc(test_cls$high_response, pred_tree_prob)$auc
+cm_tree  <- table(Predicted = pred_tree_class, True = test_cls$high_response)
+
+# =======================================================
+# 3) RANDOM FOREST (ranger)
+# =======================================================
+
+pred_rf_prob  <- predict(rf_class, data = test_cls)$predictions[, "1"]
+pred_rf_class <- ifelse(pred_rf_prob >= 0.5, 1, 0)
+
+auc_rf <- roc(test_cls$high_response, pred_rf_prob)$auc
+cm_rf  <- table(Predicted = pred_rf_class, True = test_cls$high_response)
+
+# =======================================================
+# 4) XGBoost 
+# =======================================================
+
+# Here: y_test is numeric 0/1, X_test is a numeric matrix
+pred_xgb_prob  <- predict(xgb_fit, newdata = X_test)
+pred_xgb_class <- ifelse(pred_xgb_prob >= 0.5, 1, 0)
+
+auc_xgb <- roc(y_test, pred_xgb_prob)$auc
+cm_xgb  <- table(Predicted = pred_xgb_class, True = y_test)
+
+# =======================================================
+# 5) PERFORMANCE SUMMARY TABLE
+# =======================================================
+
+perf_summary <- tibble(
+  Model = c("Logistic Regression", "Pruned CART Tree", "Random Forest", "XGBoost"),
+  AUC   = c(auc_logit, auc_tree, auc_rf, auc_xgb),
+  Notes = c(
+    "Linear baseline; interpretable",
+    "Simple non-linear rules; high variance",
+    "Strong low-variance ensemble",
+    "Best accuracy; low bias + low variance"
+  )
+)
+
+perf_summary
+
+# =======================================================
+# 6) CONFUSION MATRICES (OPTIONAL PRINT)
+# =======================================================
+
+list(
+  Logistic_Regression = cm_logit,
+  CART_Pruned = cm_tree,
+  Random_Forest = cm_rf,
+  XGBoost = cm_xgb
+)
+
+
+```
+
+### Final comparison for all models regarding classification
+
+|  |  |  |  |  |  |  |  |  |  |  |  |  |
+|----|----|----|----|----|----|----|----|----|----|----|----|----|
+|  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | Model |  | Accuracy |  | Sensitivity (Recall) |  | Specificity |  | AUC (ROC) |  | Notes |  |
+|  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | **Logistic Regression (GLM)** |  | 0.907 |  | 0.897 |  | 0.913 |  | **0.939** |  | Linear baseline; no regularization |  |
+|  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | **LASSO Logistic Regression** |  | 0.911 |  | 0.909 |  | 0.913 |  | **0.948** |  | Sparse, interpretable; variable selection |  |
+|  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | **Ridge Logistic Regression** |  | 0.910 |  | 0.922 |  | 0.903 |  | **0.951** |  | Handles correlated genes; no sparsity |  |
+|  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | **Elastic Net Logistic Regression** |  | 0.910 |  | 0.909 |  | 0.911 |  | **0.949** |  | Best linear compromise; stabilizes groups of genes |  |
+|  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | **Pruned CART Tree** |  | 0.973 |  | 0.966 |  | 0.977 |  | **0.984** |  | Simple nonlinear rules; interpretable; high variance |  |
+|  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | **Random Forest** |  | 0.972 |  | 0.950 |  | 0.982 |  | **0.996** |  | Low variance ensemble; handles interactions |  |
+|  |  |  |  |  |  |  |  |  |  |  |  |  |
+|  | **XGBoost** |  | **0.987** |  | **0.976** |  | **0.981** |  | **0.998** |  | Best accuracy; low bias; robust in high dimension |  |
+|  |  |  |  |  |  |  |  |  |  |  |  |  |
+
+The full benchmark highlights a clear hierarchy in classification performance. Penalized logistic regression models (LASSO, Ridge, Elastic Net) outperform standard logistic regression by stabilizing coefficients and reducing overfitting, but remain limited by their linear functional form. Pruned CART models provide interpretable if–then clinical rules and perform much better than linear methods, but still exhibit high variance in high-dimensional genomic settings. Random Forests further improve performance through bagging and feature subsampling, achieving an AUC above 0.99. XGBoost achieves the strongest overall performance (AUC ≈ 0.998), leveraging gradient boosting, regularization, and subsampling to capture subtle nonlinear gene–gene interactions. This pattern is consistent with modern biomedical machine learning: as complexity and dimensionality rise, ensemble tree-based models tend to dominate in predictive accuracy.
