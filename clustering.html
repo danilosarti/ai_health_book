@@ -2105,24 +2105,24 @@ Figure&nbsp;8.9: Conceptual illustration of the pseudo-F statistic showing withi
 <pre><code># A tibble: 18 × 6
    centers algorithm     db.test.mean dunn.test.mean G1.test.mean exec.time
      &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt;          &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;
- 1       3 Hartigan-Wong         1.04          0.286         55.0   0.00166
- 2       3 Lloyd                 1.04          0.286         55.0   0.00129
- 3       3 MacQueen              1.04          0.286         55.0   0.00138
- 4       4 Hartigan-Wong         1.01          0.344         61.4   0.00198
- 5       4 Lloyd                 1.01          0.344         61.4   0.00162
- 6       4 MacQueen              1.01          0.344         61.4   0.00165
- 7       5 Hartigan-Wong         1.15          0.153         55.9   0.00237
- 8       5 Lloyd                 1.16          0.147         55.8   0.00233
- 9       5 MacQueen              1.16          0.157         55.0   0.00164
-10       6 Hartigan-Wong         1.22          0.150         48.8   0.00275
-11       6 Lloyd                 1.22          0.149         49.0   0.00290
-12       6 MacQueen              1.23          0.155         49.4   0.00168
-13       7 Hartigan-Wong         1.29          0.150         44.2   0.00330
-14       7 Lloyd                 1.29          0.158         45.2   0.00268
-15       7 MacQueen              1.31          0.150         44.5   0.00189
-16       8 Hartigan-Wong         1.39          0.147         41.2   0.00377
-17       8 Lloyd                 1.31          0.152         41.6   0.00320
-18       8 MacQueen              1.34          0.151         42.1   0.00240</code></pre>
+ 1       3 Hartigan-Wong         1.04          0.286         55.0   0.00167
+ 2       3 Lloyd                 1.04          0.286         55.0   0.00133
+ 3       3 MacQueen              1.04          0.286         55.0   0.00140
+ 4       4 Hartigan-Wong         1.01          0.344         61.4   0.00202
+ 5       4 Lloyd                 1.01          0.344         61.4   0.00155
+ 6       4 MacQueen              1.01          0.344         61.4   0.00160
+ 7       5 Hartigan-Wong         1.15          0.153         55.9   0.00236
+ 8       5 Lloyd                 1.16          0.147         55.8   0.00203
+ 9       5 MacQueen              1.16          0.157         55.0   0.00149
+10       6 Hartigan-Wong         1.22          0.150         48.8   0.00266
+11       6 Lloyd                 1.22          0.149         49.0   0.00270
+12       6 MacQueen              1.23          0.155         49.4   0.00167
+13       7 Hartigan-Wong         1.29          0.150         44.2   0.00323
+14       7 Lloyd                 1.29          0.158         45.2   0.00266
+15       7 MacQueen              1.31          0.150         44.5   0.00184
+16       8 Hartigan-Wong         1.39          0.147         41.2   0.00366
+17       8 Lloyd                 1.31          0.152         41.6   0.00318
+18       8 MacQueen              1.34          0.151         42.1   0.00211</code></pre>
 </div>
 </div>
 <p>In our wearable sensor dataset, all three algorithms identify <span class="math inline">\(\mathbf{k} \boldsymbol{=} \mathbf{4}\)</span> as the configuration with:</p>
@@ -3487,7 +3487,6 @@ True        1  2  3
 <p>The annotation bar on the left indicates the known simulated subtype (A_IFN, B_Inflam, C_Metab). The alignment between the boxed clusters and the annotation colors is striking: each cluster corresponds almost entirely to a single subtype. This indicates that the hierarchical procedure has successfully recovered the embedded structure of the data.</p>
 <p>More importantly, each cluster is characterized by a distinct pattern of coordinated gene expression. Within each boxed region, certain groups of genes appear consistently up-regulated (red) while the same genes are down-regulated (blue) in the other clusters. This pattern reflects subtype-specific molecular programs. For example, a block of genes that is red in one cluster and blue in the others suggests that those genes are preferentially activated in that patient group. Because scaling is gene-wise, these differences represent relative activation within each subtype rather than global shifts in overall expression levels.</p>
 <p>The fact that the identity of “highly expressed” genes changes across clusters is precisely what drives the separation in the dendrogram. Clustering groups patients based on similarity of their multivariate expression profiles; if different subsets of genes are up-regulated in different patient groups, their global expression vectors become distinct. In this sense, the heatmap makes visible the mechanism underlying the clustering: each subtype is defined not by a single gene, but by coordinated shifts in expression across gene modules. These subtype-specific expression signatures generate the distances that the hierarchical algorithm uses to build the tree.</p>
-<p>Together, the dendrogram structure, the cluster boxes, the annotation bar, and the coherent gene blocks provide consistent evidence that the clustering is capturing biologically meaningful variation rather than random noise.</p>
 
 
 </section>
