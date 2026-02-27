@@ -277,6 +277,20 @@ window.Quarto = {
   <li><a href="#choosing-the-number-of-clusters-1" id="toc-choosing-the-number-of-clusters-1" class="nav-link" data-scroll-target="#choosing-the-number-of-clusters-1"><span class="header-section-number">8.6.6</span> Choosing the number of clusters</a></li>
   <li><a href="#stability-assessment" id="toc-stability-assessment" class="nav-link" data-scroll-target="#stability-assessment"><span class="header-section-number">8.6.7</span> Stability Assessment</a></li>
   </ul></li>
+  <li><a href="#density-based-clustering" id="toc-density-based-clustering" class="nav-link" data-scroll-target="#density-based-clustering"><span class="header-section-number">8.7</span> Density-based clustering</a>
+  <ul class="collapse">
+  <li><a href="#dbscan-core-points-border-points-and-noise" id="toc-dbscan-core-points-border-points-and-noise" class="nav-link" data-scroll-target="#dbscan-core-points-border-points-and-noise"><span class="header-section-number">8.7.1</span> DBSCAN: core points, border points, and noise</a></li>
+  <li><a href="#choosing-eps-and-minpts-in-practice" id="toc-choosing-eps-and-minpts-in-practice" class="nav-link" data-scroll-target="#choosing-eps-and-minpts-in-practice"><span class="header-section-number">8.7.2</span> Choosing eps and minPts in practice</a></li>
+  <li><a href="#applying-dbscan-to-the-wearable-dataset" id="toc-applying-dbscan-to-the-wearable-dataset" class="nav-link" data-scroll-target="#applying-dbscan-to-the-wearable-dataset"><span class="header-section-number">8.7.3</span> Applying DBSCAN to the wearable dataset</a></li>
+  <li><a href="#optics-density-structure-across-scales" id="toc-optics-density-structure-across-scales" class="nav-link" data-scroll-target="#optics-density-structure-across-scales"><span class="header-section-number">8.7.4</span> OPTICS: density structure across scales</a></li>
+  </ul></li>
+  <li><a href="#from-hard-clustering-to-probabilistic-clustering" id="toc-from-hard-clustering-to-probabilistic-clustering" class="nav-link" data-scroll-target="#from-hard-clustering-to-probabilistic-clustering"><span class="header-section-number">8.8</span> From Hard Clustering to Probabilistic Clustering</a>
+  <ul class="collapse">
+  <li><a href="#from-hard-clustering-to-probabilistic-clustering-illustration" id="toc-from-hard-clustering-to-probabilistic-clustering-illustration" class="nav-link" data-scroll-target="#from-hard-clustering-to-probabilistic-clustering-illustration"><span class="header-section-number">8.8.1</span> From hard clustering to probabilistic clustering (illustration)</a></li>
+  <li><a href="#gaussian-mixture-models-gmm" id="toc-gaussian-mixture-models-gmm" class="nav-link" data-scroll-target="#gaussian-mixture-models-gmm"><span class="header-section-number">8.8.2</span> Gaussian Mixture Models (GMM)</a></li>
+  <li><a href="#the-em-algorithm-conceptual-overview" id="toc-the-em-algorithm-conceptual-overview" class="nav-link" data-scroll-target="#the-em-algorithm-conceptual-overview"><span class="header-section-number">8.8.3</span> The EM Algorithm (Conceptual Overview)</a></li>
+  <li><a href="#comparison-with-k-means" id="toc-comparison-with-k-means" class="nav-link" data-scroll-target="#comparison-with-k-means"><span class="header-section-number">8.8.4</span> Comparison with k-means</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -2105,24 +2119,24 @@ Figure&nbsp;8.9: Conceptual illustration of the pseudo-F statistic showing withi
 <pre><code># A tibble: 18 × 6
    centers algorithm     db.test.mean dunn.test.mean G1.test.mean exec.time
      &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt;          &lt;dbl&gt;        &lt;dbl&gt;     &lt;dbl&gt;
- 1       3 Hartigan-Wong         1.04          0.286         55.0   0.00167
- 2       3 Lloyd                 1.04          0.286         55.0   0.00133
- 3       3 MacQueen              1.04          0.286         55.0   0.00140
- 4       4 Hartigan-Wong         1.01          0.344         61.4   0.00202
+ 1       3 Hartigan-Wong         1.04          0.286         55.0   0.00188
+ 2       3 Lloyd                 1.04          0.286         55.0   0.00129
+ 3       3 MacQueen              1.04          0.286         55.0   0.00104
+ 4       4 Hartigan-Wong         1.01          0.344         61.4   0.00213
  5       4 Lloyd                 1.01          0.344         61.4   0.00155
- 6       4 MacQueen              1.01          0.344         61.4   0.00160
- 7       5 Hartigan-Wong         1.15          0.153         55.9   0.00236
- 8       5 Lloyd                 1.16          0.147         55.8   0.00203
- 9       5 MacQueen              1.16          0.157         55.0   0.00149
-10       6 Hartigan-Wong         1.22          0.150         48.8   0.00266
-11       6 Lloyd                 1.22          0.149         49.0   0.00270
-12       6 MacQueen              1.23          0.155         49.4   0.00167
-13       7 Hartigan-Wong         1.29          0.150         44.2   0.00323
-14       7 Lloyd                 1.29          0.158         45.2   0.00266
-15       7 MacQueen              1.31          0.150         44.5   0.00184
-16       8 Hartigan-Wong         1.39          0.147         41.2   0.00366
-17       8 Lloyd                 1.31          0.152         41.6   0.00318
-18       8 MacQueen              1.34          0.151         42.1   0.00211</code></pre>
+ 6       4 MacQueen              1.01          0.344         61.4   0.00124
+ 7       5 Hartigan-Wong         1.15          0.153         55.9   0.00231
+ 8       5 Lloyd                 1.16          0.147         55.8   0.00198
+ 9       5 MacQueen              1.16          0.157         55.0   0.00164
+10       6 Hartigan-Wong         1.22          0.150         48.8   0.00268
+11       6 Lloyd                 1.22          0.149         49.0   0.00261
+12       6 MacQueen              1.23          0.155         49.4   0.00165
+13       7 Hartigan-Wong         1.29          0.150         44.2   0.00319
+14       7 Lloyd                 1.29          0.158         45.2   0.00253
+15       7 MacQueen              1.31          0.150         44.5   0.00182
+16       8 Hartigan-Wong         1.39          0.147         41.2   0.00353
+17       8 Lloyd                 1.31          0.152         41.6   0.00320
+18       8 MacQueen              1.34          0.151         42.1   0.00230</code></pre>
 </div>
 </div>
 <p>In our wearable sensor dataset, all three algorithms identify <span class="math inline">\(\mathbf{k} \boldsymbol{=} \mathbf{4}\)</span> as the configuration with:</p>
@@ -2709,7 +2723,7 @@ Available components:
 </div>
 </div>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 6) PCA scatter (already in your chapter) + optional arrows (biplot-like)</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 6) PCA scatter  + optional arrows (biplot-like)</span></span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ------------------------------------------------------------</span></span>
 <span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># scores (observations x PCs)</span></span>
 <span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(pca_res<span class="sc">$</span>x[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">rownames =</span> <span class="st">"row_id"</span>) <span class="sc">%&gt;%</span></span>
@@ -2801,6 +2815,8 @@ Explained variance:</code></pre>
 </div>
 <p>The PCA diagnostics indicate that PC1 is the dominant axis of variation in the dataset, explaining 55.8% of the total variance, and together with PC2 accounting for 72.1%. This implies that the two-dimensional PC1–PC2 plane provides a meaningful low-dimensional representation of the underlying physiological structure. Inspection of the loadings shows that PC1 contrasts higher heart rate (HR_mean, positive loading) against higher heart rate variability (HRV_sdnn), greater physical activity (steps_mean), higher oxygen saturation (SpO2), and better sleep efficiency (sleep_eff), all with negative loadings of comparable magnitude. Substantively, PC1 can be interpreted as a global physiological gradient separating a more “activated” or stress-like profile (higher heart rate) from a more “recovered” or well-regulated profile (higher autonomic variability, activity, oxygenation, and sleep efficiency). The horizontal separation of clusters in the biplot is largely aligned with this axis.</p>
 <p>PC2, explaining an additional 16.3% of variance, is primarily driven by skin temperature (skin_temp), with a strong negative loading, and secondarily by sleep efficiency and oxygen saturation. This suggests that PC2 captures a thermoregulatory or contextual dimension, potentially reflecting circadian, environmental, or sensor-related effects that are partially independent of the main activation–recovery gradient described by PC1. In practical applications, PC1 can be used to characterize broad physiological phenotypes across individuals, whereas PC2 can help distinguish subgroups with similar global profiles but differing temperature- or sleep-related patterns. Together, these components support both interpretable clustering and dimensionality reduction for downstream modeling or monitoring tasks.</p>
+<p>The arrows represent the projection of the original variables onto the first two principal components. Each arrow indicates the direction of increasing values for that variable in the reduced-dimensional space. The length of the arrow reflects how strongly the variable contributes to the variance captured by PC1 and PC2, while the angle between arrows reflects correlation structure: small angles indicate positive correlation, opposite directions indicate negative correlation, and orthogonal directions suggest approximate independence. Observations located in the direction of a given arrow tend to exhibit higher values of that variable. This visualization therefore allows simultaneous interpretation of cluster separation and underlying physiological drivers.</p>
+<p>In the present biplot figure, this interpretation can be read directly from the spatial alignment of clusters and arrows. The red cluster, positioned on the right-hand side of the plot, lies in the direction of the HR_mean arrow, indicating that this group is characterized by higher resting heart rate. The purple cluster, located on the left-hand side, aligns with the direction of HRV_sdnn, suggesting greater heart rate variability in that subgroup. Finally, the blue cluster, concentrated in the lower portion of the plot, follows the direction of the skin_temp arrow, indicating relatively higher skin temperature values. In this way, the PCA biplot not only visualizes separation between clusters but also clarifies which physiological variables are primarily responsible for that separation.</p>
 </section>
 <section id="using-final-model-to-assign-new-observations" class="level3" data-number="8.5.16">
 <h3 data-number="8.5.16" class="anchored" data-anchor-id="using-final-model-to-assign-new-observations"><span class="header-section-number">8.5.16</span> Using final model to assign new observations</h3>
@@ -3487,6 +3503,1173 @@ True        1  2  3
 <p>The annotation bar on the left indicates the known simulated subtype (A_IFN, B_Inflam, C_Metab). The alignment between the boxed clusters and the annotation colors is striking: each cluster corresponds almost entirely to a single subtype. This indicates that the hierarchical procedure has successfully recovered the embedded structure of the data.</p>
 <p>More importantly, each cluster is characterized by a distinct pattern of coordinated gene expression. Within each boxed region, certain groups of genes appear consistently up-regulated (red) while the same genes are down-regulated (blue) in the other clusters. This pattern reflects subtype-specific molecular programs. For example, a block of genes that is red in one cluster and blue in the others suggests that those genes are preferentially activated in that patient group. Because scaling is gene-wise, these differences represent relative activation within each subtype rather than global shifts in overall expression levels.</p>
 <p>The fact that the identity of “highly expressed” genes changes across clusters is precisely what drives the separation in the dendrogram. Clustering groups patients based on similarity of their multivariate expression profiles; if different subsets of genes are up-regulated in different patient groups, their global expression vectors become distinct. In this sense, the heatmap makes visible the mechanism underlying the clustering: each subtype is defined not by a single gene, but by coordinated shifts in expression across gene modules. These subtype-specific expression signatures generate the distances that the hierarchical algorithm uses to build the tree.</p>
+</section>
+</section>
+<section id="density-based-clustering" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="density-based-clustering"><span class="header-section-number">8.7</span> Density-based clustering</h2>
+<p>Centroid-based methods such as k-means define clusters by proximity to a representative center. This works well when groups are roughly spherical and have comparable spread, but it can fail when clusters have irregular shapes, different densities, or when the dataset contains outliers that should not belong to any cluster. Density-based clustering takes a different view: clusters are defined as contiguous regions of high point density separated by regions of low density.</p>
+<p>In density-based clustering, a “good” cluster is not necessarily centered around a mean. Instead, a cluster is a connected set of observations where each observation lies in a neighborhood that contains “enough” nearby observations. This definition naturally supports non-spherical shapes (e.g., crescents, rings), and it provides an explicit mechanism to label observations that do not belong to any dense region as noise. In biomedical settings, this is often exactly what we want: unusual physiological episodes, artefacts, or rare phenotypes can be flagged rather than forced into a nearest-centroid group.</p>
+<p>Two widely used density-based methods are DBSCAN and OPTICS. DBSCAN is the classic algorithm and introduces the key concepts (core points, border points, and noise). OPTICS generalizes DBSCAN to handle datasets where different clusters have different densities, and it provides a reachability plot that summarizes the cluster structure across scales.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Density-based clustering setup</span></span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="co"># - Simulated 2D examples (non-spherical shapes + noise)</span></span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a><span class="co"># - Wearable dataset example (scaled features)</span></span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Helper: consistent theme</span></span>
+<span id="cb83-9"><a href="#cb83-9" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="dbscan-core-points-border-points-and-noise" class="level3" data-number="8.7.1">
+<h3 data-number="8.7.1" class="anchored" data-anchor-id="dbscan-core-points-border-points-and-noise"><span class="header-section-number">8.7.1</span> DBSCAN: core points, border points, and noise</h3>
+<p>DBSCAN (Density-Based Spatial Clustering of Applications with Noise) defines clusters using two hyperparameters:</p>
+<ul>
+<li>eps: the neighborhood radius ( <span class="math inline">\(\varepsilon\)</span> )</li>
+<li>minPts: the minimum number of points required to form a dense neighborhood</li>
+</ul>
+<p>Given these two values, DBSCAN classifies observations into three types:</p>
+<ul>
+<li>Core point: has at least minPts points (including itself) within distance eps.</li>
+<li>Border point: has fewer than minPts neighbors within eps, but lies within eps of a core point.</li>
+<li>Noise point: is neither a core point nor a border point.</li>
+</ul>
+<p>The next chunk creates three small point clouds to illustrate DBSCAN’s local concept of density: a compact “dense region”, a looser “border region”, and scattered “noise”. It then selects a single candidate point in the dense region and draws its ε-neighborhood (a dashed circle of radius ε). In DBSCAN, whether a point becomes a core point depends on how many points fall inside this circle (including itself). The purpose of the figure is conceptual: it visually anchors the idea that clusters are grown from locally dense neighborhoods rather than around a global centroid.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a><span class="co"># DBSCAN conceptual diagram with explicit epsilon (ε) — FIXED</span></span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb84-8"><a href="#cb84-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-9"><a href="#cb84-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Dense region</span></span>
+<span id="cb84-10"><a href="#cb84-10" aria-hidden="true" tabindex="-1"></a>core_cluster <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb84-11"><a href="#cb84-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">25</span>, <span class="dv">0</span>, <span class="fl">0.25</span>),</span>
+<span id="cb84-12"><a href="#cb84-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">25</span>, <span class="dv">0</span>, <span class="fl">0.25</span>)</span>
+<span id="cb84-13"><a href="#cb84-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb84-14"><a href="#cb84-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-15"><a href="#cb84-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Border-ish region</span></span>
+<span id="cb84-16"><a href="#cb84-16" aria-hidden="true" tabindex="-1"></a>border_points <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb84-17"><a href="#cb84-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">rnorm</span>(<span class="dv">8</span>, <span class="fl">0.8</span>, <span class="fl">0.15</span>),</span>
+<span id="cb84-18"><a href="#cb84-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">rnorm</span>(<span class="dv">8</span>, <span class="fl">0.8</span>, <span class="fl">0.15</span>)</span>
+<span id="cb84-19"><a href="#cb84-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb84-20"><a href="#cb84-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-21"><a href="#cb84-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Noise</span></span>
+<span id="cb84-22"><a href="#cb84-22" aria-hidden="true" tabindex="-1"></a>noise_points <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb84-23"><a href="#cb84-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">10</span>, <span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>),</span>
+<span id="cb84-24"><a href="#cb84-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">10</span>, <span class="sc">-</span><span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb84-25"><a href="#cb84-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb84-26"><a href="#cb84-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-27"><a href="#cb84-27" aria-hidden="true" tabindex="-1"></a>data_all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb84-28"><a href="#cb84-28" aria-hidden="true" tabindex="-1"></a>  core_cluster <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">"Dense region"</span>),</span>
+<span id="cb84-29"><a href="#cb84-29" aria-hidden="true" tabindex="-1"></a>  border_points <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">"Border region"</span>),</span>
+<span id="cb84-30"><a href="#cb84-30" aria-hidden="true" tabindex="-1"></a>  noise_points <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">type =</span> <span class="st">"Noise"</span>)</span>
+<span id="cb84-31"><a href="#cb84-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb84-32"><a href="#cb84-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-33"><a href="#cb84-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Candidate core point (example)</span></span>
+<span id="cb84-34"><a href="#cb84-34" aria-hidden="true" tabindex="-1"></a>example_core <span class="ot">&lt;-</span> core_cluster[<span class="dv">1</span>, ]</span>
+<span id="cb84-35"><a href="#cb84-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-36"><a href="#cb84-36" aria-hidden="true" tabindex="-1"></a>eps <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb84-37"><a href="#cb84-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-38"><a href="#cb84-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Epsilon circle</span></span>
+<span id="cb84-39"><a href="#cb84-39" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>pi, <span class="at">length.out =</span> <span class="dv">300</span>)</span>
+<span id="cb84-40"><a href="#cb84-40" aria-hidden="true" tabindex="-1"></a>circle <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb84-41"><a href="#cb84-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> example_core<span class="sc">$</span>x <span class="sc">+</span> eps <span class="sc">*</span> <span class="fu">cos</span>(theta),</span>
+<span id="cb84-42"><a href="#cb84-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> example_core<span class="sc">$</span>y <span class="sc">+</span> eps <span class="sc">*</span> <span class="fu">sin</span>(theta)</span>
+<span id="cb84-43"><a href="#cb84-43" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb84-44"><a href="#cb84-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-45"><a href="#cb84-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Radius segment as a ONE-ROW tibble</span></span>
+<span id="cb84-46"><a href="#cb84-46" aria-hidden="true" tabindex="-1"></a>radius_seg <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb84-47"><a href="#cb84-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">x    =</span> example_core<span class="sc">$</span>x,</span>
+<span id="cb84-48"><a href="#cb84-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">y    =</span> example_core<span class="sc">$</span>y,</span>
+<span id="cb84-49"><a href="#cb84-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">xend =</span> example_core<span class="sc">$</span>x <span class="sc">+</span> eps,</span>
+<span id="cb84-50"><a href="#cb84-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">yend =</span> example_core<span class="sc">$</span>y</span>
+<span id="cb84-51"><a href="#cb84-51" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb84-52"><a href="#cb84-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-53"><a href="#cb84-53" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_all, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb84-54"><a href="#cb84-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> type), <span class="at">size =</span> <span class="fl">2.5</span>, <span class="at">alpha =</span> <span class="fl">0.85</span>) <span class="sc">+</span></span>
+<span id="cb84-55"><a href="#cb84-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(</span>
+<span id="cb84-56"><a href="#cb84-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> circle, <span class="fu">aes</span>(x, y),</span>
+<span id="cb84-57"><a href="#cb84-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth =</span> <span class="fl">1.1</span>, <span class="at">color =</span> <span class="st">"black"</span></span>
+<span id="cb84-58"><a href="#cb84-58" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb84-59"><a href="#cb84-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(</span>
+<span id="cb84-60"><a href="#cb84-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> radius_seg,</span>
+<span id="cb84-61"><a href="#cb84-61" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">xend =</span> xend, <span class="at">yend =</span> yend),</span>
+<span id="cb84-62"><a href="#cb84-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">linewidth =</span> <span class="fl">1.1</span>, <span class="at">color =</span> <span class="st">"black"</span></span>
+<span id="cb84-63"><a href="#cb84-63" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb84-64"><a href="#cb84-64" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(</span>
+<span id="cb84-65"><a href="#cb84-65" aria-hidden="true" tabindex="-1"></a>    <span class="st">"text"</span>,</span>
+<span id="cb84-66"><a href="#cb84-66" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> example_core<span class="sc">$</span>x <span class="sc">+</span> eps<span class="sc">/</span><span class="dv">2</span>,</span>
+<span id="cb84-67"><a href="#cb84-67" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> example_core<span class="sc">$</span>y <span class="sc">+</span> <span class="fl">0.08</span>,</span>
+<span id="cb84-68"><a href="#cb84-68" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"\u03B5"</span>,  <span class="co"># Greek epsilon character</span></span>
+<span id="cb84-69"><a href="#cb84-69" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">7</span></span>
+<span id="cb84-70"><a href="#cb84-70" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb84-71"><a href="#cb84-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb84-72"><a href="#cb84-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> example_core,</span>
+<span id="cb84-73"><a href="#cb84-73" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(x, y),</span>
+<span id="cb84-74"><a href="#cb84-74" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">"black"</span></span>
+<span id="cb84-75"><a href="#cb84-75" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb84-76"><a href="#cb84-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb84-77"><a href="#cb84-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb84-78"><a href="#cb84-78" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb84-79"><a href="#cb84-79" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"DBSCAN ε-Neighborhood Illustration"</span>,</span>
+<span id="cb84-80"><a href="#cb84-80" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Dashed circle represents the ε-neighborhood around a candidate core point"</span>,</span>
+<span id="cb84-81"><a href="#cb84-81" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="cn">NULL</span></span>
+<span id="cb84-82"><a href="#cb84-82" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The figure above shows that clusters are formed by density connectivity: starting from a core point, DBSCAN expands a cluster by recursively adding all points that are within eps of any core point in the cluster. This expansion continues until no additional points can be added. Points that do not become part of any cluster are labelled as noise.</p>
+<p>The key modeling idea is that DBSCAN does not “force” a partition. If an observation does not live in a sufficiently dense region, it is not assigned to a cluster.</p>
+<p>The next example simulates a classic “non-convex” clustering geometry: two concentric rings plus uniform background noise. The chunk first plots the raw data to show that the structure is not well described by spherical, centroid-based groups. It then fits DBSCAN with chosen eps and minPts. DBSCAN assigns each point either to a cluster (positive integer label) or to cluster 0, which means “noise” (not density-connected to any core region). The final plot overlays this interpretation: points labelled as noise are shown in grey, while density-connected points are colored by cluster label. The purpose is to demonstrate DBSCAN’s two key advantages: (i) it can recover non-spherical structure, and (ii) it can explicitly leave outliers unassigned.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Example 1: Rings + noise</span></span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Three-panel comparison: raw data vs k-means vs DBSCAN</span></span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Layout: ONE plot per row (3 rows total)</span></span>
+<span id="cb85-5"><a href="#cb85-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Goal: DBSCAN recovers exactly TWO ring clusters + explicit noise</span></span>
+<span id="cb85-6"><a href="#cb85-6" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb85-7"><a href="#cb85-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-8"><a href="#cb85-8" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb85-9"><a href="#cb85-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-10"><a href="#cb85-10" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb85-11"><a href="#cb85-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) Simulate two rings + uniform noise (clean geometry)</span></span>
+<span id="cb85-12"><a href="#cb85-12" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb85-13"><a href="#cb85-13" aria-hidden="true" tabindex="-1"></a>n_ring <span class="ot">&lt;-</span> <span class="dv">350</span></span>
+<span id="cb85-14"><a href="#cb85-14" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(n_ring, <span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>pi)</span>
+<span id="cb85-15"><a href="#cb85-15" aria-hidden="true" tabindex="-1"></a>t2 <span class="ot">&lt;-</span> <span class="fu">runif</span>(n_ring, <span class="dv">0</span>, <span class="dv">2</span><span class="sc">*</span>pi)</span>
+<span id="cb85-16"><a href="#cb85-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-17"><a href="#cb85-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Slightly lower jitter -&gt; more uniform local density along each ring</span></span>
+<span id="cb85-18"><a href="#cb85-18" aria-hidden="true" tabindex="-1"></a>ring1 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb85-19"><a href="#cb85-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fl">1.0</span> <span class="sc">*</span> <span class="fu">cos</span>(t1) <span class="sc">+</span> <span class="fu">rnorm</span>(n_ring, <span class="dv">0</span>, <span class="fl">0.05</span>),</span>
+<span id="cb85-20"><a href="#cb85-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fl">1.0</span> <span class="sc">*</span> <span class="fu">sin</span>(t1) <span class="sc">+</span> <span class="fu">rnorm</span>(n_ring, <span class="dv">0</span>, <span class="fl">0.05</span>)</span>
+<span id="cb85-21"><a href="#cb85-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb85-22"><a href="#cb85-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-23"><a href="#cb85-23" aria-hidden="true" tabindex="-1"></a>ring2 <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb85-24"><a href="#cb85-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fl">2.2</span> <span class="sc">*</span> <span class="fu">cos</span>(t2) <span class="sc">+</span> <span class="fu">rnorm</span>(n_ring, <span class="dv">0</span>, <span class="fl">0.06</span>),</span>
+<span id="cb85-25"><a href="#cb85-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fl">2.2</span> <span class="sc">*</span> <span class="fu">sin</span>(t2) <span class="sc">+</span> <span class="fu">rnorm</span>(n_ring, <span class="dv">0</span>, <span class="fl">0.06</span>)</span>
+<span id="cb85-26"><a href="#cb85-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb85-27"><a href="#cb85-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-28"><a href="#cb85-28" aria-hidden="true" tabindex="-1"></a>noise <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb85-29"><a href="#cb85-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">runif</span>(<span class="dv">140</span>, <span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>),</span>
+<span id="cb85-30"><a href="#cb85-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">runif</span>(<span class="dv">140</span>, <span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb85-31"><a href="#cb85-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb85-32"><a href="#cb85-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-33"><a href="#cb85-33" aria-hidden="true" tabindex="-1"></a>toy_db <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb85-34"><a href="#cb85-34" aria-hidden="true" tabindex="-1"></a>  ring1 <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">source =</span> <span class="st">"ring1"</span>),</span>
+<span id="cb85-35"><a href="#cb85-35" aria-hidden="true" tabindex="-1"></a>  ring2 <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">source =</span> <span class="st">"ring2"</span>),</span>
+<span id="cb85-36"><a href="#cb85-36" aria-hidden="true" tabindex="-1"></a>  noise <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">source =</span> <span class="st">"noise"</span>)</span>
+<span id="cb85-37"><a href="#cb85-37" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb85-38"><a href="#cb85-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-39"><a href="#cb85-39" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb85-40"><a href="#cb85-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 1: raw geometry (rings highlighted; noise faded)</span></span>
+<span id="cb85-41"><a href="#cb85-41" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb85-42"><a href="#cb85-42" aria-hidden="true" tabindex="-1"></a>p_raw <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(toy_db, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb85-43"><a href="#cb85-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb85-44"><a href="#cb85-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">subset</span>(toy_db, source <span class="sc">==</span> <span class="st">"noise"</span>),</span>
+<span id="cb85-45"><a href="#cb85-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.20</span>, <span class="at">size =</span> <span class="fl">1.7</span>, <span class="at">color =</span> <span class="st">"grey75"</span></span>
+<span id="cb85-46"><a href="#cb85-46" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb85-47"><a href="#cb85-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb85-48"><a href="#cb85-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">subset</span>(toy_db, source <span class="sc">!=</span> <span class="st">"noise"</span>),</span>
+<span id="cb85-49"><a href="#cb85-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">color =</span> source),</span>
+<span id="cb85-50"><a href="#cb85-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.90</span>, <span class="at">size =</span> <span class="fl">1.7</span></span>
+<span id="cb85-51"><a href="#cb85-51" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb85-52"><a href="#cb85-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb85-53"><a href="#cb85-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb85-54"><a href="#cb85-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Toy data: two rings + uniform noise"</span>,</span>
+<span id="cb85-55"><a href="#cb85-55" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Non-convex geometry (centroid-based methods struggle)"</span>,</span>
+<span id="cb85-56"><a href="#cb85-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Source"</span></span>
+<span id="cb85-57"><a href="#cb85-57" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb85-58"><a href="#cb85-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb85-59"><a href="#cb85-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-60"><a href="#cb85-60" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb85-61"><a href="#cb85-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 2: k-means on the same data (k = 2)</span></span>
+<span id="cb85-62"><a href="#cb85-62" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb85-63"><a href="#cb85-63" aria-hidden="true" tabindex="-1"></a>km_fit <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(toy_db[, <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)], <span class="at">centers =</span> <span class="dv">2</span>, <span class="at">nstart =</span> <span class="dv">20</span>)</span>
+<span id="cb85-64"><a href="#cb85-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-65"><a href="#cb85-65" aria-hidden="true" tabindex="-1"></a>toy_km <span class="ot">&lt;-</span> toy_db <span class="sc">%&gt;%</span></span>
+<span id="cb85-66"><a href="#cb85-66" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">km_cluster =</span> <span class="fu">factor</span>(km_fit<span class="sc">$</span>cluster))</span>
+<span id="cb85-67"><a href="#cb85-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-68"><a href="#cb85-68" aria-hidden="true" tabindex="-1"></a>p_km <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(toy_km, <span class="fu">aes</span>(x, y, <span class="at">color =</span> km_cluster)) <span class="sc">+</span></span>
+<span id="cb85-69"><a href="#cb85-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.75</span>, <span class="at">size =</span> <span class="fl">1.7</span>) <span class="sc">+</span></span>
+<span id="cb85-70"><a href="#cb85-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb85-71"><a href="#cb85-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb85-72"><a href="#cb85-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"k-means result (k = 2)"</span>,</span>
+<span id="cb85-73"><a href="#cb85-73" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Centroid-based partition (often cuts across rings)"</span>,</span>
+<span id="cb85-74"><a href="#cb85-74" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Cluster"</span></span>
+<span id="cb85-75"><a href="#cb85-75" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb85-76"><a href="#cb85-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb85-77"><a href="#cb85-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-78"><a href="#cb85-78" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb85-79"><a href="#cb85-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 3: DBSCAN (noise in grey, clusters in color)</span></span>
+<span id="cb85-80"><a href="#cb85-80" aria-hidden="true" tabindex="-1"></a><span class="co"># Choose eps so each ring stays density-connected as ONE cluster.</span></span>
+<span id="cb85-81"><a href="#cb85-81" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb85-82"><a href="#cb85-82" aria-hidden="true" tabindex="-1"></a>eps_use   <span class="ot">&lt;-</span> <span class="fl">0.28</span></span>
+<span id="cb85-83"><a href="#cb85-83" aria-hidden="true" tabindex="-1"></a>minPts_use <span class="ot">&lt;-</span> <span class="dv">10</span> </span>
+<span id="cb85-84"><a href="#cb85-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-85"><a href="#cb85-85" aria-hidden="true" tabindex="-1"></a>db_fit <span class="ot">&lt;-</span> dbscan<span class="sc">::</span><span class="fu">dbscan</span>(toy_db[, <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)], <span class="at">eps =</span> eps_use, <span class="at">minPts =</span> minPts_use)</span>
+<span id="cb85-86"><a href="#cb85-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-87"><a href="#cb85-87" aria-hidden="true" tabindex="-1"></a>toy_db2 <span class="ot">&lt;-</span> toy_db <span class="sc">%&gt;%</span></span>
+<span id="cb85-88"><a href="#cb85-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb85-89"><a href="#cb85-89" aria-hidden="true" tabindex="-1"></a>    <span class="at">cluster   =</span> db_fit<span class="sc">$</span>cluster,     <span class="co"># numeric label; 0 = noise</span></span>
+<span id="cb85-90"><a href="#cb85-90" aria-hidden="true" tabindex="-1"></a>    <span class="at">is_noise  =</span> cluster <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb85-91"><a href="#cb85-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">cluster_f =</span> <span class="fu">factor</span>(cluster)</span>
+<span id="cb85-92"><a href="#cb85-92" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb85-93"><a href="#cb85-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-94"><a href="#cb85-94" aria-hidden="true" tabindex="-1"></a>p_db <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(toy_db2, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb85-95"><a href="#cb85-95" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb85-96"><a href="#cb85-96" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">subset</span>(toy_db2, is_noise),</span>
+<span id="cb85-97"><a href="#cb85-97" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"grey60"</span>,</span>
+<span id="cb85-98"><a href="#cb85-98" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.35</span>,</span>
+<span id="cb85-99"><a href="#cb85-99" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">1.7</span></span>
+<span id="cb85-100"><a href="#cb85-100" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb85-101"><a href="#cb85-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb85-102"><a href="#cb85-102" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">subset</span>(toy_db2, <span class="sc">!</span>is_noise),</span>
+<span id="cb85-103"><a href="#cb85-103" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">color =</span> cluster_f),</span>
+<span id="cb85-104"><a href="#cb85-104" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.90</span>,</span>
+<span id="cb85-105"><a href="#cb85-105" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">1.7</span></span>
+<span id="cb85-106"><a href="#cb85-106" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb85-107"><a href="#cb85-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb85-108"><a href="#cb85-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb85-109"><a href="#cb85-109" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"DBSCAN result"</span>,</span>
+<span id="cb85-110"><a href="#cb85-110" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"eps = "</span>, eps_use, <span class="st">", minPts = "</span>, minPts_use, <span class="st">" (cluster 0 = noise)"</span>),</span>
+<span id="cb85-111"><a href="#cb85-111" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Cluster"</span></span>
+<span id="cb85-112"><a href="#cb85-112" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb85-113"><a href="#cb85-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb85-114"><a href="#cb85-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb85-115"><a href="#cb85-115" aria-hidden="true" tabindex="-1"></a>p_raw</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>p_km</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-23-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>p_db</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-23-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The three figures presents three views of the same simulated dataset in order to contrast centroid-based and density-based clustering. The first plot shows the raw geometry: two concentric rings embedded in uniformly distributed background noise. This structure is non-convex, meaning that meaningful clusters follow curved manifolds rather than compact, spherical regions.</p>
+<p>The second plot shows the result of applying k-means with k = 2. Because k-means minimizes within-cluster sum of squares, it prefers convex clusters separated by (approximately) linear boundaries in the feature space. On ring-shaped data, this tends to split the plane into two halves, cutting across both rings and mixing points that are close in Euclidean distance but belong to different parts of the same ring.</p>
+<p>The third plot shows DBSCAN using a fixed ε (neighborhood radius) and minPts (minimum neighbors required for a dense region). DBSCAN labels points as either density-connected cluster members (positive integer labels) or noise (cluster 0). Here, the two rings are recovered as two coherent clusters because points remain connected through overlapping ε-neighborhoods along each ring, while isolated background points are left unassigned and appear in grey. This illustrates DBSCAN’s key advantage on non-convex structure: clusters are grown by local density connectivity, and outliers can be explicitly treated as noise rather than forced into a nearest-centroid partition.</p>
+<p>The choice of ε directly controls the scale of density connectivity. If ε is too small, local gaps along a structure may break connectivity and fragment a single geometric object into multiple clusters. If ε is too large, distinct structures may merge and background noise may be absorbed into clusters.</p>
+<p>The following illustration applies three different ε values to the same ring dataset while keeping <code>minPts</code> fixed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Sensitivity of DBSCAN to epsilon (ε)</span></span>
+<span id="cb88-3"><a href="#cb88-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Same data, different ε values</span></span>
+<span id="cb88-4"><a href="#cb88-4" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb88-5"><a href="#cb88-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-6"><a href="#cb88-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep minPts fixed</span></span>
+<span id="cb88-7"><a href="#cb88-7" aria-hidden="true" tabindex="-1"></a>minPts_demo <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb88-8"><a href="#cb88-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-9"><a href="#cb88-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Three epsilon values</span></span>
+<span id="cb88-10"><a href="#cb88-10" aria-hidden="true" tabindex="-1"></a>eps_small  <span class="ot">&lt;-</span> <span class="fl">0.15</span>   <span class="co"># Too small -&gt; fragmentation</span></span>
+<span id="cb88-11"><a href="#cb88-11" aria-hidden="true" tabindex="-1"></a>eps_good   <span class="ot">&lt;-</span> <span class="fl">0.28</span>   <span class="co"># Reasonable -&gt; two rings recovered</span></span>
+<span id="cb88-12"><a href="#cb88-12" aria-hidden="true" tabindex="-1"></a>eps_large  <span class="ot">&lt;-</span> <span class="fl">0.55</span>   <span class="co"># Too large -&gt; merging + noise absorbed</span></span>
+<span id="cb88-13"><a href="#cb88-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-14"><a href="#cb88-14" aria-hidden="true" tabindex="-1"></a>run_dbscan_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(eps_value, title_text) {</span>
+<span id="cb88-15"><a href="#cb88-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb88-16"><a href="#cb88-16" aria-hidden="true" tabindex="-1"></a>  db_fit <span class="ot">&lt;-</span> dbscan<span class="sc">::</span><span class="fu">dbscan</span>(toy_db[, <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)],</span>
+<span id="cb88-17"><a href="#cb88-17" aria-hidden="true" tabindex="-1"></a>                           <span class="at">eps =</span> eps_value,</span>
+<span id="cb88-18"><a href="#cb88-18" aria-hidden="true" tabindex="-1"></a>                           <span class="at">minPts =</span> minPts_demo)</span>
+<span id="cb88-19"><a href="#cb88-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb88-20"><a href="#cb88-20" aria-hidden="true" tabindex="-1"></a>  toy_tmp <span class="ot">&lt;-</span> toy_db <span class="sc">%&gt;%</span></span>
+<span id="cb88-21"><a href="#cb88-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb88-22"><a href="#cb88-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">cluster   =</span> db_fit<span class="sc">$</span>cluster,</span>
+<span id="cb88-23"><a href="#cb88-23" aria-hidden="true" tabindex="-1"></a>      <span class="at">is_noise  =</span> cluster <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb88-24"><a href="#cb88-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">cluster_f =</span> <span class="fu">factor</span>(cluster)</span>
+<span id="cb88-25"><a href="#cb88-25" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb88-26"><a href="#cb88-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb88-27"><a href="#cb88-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(toy_tmp, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb88-28"><a href="#cb88-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(</span>
+<span id="cb88-29"><a href="#cb88-29" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> <span class="fu">subset</span>(toy_tmp, is_noise),</span>
+<span id="cb88-30"><a href="#cb88-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">color =</span> <span class="st">"grey60"</span>,</span>
+<span id="cb88-31"><a href="#cb88-31" aria-hidden="true" tabindex="-1"></a>      <span class="at">alpha =</span> <span class="fl">0.35</span>,</span>
+<span id="cb88-32"><a href="#cb88-32" aria-hidden="true" tabindex="-1"></a>      <span class="at">size =</span> <span class="fl">1.5</span></span>
+<span id="cb88-33"><a href="#cb88-33" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb88-34"><a href="#cb88-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(</span>
+<span id="cb88-35"><a href="#cb88-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> <span class="fu">subset</span>(toy_tmp, <span class="sc">!</span>is_noise),</span>
+<span id="cb88-36"><a href="#cb88-36" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(<span class="at">color =</span> cluster_f),</span>
+<span id="cb88-37"><a href="#cb88-37" aria-hidden="true" tabindex="-1"></a>      <span class="at">alpha =</span> <span class="fl">0.9</span>,</span>
+<span id="cb88-38"><a href="#cb88-38" aria-hidden="true" tabindex="-1"></a>      <span class="at">size =</span> <span class="fl">1.5</span></span>
+<span id="cb88-39"><a href="#cb88-39" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb88-40"><a href="#cb88-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb88-41"><a href="#cb88-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb88-42"><a href="#cb88-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb88-43"><a href="#cb88-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb88-44"><a href="#cb88-44" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> title_text,</span>
+<span id="cb88-45"><a href="#cb88-45" aria-hidden="true" tabindex="-1"></a>      <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"eps = "</span>, eps_value,</span>
+<span id="cb88-46"><a href="#cb88-46" aria-hidden="true" tabindex="-1"></a>                        <span class="st">", minPts = "</span>, minPts_demo)</span>
+<span id="cb88-47"><a href="#cb88-47" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb88-48"><a href="#cb88-48" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb88-49"><a href="#cb88-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-50"><a href="#cb88-50" aria-hidden="true" tabindex="-1"></a>p_small <span class="ot">&lt;-</span> <span class="fu">run_dbscan_plot</span>(eps_small,</span>
+<span id="cb88-51"><a href="#cb88-51" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"ε too small: ring fragments into multiple clusters"</span>)</span>
+<span id="cb88-52"><a href="#cb88-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-53"><a href="#cb88-53" aria-hidden="true" tabindex="-1"></a>p_good  <span class="ot">&lt;-</span> <span class="fu">run_dbscan_plot</span>(eps_good,</span>
+<span id="cb88-54"><a href="#cb88-54" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"ε well calibrated: two rings recovered"</span>)</span>
+<span id="cb88-55"><a href="#cb88-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-56"><a href="#cb88-56" aria-hidden="true" tabindex="-1"></a>p_large <span class="ot">&lt;-</span> <span class="fu">run_dbscan_plot</span>(eps_large,</span>
+<span id="cb88-57"><a href="#cb88-57" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"ε too large: clusters merge and noise is absorbed"</span>)</span>
+<span id="cb88-58"><a href="#cb88-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb88-59"><a href="#cb88-59" aria-hidden="true" tabindex="-1"></a>p_small</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>p_good</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-24-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a>p_large</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-24-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="choosing-eps-and-minpts-in-practice" class="level3" data-number="8.7.2">
+<h3 data-number="8.7.2" class="anchored" data-anchor-id="choosing-eps-and-minpts-in-practice"><span class="header-section-number">8.7.2</span> Choosing eps and minPts in practice</h3>
+<p>DBSCAN’s behavior is governed by eps and minPts, and these parameters must be chosen relative to the scale and dimensionality of the data. Two practical heuristics are commonly used:</p>
+<ul>
+<li><p>Standardize features before clustering so that distances are comparable across variables.</p></li>
+<li><p>Use a k-nearest-neighbor distance plot (kNN distance plot) to select eps.</p></li>
+</ul>
+<p>The kNN distance plot works as follows. Fix minPts, and for each observation compute the distance to its k-th nearest neighbor (where <span class="math inline">\(\mathrm{k}=\)</span> minPts). Sort these distances from smallest to largest and plot them. A typical “elbow” indicates a transition from points inside dense regions to points in sparse regions. Choosing eps near this elbow often yields a reasonable clustering.</p>
+<p>The minPts parameter is often set to a small integer (e.g., 5-15) depending on sample size and expected cluster granularity. In higher dimensions, density becomes harder to estimate, and DBSCAN may require larger minPts or may become unstable. This is not a failure of implementation but a reflection of the curse of dimensionality: in high-dimensional spaces, distances become less informative and local neighborhoods become sparse.</p>
+<p>The next chunk of code implements a practical heuristic for selecting eps. After fixing minPts, it computes, for every point, the distance to its k-th nearest neighbor (with k = minPts) and sorts these distances. Points inside dense regions tend to have small kNN distances; points in sparse regions (including noise) have larger kNN distances. The “elbow” in the sorted curve often marks a transition between these regimes, and choosing eps near that elbow typically yields a reasonable density threshold for DBSCAN.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a><span class="co"># kNN distance plot for eps selection (heuristic)</span></span>
+<span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb91-4"><a href="#cb91-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-5"><a href="#cb91-5" aria-hidden="true" tabindex="-1"></a>minPts <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb91-6"><a href="#cb91-6" aria-hidden="true" tabindex="-1"></a>knn <span class="ot">&lt;-</span> dbscan<span class="sc">::</span><span class="fu">kNNdist</span>(toy_db[, <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)], <span class="at">k =</span> minPts)</span>
+<span id="cb91-7"><a href="#cb91-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-8"><a href="#cb91-8" aria-hidden="true" tabindex="-1"></a>knn_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb91-9"><a href="#cb91-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">idx =</span> <span class="fu">seq_along</span>(knn),</span>
+<span id="cb91-10"><a href="#cb91-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">knn_dist =</span> <span class="fu">sort</span>(knn)</span>
+<span id="cb91-11"><a href="#cb91-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb91-12"><a href="#cb91-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-13"><a href="#cb91-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(knn_df, <span class="fu">aes</span>(idx, knn_dist)) <span class="sc">+</span></span>
+<span id="cb91-14"><a href="#cb91-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb91-15"><a href="#cb91-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">1.5</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>) <span class="sc">+</span></span>
+<span id="cb91-16"><a href="#cb91-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb91-17"><a href="#cb91-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"kNN distance plot (eps selection heuristic)"</span>,</span>
+<span id="cb91-18"><a href="#cb91-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"k = minPts = "</span>, minPts, <span class="st">" (look for an elbow)"</span>),</span>
+<span id="cb91-19"><a href="#cb91-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Sorted observations"</span>,</span>
+<span id="cb91-20"><a href="#cb91-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">paste0</span>(<span class="st">"Distance to the "</span>, minPts, <span class="st">"-th nearest neighbor"</span>)</span>
+<span id="cb91-21"><a href="#cb91-21" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="applying-dbscan-to-the-wearable-dataset" class="level3" data-number="8.7.3">
+<h3 data-number="8.7.3" class="anchored" data-anchor-id="applying-dbscan-to-the-wearable-dataset"><span class="header-section-number">8.7.3</span> Applying DBSCAN to the wearable dataset</h3>
+<p>In the wearable dataset, each observation corresponds to an individual summarized by a set of scaled physiological variables (resting heart rate, HRV, steps, skin temperature, oxygen saturation, and sleep efficiency). When applying DBSCAN here, we typically standardize all variables (as we already do for kmeans), and then run a kNN distance plot to choose an eps value.</p>
+<p>The interpretation differs from k-means. DBSCAN may return: - a few dense physiological phenotypes (clusters), and - a set of “noise” observations that do not belong to any dense region</p>
+<p>In a real remote-monitoring setting, these noise observations might correspond to unusual states (e.g., transient fever, sensor artefacts, or atypical recovery profiles). In a simulated dataset like ours, DBSCAN may or may not label a noise set depending on how separated and how dense the simulated groups are. This is not a bug; it is precisely the point of a density-based definition.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a><span class="co"># DBSCAN on the wearable dataset (scaled features)</span></span>
+<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb92-5"><a href="#cb92-5" aria-hidden="true" tabindex="-1"></a>wear <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"~/att_ai_ml/att_book/data/wearable_cluster.rds"</span>)</span>
+<span id="cb92-6"><a href="#cb92-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb92-7"><a href="#cb92-7" aria-hidden="true" tabindex="-1"></a>wear_scaled <span class="ot">&lt;-</span> wear <span class="sc">%&gt;%</span></span>
+<span id="cb92-8"><a href="#cb92-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(HR_mean<span class="sc">:</span>sleep_eff, <span class="sc">~</span> <span class="fu">as.numeric</span>(<span class="fu">scale</span>(.))))</span>
+<span id="cb92-9"><a href="#cb92-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb92-10"><a href="#cb92-10" aria-hidden="true" tabindex="-1"></a>X_wear <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(wear_scaled <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(HR_mean<span class="sc">:</span>sleep_eff))</span>
+<span id="cb92-11"><a href="#cb92-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb92-12"><a href="#cb92-12" aria-hidden="true" tabindex="-1"></a>minPts_wear <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb92-13"><a href="#cb92-13" aria-hidden="true" tabindex="-1"></a>knn_wear <span class="ot">&lt;-</span> dbscan<span class="sc">::</span><span class="fu">kNNdist</span>(X_wear, <span class="at">k =</span> minPts_wear)</span>
+<span id="cb92-14"><a href="#cb92-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb92-15"><a href="#cb92-15" aria-hidden="true" tabindex="-1"></a>knn_wear_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb92-16"><a href="#cb92-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">idx =</span> <span class="fu">seq_along</span>(knn_wear),</span>
+<span id="cb92-17"><a href="#cb92-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">knn_dist =</span> <span class="fu">sort</span>(knn_wear)</span>
+<span id="cb92-18"><a href="#cb92-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb92-19"><a href="#cb92-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb92-20"><a href="#cb92-20" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(knn_wear_df, <span class="fu">aes</span>(idx, knn_dist)) <span class="sc">+</span></span>
+<span id="cb92-21"><a href="#cb92-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb92-22"><a href="#cb92-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">1.2</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb92-23"><a href="#cb92-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb92-24"><a href="#cb92-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Wearable data: kNN distance plot"</span>,</span>
+<span id="cb92-25"><a href="#cb92-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"k = minPts = "</span>, minPts_wear, <span class="st">" (choose eps near the elbow)"</span>),</span>
+<span id="cb92-26"><a href="#cb92-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Sorted observations"</span>,</span>
+<span id="cb92-27"><a href="#cb92-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">paste0</span>(<span class="st">"Distance to the "</span>, minPts_wear, <span class="st">"-th nearest neighbor"</span>)</span>
+<span id="cb92-28"><a href="#cb92-28" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>eps_wear <span class="ot">&lt;-</span> <span class="fl">1.1</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>db_wear <span class="ot">&lt;-</span> dbscan<span class="sc">::</span><span class="fu">dbscan</span>(X_wear, <span class="at">eps =</span> eps_wear, <span class="at">minPts =</span> minPts_wear)</span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a>wear_db <span class="ot">&lt;-</span> wear_scaled <span class="sc">%&gt;%</span></span>
+<span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb93-6"><a href="#cb93-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">db_cluster_num =</span> db_wear<span class="sc">$</span>cluster,</span>
+<span id="cb93-7"><a href="#cb93-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">db_is_noise    =</span> db_cluster_num <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb93-8"><a href="#cb93-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">db_cluster     =</span> <span class="fu">factor</span>(db_cluster_num)</span>
+<span id="cb93-9"><a href="#cb93-9" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb93-10"><a href="#cb93-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-11"><a href="#cb93-11" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(wear_db<span class="sc">$</span>db_cluster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  0   1   2   3   4 
+ 16 157 316 156 155 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(wear_db, <span class="fu">aes</span>(HR_mean, steps_mean)) <span class="sc">+</span></span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">subset</span>(wear_db, db_is_noise),</span>
+<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"grey60"</span>,</span>
+<span id="cb95-5"><a href="#cb95-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.45</span>,</span>
+<span id="cb95-6"><a href="#cb95-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">2</span></span>
+<span id="cb95-7"><a href="#cb95-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb95-8"><a href="#cb95-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb95-9"><a href="#cb95-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">subset</span>(wear_db, <span class="sc">!</span>db_is_noise),</span>
+<span id="cb95-10"><a href="#cb95-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">color =</span> db_cluster),</span>
+<span id="cb95-11"><a href="#cb95-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.80</span>,</span>
+<span id="cb95-12"><a href="#cb95-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">2</span></span>
+<span id="cb95-13"><a href="#cb95-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb95-14"><a href="#cb95-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb95-15"><a href="#cb95-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Wearable data: DBSCAN clusters"</span>,</span>
+<span id="cb95-16"><a href="#cb95-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"eps = "</span>, eps_wear, <span class="st">", minPts = "</span>, minPts_wear, <span class="st">" (noise shown in grey)"</span>),</span>
+<span id="cb95-17"><a href="#cb95-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Scaled resting heart rate"</span>,</span>
+<span id="cb95-18"><a href="#cb95-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Scaled daily steps"</span>,</span>
+<span id="cb95-19"><a href="#cb95-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"DBSCAN cluster"</span></span>
+<span id="cb95-20"><a href="#cb95-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb95-21"><a href="#cb95-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-26-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The last chunk applies DBSCAN to the wearable dataset after standardizing all physiological variables to ensure that distances are comparable across features. The algorithm is run on the full multivariate feature space (resting heart rate, HRV, steps, skin temperature, oxygen saturation, and sleep efficiency), not just the two variables shown in the final visualization. A k-nearest-neighbor distance plot is first constructed with <span class="math inline">\(k=\operatorname{minPts}=10\)</span> to guide the choice of <span class="math inline">\(\varepsilon\)</span>. The elbow in this plot suggests a reasonable density threshold, and <span class="math inline">\(\varepsilon=1.1\)</span> is selected. DBSCAN then assigns each observation either to a densityconnected cluster (positive integer label) or to cluster 0 (noise). The table of cluster counts provides a numerical summary of the partition.</p>
+<p>The final figure displays the clustering in a two-dimensional projection (scaled resting heart rate vs.&nbsp;scaled daily steps) for interpretability. Although clustering was performed in the full feature space, this projection reveals several well-separated physiological phenotypes. Points shown in grey correspond to observations that do not belong to any sufficiently dense region under the chosen parameters, while colored points indicate density-connected clusters. In this simulated wearable dataset, DBSCAN identifies distinct groups with coherent physiological profiles while explicitly leaving atypical or isolated patterns unassigned. This illustrates the practical advantage of density-based clustering in healthmonitoring contexts, where unusual or transient states may be better treated as noise rather than forced into predefined clusters.</p>
+</section>
+<section id="optics-density-structure-across-scales" class="level3" data-number="8.7.4">
+<h3 data-number="8.7.4" class="anchored" data-anchor-id="optics-density-structure-across-scales"><span class="header-section-number">8.7.4</span> OPTICS: density structure across scales</h3>
+<p>A common limitation of DBSCAN is that it assumes a single global density level: one eps value is used everywhere. In real datasets, different clusters may have different densities. For example, one physiological phenotype might be tightly concentrated (high-density cluster), while another is more diffuse (lower-density cluster). A single eps value may either fragment the dense cluster or merge the diffuse cluster with noise.</p>
+<p>OPTICS (Ordering Points To Identify the Clustering Structure) addresses this by producing an ordering of points and a reachability distance for each point. Rather than committing to one eps threshold, OPTICS summarizes the density landscape across a range of eps values. The main output is a reachability plot:</p>
+<ul>
+<li>Valleys correspond to clusters (high density).</li>
+<li>Peaks correspond to transitions between clusters or sparse regions.</li>
+</ul>
+<p>Clusters can then be extracted from OPTICS by choosing a reachability threshold or by using automated extraction methods.</p>
+<p>Conceptually, OPTICS can be seen as “DBSCAN for multiple eps values,” providing a more robust view when densities vary.</p>
+<p>This example applies OPTICS to the same ring dataset previously analyzed with DBSCAN. Unlike DBSCAN, OPTICS does not commit to a single global ε value during clustering. Instead, it computes an ordering of observations together with a reachability distance that reflects the local density structure of the data. The reachability plot displays this structure: valleys correspond to dense, internally connected regions (the rings), while peaks indicate transitions through sparse areas or noise.</p>
+<p>Clusters can then be extracted by selecting a reachability threshold (here eps_cl = 0.28), which is conceptually similar to applying DBSCAN at that density level. Because OPTICS captures the density landscape across scales before extraction, it is often more robust when clusters have varying densities or when a single global ε would either fragment a structure or merge distinct regions. In the ring dataset, OPTICS recovers the same non-convex geometry while providing a richer diagnostic view of density structure through the reachability plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="co"># OPTICS on the same ring dataset used for DBSCAN</span></span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb96-4"><a href="#cb96-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-5"><a href="#cb96-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the same toy_db (two rings + noise)</span></span>
+<span id="cb96-6"><a href="#cb96-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-7"><a href="#cb96-7" aria-hidden="true" tabindex="-1"></a>minPts_opt <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb96-8"><a href="#cb96-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-9"><a href="#cb96-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit OPTICS</span></span>
+<span id="cb96-10"><a href="#cb96-10" aria-hidden="true" tabindex="-1"></a>opt_fit <span class="ot">&lt;-</span> dbscan<span class="sc">::</span><span class="fu">optics</span>(toy_db[, <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>)],</span>
+<span id="cb96-11"><a href="#cb96-11" aria-hidden="true" tabindex="-1"></a>                          <span class="at">minPts =</span> minPts_opt)</span>
+<span id="cb96-12"><a href="#cb96-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-13"><a href="#cb96-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb96-14"><a href="#cb96-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Reachability plot</span></span>
+<span id="cb96-15"><a href="#cb96-15" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb96-16"><a href="#cb96-16" aria-hidden="true" tabindex="-1"></a>reach_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb96-17"><a href="#cb96-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">order =</span> <span class="fu">seq_along</span>(opt_fit<span class="sc">$</span>order),</span>
+<span id="cb96-18"><a href="#cb96-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">reachability =</span> opt_fit<span class="sc">$</span>reachdist[opt_fit<span class="sc">$</span>order]</span>
+<span id="cb96-19"><a href="#cb96-19" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb96-20"><a href="#cb96-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">reachability =</span> <span class="fu">ifelse</span>(<span class="fu">is.finite</span>(reachability),</span>
+<span id="cb96-21"><a href="#cb96-21" aria-hidden="true" tabindex="-1"></a>                               reachability,</span>
+<span id="cb96-22"><a href="#cb96-22" aria-hidden="true" tabindex="-1"></a>                               <span class="cn">NA_real_</span>))</span>
+<span id="cb96-23"><a href="#cb96-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-24"><a href="#cb96-24" aria-hidden="true" tabindex="-1"></a>p_reach <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(reach_df, <span class="fu">aes</span>(order, reachability)) <span class="sc">+</span></span>
+<span id="cb96-25"><a href="#cb96-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">alpha =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb96-26"><a href="#cb96-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb96-27"><a href="#cb96-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb96-28"><a href="#cb96-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"OPTICS reachability plot (rings dataset)"</span>,</span>
+<span id="cb96-29"><a href="#cb96-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Valleys correspond to dense ring structures"</span>,</span>
+<span id="cb96-30"><a href="#cb96-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"OPTICS ordering"</span>,</span>
+<span id="cb96-31"><a href="#cb96-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Reachability distance"</span></span>
+<span id="cb96-32"><a href="#cb96-32" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb96-33"><a href="#cb96-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-34"><a href="#cb96-34" aria-hidden="true" tabindex="-1"></a>p_reach</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract clusters using a chosen reachability threshold</span></span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a>eps_extract <span class="ot">&lt;-</span> <span class="fl">0.28</span>   <span class="co"># similar scale to DBSCAN example</span></span>
+<span id="cb97-5"><a href="#cb97-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-6"><a href="#cb97-6" aria-hidden="true" tabindex="-1"></a>cl_opt <span class="ot">&lt;-</span> dbscan<span class="sc">::</span><span class="fu">extractDBSCAN</span>(opt_fit,</span>
+<span id="cb97-7"><a href="#cb97-7" aria-hidden="true" tabindex="-1"></a>                                <span class="at">eps_cl =</span> eps_extract)</span>
+<span id="cb97-8"><a href="#cb97-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-9"><a href="#cb97-9" aria-hidden="true" tabindex="-1"></a>toy_opt2 <span class="ot">&lt;-</span> toy_db <span class="sc">%&gt;%</span></span>
+<span id="cb97-10"><a href="#cb97-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">opt_cluster =</span> <span class="fu">factor</span>(cl_opt<span class="sc">$</span>cluster),</span>
+<span id="cb97-11"><a href="#cb97-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">opt_is_noise =</span> cl_opt<span class="sc">$</span>cluster <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb97-12"><a href="#cb97-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-13"><a href="#cb97-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(toy_opt2, <span class="fu">aes</span>(x, y)) <span class="sc">+</span></span>
+<span id="cb97-14"><a href="#cb97-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb97-15"><a href="#cb97-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">subset</span>(toy_opt2, opt_is_noise),</span>
+<span id="cb97-16"><a href="#cb97-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"grey60"</span>,</span>
+<span id="cb97-17"><a href="#cb97-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.40</span>,</span>
+<span id="cb97-18"><a href="#cb97-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">1.7</span></span>
+<span id="cb97-19"><a href="#cb97-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb97-20"><a href="#cb97-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb97-21"><a href="#cb97-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">subset</span>(toy_opt2, <span class="sc">!</span>opt_is_noise),</span>
+<span id="cb97-22"><a href="#cb97-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">color =</span> opt_cluster),</span>
+<span id="cb97-23"><a href="#cb97-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.85</span>,</span>
+<span id="cb97-24"><a href="#cb97-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">1.7</span></span>
+<span id="cb97-25"><a href="#cb97-25" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb97-26"><a href="#cb97-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb97-27"><a href="#cb97-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb97-28"><a href="#cb97-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb97-29"><a href="#cb97-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"OPTICS clusters extracted from rings dataset"</span>,</span>
+<span id="cb97-30"><a href="#cb97-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"eps_cl = "</span>, eps_extract,</span>
+<span id="cb97-31"><a href="#cb97-31" aria-hidden="true" tabindex="-1"></a>                      <span class="st">", minPts = "</span>, minPts_opt,</span>
+<span id="cb97-32"><a href="#cb97-32" aria-hidden="true" tabindex="-1"></a>                      <span class="st">" (noise shown in grey)"</span>),</span>
+<span id="cb97-33"><a href="#cb97-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Cluster"</span></span>
+<span id="cb97-34"><a href="#cb97-34" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-27-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This figure shows the clusters obtained by applying OPTICS to the two-ring dataset and then extracting clusters using a reachability threshold of <span class="math inline">\(\varepsilon_{c l}=0.3\)</span> with <span class="math inline">\(\mathrm{minPts}=10\)</span>. The grey points correspond to observations labeled as noise (cluster 0), while colored points indicate density-connected clusters.</p>
+<p>Two main features are visible. First, the inner ring is recovered as a single coherent cluster (cluster 1), reflecting its strong and uniform local density. Second, the outer ring is also largely recovered as a connected structure, but it appears split into two clusters (clusters 2 and 3). This split reflects subtle density variations along the ring: although geometrically forming one circular structure, local reachability distances differ slightly across segments, and the chosen extraction threshold separates them into two density-connected components.</p>
+<p>Importantly, OPTICS itself does not commit to a fixed global <span class="math inline">\(\varepsilon\)</span> during ordering. The reachability plot (shown earlier) encodes the density landscape across scales, and clusters are only defined when a specific extraction threshold is applied. Thus, the fragmentation of the outer ring here is not a failure of OPTICS but a consequence of the chosen <span class="math inline">\(\varepsilon_{c l}\)</span>. A slightly larger extraction threshold would likely merge clusters 2 and 3 into a single outer-ring cluster.</p>
+<p>Lets now apply optics in our wearables dataset</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a><span class="co"># OPTICS on the wearable dataset (scaled features)</span></span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb98-4"><a href="#cb98-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-5"><a href="#cb98-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Reuse scaled data from DBSCAN section</span></span>
+<span id="cb98-6"><a href="#cb98-6" aria-hidden="true" tabindex="-1"></a><span class="co"># wear_scaled already contains standardized features</span></span>
+<span id="cb98-7"><a href="#cb98-7" aria-hidden="true" tabindex="-1"></a><span class="co"># X_wear is the matrix of scaled physiological variables</span></span>
+<span id="cb98-8"><a href="#cb98-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-9"><a href="#cb98-9" aria-hidden="true" tabindex="-1"></a>minPts_opt_wear <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb98-10"><a href="#cb98-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-11"><a href="#cb98-11" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb98-12"><a href="#cb98-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit OPTICS</span></span>
+<span id="cb98-13"><a href="#cb98-13" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb98-14"><a href="#cb98-14" aria-hidden="true" tabindex="-1"></a>opt_wear <span class="ot">&lt;-</span> dbscan<span class="sc">::</span><span class="fu">optics</span>(X_wear,</span>
+<span id="cb98-15"><a href="#cb98-15" aria-hidden="true" tabindex="-1"></a>                           <span class="at">minPts =</span> minPts_opt_wear)</span>
+<span id="cb98-16"><a href="#cb98-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-17"><a href="#cb98-17" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb98-18"><a href="#cb98-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Reachability plot</span></span>
+<span id="cb98-19"><a href="#cb98-19" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb98-20"><a href="#cb98-20" aria-hidden="true" tabindex="-1"></a>reach_wear_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb98-21"><a href="#cb98-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">order =</span> <span class="fu">seq_along</span>(opt_wear<span class="sc">$</span>order),</span>
+<span id="cb98-22"><a href="#cb98-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">reachability =</span> opt_wear<span class="sc">$</span>reachdist[opt_wear<span class="sc">$</span>order]</span>
+<span id="cb98-23"><a href="#cb98-23" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb98-24"><a href="#cb98-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">reachability =</span> <span class="fu">ifelse</span>(<span class="fu">is.finite</span>(reachability),</span>
+<span id="cb98-25"><a href="#cb98-25" aria-hidden="true" tabindex="-1"></a>                               reachability,</span>
+<span id="cb98-26"><a href="#cb98-26" aria-hidden="true" tabindex="-1"></a>                               <span class="cn">NA_real_</span>))</span>
+<span id="cb98-27"><a href="#cb98-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb98-28"><a href="#cb98-28" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(reach_wear_df, <span class="fu">aes</span>(order, reachability)) <span class="sc">+</span></span>
+<span id="cb98-29"><a href="#cb98-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">alpha =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb98-30"><a href="#cb98-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb98-31"><a href="#cb98-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb98-32"><a href="#cb98-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Wearable data: OPTICS reachability plot"</span>,</span>
+<span id="cb98-33"><a href="#cb98-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"minPts = "</span>, minPts_opt_wear),</span>
+<span id="cb98-34"><a href="#cb98-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"OPTICS ordering"</span>,</span>
+<span id="cb98-35"><a href="#cb98-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Reachability distance"</span></span>
+<span id="cb98-36"><a href="#cb98-36" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The figure above displays the OPTICS reachability plot for the wearable dataset with <span class="math inline">\(\min \mathrm{Pts}=10\)</span>. Each vertical bar represents one observation in the order produced by the OPTICS algorithm, and its height corresponds to the reachability distance-a measure of how far the point must reach to connect to an existing dense region. Low reachability values form visible valleys, which indicate dense and internally coherent regions of the feature space and therefore suggest potential clusters. In contrast, tall peaks correspond to transitions between clusters or to sparse observations that may ultimately be labeled as noise. The presence of multiple broad valleys indicates that the wearable data contain several densitybased subgroups, while differences in valley depth suggest that these groups vary in compactness. Unlike DBSCAN, which requires fixing a single global neighborhood radius in advance, OPTICS first maps the density structure across scales. Clusters are then extracted by choosing a reachability threshold, allowing the analyst to separate stable dense regions while leaving sparse observations unassigned.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract clusters using a reachability threshold</span></span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-5"><a href="#cb99-5" aria-hidden="true" tabindex="-1"></a>eps_cl_wear <span class="ot">&lt;-</span> <span class="fl">1.1</span>   <span class="co"># Adjust based on reachability plot</span></span>
+<span id="cb99-6"><a href="#cb99-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-7"><a href="#cb99-7" aria-hidden="true" tabindex="-1"></a>cl_wear <span class="ot">&lt;-</span> dbscan<span class="sc">::</span><span class="fu">extractDBSCAN</span>(opt_wear,</span>
+<span id="cb99-8"><a href="#cb99-8" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">eps_cl =</span> eps_cl_wear)</span>
+<span id="cb99-9"><a href="#cb99-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-10"><a href="#cb99-10" aria-hidden="true" tabindex="-1"></a>wear_opt <span class="ot">&lt;-</span> wear_scaled <span class="sc">%&gt;%</span></span>
+<span id="cb99-11"><a href="#cb99-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb99-12"><a href="#cb99-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">opt_cluster_num =</span> cl_wear<span class="sc">$</span>cluster,</span>
+<span id="cb99-13"><a href="#cb99-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">opt_is_noise    =</span> opt_cluster_num <span class="sc">==</span> <span class="dv">0</span>,</span>
+<span id="cb99-14"><a href="#cb99-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">opt_cluster     =</span> <span class="fu">factor</span>(opt_cluster_num)</span>
+<span id="cb99-15"><a href="#cb99-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb99-16"><a href="#cb99-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-17"><a href="#cb99-17" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(wear_opt<span class="sc">$</span>opt_cluster)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  0   1   2   3   4 
+ 16 157 156 155 316 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize in HR vs Steps projection</span></span>
+<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb101-4"><a href="#cb101-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(wear_opt, <span class="fu">aes</span>(HR_mean, steps_mean)) <span class="sc">+</span></span>
+<span id="cb101-5"><a href="#cb101-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb101-6"><a href="#cb101-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">subset</span>(wear_opt, opt_is_noise),</span>
+<span id="cb101-7"><a href="#cb101-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"grey60"</span>,</span>
+<span id="cb101-8"><a href="#cb101-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.45</span>,</span>
+<span id="cb101-9"><a href="#cb101-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">2</span></span>
+<span id="cb101-10"><a href="#cb101-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb101-11"><a href="#cb101-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb101-12"><a href="#cb101-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">subset</span>(wear_opt, <span class="sc">!</span>opt_is_noise),</span>
+<span id="cb101-13"><a href="#cb101-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">color =</span> opt_cluster),</span>
+<span id="cb101-14"><a href="#cb101-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.80</span>,</span>
+<span id="cb101-15"><a href="#cb101-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">2</span></span>
+<span id="cb101-16"><a href="#cb101-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb101-17"><a href="#cb101-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb101-18"><a href="#cb101-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Wearable data: OPTICS clusters"</span>,</span>
+<span id="cb101-19"><a href="#cb101-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"eps_cl = "</span>, eps_cl_wear,</span>
+<span id="cb101-20"><a href="#cb101-20" aria-hidden="true" tabindex="-1"></a>                      <span class="st">", minPts = "</span>, minPts_opt_wear,</span>
+<span id="cb101-21"><a href="#cb101-21" aria-hidden="true" tabindex="-1"></a>                      <span class="st">" (noise shown in grey)"</span>),</span>
+<span id="cb101-22"><a href="#cb101-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Scaled resting heart rate"</span>,</span>
+<span id="cb101-23"><a href="#cb101-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Scaled daily steps"</span>,</span>
+<span id="cb101-24"><a href="#cb101-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"OPTICS cluster"</span></span>
+<span id="cb101-25"><a href="#cb101-25" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb101-26"><a href="#cb101-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The last two example chunks applie OPTICS to the wearable dataset using the same standardized physiological variables previously used for DBSCAN. As with DBSCAN, clustering is performed in the full multivariate feature space rather than only the two variables shown in the visualization. The reachability plot summarizes the density landscape across the dataset: low reachability values (valleys) indicate dense regions, while high values (peaks) correspond to transitions between clusters or sparse observations.</p>
+<p>Clusters are then extracted using a reachability threshold <span class="math inline">\(\varepsilon_{cl}\)</span>. Unlike DBSCAN, OPTICS does not rely on a single global neighborhood radius during ordering; instead, it captures density structure across scales before cluster extraction. In the wearable dataset, OPTICS identifies coherent physiological phenotypes while still allowing atypical or weakly connected observations to be labeled as noise. This makes OPTICS particularly useful when cluster densities may vary or when a single fixed <span class="math inline">\(\varepsilon\)</span> would either fragment dense groups or merge distinct patterns.</p>
+</section>
+</section>
+<section id="from-hard-clustering-to-probabilistic-clustering" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="from-hard-clustering-to-probabilistic-clustering"><span class="header-section-number">8.8</span> From Hard Clustering to Probabilistic Clustering</h2>
+<p>Up to this point, clustering has been presented as a geometric partitioning problem. Algorithms such as k-means assign each observation to exactly one cluster by minimizing within-cluster variance. This assignment is deterministic: once the algorithm converges, every observation belongs to a single group with no ambiguity. Such methods are therefore referred to as hard clustering approaches.</p>
+<p>However, in many real datasets-particularly in biomedical or physiological contexts-group boundaries are not sharp. Individuals may exhibit intermediate characteristics, partially resembling more than one phenotype. In these settings, it may be more natural to describe cluster membership probabilistically.</p>
+<p>Mixture models adopt this perspective. Instead of assuming that clusters are simply regions of space, we assume that the data are generated from a combination of underlying probability distributions. Each cluster corresponds to one component distribution, and each observation has a probability of belonging to each component. This framework is known as probabilistic (or soft) clustering.</p>
+<p>Formally, a mixture model assumes that the data distribution can be written as</p>
+<p><span class="math display">\[
+p(x)=\sum_{k=1}^K \pi_k f_k(x),
+\]</span></p>
+<p>where <span class="math inline">\(\pi_k\)</span> are non-negative mixing proportions that sum to one, and <span class="math inline">\(f_k(x)\)</span> are component densities. The clustering task becomes the estimation of these components and the probability that each observation was generated by them.</p>
+<section id="from-hard-clustering-to-probabilistic-clustering-illustration" class="level3" data-number="8.8.1">
+<h3 data-number="8.8.1" class="anchored" data-anchor-id="from-hard-clustering-to-probabilistic-clustering-illustration"><span class="header-section-number">8.8.1</span> From hard clustering to probabilistic clustering (illustration)</h3>
+<p>The most intuitive way to see the difference between hard clustering and mixture models is to use a dataset where groups overlap. In such a setting, k-means must still assign every observation to exactly one cluster, even when a point lies in the “grey zone” between groups. A Gaussian mixture model (GMM), in contrast, returns <em>posterior membership probabilities</em>: each point receives a probability of belonging to each component. These probabilities quantify uncertainty and allow intermediate observations to be described as partially belonging to more than one group.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Toy data: two overlapping Gaussian clouds (ideal for soft vs hard)</span></span>
+<span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb102-4"><a href="#cb102-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-5"><a href="#cb102-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb102-6"><a href="#cb102-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mclust)</span>
+<span id="cb102-7"><a href="#cb102-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb102-8"><a href="#cb102-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-9"><a href="#cb102-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb102-10"><a href="#cb102-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-11"><a href="#cb102-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Two overlapping bivariate Gaussians</span></span>
+<span id="cb102-12"><a href="#cb102-12" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">450</span></span>
+<span id="cb102-13"><a href="#cb102-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-14"><a href="#cb102-14" aria-hidden="true" tabindex="-1"></a>mu1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.6</span>,  <span class="fl">0.2</span>)</span>
+<span id="cb102-15"><a href="#cb102-15" aria-hidden="true" tabindex="-1"></a>mu2 <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="fl">0.6</span>, <span class="sc">-</span><span class="fl">0.2</span>)</span>
+<span id="cb102-16"><a href="#cb102-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-17"><a href="#cb102-17" aria-hidden="true" tabindex="-1"></a>Sigma1 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">1.0</span>,  <span class="fl">0.6</span>,</span>
+<span id="cb102-18"><a href="#cb102-18" aria-hidden="true" tabindex="-1"></a>                   <span class="fl">0.6</span>,  <span class="fl">1.2</span>), <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb102-19"><a href="#cb102-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-20"><a href="#cb102-20" aria-hidden="true" tabindex="-1"></a>Sigma2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fl">1.2</span>, <span class="sc">-</span><span class="fl">0.4</span>,</span>
+<span id="cb102-21"><a href="#cb102-21" aria-hidden="true" tabindex="-1"></a>                  <span class="sc">-</span><span class="fl">0.4</span>,  <span class="fl">0.9</span>), <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb102-22"><a href="#cb102-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-23"><a href="#cb102-23" aria-hidden="true" tabindex="-1"></a>X1 <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(<span class="at">n =</span> n, <span class="at">mu =</span> mu1, <span class="at">Sigma =</span> Sigma1)</span>
+<span id="cb102-24"><a href="#cb102-24" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(<span class="at">n =</span> n, <span class="at">mu =</span> mu2, <span class="at">Sigma =</span> Sigma2)</span>
+<span id="cb102-25"><a href="#cb102-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-26"><a href="#cb102-26" aria-hidden="true" tabindex="-1"></a>toy_mix <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb102-27"><a href="#cb102-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(X1) <span class="sc">%&gt;%</span> <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"y"</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">true =</span> <span class="st">"Component 1"</span>),</span>
+<span id="cb102-28"><a href="#cb102-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(X2) <span class="sc">%&gt;%</span> <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"y"</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">true =</span> <span class="st">"Component 2"</span>)</span>
+<span id="cb102-29"><a href="#cb102-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb102-30"><a href="#cb102-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-31"><a href="#cb102-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Define consistent color palettes</span></span>
+<span id="cb102-32"><a href="#cb102-32" aria-hidden="true" tabindex="-1"></a>true_cols <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb102-33"><a href="#cb102-33" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Component 1"</span> <span class="ot">=</span> <span class="st">"#E64B35"</span>,  <span class="co"># reddish</span></span>
+<span id="cb102-34"><a href="#cb102-34" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Component 2"</span> <span class="ot">=</span> <span class="st">"#4DBBD5"</span>   <span class="co"># teal</span></span>
+<span id="cb102-35"><a href="#cb102-35" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb102-36"><a href="#cb102-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-37"><a href="#cb102-37" aria-hidden="true" tabindex="-1"></a>p_raw <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(toy_mix, <span class="fu">aes</span>(x, y, <span class="at">color =</span> true)) <span class="sc">+</span></span>
+<span id="cb102-38"><a href="#cb102-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.65</span>, <span class="at">size =</span> <span class="fl">1.6</span>) <span class="sc">+</span></span>
+<span id="cb102-39"><a href="#cb102-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb102-40"><a href="#cb102-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb102-41"><a href="#cb102-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> true_cols) <span class="sc">+</span></span>
+<span id="cb102-42"><a href="#cb102-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb102-43"><a href="#cb102-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Toy data: overlapping components"</span>,</span>
+<span id="cb102-44"><a href="#cb102-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"True generating components (elliptical Gaussians)"</span>,</span>
+<span id="cb102-45"><a href="#cb102-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"True source"</span></span>
+<span id="cb102-46"><a href="#cb102-46" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb102-47"><a href="#cb102-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-48"><a href="#cb102-48" aria-hidden="true" tabindex="-1"></a>p_raw</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="hard-clustering-k-means-forces-a-single-label" class="level4" data-number="8.8.1.1">
+<h4 data-number="8.8.1.1" class="anchored" data-anchor-id="hard-clustering-k-means-forces-a-single-label"><span class="header-section-number">8.8.1.1</span> Hard clustering: k-means forces a single label</h4>
+<p>k-means produces a deterministic partition: every point is assigned to exactly one cluster. In overlapping regions, this creates an artificial “hard boundary”, because the algorithm has no mechanism to express uncertainty. This is often fine for clean, well-separated, spherical groups, but it can be limiting when phenotypes overlap or when measurements are noisy.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Hard clustering: k-means (k = 2)</span></span>
+<span id="cb103-3"><a href="#cb103-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb103-4"><a href="#cb103-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-5"><a href="#cb103-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb103-6"><a href="#cb103-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Hard clustering: k-means (k = 2)</span></span>
+<span id="cb103-7"><a href="#cb103-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb103-8"><a href="#cb103-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-9"><a href="#cb103-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb103-10"><a href="#cb103-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-11"><a href="#cb103-11" aria-hidden="true" tabindex="-1"></a>km <span class="ot">&lt;-</span> <span class="fu">kmeans</span>(toy_mix[, <span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"y"</span>)], <span class="at">centers =</span> <span class="dv">2</span>, <span class="at">nstart =</span> <span class="dv">30</span>)</span>
+<span id="cb103-12"><a href="#cb103-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-13"><a href="#cb103-13" aria-hidden="true" tabindex="-1"></a>toy_km <span class="ot">&lt;-</span> toy_mix <span class="sc">%&gt;%</span></span>
+<span id="cb103-14"><a href="#cb103-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">km_cluster =</span> <span class="fu">factor</span>(km<span class="sc">$</span>cluster))</span>
+<span id="cb103-15"><a href="#cb103-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-16"><a href="#cb103-16" aria-hidden="true" tabindex="-1"></a><span class="co"># New color palette for k-means (distinct from true colors)</span></span>
+<span id="cb103-17"><a href="#cb103-17" aria-hidden="true" tabindex="-1"></a>km_cols <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb103-18"><a href="#cb103-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"#3C5488"</span>,   <span class="co"># dark blue</span></span>
+<span id="cb103-19"><a href="#cb103-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2"</span> <span class="ot">=</span> <span class="st">"#F39B7F"</span>    <span class="co"># soft orange</span></span>
+<span id="cb103-20"><a href="#cb103-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb103-21"><a href="#cb103-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-22"><a href="#cb103-22" aria-hidden="true" tabindex="-1"></a>p_km <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(toy_km, <span class="fu">aes</span>(x, y, <span class="at">color =</span> km_cluster)) <span class="sc">+</span></span>
+<span id="cb103-23"><a href="#cb103-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.70</span>, <span class="at">size =</span> <span class="fl">1.6</span>) <span class="sc">+</span></span>
+<span id="cb103-24"><a href="#cb103-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb103-25"><a href="#cb103-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb103-26"><a href="#cb103-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> km_cols) <span class="sc">+</span></span>
+<span id="cb103-27"><a href="#cb103-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb103-28"><a href="#cb103-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"k-means (hard assignments)"</span>,</span>
+<span id="cb103-29"><a href="#cb103-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Algorithmic partition (forced boundary in overlap)"</span>,</span>
+<span id="cb103-30"><a href="#cb103-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"k-means cluster"</span></span>
+<span id="cb103-31"><a href="#cb103-31" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb103-32"><a href="#cb103-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb103-33"><a href="#cb103-33" aria-hidden="true" tabindex="-1"></a>p_raw </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>p_km</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-31-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The first figure shows the true generating components used to simulate the data, colored according to their underlying Gaussian source. Although two distinct distributions were used, the overlap region reveals that membership is not visually separable by a sharp boundary. The second figure in the last sequence displays the k-means partition of the same dataset. Importantly, the color scheme differs from the true source to emphasize that k-means is recovering clusters based solely on geometric proximity, not on knowledge of the data-generating mechanism. In the central overlap region, points that visually belong to both generating components are nonetheless assigned deterministically to a single cluster. This illustrates the defining characteristic of hard clustering: every observation must belong to exactly one group, even when the underlying structure is ambiguous.</p>
+</section>
+</section>
+<section id="gaussian-mixture-models-gmm" class="level3" data-number="8.8.2">
+<h3 data-number="8.8.2" class="anchored" data-anchor-id="gaussian-mixture-models-gmm"><span class="header-section-number">8.8.2</span> Gaussian Mixture Models (GMM)</h3>
+<p>The most widely used mixture model for continuous data is the Gaussian Mixture Model (GMM). In this case, each component <span class="math inline">\(f_k(x)\)</span> is assumed to be a multivariate normal distribution:</p>
+<p><span class="math display">\[
+f_k(x)=\mathcal{N}\left(x \mid \mu_k, \Sigma_k\right) .
+\]</span></p>
+<p>Each cluster is therefore characterized by:</p>
+<ul>
+<li>A mean vector <span class="math inline">\(\mu_k\)</span> (its center),</li>
+<li>A covariance matrix <span class="math inline">\(\Sigma_k\)</span> (its shape and orientation),</li>
+<li>A mixing proportion <span class="math inline">\(\pi_k\)</span> (its relative size).</li>
+</ul>
+<p>This formulation is substantially more flexible than k -means. Because covariance matrices are estimated for each component, clusters may be:</p>
+<ul>
+<li>Spherical or elongated,</li>
+<li>Axis-aligned or rotated,</li>
+<li>Compact or diffuse.</li>
+</ul>
+<p>The next figure represents these clusters structures. We generate three components with different shapes and characteristics and then check if GMM can guess the right cluster structures.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Contrast palettes: simulated truth vs clustering output</span></span>
+<span id="cb105-3"><a href="#cb105-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb105-4"><a href="#cb105-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-5"><a href="#cb105-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb105-6"><a href="#cb105-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb105-7"><a href="#cb105-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mclust)</span>
+<span id="cb105-8"><a href="#cb105-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb105-9"><a href="#cb105-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-10"><a href="#cb105-10" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb105-11"><a href="#cb105-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-12"><a href="#cb105-12" aria-hidden="true" tabindex="-1"></a><span class="co"># ---- helper: rotated covariance ----</span></span>
+<span id="cb105-13"><a href="#cb105-13" aria-hidden="true" tabindex="-1"></a>rot_cov <span class="ot">&lt;-</span> <span class="cf">function</span>(a, b, angle_rad) {</span>
+<span id="cb105-14"><a href="#cb105-14" aria-hidden="true" tabindex="-1"></a>  R <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fu">cos</span>(angle_rad), <span class="sc">-</span><span class="fu">sin</span>(angle_rad),</span>
+<span id="cb105-15"><a href="#cb105-15" aria-hidden="true" tabindex="-1"></a>                <span class="fu">sin</span>(angle_rad),  <span class="fu">cos</span>(angle_rad)), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb105-16"><a href="#cb105-16" aria-hidden="true" tabindex="-1"></a>  D <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">c</span>(a, b))</span>
+<span id="cb105-17"><a href="#cb105-17" aria-hidden="true" tabindex="-1"></a>  R <span class="sc">%*%</span> D <span class="sc">%*%</span> <span class="fu">t</span>(R)</span>
+<span id="cb105-18"><a href="#cb105-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb105-19"><a href="#cb105-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-20"><a href="#cb105-20" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">250</span></span>
+<span id="cb105-21"><a href="#cb105-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-22"><a href="#cb105-22" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) Spherical + compact</span></span>
+<span id="cb105-23"><a href="#cb105-23" aria-hidden="true" tabindex="-1"></a>mu1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>,  <span class="dv">2</span>)</span>
+<span id="cb105-24"><a href="#cb105-24" aria-hidden="true" tabindex="-1"></a>S1  <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.25</span>))</span>
+<span id="cb105-25"><a href="#cb105-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-26"><a href="#cb105-26" aria-hidden="true" tabindex="-1"></a><span class="co"># 2) Axis-aligned elongated (diffuse along x)</span></span>
+<span id="cb105-27"><a href="#cb105-27" aria-hidden="true" tabindex="-1"></a>mu2 <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="dv">0</span>,  <span class="dv">0</span>)</span>
+<span id="cb105-28"><a href="#cb105-28" aria-hidden="true" tabindex="-1"></a>S2  <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">c</span>(<span class="fl">1.8</span>, <span class="fl">0.25</span>))</span>
+<span id="cb105-29"><a href="#cb105-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-30"><a href="#cb105-30" aria-hidden="true" tabindex="-1"></a><span class="co"># 3) Rotated elongated</span></span>
+<span id="cb105-31"><a href="#cb105-31" aria-hidden="true" tabindex="-1"></a>mu3 <span class="ot">&lt;-</span> <span class="fu">c</span>( <span class="dv">3</span>,  <span class="dv">2</span>)</span>
+<span id="cb105-32"><a href="#cb105-32" aria-hidden="true" tabindex="-1"></a>S3  <span class="ot">&lt;-</span> <span class="fu">rot_cov</span>(<span class="at">a =</span> <span class="fl">1.6</span>, <span class="at">b =</span> <span class="fl">0.25</span>, <span class="at">angle_rad =</span> pi<span class="sc">/</span><span class="dv">4</span>)</span>
+<span id="cb105-33"><a href="#cb105-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-34"><a href="#cb105-34" aria-hidden="true" tabindex="-1"></a>X1 <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(n, <span class="at">mu =</span> mu1, <span class="at">Sigma =</span> S1)</span>
+<span id="cb105-35"><a href="#cb105-35" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(n, <span class="at">mu =</span> mu2, <span class="at">Sigma =</span> S2)</span>
+<span id="cb105-36"><a href="#cb105-36" aria-hidden="true" tabindex="-1"></a>X3 <span class="ot">&lt;-</span> MASS<span class="sc">::</span><span class="fu">mvrnorm</span>(n, <span class="at">mu =</span> mu3, <span class="at">Sigma =</span> S3)</span>
+<span id="cb105-37"><a href="#cb105-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-38"><a href="#cb105-38" aria-hidden="true" tabindex="-1"></a>toy_gmm <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb105-39"><a href="#cb105-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(X1) <span class="sc">%&gt;%</span> <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"y"</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">true =</span> <span class="st">"Component 1"</span>),</span>
+<span id="cb105-40"><a href="#cb105-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(X2) <span class="sc">%&gt;%</span> <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"y"</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">true =</span> <span class="st">"Component 2"</span>),</span>
+<span id="cb105-41"><a href="#cb105-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(X3) <span class="sc">%&gt;%</span> <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"y"</span>)) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">true =</span> <span class="st">"Component 3"</span>)</span>
+<span id="cb105-42"><a href="#cb105-42" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb105-43"><a href="#cb105-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-44"><a href="#cb105-44" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb105-45"><a href="#cb105-45" aria-hidden="true" tabindex="-1"></a><span class="co"># Palette A (SIMULATED truth): choose a manual palette you like</span></span>
+<span id="cb105-46"><a href="#cb105-46" aria-hidden="true" tabindex="-1"></a><span class="co"># (These are vibrant and distinct, but you can swap as you wish.)</span></span>
+<span id="cb105-47"><a href="#cb105-47" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb105-48"><a href="#cb105-48" aria-hidden="true" tabindex="-1"></a>true_cols <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb105-49"><a href="#cb105-49" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Component 1"</span> <span class="ot">=</span> <span class="st">"#1B9E77"</span>,  <span class="co"># teal</span></span>
+<span id="cb105-50"><a href="#cb105-50" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Component 2"</span> <span class="ot">=</span> <span class="st">"#D95F02"</span>,  <span class="co"># orange</span></span>
+<span id="cb105-51"><a href="#cb105-51" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Component 3"</span> <span class="ot">=</span> <span class="st">"#7570B3"</span>   <span class="co"># purple</span></span>
+<span id="cb105-52"><a href="#cb105-52" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb105-53"><a href="#cb105-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-54"><a href="#cb105-54" aria-hidden="true" tabindex="-1"></a>p_true <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(toy_gmm, <span class="fu">aes</span>(x, y, <span class="at">color =</span> true)) <span class="sc">+</span></span>
+<span id="cb105-55"><a href="#cb105-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.65</span>, <span class="at">size =</span> <span class="fl">1.6</span>) <span class="sc">+</span></span>
+<span id="cb105-56"><a href="#cb105-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb105-57"><a href="#cb105-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb105-58"><a href="#cb105-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> true_cols) <span class="sc">+</span></span>
+<span id="cb105-59"><a href="#cb105-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb105-60"><a href="#cb105-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Toy data: simulated components (ground truth)"</span>,</span>
+<span id="cb105-61"><a href="#cb105-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Colors reflect the data-generating component"</span>,</span>
+<span id="cb105-62"><a href="#cb105-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"True component"</span></span>
+<span id="cb105-63"><a href="#cb105-63" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb105-64"><a href="#cb105-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-65"><a href="#cb105-65" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb105-66"><a href="#cb105-66" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a GMM (soft clustering model; here we plot hard labels from MAP)</span></span>
+<span id="cb105-67"><a href="#cb105-67" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb105-68"><a href="#cb105-68" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">Mclust</span>(toy_gmm[, <span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"y"</span>)], <span class="at">G =</span> <span class="dv">3</span>)</span>
+<span id="cb105-69"><a href="#cb105-69" aria-hidden="true" tabindex="-1"></a>toy_fit <span class="ot">&lt;-</span> toy_gmm <span class="sc">%&gt;%</span></span>
+<span id="cb105-70"><a href="#cb105-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gmm_cluster =</span> <span class="fu">factor</span>(fit<span class="sc">$</span>classification))</span>
+<span id="cb105-71"><a href="#cb105-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-72"><a href="#cb105-72" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb105-73"><a href="#cb105-73" aria-hidden="true" tabindex="-1"></a><span class="co"># Palette B (CLUSTER output): a *different* palette family</span></span>
+<span id="cb105-74"><a href="#cb105-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Brewer palettes are great for contrast with manual colors above.</span></span>
+<span id="cb105-75"><a href="#cb105-75" aria-hidden="true" tabindex="-1"></a><span class="co"># Options: "Set1", "Set2", "Dark2"</span></span>
+<span id="cb105-76"><a href="#cb105-76" aria-hidden="true" tabindex="-1"></a><span class="co"># ---------------------------------------------------------------</span></span>
+<span id="cb105-77"><a href="#cb105-77" aria-hidden="true" tabindex="-1"></a>cluster_palette <span class="ot">&lt;-</span> <span class="st">"Set1"</span></span>
+<span id="cb105-78"><a href="#cb105-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-79"><a href="#cb105-79" aria-hidden="true" tabindex="-1"></a>p_gmm <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(toy_fit, <span class="fu">aes</span>(x, y, <span class="at">color =</span> gmm_cluster)) <span class="sc">+</span></span>
+<span id="cb105-80"><a href="#cb105-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.70</span>, <span class="at">size =</span> <span class="fl">1.6</span>) <span class="sc">+</span></span>
+<span id="cb105-81"><a href="#cb105-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb105-82"><a href="#cb105-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb105-83"><a href="#cb105-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> cluster_palette) <span class="sc">+</span></span>
+<span id="cb105-84"><a href="#cb105-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb105-85"><a href="#cb105-85" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"GMM clustering result (estimated labels)"</span>,</span>
+<span id="cb105-86"><a href="#cb105-86" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(<span class="st">"Model: "</span>, fit<span class="sc">$</span>modelName, <span class="st">" | G = "</span>, fit<span class="sc">$</span>G),</span>
+<span id="cb105-87"><a href="#cb105-87" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"GMM cluster"</span></span>
+<span id="cb105-88"><a href="#cb105-88" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb105-89"><a href="#cb105-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-90"><a href="#cb105-90" aria-hidden="true" tabindex="-1"></a>p_true </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a>p_gmm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-32-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The upper panel displays the simulated data-generating structure: three Gaussian components with distinct covariance patterns. One component is compact and approximately spherical, another is more diffuse and elongated along a horizontal axis, and the third is elongated and rotated, producing a tilted elliptical shape. These colors represent the true underlying distributions used to generate the data and therefore serve as ground truth. The lower panel shows the clustering result obtained from a Gaussian Mixture Model (GMM), where labels are estimated from the fitted model rather than known a priori. Despite not having access to the true component labels, the GMM successfully recovers the three distinct groups and their differing geometric structures. The selected model (“VVV”) indicates that each component is allowed its own covariance matrix, enabling the algorithm to capture differences in shape, orientation, and dispersion.</p>
+<p>Most importantly, cluster membership is soft. For each observation <span class="math inline">\(x_i\)</span>, the model estimates posterior probabilities:</p>
+<p><span class="math display">\[
+P\left(z_i=k \mid x_i\right),
+\]</span></p>
+<p>which represent the probability that observation <span class="math inline">\(i\)</span> belongs to cluster <span class="math inline">\(k\)</span>. Final cluster labels may be obtained by selecting the maximum probability, but the full probabilistic information is retained.</p>
+<p>This probabilistic framework is particularly appealing when groups overlap or when uncertainty is scientifically meaningful. The following code allow us to extract such probabilities.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit GMM on toy_mix and extract posterior probabilities (aligned)</span></span>
+<span id="cb107-3"><a href="#cb107-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb107-4"><a href="#cb107-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-5"><a href="#cb107-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) Fit the GMM on the SAME data you will bind to</span></span>
+<span id="cb107-6"><a href="#cb107-6" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">Mclust</span>(toy_mix[, <span class="fu">c</span>(<span class="st">"x"</span>,<span class="st">"y"</span>)], <span class="at">G =</span> <span class="dv">2</span>)</span>
+<span id="cb107-7"><a href="#cb107-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-8"><a href="#cb107-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 2) Posterior membership probabilities: N x G</span></span>
+<span id="cb107-9"><a href="#cb107-9" aria-hidden="true" tabindex="-1"></a>post_probs <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(fit<span class="sc">$</span>z)</span>
+<span id="cb107-10"><a href="#cb107-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(post_probs) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"P(Component_"</span>, <span class="fu">seq_len</span>(<span class="fu">ncol</span>(post_probs)), <span class="st">")"</span>)</span>
+<span id="cb107-11"><a href="#cb107-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-12"><a href="#cb107-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 3) Build a single tibble (same number of rows guaranteed)</span></span>
+<span id="cb107-13"><a href="#cb107-13" aria-hidden="true" tabindex="-1"></a>toy_probs <span class="ot">&lt;-</span> toy_mix <span class="sc">%&gt;%</span></span>
+<span id="cb107-14"><a href="#cb107-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(post_probs) <span class="sc">%&gt;%</span></span>
+<span id="cb107-15"><a href="#cb107-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb107-16"><a href="#cb107-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">MAP_cluster =</span> <span class="fu">factor</span>(fit<span class="sc">$</span>classification),   <span class="co"># most likely component</span></span>
+<span id="cb107-17"><a href="#cb107-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">max_prob    =</span> <span class="fu">apply</span>(fit<span class="sc">$</span>z, <span class="dv">1</span>, max),</span>
+<span id="cb107-18"><a href="#cb107-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">uncertainty =</span> <span class="dv">1</span> <span class="sc">-</span> max_prob</span>
+<span id="cb107-19"><a href="#cb107-19" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb107-20"><a href="#cb107-20" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(</span>
+<span id="cb107-21"><a href="#cb107-21" aria-hidden="true" tabindex="-1"></a>    x, y, true,</span>
+<span id="cb107-22"><a href="#cb107-22" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">starts_with</span>(<span class="st">"P("</span>),</span>
+<span id="cb107-23"><a href="#cb107-23" aria-hidden="true" tabindex="-1"></a>    MAP_cluster, max_prob, uncertainty</span>
+<span id="cb107-24"><a href="#cb107-24" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb107-25"><a href="#cb107-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-26"><a href="#cb107-26" aria-hidden="true" tabindex="-1"></a><span class="co"># quick check</span></span>
+<span id="cb107-27"><a href="#cb107-27" aria-hidden="true" tabindex="-1"></a><span class="fu">stopifnot</span>(<span class="fu">nrow</span>(toy_probs) <span class="sc">==</span> <span class="fu">nrow</span>(toy_mix))</span>
+<span id="cb107-28"><a href="#cb107-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb107-29"><a href="#cb107-29" aria-hidden="true" tabindex="-1"></a>toy_probs <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 8
+         x       y true   `P(Component_1)` `P(Component_2)` MAP_cluster max_prob
+     &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;             &lt;dbl&gt;            &lt;dbl&gt; &lt;fct&gt;          &lt;dbl&gt;
+ 1  0.353   0.456  Compo…          0.541              0.459 1              0.541
+ 2 -0.725   0.367  Compo…          0.314              0.686 2              0.686
+ 3  0.620   0.490  Compo…          0.597              0.403 1              0.597
+ 4  0.0794  1.80   Compo…          0.274              0.726 2              0.726
+ 5 -0.428   0.690  Compo…          0.376              0.624 2              0.624
+ 6 -0.810   0.0988 Compo…          0.268              0.732 2              0.732
+ 7  0.373   0.0556 Compo…          0.622              0.378 1              0.622
+ 8 -0.662   0.116  Compo…          0.303              0.697 2              0.697
+ 9 -0.700  -0.306  Compo…          0.250              0.750 2              0.750
+10 -0.447   1.27   Compo…          0.372              0.628 2              0.628
+11 -0.783  -0.323  Compo…          0.224              0.776 2              0.776
+12 -1.85   -1.75   Compo…          0.00314            0.997 2              0.997
+# ℹ 1 more variable: uncertainty &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>In the last table, the two columns <span class="math inline">\(\mathrm{P}(\)</span> Component_1) and <span class="math inline">\(\mathrm{P}(\)</span> Component_2 <span class="math inline">\()\)</span> are the posterior membership probabilities from the fitted Gaussian mixture model: for each observation (each row), they quantify how likely it is that the point was generated by each Gaussian component, and they always sum to 1 . The column MAP_cluster is the hard label induced by the soft model (Maximum A Posteriori assignment): it simply picks the component with the larger posterior probability for that point, so it’s the “most likely” cluster under the mixture model. The quantity max_prob <span class="math inline">\(=\max (\mathrm{P}(\)</span> Component_1), P (Component_2) ) measures how confident the model is about that MAP label: values near 1 indicate the point sits in a region clearly dominated by one component, while values near 0.5 indicate the point lies in the overlap where both components explain it almost equally well. Finally, uncertainty = 1 - max_prob is a convenient uncertainty score: it is close to 0 for unambiguous points (e.g., max_prob <span class="math inline">\(\approx 0.95 \rightarrow\)</span> uncertainty <span class="math inline">\(\approx\)</span> 0.05 ) and it approaches 0.5 when membership is highly ambiguous (max_prob <span class="math inline">\(\approx 0.50 \rightarrow\)</span> uncertainty <span class="math inline">\(\approx 0.50\)</span> ). This is exactly the “soft clustering” benefit: you keep both a crisp label (MAP_cluster ) and a numeric measure of ambiguity ( uncertainty) that is scientifically meaningful when groups overlap.</p>
+<section id="most-ambiguous-observations-highest-uncertainty." class="level4" data-number="8.8.2.1">
+<h4 data-number="8.8.2.1" class="anchored" data-anchor-id="most-ambiguous-observations-highest-uncertainty."><span class="header-section-number">8.8.2.1</span> Most ambiguous observations (highest uncertainty).</h4>
+<p>We can use the following code to check the overlaps:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>toy_probs <span class="sc">%&gt;%</span></span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(uncertainty)) <span class="sc">%&gt;%</span></span>
+<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 8
+          x       y true  `P(Component_1)` `P(Component_2)` MAP_cluster max_prob
+      &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt;            &lt;dbl&gt; &lt;fct&gt;          &lt;dbl&gt;
+ 1 -0.0654  -1.21   Comp…            0.501            0.499 1              0.501
+ 2  0.154    0.406  Comp…            0.501            0.499 1              0.501
+ 3  1.15     1.02   Comp…            0.498            0.502 2              0.502
+ 4  1.39     1.08   Comp…            0.498            0.502 2              0.502
+ 5  0.385    0.690  Comp…            0.498            0.502 2              0.502
+ 6 -0.0656  -1.38   Comp…            0.498            0.502 2              0.502
+ 7  0.169    0.456  Comp…            0.498            0.502 2              0.502
+ 8  0.306    0.625  Comp…            0.497            0.503 2              0.503
+ 9 -1.18     1.79   Comp…            0.503            0.497 1              0.503
+10  0.225    0.498  Comp…            0.504            0.496 1              0.504
+11 -0.0758  -0.806  Comp…            0.496            0.504 2              0.504
+12  0.00737 -0.0257 Comp…            0.504            0.496 1              0.504
+# ℹ 1 more variable: uncertainty &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>The last table lists the observations with the largest uncertainty values, obtained by sorting in descending order of <span class="math inline">\(1-\max _k P\left(z_i=k \mid x_i\right)\)</span>. These points exhibit posterior probabilities very close to 0.5 for both components (e.g., 0.501 vs 0.499 ), indicating that the model assigns nearly equal likelihood to each cluster. Such observations lie in the geometric overlap between the two Gaussian components and therefore represent genuinely ambiguous cases. This output illustrates the core advantage of probabilistic clustering: instead of forcing a sharp boundary, the model explicitly quantifies uncertainty for points that cannot be confidently assigned to a single group.</p>
+<p>We can use the following code to visualise the ambiguous points.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb111-2"><a href="#cb111-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Cleaner plot: clusters (color) + ambiguous points highlighted</span></span>
+<span id="cb111-3"><a href="#cb111-3" aria-hidden="true" tabindex="-1"></a><span class="co"># - Typical points: small + transparent</span></span>
+<span id="cb111-4"><a href="#cb111-4" aria-hidden="true" tabindex="-1"></a><span class="co"># - Ambiguous points: larger, black outline, plotted on top</span></span>
+<span id="cb111-5"><a href="#cb111-5" aria-hidden="true" tabindex="-1"></a><span class="co"># ===============================================================</span></span>
+<span id="cb111-6"><a href="#cb111-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb111-7"><a href="#cb111-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb111-8"><a href="#cb111-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb111-9"><a href="#cb111-9" aria-hidden="true" tabindex="-1"></a>p_top <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb111-10"><a href="#cb111-10" aria-hidden="true" tabindex="-1"></a>thr <span class="ot">&lt;-</span> <span class="fu">quantile</span>(toy_probs<span class="sc">$</span>uncertainty, <span class="at">probs =</span> <span class="dv">1</span> <span class="sc">-</span> p_top, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb111-11"><a href="#cb111-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb111-12"><a href="#cb111-12" aria-hidden="true" tabindex="-1"></a>toy_plot <span class="ot">&lt;-</span> toy_probs <span class="sc">%&gt;%</span></span>
+<span id="cb111-13"><a href="#cb111-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ambiguous =</span> uncertainty <span class="sc">&gt;=</span> thr)</span>
+<span id="cb111-14"><a href="#cb111-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb111-15"><a href="#cb111-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb111-16"><a href="#cb111-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># typical points (background)</span></span>
+<span id="cb111-17"><a href="#cb111-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb111-18"><a href="#cb111-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">subset</span>(toy_plot, <span class="sc">!</span>ambiguous),</span>
+<span id="cb111-19"><a href="#cb111-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(x, y, <span class="at">color =</span> MAP_cluster),</span>
+<span id="cb111-20"><a href="#cb111-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.35</span>,</span>
+<span id="cb111-21"><a href="#cb111-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">size  =</span> <span class="fl">1.6</span></span>
+<span id="cb111-22"><a href="#cb111-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb111-23"><a href="#cb111-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ambiguous points (foreground)</span></span>
+<span id="cb111-24"><a href="#cb111-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb111-25"><a href="#cb111-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">subset</span>(toy_plot, ambiguous),</span>
+<span id="cb111-26"><a href="#cb111-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(x, y, <span class="at">color =</span> MAP_cluster),</span>
+<span id="cb111-27"><a href="#cb111-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> <span class="dv">21</span>,          <span class="co"># filled circle with outline</span></span>
+<span id="cb111-28"><a href="#cb111-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill  =</span> <span class="st">"white"</span>,</span>
+<span id="cb111-29"><a href="#cb111-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">stroke =</span> <span class="fl">1.1</span>,</span>
+<span id="cb111-30"><a href="#cb111-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">size  =</span> <span class="fl">3.0</span>,</span>
+<span id="cb111-31"><a href="#cb111-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">1.0</span></span>
+<span id="cb111-32"><a href="#cb111-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb111-33"><a href="#cb111-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_equal</span>() <span class="sc">+</span></span>
+<span id="cb111-34"><a href="#cb111-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb111-35"><a href="#cb111-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb111-36"><a href="#cb111-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"GMM clustering with uncertainty highlighted"</span>,</span>
+<span id="cb111-37"><a href="#cb111-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="fu">paste0</span>(</span>
+<span id="cb111-38"><a href="#cb111-38" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Color = MAP cluster; highlighted points are the most ambiguous (top "</span>,</span>
+<span id="cb111-39"><a href="#cb111-39" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>(<span class="dv">100</span><span class="sc">*</span>p_top), <span class="st">"% by uncertainty)"</span></span>
+<span id="cb111-40"><a href="#cb111-40" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb111-41"><a href="#cb111-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"MAP cluster"</span></span>
+<span id="cb111-42"><a href="#cb111-42" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb111-43"><a href="#cb111-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb111-44"><a href="#cb111-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"right"</span></span>
+<span id="cb111-45"><a href="#cb111-45" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="clustering_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="cluster-level-summary-of-certainty." class="level4" data-number="8.8.2.2">
+<h4 data-number="8.8.2.2" class="anchored" data-anchor-id="cluster-level-summary-of-certainty."><span class="header-section-number">8.8.2.2</span> Cluster-level summary of certainty.</h4>
+<p>The following code provide us with cluster summaries</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a>toy_probs <span class="sc">%&gt;%</span></span>
+<span id="cb112-2"><a href="#cb112-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(MAP_cluster) <span class="sc">%&gt;%</span></span>
+<span id="cb112-3"><a href="#cb112-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb112-4"><a href="#cb112-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
+<span id="cb112-5"><a href="#cb112-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_max_prob =</span> <span class="fu">mean</span>(max_prob),</span>
+<span id="cb112-6"><a href="#cb112-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_uncertainty =</span> <span class="fu">mean</span>(uncertainty),</span>
+<span id="cb112-7"><a href="#cb112-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb112-8"><a href="#cb112-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 4
+  MAP_cluster     n mean_max_prob mean_uncertainty
+  &lt;fct&gt;       &lt;int&gt;         &lt;dbl&gt;            &lt;dbl&gt;
+1 1             360         0.798            0.202
+2 2             540         0.733            0.267</code></pre>
+</div>
+</div>
+<p>The second table summarizes classification confidence at the cluster level. For each MAP cluster, it reports the number of assigned observations, the average maximum posterior probability, and the average uncertainty. Cluster 1 shows a higher mean maximum probability (≈ 0.80) and lower mean uncertainty (≈ 0.20), indicating more clearly separated observations. Cluster 2 has a lower mean maximum probability (≈ 0.73) and higher mean uncertainty (≈ 0.27), suggesting greater overlap with the other component. This aggregate view provides a quantitative assessment of how well-separated the clusters are, complementing the visual inspection of overlap in the scatter plot.</p>
+</section>
+</section>
+<section id="the-em-algorithm-conceptual-overview" class="level3" data-number="8.8.3">
+<h3 data-number="8.8.3" class="anchored" data-anchor-id="the-em-algorithm-conceptual-overview"><span class="header-section-number">8.8.3</span> The EM Algorithm (Conceptual Overview)</h3>
+<p>Estimating a Gaussian mixture model requires determining the unknown parameters <span class="math inline">\(\left\{\pi_k, \mu_k, \Sigma_k\right\}_{k=1}^K\)</span>. Direct maximization of the likelihood is challenging because cluster memberships are latent (unobserved). The standard solution is the Expectation-Maximization (EM) algorithm.</p>
+<p>The EM algorithm proceeds iteratively in two alternating steps:</p>
+<p>E-step (Expectation step). Given current parameter estimates, compute the posterior probability that each observation belongs to each cluster. These probabilities act as soft assignments.</p>
+<p>M-step (Maximization step). Update the parameters <span class="math inline">\(\pi_k, \mu_k, \Sigma_k\)</span> by maximizing the expected complete-data likelihood, using the probabilities computed in the E-step as weights.</p>
+<p>These two steps are repeated until convergence. Intuitively, the algorithm alternates between estimating cluster memberships (softly) and updating cluster parameters, gradually refining both.</p>
+<p>Unlike k-means, which minimizes a geometric criterion, EM maximizes a probabilistic likelihood function.</p>
+</section>
+<section id="comparison-with-k-means" class="level3" data-number="8.8.4">
+<h3 data-number="8.8.4" class="anchored" data-anchor-id="comparison-with-k-means"><span class="header-section-number">8.8.4</span> Comparison with k-means</h3>
+<p>Gaussian mixture models generalize k-means. In fact, k-means can be viewed as a special limiting case of a GMM under restrictive assumptions:</p>
+<ul>
+<li>All clusters share identical covariance matrices<br>
+</li>
+<li>Covariance matrices are spherical (proportional to the identity matrix)<br>
+</li>
+<li>Variance tends toward zero<br>
+</li>
+<li>Hard assignments are used instead of probabilities</li>
+</ul>
+<p>Under these assumptions, maximizing the Gaussian mixture likelihood becomes equivalent to minimizing within-cluster sum of squares, which is precisely the k-means objective.</p>
+<p>The key differences can be summarized as follows:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 19%">
+<col style="width: 34%">
+<col style="width: 46%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Feature</th>
+<th>k-means</th>
+<th>GMM</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Assignment</td>
+<td>Hard</td>
+<td>Soft (probabilistic)</td>
+</tr>
+<tr class="even">
+<td>Cluster shape</td>
+<td>Spherical</td>
+<td>Elliptical (flexible covariance)</td>
+</tr>
+<tr class="odd">
+<td>Objective</td>
+<td>Minimize WCSS</td>
+<td>Maximize likelihood</td>
+</tr>
+<tr class="even">
+<td>Uncertainty</td>
+<td>Not available</td>
+<td>Explicit posterior probabilities</td>
+</tr>
+</tbody>
+</table>
 
 
 </section>
