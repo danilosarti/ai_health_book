@@ -247,16 +247,20 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section"><span class="header-section-number">6.1</span> </a></li>
-  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation"><span class="header-section-number">6.2</span> Motivation</a></li>
-  <li><a href="#missing-mechanisms" id="toc-missing-mechanisms" class="nav-link" data-scroll-target="#missing-mechanisms"><span class="header-section-number">6.3</span> Missing mechanisms</a>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link active" data-scroll-target="#motivation"><span class="header-section-number">6.1</span> Motivation</a></li>
+  <li><a href="#why-missing-data-matters" id="toc-why-missing-data-matters" class="nav-link" data-scroll-target="#why-missing-data-matters"><span class="header-section-number">6.2</span> Why missing data matters</a>
   <ul class="collapse">
-  <li><a href="#ilustrating-mnar-mechanism" id="toc-ilustrating-mnar-mechanism" class="nav-link" data-scroll-target="#ilustrating-mnar-mechanism"><span class="header-section-number">6.3.1</span> Ilustrating MNAR mechanism</a></li>
+  <li><a href="#arbitrary-replacements-produce-arbitrarily-different-means" id="toc-arbitrary-replacements-produce-arbitrarily-different-means" class="nav-link" data-scroll-target="#arbitrary-replacements-produce-arbitrarily-different-means"><span class="header-section-number">6.2.1</span> Arbitrary replacements produce arbitrarily different means</a></li>
   </ul></li>
-  <li><a href="#how-to-deal-with-missingness-rates" id="toc-how-to-deal-with-missingness-rates" class="nav-link" data-scroll-target="#how-to-deal-with-missingness-rates"><span class="header-section-number">6.4</span> How to deal with missingness rates?</a></li>
-  <li><a href="#other-imputation-methods-available-in-mice" id="toc-other-imputation-methods-available-in-mice" class="nav-link" data-scroll-target="#other-imputation-methods-available-in-mice"><span class="header-section-number">6.5</span> Other Imputation Methods Available in mice</a>
+  <li><a href="#naive-approaches-to-handling-missing-data" id="toc-naive-approaches-to-handling-missing-data" class="nav-link" data-scroll-target="#naive-approaches-to-handling-missing-data"><span class="header-section-number">6.3</span> Naive approaches to handling missing data</a></li>
+  <li><a href="#missing-mechanisms" id="toc-missing-mechanisms" class="nav-link" data-scroll-target="#missing-mechanisms"><span class="header-section-number">6.4</span> Missing mechanisms</a>
   <ul class="collapse">
-  <li><a href="#choosing-an-imputation-method-practical-guidance" id="toc-choosing-an-imputation-method-practical-guidance" class="nav-link" data-scroll-target="#choosing-an-imputation-method-practical-guidance"><span class="header-section-number">6.5.1</span> Choosing an Imputation Method: Practical Guidance</a></li>
+  <li><a href="#ilustrating-mnar-mechanism" id="toc-ilustrating-mnar-mechanism" class="nav-link" data-scroll-target="#ilustrating-mnar-mechanism"><span class="header-section-number">6.4.1</span> Ilustrating MNAR mechanism</a></li>
+  </ul></li>
+  <li><a href="#how-to-deal-with-missingness-rates" id="toc-how-to-deal-with-missingness-rates" class="nav-link" data-scroll-target="#how-to-deal-with-missingness-rates"><span class="header-section-number">6.5</span> How to deal with missingness rates?</a></li>
+  <li><a href="#other-imputation-methods-available-in-mice" id="toc-other-imputation-methods-available-in-mice" class="nav-link" data-scroll-target="#other-imputation-methods-available-in-mice"><span class="header-section-number">6.6</span> Other Imputation Methods Available in mice</a>
+  <ul class="collapse">
+  <li><a href="#choosing-an-imputation-method-practical-guidance" id="toc-choosing-an-imputation-method-practical-guidance" class="nav-link" data-scroll-target="#choosing-an-imputation-method-practical-guidance"><span class="header-section-number">6.6.1</span> Choosing an Imputation Method: Practical Guidance</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -283,11 +287,8 @@ window.Quarto = {
 </header>
 
 
-<section id="section" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="section"><span class="header-section-number">6.1</span> </h2>
-</section>
-<section id="motivation" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="motivation"><span class="header-section-number">6.2</span> Motivation</h2>
+<section id="motivation" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="motivation"><span class="header-section-number">6.1</span> Motivation</h2>
 <p>This chapter introduces the statistical foundations and practical tools for analysing datasets with missing values, using the amputated version of the wearable-sensor dataset introduced in the previous chapter. Although simulated, the dataset mirrors the types of incomplete streams routinely encountered in decentralised clinical trials, where remote monitoring depends on device adherence, sensor quality, and participant characteristics.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="co">#install.packages("tidyverse")</span></span>
@@ -295,7 +296,9 @@ window.Quarto = {
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  wear <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"~/att_ai_ml/att_book/data/dct_wearable_amputated.rds"</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  wear_complete <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"~/att_ai_ml/att_book/data/dct_wearable_complete.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>## Why missing data matters</p>
+</section>
+<section id="why-missing-data-matters" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="why-missing-data-matters"><span class="header-section-number">6.2</span> Why missing data matters</h2>
 <p>Missing data is often introduced as a technical inconvenience - something that “just happens” in realworld datasets. But its implications are far deeper. To appreciate why careful methods are needed, we begin with the simplest possible statistical quantity: the sample mean.</p>
 <p>Even this basic calculation becomes ambiguous as soon as one value is missing. 1. The mean requires all values to be known</p>
 <p>The sample mean is defined as:</p>
@@ -345,7 +348,8 @@ window.Quarto = {
   \]</span></p>
 <p>But notice: - one value was dropped, - the total number of values changed from 4 to 3, - and the resulting mean answers a different question.</p>
 <p>This is equivalent to assuming the data are MCAR (Missing Completely At Random), a concept we will discuss later in this chapter. If that assumption is not true, the result is biased - even for a simple mean.</p>
-<p>### Arbitrary replacements produce arbitrarily different means</p>
+<section id="arbitrary-replacements-produce-arbitrarily-different-means" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="arbitrary-replacements-produce-arbitrarily-different-means"><span class="header-section-number">6.2.1</span> Arbitrary replacements produce arbitrarily different means</h3>
 <p>Suppose someone fills the missing value with zero:</p>
 <p>::: {.cell}</p>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x_zero <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(x), <span class="dv">0</span>, x)</span>
@@ -378,7 +382,10 @@ window.Quarto = {
 <p>This simple example sets up the core idea:</p>
 <p>If we cannot define a mean without assumptions, then regression models — which involve multiple variables and complex relationships — are even more sensitive to missing data.</p>
 <p>This naturally leads into your next section that show how missingness may affect modelling.</p>
-<p>## Naive approaches to handling missing data</p>
+</section>
+</section>
+<section id="naive-approaches-to-handling-missing-data" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="naive-approaches-to-handling-missing-data"><span class="header-section-number">6.3</span> Naive approaches to handling missing data</h2>
 <p>Before introducing principled statistical approaches, it is helpful to examine the simplistic strategies that analysts often apply when confronted with missing values. These methods are appealing because they are easy to use and require no modelling assumptions. However, as the examples below demonstrate, they frequently distort statistical relationships and lead to biased or unstable results.</p>
 <p>One of the most common strategies is listwise deletion, sometimes called complete-case analysis. In this approach, any row that contains at least one missing value is entirely removed from the dataset. Many statistical functions in R use this strategy by default, so it often happens silently. To illustrate how aggressively this approach reduces the number of observations, consider the amputated wearable dataset:</p>
 <div class="cell">
@@ -665,8 +672,8 @@ F-statistic: 915.1 on 3 and 423 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Model fit deteriorates as well. The residual standard error increases from 7.36 to 7.50, the degrees of freedom fall from 496 to 423, and R² decreases slightly from 0.873 to 0.866. These changes arise from two sources: a loss of information due to discarding valid observations, and a distortion of the sample because the missingness mechanism selectively removes specific groups of individuals. Both consequences are typical of listwise deletion under MAR or MNAR conditions.</p>
 <p>The broader lesson is that missing data can bias model estimates even when the model is correctly specified and even when the proportion of missingness is not very large. Listwise deletion wastes information, is only unbiased under the strong MCAR assumption, and often yields coefficients that differ from the truth in subtle or non-obvious ways. It alters the composition of the analytic sample and produces results that may no longer reflect the underlying population relationships. These issues motivate more principled approaches such as multiple imputation, Bayesian treatments of missingness, and model-based procedures such as EM or fully conditional specification. The comparison between the complete-data regression and the listwise-deletion regression shows that ignoring missing data is not a benign choice—it fundamentally alters the scientific conclusions.</p>
 </section>
-<section id="missing-mechanisms" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="missing-mechanisms"><span class="header-section-number">6.3</span> Missing mechanisms</h2>
+<section id="missing-mechanisms" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="missing-mechanisms"><span class="header-section-number">6.4</span> Missing mechanisms</h2>
 <p>Once we have seen that naïve approaches distort even the simplest statistical quantities, we arrive at a more foundational question: why do observations go missing in the first place? This question is not a nuisance or a side issue; it is the core of the missing-data problem. From a statistical point of view, the process that generates missingness is itself a random variable. It has its own probability distribution, just like the physiological variables in the wearable dataset, and should be modelled accordingly. This viewpoint connects naturally with the Bayesian perspective discussed in the previous chapter: unobserved values are uncertain quantities, and the act of becoming missing is also governed by uncertainty that can, in principle, be described probabilistically.</p>
 <p>Formally, we represent missingness with an indicator <span class="math inline">\(R_{\text {, }}\)</span> where <span class="math inline">\(R_i=1\)</span> if an observation is present and <span class="math inline">\(R_i=0\)</span> if it is missing. The full dataset consists of the observed values <span class="math inline">\(Y_{\text {obs }}\)</span>, the unobserved values <span class="math inline">\(Y_{\text {mis, }}\)</span> and the missingness indicators <span class="math inline">\(R\)</span>. Understanding the mechanism means describing the conditional distribution <span class="math inline">\(P\left(R \mid Y_{\text {obs }}, Y_{\text {mis }}, X\right)\)</span>, where <span class="math inline">\(X\)</span> may contain other covariates. Rubin’s framework distinguishes three broad types of mechanisms, which differ in how missingness relates to the data themselves and ultimately determine which analysis methods are valid.</p>
 <p>The most restrictive mechanism is Missing Completely At Random (MCAR). Under MCAR, the probability of a value being missing does not depend on anything in the dataset-not on observed measurements, not on unobserved ones, and not on any auxiliary in <span class="math inline">\({ }^{\prime} \downarrow\)</span> nation. Mathematically this corresponds to <span class="math inline">\(P(R \mid Y_{\text {obs }}, Y_{\text {mis }, X}=P(R)\)</span>. Missingness is thus pure random noise. When MCAR holds, the observedsample is essentially a random subsample of the full dataset, which implies that complete-case analyses remain unbiased. In practice, MCAR is rare. In your simulated wearable dataset, the only MCAR process appears in the activity index, where a set of observations was removed by random selection without reference to any physiological variable. A diagnostic plot comparing frailty between observed and missing groups for activity index typically shows nearly identical distributions, which visually reinforces the MCAR assumption.</p>
@@ -886,8 +893,8 @@ Residual Deviance: 157.1    AIC: 161.1</code></pre>
 </div>
 </div>
 </div>
-<section id="ilustrating-mnar-mechanism" class="level3" data-number="6.3.1">
-<h3 data-number="6.3.1" class="anchored" data-anchor-id="ilustrating-mnar-mechanism"><span class="header-section-number">6.3.1</span> Ilustrating MNAR mechanism</h3>
+<section id="ilustrating-mnar-mechanism" class="level3" data-number="6.4.1">
+<h3 data-number="6.4.1" class="anchored" data-anchor-id="ilustrating-mnar-mechanism"><span class="header-section-number">6.4.1</span> Ilustrating MNAR mechanism</h3>
 <p>To illustrate a true MNAR mechanism in a controlled way, we introduce a synthetic variable called hydration_level. This variable is not used in the modelling of the stress score and serves purely didactic purposes. We then impose a missingness mechanism that depends directly on the unobserved values themselves: lower hydration levels are assigned a higher probability of being missing. Because missingness is a function of the value that is missing, this produces a textbook case of MNAR. No combination of the other variables (frailty, age, HRV, resting HR, etc.) can explain the pattern; the missingness is inherently tied to the variable being partially unobserved. This behaviour is rarely identifiable in real datasets and cannot be reliably corrected without modelling assumptions. The example is included to help students visualise an MNAR pattern and understand why principled statistical methods struggle in this setting.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>  <span class="do">## -----------------------------------------------------------</span></span>
@@ -985,8 +992,8 @@ Residual Deviance: 157.1    AIC: 161.1</code></pre>
 </div>
 </section>
 </section>
-<section id="how-to-deal-with-missingness-rates" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="how-to-deal-with-missingness-rates"><span class="header-section-number">6.4</span> How to deal with missingness rates?</h2>
+<section id="how-to-deal-with-missingness-rates" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="how-to-deal-with-missingness-rates"><span class="header-section-number">6.5</span> How to deal with missingness rates?</h2>
 <p>Once missing data mechanisms are understood, the next practical question is how to handle the quantity of missingness in each variable. The proportion of missing values — the missingness rate — strongly influences whether imputation is advisable, whether a variable should be excluded from modelling, or whether specialised methods (such as multiple imputation or Bayesian models) are needed.</p>
 <p>A low missingness rate does not automatically imply that missingness is harmless; in the previous examples, even modest MAR patterns produced measurable bias. Still, the missingness rate often guides decisions in applied data analysis, and it is helpful to understand how different levels of missingness tend to affect model performance and inference.</p>
 <p>At very low missingness levels, typically below five percent, imputation rarely introduces substantial artefacts. In such settings, imputing values using principled methods such as predictive mean matching generally stabilises the analysis and avoids the small but systematic distortions introduced by listwise deletion. Most modern statistical workflows treat this range as safe for imputation, particularly when missingness follows MCAR or MAR patterns.</p>
@@ -1199,8 +1206,8 @@ Attaching package: 'mice'</code></pre>
 </div>
 <p>The resulting table makes the contrast explicit. Listwise deletion clearly underestimates the effect of frailty and slightly distorts the effects of HRV and resting heart rate. Multiple imputation, by contrast, recovers estimates almost indistinguishable from those obtained from the complete dataset. This is the core advantage of the method: it restores the statistical information that would otherwise be lost or distorted by naive approaches, while appropriately propagating uncertainty due to missingness.</p>
 </section>
-<section id="other-imputation-methods-available-in-mice" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="other-imputation-methods-available-in-mice"><span class="header-section-number">6.5</span> Other Imputation Methods Available in mice</h2>
+<section id="other-imputation-methods-available-in-mice" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="other-imputation-methods-available-in-mice"><span class="header-section-number">6.6</span> Other Imputation Methods Available in mice</h2>
 <p>Predictive mean matching is a robust default and works well for continuous physiological variables such as HRV, resting heart rate, or skin temperature. However, mice includes a broad family of imputation engines that can be matched to different data types, modelling goals, or complexity levels. Understanding these alternatives provides flexibility when designing imputation workflows, especially in larger clinical or biological datasets where variables have mixed scales, nonlinear behaviour, or structural constraints.</p>
 <p>At its core, mice uses Fully Conditional Specification (FCS): each variable with missing values is imputed from a regression model conditional on the other variables. The “method” argument in mice() controls the regression model used for each variable. The choice of method should reflect both the scale of the variable and the assumptions underlying the analysis.</p>
 <p>Linear regression for continuous data (“norm”)</p>
@@ -1232,8 +1239,8 @@ Attaching package: 'mice'</code></pre>
 <p>When derived quantities depend deterministically on other variables—for example, BMI from height and weight—it is advisable to avoid imputing them separately. Instead, mice allows passive imputation, in which a formula is specified and the variable is recalculated at each iteration rather than modelled:</p>
 <p><code>method["BMI"] &lt;- "~ I(weight / (height/100)^2)"</code></p>
 <p>This ensures consistency across imputations and prevents biologically impossible combinations.</p>
-<section id="choosing-an-imputation-method-practical-guidance" class="level3" data-number="6.5.1">
-<h3 data-number="6.5.1" class="anchored" data-anchor-id="choosing-an-imputation-method-practical-guidance"><span class="header-section-number">6.5.1</span> Choosing an Imputation Method: Practical Guidance</h3>
+<section id="choosing-an-imputation-method-practical-guidance" class="level3" data-number="6.6.1">
+<h3 data-number="6.6.1" class="anchored" data-anchor-id="choosing-an-imputation-method-practical-guidance"><span class="header-section-number">6.6.1</span> Choosing an Imputation Method: Practical Guidance</h3>
 <p>In most applied workflows, predictive mean matching (“pmm”) remains an excellent general-purpose choice for continuous variables. It preserves the distribution and resists outliers or model misspecification. Logistic/multinomial models are the default for categorical variables, and “polr” is ideal for ordinal ones.</p>
 <p>Random forest imputation is useful when modelling highly nonlinear relationships but should be applied thoughtfully, as it may interfere with downstream model interpretability or introduce difficulties when pooling estimates.</p>
 <p>Finally, when working with longitudinal or multilevel data, two-level imputation models provide a principled way to incorporate within-participant correlation, which is especially relevant in wearable-sensor studies.</p>
