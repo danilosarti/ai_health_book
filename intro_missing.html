@@ -258,9 +258,10 @@ window.Quarto = {
   <li><a href="#ilustrating-mnar-mechanism" id="toc-ilustrating-mnar-mechanism" class="nav-link" data-scroll-target="#ilustrating-mnar-mechanism"><span class="header-section-number">6.4.1</span> Ilustrating MNAR mechanism</a></li>
   </ul></li>
   <li><a href="#how-to-deal-with-missingness-rates" id="toc-how-to-deal-with-missingness-rates" class="nav-link" data-scroll-target="#how-to-deal-with-missingness-rates"><span class="header-section-number">6.5</span> How to deal with missingness rates?</a></li>
-  <li><a href="#other-imputation-methods-available-in-mice" id="toc-other-imputation-methods-available-in-mice" class="nav-link" data-scroll-target="#other-imputation-methods-available-in-mice"><span class="header-section-number">6.6</span> Other Imputation Methods Available in mice</a>
+  <li><a href="#imputing-data-with-mice-r-package" id="toc-imputing-data-with-mice-r-package" class="nav-link" data-scroll-target="#imputing-data-with-mice-r-package"><span class="header-section-number">6.6</span> Imputing data with MICE R package</a></li>
+  <li><a href="#other-imputation-methods-available-in-mice" id="toc-other-imputation-methods-available-in-mice" class="nav-link" data-scroll-target="#other-imputation-methods-available-in-mice"><span class="header-section-number">6.7</span> Other Imputation Methods Available in mice</a>
   <ul class="collapse">
-  <li><a href="#choosing-an-imputation-method-practical-guidance" id="toc-choosing-an-imputation-method-practical-guidance" class="nav-link" data-scroll-target="#choosing-an-imputation-method-practical-guidance"><span class="header-section-number">6.6.1</span> Choosing an Imputation Method: Practical Guidance</a></li>
+  <li><a href="#choosing-an-imputation-method-practical-guidance" id="toc-choosing-an-imputation-method-practical-guidance" class="nav-link" data-scroll-target="#choosing-an-imputation-method-practical-guidance"><span class="header-section-number">6.7.1</span> Choosing an Imputation Method: Practical Guidance</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -1027,7 +1028,9 @@ Residual Deviance: 157.1    AIC: 161.1</code></pre>
 <p>Compared with listwise deletion: - MI reduces bias under MAR, - improves power by using the full sample - stabilises regression estimates, - and preserves covariance structure.</p>
 <p>Compared with single-value imputation (mean/median): - Ml restores variance, - avoids collapsing distributions, - produces correlations and regression slopes consistent with the full data, - and appropriately widens confidence intervals.</p>
 <p>Across modern statistics, MI is now considered the standard approach for handling missing data under MCAR/MAR.</p>
-<p>## Imputing data with MICE R package</p>
+</section>
+<section id="imputing-data-with-mice-r-package" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="imputing-data-with-mice-r-package"><span class="header-section-number">6.6</span> Imputing data with MICE R package</h2>
 <p>To illustrate how multiple imputation operates in real analyses, we now apply the method to the amputated wearable dataset using the mice package. The goal is to fit the regression model for stress_score while recovering the information lost through missingness and avoiding the biases demonstrated earlier. Each block of code below is followed by a narrative explanation of what it does and how to interpret its output.</p>
 <p>The first step is to load the required packages: When mice is attached, R prints a message indicating that some base functions (cbind, rbind, filter) are masked. This is normal and simply reflects that mice defines its own versions for internal use. The tidyverse package is also loaded for convenience in data manipulation and plotting.</p>
 <p>We then initiate the imputation with:</p>
@@ -1206,8 +1209,8 @@ Attaching package: 'mice'</code></pre>
 </div>
 <p>The resulting table makes the contrast explicit. Listwise deletion clearly underestimates the effect of frailty and slightly distorts the effects of HRV and resting heart rate. Multiple imputation, by contrast, recovers estimates almost indistinguishable from those obtained from the complete dataset. This is the core advantage of the method: it restores the statistical information that would otherwise be lost or distorted by naive approaches, while appropriately propagating uncertainty due to missingness.</p>
 </section>
-<section id="other-imputation-methods-available-in-mice" class="level2" data-number="6.6">
-<h2 data-number="6.6" class="anchored" data-anchor-id="other-imputation-methods-available-in-mice"><span class="header-section-number">6.6</span> Other Imputation Methods Available in mice</h2>
+<section id="other-imputation-methods-available-in-mice" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="other-imputation-methods-available-in-mice"><span class="header-section-number">6.7</span> Other Imputation Methods Available in mice</h2>
 <p>Predictive mean matching is a robust default and works well for continuous physiological variables such as HRV, resting heart rate, or skin temperature. However, mice includes a broad family of imputation engines that can be matched to different data types, modelling goals, or complexity levels. Understanding these alternatives provides flexibility when designing imputation workflows, especially in larger clinical or biological datasets where variables have mixed scales, nonlinear behaviour, or structural constraints.</p>
 <p>At its core, mice uses Fully Conditional Specification (FCS): each variable with missing values is imputed from a regression model conditional on the other variables. The “method” argument in mice() controls the regression model used for each variable. The choice of method should reflect both the scale of the variable and the assumptions underlying the analysis.</p>
 <p>Linear regression for continuous data (“norm”)</p>
@@ -1239,8 +1242,8 @@ Attaching package: 'mice'</code></pre>
 <p>When derived quantities depend deterministically on other variables—for example, BMI from height and weight—it is advisable to avoid imputing them separately. Instead, mice allows passive imputation, in which a formula is specified and the variable is recalculated at each iteration rather than modelled:</p>
 <p><code>method["BMI"] &lt;- "~ I(weight / (height/100)^2)"</code></p>
 <p>This ensures consistency across imputations and prevents biologically impossible combinations.</p>
-<section id="choosing-an-imputation-method-practical-guidance" class="level3" data-number="6.6.1">
-<h3 data-number="6.6.1" class="anchored" data-anchor-id="choosing-an-imputation-method-practical-guidance"><span class="header-section-number">6.6.1</span> Choosing an Imputation Method: Practical Guidance</h3>
+<section id="choosing-an-imputation-method-practical-guidance" class="level3" data-number="6.7.1">
+<h3 data-number="6.7.1" class="anchored" data-anchor-id="choosing-an-imputation-method-practical-guidance"><span class="header-section-number">6.7.1</span> Choosing an Imputation Method: Practical Guidance</h3>
 <p>In most applied workflows, predictive mean matching (“pmm”) remains an excellent general-purpose choice for continuous variables. It preserves the distribution and resists outliers or model misspecification. Logistic/multinomial models are the default for categorical variables, and “polr” is ideal for ordinal ones.</p>
 <p>Random forest imputation is useful when modelling highly nonlinear relationships but should be applied thoughtfully, as it may interfere with downstream model interpretability or introduce difficulties when pooling estimates.</p>
 <p>Finally, when working with longitudinal or multilevel data, two-level imputation models provide a principled way to incorporate within-participant correlation, which is especially relevant in wearable-sensor studies.</p>
