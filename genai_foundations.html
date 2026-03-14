@@ -2425,7 +2425,7 @@ style E fill:#f8d7da
 W : \Omega \rightarrow \mathcal{V}
 \]</span></p>
 <p>where each element of <span class="math display">\[\mathcal{V}\]</span> corresponds to a valid token that may appear in the data.</p>
-<p>The probability mass function associated with <span class="math display">\[W\]</span> is</p>
+<p>The probability mass function associated with <span class="math inline">\(W\)</span> is</p>
 <p><span class="math display">\[
 P(W = w) = \pi_w
 \]</span></p>
@@ -2433,26 +2433,26 @@ P(W = w) = \pi_w
 <p><span class="math display">\[
 \sum_{w \in \mathcal{V}} \pi_w = 1 .
 \]</span></p>
-<p>For any real-valued function <span class="math display">\[f : \mathcal{V} \to \mathbb{R}\]</span>, the expectation under the distribution <span class="math display">\[P\]</span> is defined as</p>
+<p>For any real-valued function <span class="math display">\[f : \mathcal{V} \to \mathbb{R}\]</span>, the expectation under the distribution <span class="math inline">\(P\)</span> is defined as</p>
 <p><span class="math display">\[
 \mathbb{E}[f(W)] =
 \sum_{w \in \mathcal{V}} f(w) P(W = w).
 \]</span></p>
-<p>A central quantity in information theory is the <strong>Shannon entropy</strong> of a distribution <span class="math display">\[P\]</span>:</p>
+<p>A central quantity in information theory is the <strong>Shannon entropy</strong> of a distribution <span class="math inline">\(P\)</span>:</p>
 <p><span class="math display">\[
 H(P) =
 - \sum_{w \in \mathcal{V}} P(w) \log P(w).
 \]</span></p>
-<p>Entropy measures the uncertainty of a probability distribution and can also be interpreted as the minimal expected code length required to encode outcomes generated according to <span class="math display">\[P\]</span>.</p>
-<p>Given two probability distributions <span class="math display">\[P\]</span> and <span class="math display">\[Q\]</span> defined over the same vocabulary, the <strong>Kullback–Leibler divergence</strong> is</p>
+<p>Entropy measures the uncertainty of a probability distribution and can also be interpreted as the minimal expected code length required to encode outcomes generated according to <span class="math inline">\(P\)</span>.</p>
+<p>Given two probability distributions <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span> defined over the same vocabulary, the <strong>Kullback–Leibler divergence</strong> is</p>
 <p><span class="math display">\[
 D_{KL}(P \| Q) =
 \sum_{w \in \mathcal{V}} P(w)
 \log
 \frac{P(w)}{Q(w)} .
 \]</span></p>
-<p>The KL divergence is always non-negative and equals zero if and only if <span class="math display">\[P = Q\]</span>. It measures the inefficiency incurred when the distribution <span class="math display">\[Q\]</span> is used to approximate the true distribution <span class="math display">\[P\]</span>.</p>
-<p>Closely related is the <strong>cross-entropy</strong> between <span class="math display">\[P\]</span> and <span class="math display">\[Q\]</span>:</p>
+<p>The KL divergence is always non-negative and equals zero if and only if <span class="math inline">\(P = Q\)</span>. It measures the inefficiency incurred when the distribution <span class="math inline">\(Q\)</span> is used to approximate the true distribution <span class="math inline">\(P\)</span>.</p>
+<p>Closely related is the <strong>cross-entropy</strong> between <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span>:</p>
 <p><span class="math display">\[
 H(P, Q) =
 -
@@ -2462,7 +2462,7 @@ H(P, Q) =
 <p><span class="math display">\[
 H(P,Q) = H(P) + D_{KL}(P\|Q).
 \]</span></p>
-<p>This relationship is fundamental in machine learning. Minimizing cross-entropy with respect to a model distribution <span class="math display">\[Q\]</span> is equivalent to minimizing the KL divergence from the true data distribution <span class="math display">\[P\]</span>.</p>
+<p>This relationship is fundamental in machine learning. Minimizing cross-entropy with respect to a model distribution <span class="math inline">\(Q\)</span> is equivalent to minimizing the KL divergence from the true data distribution <span class="math inline">\(P\)</span>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb130"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.7</span>, <span class="fl">0.2</span>, <span class="fl">0.1</span>)</span>
 <span id="cb130-2"><a href="#cb130-2" aria-hidden="true" tabindex="-1"></a>Q <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">0.3</span>, <span class="fl">0.1</span>)</span>
@@ -2515,16 +2515,15 @@ P(w_t \mid w_1, \ldots, w_{t-1}).
 <p></p><figure class="figure"><p></p>
 <div>
 <pre class="mermaid mermaid-js">flowchart LR
+W1["w1"] --&gt; W2["w2"]
+W2["w2"] --&gt; W3["w3"]
+W3["w3"] --&gt; W4["w4"]
+W4["w4"] --&gt; W5["..."]
 
-W1[w1] --&gt; W2[w2]
-W2 --&gt; W3[w3]
-W3 --&gt; W4[w4]
-W4 --&gt; W5[...]
-
-P1[P(w1)]
-P2[P(w2 | w1)]
-P3[P(w3 | w1,w2)]
-P4[P(w4 | w1,w2,w3)]
+P1["P(w1)"]
+P2["P(w2 | w1)"]
+P3["P(w3 | w1,w2)"]
+P4["P(w4 | w1,w2,w3)"]
 
 W1 --&gt; P1
 W2 --&gt; P2
@@ -2538,7 +2537,7 @@ W4 --&gt; P4
 </div>
 </div>
 <p>Figure: Chain-rule decomposition of sequence probability. Instead of estimating the probability of an entire sentence directly, language models factor the joint probability into a sequence of conditional predictions. Each step predicts the next token given the preceding context.</p>
-<p>This factorization transforms sequence modeling into a sequence of conditional prediction problems. At each position <span class="math display">\[t\]</span>, the model estimates a probability distribution over the vocabulary conditioned on the preceding tokens.</p>
+<p>This factorization transforms sequence modeling into a sequence of conditional prediction problems. At each position <span class="math inline">\(t\)</span>, the model estimates a probability distribution over the vocabulary conditioned on the preceding tokens.</p>
 <p>Training a language model consists of adjusting parameters so that the conditional probabilities predicted by the model match those observed in the corpus. In practice, this objective is implemented by minimizing the <strong>cross-entropy loss</strong> between the empirical distribution of tokens in the data and the distribution predicted by the model.</p>
 <p>Under this formulation, generation corresponds to repeatedly sampling from the learned conditional distribution</p>
 <p><span class="math display">\[
