@@ -272,14 +272,16 @@ window.Quarto = {
   <li><a href="#character-level-tokenization-1" id="toc-character-level-tokenization-1" class="nav-link" data-scroll-target="#character-level-tokenization-1"><span class="header-section-number">10.6.3</span> Character-Level Tokenization</a></li>
   <li><a href="#subword-tokenization-modern-standard" id="toc-subword-tokenization-modern-standard" class="nav-link" data-scroll-target="#subword-tokenization-modern-standard"><span class="header-section-number">10.6.4</span> Subword Tokenization (Modern Standard)</a></li>
   <li><a href="#byte-level-tokenization" id="toc-byte-level-tokenization" class="nav-link" data-scroll-target="#byte-level-tokenization"><span class="header-section-number">10.6.5</span> Byte-Level Tokenization</a></li>
-  <li><a href="#tokenization-beyond-text" id="toc-tokenization-beyond-text" class="nav-link" data-scroll-target="#tokenization-beyond-text"><span class="header-section-number">10.6.6</span> Tokenization Beyond Text</a></li>
   </ul></li>
   <li><a href="#large-text-corpora-in-practice" id="toc-large-text-corpora-in-practice" class="nav-link" data-scroll-target="#large-text-corpora-in-practice"><span class="header-section-number">10.7</span> Large Text Corpora in Practice</a>
   <ul class="collapse">
   <li><a href="#accessing-public-corpora" id="toc-accessing-public-corpora" class="nav-link" data-scroll-target="#accessing-public-corpora"><span class="header-section-number">10.7.1</span> Accessing public corpora</a></li>
   <li><a href="#exploring-corpora" id="toc-exploring-corpora" class="nav-link" data-scroll-target="#exploring-corpora"><span class="header-section-number">10.7.2</span> Exploring corpora</a></li>
   </ul></li>
-  <li><a href="#audio-tokenization" id="toc-audio-tokenization" class="nav-link" data-scroll-target="#audio-tokenization"><span class="header-section-number">10.8</span> Audio Tokenization</a></li>
+  <li><a href="#tokenization-beyond-text" id="toc-tokenization-beyond-text" class="nav-link" data-scroll-target="#tokenization-beyond-text"><span class="header-section-number">10.8</span> Tokenization Beyond Text</a>
+  <ul class="collapse">
+  <li><a href="#audio-tokenization" id="toc-audio-tokenization" class="nav-link" data-scroll-target="#audio-tokenization"><span class="header-section-number">10.8.1</span> Audio Tokenization</a></li>
+  </ul></li>
   <li><a href="#comparative-overview-of-tokenization-strategies" id="toc-comparative-overview-of-tokenization-strategies" class="nav-link" data-scroll-target="#comparative-overview-of-tokenization-strategies"><span class="header-section-number">10.9</span> Comparative Overview of Tokenization Strategies</a></li>
   <li><a href="#from-tokenization-to-learning" id="toc-from-tokenization-to-learning" class="nav-link" data-scroll-target="#from-tokenization-to-learning"><span class="header-section-number">10.10</span> From Tokenization to Learning</a></li>
   <li><a href="#mathematical-foundations-for-probabilistic-language-modeling" id="toc-mathematical-foundations-for-probabilistic-language-modeling" class="nav-link" data-scroll-target="#mathematical-foundations-for-probabilistic-language-modeling"><span class="header-section-number">10.11</span> Mathematical Foundations for Probabilistic Language Modeling</a></li>
@@ -2233,18 +2235,6 @@ style E fill:#f8d7da
 <p>The outputs make several important properties of byte-level tokenization explicit. First, the comparison between <code>n_chars</code> and <code>n_bytes</code> shows that byte length and character length are not the same: standard ASCII text (e.g., “The patient reports pain.”) tends to have roughly one byte per character, whereas accented characters (such as “ê” in “Português”), emojis (😣), and Chinese characters require multiple bytes under UTF-8 encoding. This explains why byte-level tokenization often produces longer sequences for multilingual or symbol-rich inputs.</p>
 <p>The long-format table, with one row per byte and an explicit positional index, reveals how a model would actually “see” the input: not as words or characters, but as an ordered sequence of integers between 0 and 255. The <code>range(byte_long$byte)</code> output confirms that every token lies within this fixed interval, highlighting a central advantage of byte-level models: the base vocabulary is bounded and universal. Unlike word-level tokenization, there is no true out-of-vocabulary case at the input level.Finally, the reconstruction check—where the byte sequences are converted back into strings and compared to the original text—demonstrates that the representation is lossless. The <code>matches</code> column verifies that encoding and decoding are perfectly reversible. This underscores the conceptual point: byte-level tokenization guarantees full coverage and exact recoverability of the original input, trading semantic granularity for universality and robustness.</p>
 </section>
-<section id="tokenization-beyond-text" class="level3" data-number="10.6.6">
-<h3 data-number="10.6.6" class="anchored" data-anchor-id="tokenization-beyond-text"><span class="header-section-number">10.6.6</span> Tokenization Beyond Text</h3>
-<p>Tokenization is not limited to written language. While it is most commonly discussed in the context of text, the underlying idea is more general: tokenization is the process of converting structured input into discrete units that can be processed by computational models. Modern foundation models extend this principle beyond language, applying tokenization to images, audio, and multimodal data. In each case, continuous signals are transformed into structured sequences of discrete elements that serve as the basic units of computation.</p>
-<p>This generalization reveals an important conceptual shift. A “token” is not inherently a word or subword; it is a representational unit. Any input modality that can be decomposed into structured, indexable components can, in principle, be tokenized and processed by transformer architectures.</p>
-<section id="image-tokenization" class="level4" data-number="10.6.6.1">
-<h4 data-number="10.6.6.1" class="anchored" data-anchor-id="image-tokenization"><span class="header-section-number">10.6.6.1</span> Image Tokenization</h4>
-<p>Images are continuous two-dimensional arrays of pixel intensities. To make them compatible with transformer models—originally designed for sequences of text tokens—images must first be transformed into discrete units.</p>
-<p>In Vision Transformers (ViT), an image is divided into fixed-size, non-overlapping patches (for example, 16×16 pixels). Each patch is flattened into a vector and treated as a token. Instead of processing individual pixels, the model processes a sequence of patch embeddings. If an image is divided into 196 patches, the transformer receives a sequence of 196 tokens, analogous to a sequence of 196 words in a sentence.</p>
-<p>Other generative vision models adopt a different strategy: they learn discrete image tokens through vector quantization. Architectures such as VQ-VAE (Vector-Quantized Variational Autoencoder) map image regions into a learned codebook of discrete indices. Each image is therefore represented as a grid of learned symbolic codes rather than raw pixel values. These codes function as image tokens and can be modeled autoregressively in the same way as text tokens.</p>
-<p>In both cases, the key idea remains the same: a continuous visual signal is transformed into a sequence (or grid) of discrete units that can be embedded and processed by transformer-based models.Audio Tokenization</p>
-</section>
-</section>
 </section>
 <section id="large-text-corpora-in-practice" class="level2" data-number="10.7">
 <h2 data-number="10.7" class="anchored" data-anchor-id="large-text-corpora-in-practice"><span class="header-section-number">10.7</span> Large Text Corpora in Practice</h2>
@@ -2291,17 +2281,28 @@ style E fill:#f8d7da
 <li>domain comparison</li>
 </ul>
 <p>The statistical properties of a corpus shape the probability distribution that the model ultimately approximates. A model trained on biomedical text behaves differently from one trained on fiction or web forums because it learns a different empirical distribution over tokens.</p>
-<p>Understanding corpora is therefore understanding the empirical target distribution (P_{data}).</p>
+<p>Understanding corpora is therefore understanding the empirical target distribution <span class="math inline">\(P_{data}\)</span>.</p>
 </section>
 </section>
-<section id="audio-tokenization" class="level2" data-number="10.8">
-<h2 data-number="10.8" class="anchored" data-anchor-id="audio-tokenization"><span class="header-section-number">10.8</span> Audio Tokenization</h2>
+<section id="tokenization-beyond-text" class="level2" data-number="10.8">
+<h2 data-number="10.8" class="anchored" data-anchor-id="tokenization-beyond-text"><span class="header-section-number">10.8</span> Tokenization Beyond Text</h2>
+<p>Tokenization is not limited to written language. While it is most commonly discussed in the context of text, the underlying idea is more general: tokenization is the process of converting structured input into discrete units that can be processed by computational models. Modern foundation models extend this principle beyond language, applying tokenization to images, audio, and multimodal data. In each case, continuous signals are transformed into structured sequences of discrete elements that serve as the basic units of computation.</p>
+<p>This generalization reveals an important conceptual shift. A “token” is not inherently a word or subword; it is a representational unit. Any input modality that can be decomposed into structured, indexable components can, in principle, be tokenized and processed by transformer architectures.</p>
+<section id="image-tokenization" class="level4" data-number="10.8.0.1">
+<h4 data-number="10.8.0.1" class="anchored" data-anchor-id="image-tokenization"><span class="header-section-number">10.8.0.1</span> Image Tokenization</h4>
+<p>Images are continuous two-dimensional arrays of pixel intensities. To make them compatible with transformer models—originally designed for sequences of text tokens—images must first be transformed into discrete units.</p>
+<p>In Vision Transformers (ViT), an image is divided into fixed-size, non-overlapping patches (for example, 16×16 pixels). Each patch is flattened into a vector and treated as a token. Instead of processing individual pixels, the model processes a sequence of patch embeddings. If an image is divided into 196 patches, the transformer receives a sequence of 196 tokens, analogous to a sequence of 196 words in a sentence.</p>
+<p>Other generative vision models adopt a different strategy: they learn discrete image tokens through vector quantization. Architectures such as VQ-VAE (Vector-Quantized Variational Autoencoder) map image regions into a learned codebook of discrete indices. Each image is therefore represented as a grid of learned symbolic codes rather than raw pixel values. These codes function as image tokens and can be modeled autoregressively in the same way as text tokens.</p>
+<p>In both cases, the key idea remains the same: a continuous visual signal is transformed into a sequence (or grid) of discrete units that can be embedded and processed by transformer-based models.Audio Tokenization</p>
+</section>
+<section id="audio-tokenization" class="level3" data-number="10.8.1">
+<h3 data-number="10.8.1" class="anchored" data-anchor-id="audio-tokenization"><span class="header-section-number">10.8.1</span> Audio Tokenization</h3>
 <p>Audio signals are continuous waveforms varying over time. To process speech or sound with transformer architectures, the waveform must be converted into a structured representation.</p>
 <p>A classical approach represents audio as frame-based acoustic features, such as spectrogram frames. The continuous waveform is segmented into short time windows (e.g., 10–25 milliseconds), and each window is transformed into a vector of frequency-domain features. These frames function as sequential tokens, analogous to words in a sentence.</p>
 <p>More recent approaches learn discrete audio tokens using vector quantization techniques. Instead of relying on handcrafted acoustic features, neural encoders map short audio segments into a learned discrete codebook. Each segment is assigned an index from this codebook, producing a sequence of symbolic audio tokens. This representation enables speech models to operate similarly to text-based language models, predicting sequences of audio codes rather than characters or words.</p>
 <p>Through this discretization process, transformers can treat speech as a sequence modeling problem: given previous audio tokens, predict the next token. The architecture remains unchanged; only the tokenization strategy differs.</p>
-<section id="multimodal-tokenization" class="level4" data-number="10.8.0.1">
-<h4 data-number="10.8.0.1" class="anchored" data-anchor-id="multimodal-tokenization"><span class="header-section-number">10.8.0.1</span> Multimodal Tokenization</h4>
+<section id="multimodal-tokenization" class="level4" data-number="10.8.1.1">
+<h4 data-number="10.8.1.1" class="anchored" data-anchor-id="multimodal-tokenization"><span class="header-section-number">10.8.1.1</span> Multimodal Tokenization</h4>
 <p>Modern foundation models increasingly integrate multiple modalities within a single architecture. To achieve this, they construct unified token sequences that combine different types of tokens into one structured input stream.</p>
 <p>A multimodal token sequence may include:</p>
 <p>Text tokens derived from subword tokenization</p>
@@ -2311,6 +2312,7 @@ style E fill:#f8d7da
 <p><code>[IMAGE_PATCH_1, IMAGE_PATCH_2, ..., &lt;IMG_END&gt;, TEXT_TOKEN_1, TEXT_TOKEN_2, ...]</code></p>
 <p>By embedding all tokens into a shared vector space, the model can learn cross-modal relationships through attention mechanisms. The same transformer architecture processes the entire sequence, regardless of modality. This design allows the system to learn associations between words and image regions, between spoken phrases and visual context, or between textual descriptions and audio patterns.</p>
 <p>Multimodal tokenization therefore extends the central abstraction of modern AI systems: any structured signal—text, image, or sound—can be converted into discrete tokens, embedded into a shared representational space, and modeled using a unified probabilistic architecture.</p>
+</section>
 </section>
 </section>
 <section id="comparative-overview-of-tokenization-strategies" class="level2" data-number="10.9">
