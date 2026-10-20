@@ -1,5 +1,5 @@
 """
-Chapter 16 — precomputed language models and embeddings.
+Chapter 16: precomputed language models and embeddings.
 
 Trains, once, everything that is too slow for the browser and writes small JSON/CSV files to
 data/precomputed/ch16/:
@@ -439,4 +439,4 @@ json.dump({"corpus": "Tiny Shakespeare", "n_chars": len(text), "vocab_size": Vc,
            "n_parameters": int(sum(p.numel() for p in cm.parameters())),
            "uniform_bits": math.log2(Vc), "curve": char_curve, "stages": stages},
           open(f"{OUT}/char_samples.json", "w"))
-log("wrote char_samples.json — done")
+log("wrote char_samples.json: done")

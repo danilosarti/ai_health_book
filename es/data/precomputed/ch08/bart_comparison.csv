@@ -1,0 +1,8 @@
+data,model,train_RMSE,test_RMSE,test_MAE,coverage95,width95
+homebeat,BART (50 trees),4.9071,5.0623,4.0662,0.98,20.838
+homebeat,Linear regression,5.1709,4.8328,3.7459,0.98,20.5485
+homebeat,Random forest (500 trees),2.1132,5.5382,4.5109,,
+homebeat,XGBoost (300 rounds),3.2482,5.7137,4.4997,,
+homebeat,Average (no model),12.6906,13.7069,11.8255,,
+ward7,BART (50 trees),0.1814,0.1817,0.1465,0.968,0.7626
+ward7,Linear regression,,0.174,0.1413,0.972,0.7229

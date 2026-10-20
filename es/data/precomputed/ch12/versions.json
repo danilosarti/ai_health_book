@@ -1,0 +1,12 @@
+{
+ "numpy": "2.5.3",
+ "pandas": "3.0.5",
+ "scikit_learn": "1.9.1",
+ "xgboost": "3.4.1",
+ "seed": 2026,
+ "lung_tree_depth": 4,
+ "ward7_rf_test_MAE": 0.1528,
+ "shap_background_n": 200,
+ "test_MAE_xgb": 6.67,
+ "test_MAE_linear": 6.67
+}

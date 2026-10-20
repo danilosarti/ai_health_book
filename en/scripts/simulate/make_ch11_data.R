@@ -1,5 +1,5 @@
 # =====================================================================
-# Chapter 11 (Clustering patients) — browser versions of the v1 datasets
+# Chapter 11 (Clustering patients): browser versions of the v1 datasets
 # Usage (from the book folder):
 #   Rscript scripts/simulate/make_ch11_data.R [folder with the v1 .rds files]
 # Writes data/wearable_phenotypes.csv (800 x 8) and data/genomic_subtypes.csv

@@ -1,0 +1,197 @@
+/* =====================================================================
+   AI & ML for Health Sciences: shared interactive toolkit styles
+   Works with Quarto's light (cosmo) and dark (darkly) themes.
+   ===================================================================== */
+
+:root {
+  --aihs-accent: #1f6f8b;
+  --aihs-accent-soft: rgba(31, 111, 139, 0.10);
+  --aihs-ok: #1b7f4c;
+  --aihs-ok-soft: rgba(27, 127, 76, 0.12);
+  --aihs-bad: #b3261e;
+  --aihs-bad-soft: rgba(179, 38, 30, 0.10);
+  --aihs-warn: #8a5a00;
+  --aihs-border: rgba(127, 127, 127, 0.35);
+  --aihs-surface: rgba(127, 127, 127, 0.06);
+  --aihs-radius: 10px;
+}
+body.quarto-dark {
+  --aihs-accent: #6cc3e0;
+  --aihs-accent-soft: rgba(108, 195, 224, 0.14);
+  --aihs-ok: #6fd39b;
+  --aihs-ok-soft: rgba(111, 211, 155, 0.14);
+  --aihs-bad: #ff8a80;
+  --aihs-bad-soft: rgba(255, 138, 128, 0.14);
+  --aihs-warn: #ffc65c;
+}
+
+/* ---------- generic interactive card ---------- */
+.quick-check, .gate, .challenge, .mission, .progress-panel, .tryit, .decision-loop-box {
+  border: 1px solid var(--aihs-border);
+  border-radius: var(--aihs-radius);
+  background: var(--aihs-surface);
+  padding: 1rem 1.1rem 0.8rem;
+  margin: 1.4rem 0;
+  position: relative;
+}
+.aihs-label {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--aihs-accent);
+  margin-bottom: 0.4rem;
+}
+
+/* ---------- quick check ---------- */
+.quick-check ul.task-list { list-style: none; padding-left: 0; margin: 0.6rem 0 0.2rem; }
+.quick-check ul.task-list li { margin: 0.35rem 0; }
+.quick-check .qc-option {
+  display: block; width: 100%; text-align: left;
+  border: 1px solid var(--aihs-border); border-radius: 8px;
+  background: transparent; color: inherit;
+  padding: 0.55rem 0.75rem; cursor: pointer; font: inherit;
+}
+.quick-check .qc-option:hover, .quick-check .qc-option:focus-visible {
+  border-color: var(--aihs-accent); outline: none; background: var(--aihs-accent-soft);
+}
+.quick-check .qc-option.is-correct { border-color: var(--aihs-ok); background: var(--aihs-ok-soft); }
+.quick-check .qc-option.is-wrong   { border-color: var(--aihs-bad); background: var(--aihs-bad-soft); }
+.quick-check .qc-why { display: none; font-size: 0.92em; margin: 0.3rem 0 0 0.2rem; }
+.quick-check .qc-why.shown { display: block; }
+.quick-check .why { display: none; } /* raw explanations are moved by JS */
+.quick-check.done::after, .tryit.done::after, .mission.done::after, .challenge.done::after, .gate.done::after {
+  content: "✓"; position: absolute; top: 0.6rem; right: 0.9rem;
+  color: var(--aihs-ok); font-weight: 700; font-size: 1.1rem;
+}
+
+/* ---------- gate ---------- */
+.gate { border-width: 2px; border-color: var(--aihs-accent); }
+.gate table { width: 100%; margin: 0.6rem 0; }
+.gate td, .gate th { padding: 0.35rem 0.5rem; vertical-align: middle; }
+.gate select, .gate input, .challenge select {
+  font: inherit; color: inherit; background: transparent;
+  border: 1px solid var(--aihs-border); border-radius: 6px; padding: 0.25rem 0.4rem; max-width: 100%;
+}
+.gate select option, .challenge select option { color: #222; }
+.gate .gate-cell.ok select, .gate .gate-cell.ok input,
+.challenge li.ok select { border-color: var(--aihs-ok); background: var(--aihs-ok-soft); }
+.gate .gate-cell.bad select, .gate .gate-cell.bad input,
+.challenge li.bad select { border-color: var(--aihs-bad); background: var(--aihs-bad-soft); }
+.aihs-btn {
+  font: inherit; font-size: 0.92rem; cursor: pointer;
+  border: 1px solid var(--aihs-accent); color: var(--aihs-accent); background: transparent;
+  border-radius: 999px; padding: 0.3rem 0.95rem; margin: 0.25rem 0.4rem 0.25rem 0;
+}
+.aihs-btn.primary { background: var(--aihs-accent); color: #fff; }
+body.quarto-dark .aihs-btn.primary { color: #0b1d24; }
+.aihs-btn:focus-visible { outline: 3px solid var(--aihs-accent-soft); outline-offset: 2px; }
+.aihs-feedback { margin-top: 0.4rem; font-size: 0.95em; min-height: 1.2em; }
+.aihs-feedback.ok { color: var(--aihs-ok); }
+.aihs-feedback.bad { color: var(--aihs-bad); }
+
+.gated-content.locked {
+  max-height: 28rem; overflow: hidden; position: relative;
+  filter: blur(3px); opacity: 0.55; pointer-events: none; user-select: none;
+}
+.gate-veil {
+  margin: -1rem 0 2rem; text-align: center; font-weight: 600; color: var(--aihs-accent);
+}
+
+/* ---------- challenge ---------- */
+.challenge ol { padding-left: 1.3rem; }
+.challenge li { margin: 0.55rem 0; }
+.challenge li select { margin-left: 0.4rem; }
+.challenge .ans { display: none; }
+
+/* ---------- missions ---------- */
+.aihs-label-sub { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--bs-body-color, inherit); opacity: 0.7; }
+
+/* ---------- progress panel ---------- */
+.progress-panel .bar { height: 12px; border-radius: 999px; background: var(--aihs-border); overflow: hidden; }
+.progress-panel .bar > span { display: block; height: 100%; width: 0; background: var(--aihs-accent); transition: width 0.4s ease; }
+.progress-panel .meta { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; margin-top: 0.5rem; font-size: 0.93rem; }
+.progress-panel .badge-earned { color: var(--aihs-ok); font-weight: 700; }
+.aihs-sticky {
+  position: fixed; right: 12px; bottom: 12px; z-index: 1030;
+  background: var(--bs-body-bg, #fff); border: 1px solid var(--aihs-border);
+  border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.aihs-sticky a { text-decoration: none; }
+
+/* ---------- dashboard ---------- */
+.aihs-dashboard table { width: 100%; }
+.aihs-dashboard td, .aihs-dashboard th { padding: 0.35rem 0.5rem; }
+.aihs-dashboard .mini { display: inline-block; width: 120px; height: 9px; border-radius: 999px; background: var(--aihs-border); vertical-align: middle; overflow: hidden; }
+.aihs-dashboard .mini > span { display: block; height: 100%; background: var(--aihs-accent); }
+
+/* ---------- running examples ---------- */
+.example-tag {
+  display: inline-block; font-size: 0.78rem; font-weight: 700; border-radius: 999px;
+  padding: 0.05rem 0.55rem; margin-right: 0.3rem; border: 1px solid currentColor;
+}
+.ex1 { color: #1f6f8b; } .ex2 { color: #8a3ffc; } .ex3 { color: #b35c00; } .ex4 { color: #1b7f4c; }
+body.quarto-dark .ex1 { color: #6cc3e0; } body.quarto-dark .ex2 { color: #c5a3ff; }
+body.quarto-dark .ex3 { color: #ffb36b; } body.quarto-dark .ex4 { color: #6fd39b; }
+
+/* ---------- inline svg diagrams ---------- */
+.aihs-svg { width: 100%; height: auto; max-width: 760px; display: block; margin: 0.5rem auto; }
+.aihs-svg text { fill: currentColor; font-family: inherit; }
+.aihs-svg .box { fill: var(--aihs-surface); stroke: currentColor; stroke-width: 1.4; }
+.aihs-svg .box-accent { fill: var(--aihs-accent-soft); stroke: var(--aihs-accent); stroke-width: 1.8; }
+.aihs-svg .arrow { stroke: currentColor; stroke-width: 1.6; fill: none; marker-end: url(#aihs-arrowhead); }
+.aihs-svg .muted { opacity: 0.7; }
+
+/* ---------- misc ---------- */
+.honesty { font-size: 0.93em; }
+.tryit .aihs-label { color: var(--aihs-warn); }
+@media (max-width: 576px) {
+  .quick-check, .gate, .challenge, .mission, .progress-panel, .tryit { padding: 0.8rem 0.75rem; }
+  .gate table, .gate tbody, .gate tr, .gate td { display: block; width: 100%; }
+  .gate thead { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .progress-panel .bar > span { transition: none; } }
+.aihs-figcap { text-align: center; font-size: 0.9em; opacity: 0.8; margin: -0.3rem auto 1.4rem; max-width: 46rem; }
+
+/* decision-quality chain */
+:root { --dq-gold: #e0b12a; --dq-edge: #8a6a12; }
+body.quarto-dark { --dq-gold: #d9a827; --dq-edge: #f3d88a; }
+.dq-chain .dq-edge { fill: none; stroke: var(--dq-edge); stroke-width: 19; stroke-linecap: butt; }
+.dq-chain .dq-link { fill: none; stroke: var(--dq-gold); stroke-width: 14; stroke-linecap: butt; }
+.dq-chain .dq-fill { fill: var(--aihs-accent-soft); stroke: none; }
+
+/* book mind map */
+:root { --mm0:#1f6f8b; --mm1:#7a4fd6; --mm2:#b35c00; --mm3:#1b7f4c; --mm4:#b3246b; --mm5:#6b7280; }
+body.quarto-dark { --mm0:#6cc3e0; --mm1:#b79cff; --mm2:#ffb36b; --mm3:#6fd39b; --mm4:#ff8fc2; --mm5:#b0b7c3; }
+.mindmap { max-width: 1600px; min-width: 1000px; }
+.mindmap .mm-center { fill: var(--aihs-accent-soft); stroke: var(--aihs-accent); stroke-width: 2; }
+.mindmap .mm-branch { fill: none; stroke-width: 3.5; stroke-linecap: round; }
+.mindmap .mm-leaf-line { fill: none; stroke-width: 1.5; opacity: 0.8; }
+.mindmap .mm-part { stroke-width: 2; fill: var(--bs-body-bg, #fff); }
+.mindmap .mm-leaf { opacity: 0.85; }
+.mindmap .mm-leaf.ready { font-weight: 700; opacity: 1; text-decoration: underline; }
+.mindmap .mm-link:focus-visible .mm-leaf { outline: 2px solid var(--aihs-accent); }
+.mindmap .mm-c0 { stroke: var(--mm0); } .mindmap .mm-c1 { stroke: var(--mm1); } .mindmap .mm-c2 { stroke: var(--mm2); }
+.mindmap .mm-c3 { stroke: var(--mm3); } .mindmap .mm-c4 { stroke: var(--mm4); } .mindmap .mm-c5 { stroke: var(--mm5); }
+.mindmap-fig { overflow-x: auto; }
+
+/* Observable Inputs buttons: keep text visible in both themes */
+.tryit form button { color: #fff; background: var(--aihs-accent); border: none; border-radius: 6px; padding: 0.3rem 0.8rem; cursor: pointer; }
+body.quarto-dark .tryit form button { color: #0b1d24; }
+.mindmap .mm-link { cursor: pointer; }
+.mindmap .mm-link:hover .mm-leaf { fill: var(--aihs-accent); }
+
+/* language bar (top of every page) */
+.aihs-langbar { display: flex; justify-content: flex-end; gap: 0.3rem; margin: 0 0 0.6rem; font-size: 0.85rem; }
+.aihs-langbar a { padding: 0.15rem 0.6rem; border: 1px solid var(--aihs-border); border-radius: 999px; text-decoration: none; color: inherit; }
+.aihs-langbar a:hover, .aihs-langbar a:focus-visible { border-color: var(--aihs-accent); color: var(--aihs-accent); }
+.aihs-langbar a.current { background: var(--aihs-accent); border-color: var(--aihs-accent); color: #fff; font-weight: 600; }
+body.quarto-dark .aihs-langbar a.current { color: #0b1d24; }
+
+/* phone width: wide tables scroll inside their own box instead of widening the page */
+@media (max-width: 600px) {
+  main table:not(.gate table) { display: block; max-width: 100%; overflow-x: auto; }
+}
+/* long URLs and DOIs in reference lists wrap instead of widening the page */
+.csl-entry, .csl-entry a { overflow-wrap: anywhere; word-break: break-word; }

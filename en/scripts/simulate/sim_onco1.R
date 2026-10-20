@@ -1,5 +1,5 @@
 # =====================================================================
-# ONCO-1 chemotherapy trial — simulation (Running example 2)
+# ONCO-1 chemotherapy trial: simulation (Running example 2)
 # Source: v1 book, supervised_regression.qmd (author: D. A. Sarti), unchanged
 # except for the output path. Seed 2025 reproduces the v1 dataset.
 # NOTE (kept on purpose, used as a lesson): genes 08, 14 and 19 are

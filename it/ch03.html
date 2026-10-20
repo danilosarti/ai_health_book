@@ -375,6 +375,11 @@ window.Quarto = {
             </a>
           </li>
           <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../es/index.html">
+            Español
+            </a>
+          </li>
+          <li>
             <a class="dropdown-item sidebar-tools-main-item" href="./../it/index.html">
             Italiano
             </a>
@@ -692,23 +697,23 @@ Il mattino dopo nel Reparto 7
 <tbody>
 <tr class="odd">
 <td>800 pazienti del passato le cui cartelle servono a stimare l'intercetta e la pendenza di una retta.</td>
-<td><select aria-label="Etichetta per l'elemento 1" data-answer="addestramento"><option value="">— scegli —</option><option>addestramento</option><option>validazione</option><option>test</option><option>impiego</option><option>fuga di informazione</option></select></td>
+<td><select aria-label="Etichetta per l'elemento 1" data-answer="addestramento"><option value="">Scegli…</option><option>addestramento</option><option>validazione</option><option>test</option><option>impiego</option><option>fuga di informazione</option></select></td>
 </tr>
 <tr class="even">
 <td>Altri 200 pazienti del passato, usati per decidere se funziona meglio un modello con 5 o con 50 vicini.</td>
-<td><select aria-label="Etichetta per l'elemento 2" data-answer="validazione"><option value="">— scegli —</option><option>addestramento</option><option>validazione</option><option>test</option><option>impiego</option><option>fuga di informazione</option></select></td>
+<td><select aria-label="Etichetta per l'elemento 2" data-answer="validazione"><option value="">Scegli…</option><option>addestramento</option><option>validazione</option><option>test</option><option>impiego</option><option>fuga di informazione</option></select></td>
 </tr>
 <tr class="odd">
 <td>250 pazienti del passato chiusi sotto chiave e usati una volta sola, alla fine, per riportare l'errore da attendersi.</td>
-<td><select aria-label="Etichetta per l'elemento 3" data-answer="test"><option value="">— scegli —</option><option>addestramento</option><option>validazione</option><option>test</option><option>impiego</option><option>fuga di informazione</option></select></td>
+<td><select aria-label="Etichetta per l'elemento 3" data-answer="test"><option value="">Scegli…</option><option>addestramento</option><option>validazione</option><option>test</option><option>impiego</option><option>fuga di informazione</option></select></td>
 </tr>
 <tr class="even">
 <td>Aoife, Tomás e Priya, i pazienti di stasera, la cui variazione della creatinina nessuno conosce ancora.</td>
-<td><select aria-label="Etichetta per l'elemento 4" data-answer="impiego"><option value="">— scegli —</option><option>addestramento</option><option>validazione</option><option>test</option><option>impiego</option><option>fuga di informazione</option></select></td>
+<td><select aria-label="Etichetta per l'elemento 4" data-answer="impiego"><option value="">Scegli…</option><option>addestramento</option><option>validazione</option><option>test</option><option>impiego</option><option>fuga di informazione</option></select></td>
 </tr>
 <tr class="odd">
 <td>La creatinina di ogni paziente misurata 24 ore dopo il ricovero, usata come predittore della variazione a 48 ore.</td>
-<td><select aria-label="Etichetta per l'elemento 5" data-answer="fuga di informazione"><option value="">— scegli —</option><option>addestramento</option><option>validazione</option><option>test</option><option>impiego</option><option>fuga di informazione</option></select></td>
+<td><select aria-label="Etichetta per l'elemento 5" data-answer="fuga di informazione"><option value="">Scegli…</option><option>addestramento</option><option>validazione</option><option>test</option><option>impiego</option><option>fuga di informazione</option></select></td>
 </tr>
 </tbody>
 </table>
@@ -2124,7 +2129,7 @@ Figura&nbsp;3.4: Validazione incrociata annidata: il ciclo interno ottimizza, il
 <section id="aprire-linsieme-di-test" class="level3" data-number="3.8.2">
 <h3 data-number="3.8.2" class="anchored" data-anchor-id="aprire-linsieme-di-test"><span class="header-section-number">3.8.2</span> Aprire l’insieme di test</h3>
 <p>Tutte le scelte sono fatte: <span class="math inline">\(k\)</span>NN con <span class="math inline">\(k\)</span> = 15, SOFA e creatinina basale standardizzati. Il modello viene ristimato su tutti i 1.000 pazienti di addestramento e, per la prima e unica volta, applicato ai 250 pazienti di test. Il suo MAE sul test è di 0,176 mg/dL, in linea con la stima in validazione incrociata (0,179). Per completezza, la retta con due predittori ottiene 0,171 e il modello della media 0,236 sugli stessi pazienti: la graduatoria trovata con la validazione incrociata regge. L’accordo tra errore in validazione incrociata ed errore sul test è ciò che un flusso di lavoro onesto dovrebbe produrre; uno scarto grande sarebbe un campanello d’allarme: o qualcosa nel processo ha fatto trapelare informazioni, o i pazienti di test sono diversi da quelli di addestramento.</p>
-<p>I due predittori erano una scelta didattica. Con tutti i dieci predittori del Reparto 7 — ospedale, età, SOFA, lattato, pressione arteriosa minima, creatinina basale, aderenza al protocollo, urea, PCR e albumina, l’insieme che il libro chiama <em>P10</em> e usa dal Capitolo 4 in poi —, standardizzati allo stesso modo sui pazienti di addestramento, <span class="math inline">\(k\)</span>NN sceglie <span class="math inline">\(k\)</span> = 22 con la validazione incrociata e raggiunge un MAE sul test di 0,168 mg/dL, migliore di entrambi i modelli con due predittori. La <a href="#tbl-ch03-comparison" class="quarto-xref">Tabella&nbsp;<span>3.7</span></a> raccoglie tutti i modelli del Reparto 7 incontrati finora. È il primo <strong>confronto fin qui</strong> del libro: ogni capitolo successivo aggiunge i suoi modelli a questa stessa tabella, stimati sugli stessi 1.000 pazienti di addestramento, giudicati sugli stessi 250 pazienti di test e valutati con le stesse metriche, così che un modello del Capitolo 6 si possa confrontare riga per riga con uno del Capitolo 3.</p>
+<p>I due predittori erano una scelta didattica. Con tutti i dieci predittori del Reparto 7 (ospedale, età, SOFA, lattato, pressione arteriosa minima, creatinina basale, aderenza al protocollo, urea, PCR e albumina, l’insieme che il libro chiama <em>P10</em> e usa dal Capitolo 4 in poi), standardizzati allo stesso modo sui pazienti di addestramento, <span class="math inline">\(k\)</span>NN sceglie <span class="math inline">\(k\)</span> = 22 con la validazione incrociata e raggiunge un MAE sul test di 0,168 mg/dL, migliore di entrambi i modelli con due predittori. La <a href="#tbl-ch03-comparison" class="quarto-xref">Tabella&nbsp;<span>3.7</span></a> raccoglie tutti i modelli del Reparto 7 incontrati finora. È il primo <strong>confronto fin qui</strong> del libro: ogni capitolo successivo aggiunge i suoi modelli a questa stessa tabella, stimati sugli stessi 1.000 pazienti di addestramento, giudicati sugli stessi 250 pazienti di test e valutati con le stesse metriche, così che un modello del Capitolo 6 si possa confrontare riga per riga con uno del Capitolo 3.</p>
 <div class="cell">
 <div id="tbl-ch03-comparison" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -2385,7 +2390,7 @@ Soluzioni scelte
 <li>Le <strong>metriche</strong> riassumono gli errori <span class="math inline">\(e_i = y_i - \hat y_i\)</span>: MAE (errore tipico), MSE e RMSE (più peso agli errori grandi) e <span class="math inline">\(R^2\)</span> (miglioramento rispetto alla previsione con la media). Scegli la metrica che corrisponde a quanto costa un errore.</li>
 <li>Ogni modello deve battere un <strong>riferimento</strong>: la media (o la mediana) e la pratica attuale.</li>
 <li>La <strong>validazione incrociata a <span class="math inline">\(V\)</span> blocchi</strong> stima il modello <span class="math inline">\(V\)</span> volte e fa la media degli errori sulle parti escluse; i blocchi devono tenere insieme i dati di ciascun paziente (o ospedale).</li>
-<li>La <strong>fuga di informazione</strong> — variabili che contengono l’esito, passi stimati su righe di valutazione o lo stesso paziente da entrambe le parti — fa sembrare i modelli migliori di quanto siano. I geni 08, 14 e 19 di ONCO-1 sono l’esempio permanente del libro.</li>
+<li>La <strong>fuga di informazione</strong> (variabili che contengono l’esito, passi stimati su righe di valutazione o lo stesso paziente da entrambe le parti) fa sembrare i modelli migliori di quanto siano. I geni 08, 14 e 19 di ONCO-1 sono l’esempio permanente del libro.</li>
 <li>Il metodo dei <strong><span class="math inline">\(k\)</span> vicini più prossimi</strong> fa la media degli esiti dei <span class="math inline">\(k\)</span> pazienti di addestramento più simili; richiede predittori standardizzati, e <span class="math inline">\(k\)</span> scambia varianza (<span class="math inline">\(k\)</span> piccolo) con distorsione (<span class="math inline">\(k\)</span> grande).</li>
 <li>Un <strong>iperparametro</strong> come <span class="math inline">\(k\)</span> si ottimizza con la validazione incrociata; la <strong>validazione incrociata annidata</strong> stima la prestazione dell’intera procedura di ottimizzazione. Poi si apre l’insieme di test, una volta sola.</li>
 </ul>

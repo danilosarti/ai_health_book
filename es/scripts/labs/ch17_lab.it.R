@@ -1,0 +1,78 @@
+# Laboratorio del capitolo 17
+# Intelligenza Artificiale e Apprendimento Automatico per le Scienze della Salute
+# Esegui dalla cartella del libro (quella che contiene data/) o modifica i percorsi.
+# 1. Token, embedding e posizioni ---------------------------------------------
+set.seed(2026)
+vocab  <- c("<bos>", "the", "patient", "reports", "denies", "chest", "pain", "fever")
+tokens <- c("<bos>", "the", "patient", "reports", "chest", "pain")
+ids    <- match(tokens, vocab)
+d <- 8; h <- 2; d_k <- d / h; d_ff <- 4 * d; n_tok <- length(ids)
+E <- matrix(rnorm(length(vocab) * d, sd = 0.5), ncol = d)        # matrice degli embedding |V| x d
+pos_enc <- function(T, d) {                                       # codifiche sinusoidali
+  P <- matrix(0, T, d)
+  for (t in 1:T) for (r in 0:(d / 2 - 1)) {
+    P[t, 2 * r + 1] <- sin((t - 1) / 10000^(2 * r / d))
+    P[t, 2 * r + 2] <- cos((t - 1) / 10000^(2 * r / d))
+  }
+  P
+}
+X <- E[ids, ] + pos_enc(n_tok, d)                                 # input n_tok x d
+dim(X)
+
+# 2. Mattoni di base ------------------------------------------------------------
+softmax <- function(x) { e <- exp(x - max(x)); e / sum(e) }
+layer_norm <- function(X) t(apply(X, 1, function(x) (x - mean(x)) / sqrt(mean((x - mean(x))^2) + 1e-5)))
+gelu <- function(x) 0.5 * x * (1 + tanh(sqrt(2 / pi) * (x + 0.044715 * x^3)))
+new_block <- function() list(
+  W_Q = matrix(rnorm(d * d, sd = 0.3), d), W_K = matrix(rnorm(d * d, sd = 0.3), d),
+  W_V = matrix(rnorm(d * d, sd = 0.3), d), W_O = matrix(rnorm(d * d, sd = 0.3), d),
+  W_1 = matrix(rnorm(d * d_ff, sd = 0.3), d), W_2 = matrix(rnorm(d_ff * d, sd = 0.3), d_ff))
+causal <- matrix(0, n_tok, n_tok); causal[upper.tri(causal)] <- -Inf   # la maschera causale
+
+mha <- function(X, B) {                                           # attenzione a più teste
+  Q <- X %*% B$W_Q; K <- X %*% B$W_K; V <- X %*% B$W_V
+  heads <- lapply(1:h, function(m) {
+    cols <- ((m - 1) * d_k + 1):(m * d_k)                          # la porzione di questa testa
+    S <- Q[, cols] %*% t(K[, cols]) / sqrt(d_k) + causal
+    A <- t(apply(S, 1, softmax))
+    list(A = A, out = A %*% V[, cols])
+  })
+  list(out = do.call(cbind, lapply(heads, `[[`, "out")) %*% B$W_O,
+       A = lapply(heads, `[[`, "A"))
+}
+block <- function(X, B) {                                         # blocco pre-LN (senza bias e guadagni)
+  att <- mha(layer_norm(X), B)
+  X1  <- X + att$out                                              # X' = X + MHA(LN(X))
+  Y   <- X1 + gelu(layer_norm(X1) %*% B$W_1) %*% B$W_2              # Y  = X' + FFN(LN(X'))
+  list(Y = Y, A = att$A)
+}
+
+# 3. Due blocchi impilati -------------------------------------------------------
+B1 <- new_block(); B2 <- new_block()
+out1 <- block(X, B1); out2 <- block(out1$Y, B2)
+dim(out2$Y)                                                       # ancora n_tok x d
+round(out1$A[[1]], 2)                                             # testa 1, strato 1: triangolo superiore a 0
+rowSums(out1$A[[1]])
+
+# 4. Probabilità del token successivo (pesi condivisi) ed entropia incrociata -----
+H <- layer_norm(out2$Y)
+logits <- H %*% t(E)                                              # n_tok x |V|
+probs  <- t(apply(logits, 1, softmax))
+next_ids <- ids[-1]                                               # il token che segue davvero
+nll <- -log(probs[cbind(1:(n_tok - 1), next_ids)])
+c(mean_cross_entropy = mean(nll), uniform_guess = log(length(vocab)))
+
+# 5. Pesi in un blocco (con bias e guadagni della normalizzazione di strato) -------
+c(attention = 4 * (d * d + d), ffn = d * d_ff + d_ff + d_ff * d + d, layernorm = 4 * d)
+
+# 6. Attenzione del piccolo transformer addestrato --------------------------------
+att  <- read.csv("data/precomputed/ch17/attention.csv")
+sent <- read.csv("data/precomputed/ch17/sentences.csv")
+tok1 <- sent$token[sent$sentence == 1]
+a <- att[att$sentence == 1 & att$layer == 1 & att$head == 1, ]
+A_trained <- matrix(0, length(tok1), length(tok1), dimnames = list(tok1, tok1))
+A_trained[cbind(a$query + 1, a$key + 1)] <- a$weight
+last_row <- A_trained[length(tok1), ]
+head(sort(last_row, decreasing = TRUE), 3)                         # dove guarda l'ultima posizione
+image(t(A_trained[nrow(A_trained):1, ]), axes = FALSE, col = hcl.colors(30, "Blues", rev = TRUE),
+      main = "Modello addestrato, strato 1, testa 1")

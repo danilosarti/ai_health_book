@@ -1,0 +1,21 @@
+var1,var2,H,H_raw,model
+age,male,0.119,0.32,Random forest
+age,ph.ecog,0.047,2.65,Random forest
+age,ph.karno,0.049,1.77,Random forest
+age,wt.loss,0.047,1.46,Random forest
+male,ph.ecog,0.012,0.69,Random forest
+male,ph.karno,0.028,1.02,Random forest
+male,wt.loss,0.041,1.26,Random forest
+ph.ecog,ph.karno,0.062,5.69,Random forest
+ph.ecog,wt.loss,0.079,5.74,Random forest
+ph.karno,wt.loss,0.102,5.49,Random forest
+age,male,0.063,0.25,XGBoost
+age,ph.ecog,0.054,3.53,XGBoost
+age,ph.karno,0.074,2.11,XGBoost
+age,wt.loss,0.065,2.42,XGBoost
+male,ph.ecog,0.024,1.58,XGBoost
+male,ph.karno,0.028,0.8,XGBoost
+male,wt.loss,0.032,1.18,XGBoost
+ph.ecog,ph.karno,0.036,3.39,XGBoost
+ph.ecog,wt.loss,0.086,7.25,XGBoost
+ph.karno,wt.loss,0.125,6.43,XGBoost

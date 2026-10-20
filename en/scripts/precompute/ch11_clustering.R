@@ -1,5 +1,5 @@
 # =====================================================================
-# Chapter 11 — precomputed results (clustering patients)
+# Chapter 11: precomputed results (clustering patients)
 # Usage (from the book folder): Rscript scripts/precompute/ch11_clustering.R
 # Needs: data/wearable_phenotypes.csv, data/genomic_subtypes.csv,
 #        data/homebeat.csv, data/homebeat_missing.csv

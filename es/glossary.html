@@ -1,0 +1,2238 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Apéndice C: Glosario – Inteligencia Artificial y Aprendizaje Automático para las Ciencias de la Salud</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./notation.html" rel="next">
+<link href="./data-dictionary.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-1ed442b0bca6acdbb302262e5862e895.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-ea2dfcc467e7465021677e6f977f9eb2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-1ed442b0bca6acdbb302262e5862e895.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Sin resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="assets/vendor/mathjax/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="assets/book.css">
+</head>
+
+<body class="floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./setup.html">Apéndices</a></li><li class="breadcrumb-item"><a href="./glossary.html"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Glosario</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Inteligencia Artificial y Aprendizaje Automático para las Ciencias de la Salud</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-translate"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../en/index.html">
+            English
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../pt/index.html">
+            Português
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../es/index.html">
+            Español
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../it/index.html">
+            Italiano
+            </a>
+          </li>
+      </ul>
+    </div>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Alternar modo oscuro"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Buscar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bienvenida</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Fundamentos: datos, modelos, decisiones</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Datos, modelos y decisiones</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Incertidumbre y probabilidad para quien decide</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Aprender de los datos: el flujo de trabajo</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Predecir desenlaces</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelos lineales y regularización</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Clasificación, umbrales y calibración</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Árboles y métodos de ensamble</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Redes neuronales y aprendizaje profundo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Aprendizaje bayesiano e incertidumbre predictiva</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Cuando faltan datos</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Encontrar estructura</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Datos de alta dimensión y reducción de la dimensionalidad</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Agrupar pacientes</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Confiar en los modelos y actuar</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">IA interpretable y explicable</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">De la predicción a la causalidad</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Decisiones secuenciales: aprendizaje por refuerzo</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Lenguaje, modelos generativos y LLM</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">El texto como dato</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Predecir la siguiente palabra: modelos de lenguaje y embeddings</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">La atención y el transformer</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Del modelo de lenguaje al asistente clínico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Modelos generativos más allá del texto</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Apéndices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configurar R, Python, Git y GitHub</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-dictionary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Datos usados en este libro</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glossary.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Glosario</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Notación</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Referencias</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./setup.html">Apéndices</a></li><li class="breadcrumb-item"><a href="./glossary.html"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Glosario</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Apéndice C: Glosario</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Cada término lleva al capítulo, y siempre que es posible a la definición, en que se presenta. Los términos están en orden alfabético; los significados resumidos sirven de recordatorio, y el capítulo ofrece la definición completa.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Término</th>
+<th>Significado resumido</th>
+<th>Definido en</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Agente y entorno</td>
+<td>Quien elige las acciones, y todo aquello sobre lo que actúa sin poder controlarlo por completo</td>
+<td><a href="./ch14.html#def-agent">Cap. 14</a></td>
+</tr>
+<tr class="even">
+<td>Agrupamiento jerárquico (dendrograma)</td>
+<td>Fusiona repetidamente los dos clústeres más próximos; las fusiones forman un árbol, que se corta a una altura para obtener una partición</td>
+<td><a href="./ch11.html#def-hierarchical">Cap. 11</a></td>
+</tr>
+<tr class="odd">
+<td>Ajuste fino (LoRA, destilación)</td>
+<td>Entrenamiento adicional con datos de la tarea objetivo; LoRA aprende una pequeña corrección de bajo rango, la destilación entrena un modelo pequeño para imitar a uno grande</td>
+<td><a href="./ch18.html#def-fine-tuning">Cap. 18</a></td>
+</tr>
+<tr class="even">
+<td>Ajuste por instrucciones</td>
+<td>Entrenamiento adicional con prompts emparejados con buenas respuestas escritas por personas</td>
+<td><a href="./ch18.html#def-instruction-tuning">Cap. 18</a></td>
+</tr>
+<tr class="odd">
+<td>Ajuste por preferencias (RLHF, DPO)</td>
+<td>Entrenar un modelo con comparaciones humanas entre respuestas, mediante un modelo de recompensa y aprendizaje por refuerzo, o directamente</td>
+<td><a href="./ch18.html#def-preference-tuning">Cap. 18</a></td>
+</tr>
+<tr class="even">
+<td>Aleatorización</td>
+<td>Asignar el tratamiento al azar, de modo que los grupos tratado y no tratado sean intercambiables en cuanto a las características medidas y no medidas</td>
+<td><a href="./ch13.html#def-randomisation">Cap. 13</a></td>
+</tr>
+<tr class="odd">
+<td>Alucinación</td>
+<td>Contenido fluido y plausible sin respaldo en la fuente ni en los hechos, incluidas referencias inventadas</td>
+<td><a href="./ch18.html#def-hallucination">Cap. 18</a></td>
+</tr>
+<tr class="even">
+<td>Análisis de casos completos</td>
+<td>Conserva solo las filas en las que se observaron todas las variables usadas (eliminación por lista)</td>
+<td><a href="./ch09.html#def-complete-case">Cap. 9</a></td>
+</tr>
+<tr class="odd">
+<td>Análisis de componentes principales (PCA)</td>
+<td>Sustituye características correlacionadas por sumas ponderadas no correlacionadas, ordenadas según la varianza que recogen</td>
+<td><a href="./ch10.html#def-pca">Cap. 10</a></td>
+</tr>
+<tr class="even">
+<td>Análisis de sensibilidad (ajuste δ)</td>
+<td>Repite un análisis con supuestos distintos, por ejemplo desplazando los valores imputados en <span class="math inline">\(\delta\)</span>, para ver si la conclusión se mantiene</td>
+<td><a href="./ch09.html#def-sensitivity-analysis">Cap. 9</a></td>
+</tr>
+<tr class="odd">
+<td>Apalancamiento y distancia de Cook</td>
+<td>Lo lejos que están los predictores de una instancia de los demás, y cuánto cambiaría el ajuste si se eliminara</td>
+<td><a href="./ch04.html#def-leverage-cook">Cap. 4</a></td>
+</tr>
+<tr class="even">
+<td>Aprendizaje automático</td>
+<td>IA que aprende de los datos en lugar de seguir reglas explícitas</td>
+<td><a href="./ch01.html#def-ml">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td>Aprendizaje no supervisado</td>
+<td>Encontrar estructura en los datos sin un desenlace</td>
+<td><a href="./ch01.html#sec-learning-types">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Aprendizaje por atajos</td>
+<td>Buen rendimiento obtenido con características asociadas al desenlace, pero que no son su causa (un marcador, un aparato); falla cuando la asociación cambia</td>
+<td><a href="./ch07.html#def-shortcut">Cap. 7</a></td>
+</tr>
+<tr class="odd">
+<td>Aprendizaje por refuerzo</td>
+<td>Aprender una política de acción a partir de recompensas a lo largo del tiempo</td>
+<td><a href="./ch01.html#sec-learning-types">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Aprendizaje por transferencia</td>
+<td>Reutilizar una red entrenada con un gran conjunto de datos como punto de partida para una tarea nueva</td>
+<td><a href="./ch07.html#def-transfer">Cap. 7</a></td>
+</tr>
+<tr class="odd">
+<td>Aprendizaje supervisado</td>
+<td>Aprender una correspondencia entre las características y un desenlace conocido</td>
+<td><a href="./ch01.html#sec-learning-types">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Árbol de decisión</td>
+<td>Predice mediante una secuencia de preguntas de sí/no sobre las características, desde el nodo raíz hasta una hoja</td>
+<td><a href="./ch06.html#def-decision-tree">Cap. 6</a></td>
+</tr>
+<tr class="odd">
+<td>Árboles de regresión aditivos bayesianos (BART)</td>
+<td>Una suma de árboles pequeños con distribuciones a priori que favorecen árboles poco profundos, ajustada por MCMC; da predicciones con incertidumbre</td>
+<td><a href="./ch08.html#def-bart">Cap. 8</a></td>
+</tr>
+<tr class="even">
+<td>Asignación blanda</td>
+<td>Probabilidad a posteriori de que una instancia pertenezca a cada componente, en lugar de una única etiqueta</td>
+<td><a href="./ch11.html#def-soft">Cap. 11</a></td>
+</tr>
+<tr class="odd">
+<td>Atención</td>
+<td>Construye una nueva representación para una posición como media ponderada de las posiciones que puede mirar; los pesos <span class="math inline">\(\alpha_{ts}\)</span> suman 1</td>
+<td><a href="./ch17.html#def-attention">Cap. 17</a></td>
+</tr>
+<tr class="even">
+<td>Atención multicabeza</td>
+<td>Varias operaciones de atención (cabezas) en paralelo, cada una con sus proyecciones, con las salidas concatenadas</td>
+<td><a href="./ch17.html#def-multihead">Cap. 17</a></td>
+</tr>
+<tr class="odd">
+<td>Autoencoder</td>
+<td>Un codificador que comprime un ejemplo en un código corto y un decodificador que lo reconstruye</td>
+<td><a href="./ch19.html#def-autoencoder">Cap. 19</a></td>
+</tr>
+<tr class="even">
+<td>Autoencoder variacional (VAE)</td>
+<td>Un autoencoder cuyo código se extrae de una distribución normal, con una penalización KL que hace que el espacio de códigos sea apto para el muestreo</td>
+<td><a href="./ch19.html#def-vae">Cap. 19</a></td>
+</tr>
+<tr class="odd">
+<td>Bagging</td>
+<td>Ajusta un modelo por cada muestra bootstrap y promedia las predicciones (<em>bootstrap aggregating</em>)</td>
+<td><a href="./ch06.html#def-bagging">Cap. 6</a></td>
+</tr>
+<tr class="even">
+<td>Bandido multibrazo</td>
+<td>Una elección repetida entre acciones con recompensas medias desconocidas, sin un estado que pase de una ronda a la siguiente</td>
+<td><a href="./ch14.html#def-bandit">Cap. 14</a></td>
+</tr>
+<tr class="odd">
+<td>Base de decisión</td>
+<td>Alternativas, consecuencias, preferencias e incertidumbres de una decisión, hechas explícitas</td>
+<td><a href="./ch01.html#sec-decisions">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Benchmark y evaluación en el mundo real</td>
+<td>Un conjunto de prueba público y fijo, frente a probar el sistema completo con las tareas, los documentos y los usuarios del lugar donde se implantará</td>
+<td><a href="./ch18.html#def-llm-evaluation">Cap. 18</a></td>
+</tr>
+<tr class="odd">
+<td>Beneficio neto y curva de decisión</td>
+<td>Verdaderos positivos menos falsos positivos ponderados por las odds del umbral; en función del umbral, muestra si merece la pena usar un modelo</td>
+<td><a href="./ch05.html#def-net-benefit">Cap. 5</a></td>
+</tr>
+<tr class="even">
+<td>Bloque transformer</td>
+<td>Atención multicabeza y una red feed-forward, cada una con normalización de capa y conexión residual; un transformer apila <span class="math inline">\(N\)</span> bloques</td>
+<td><a href="./ch17.html#def-transformer-block">Cap. 17</a></td>
+</tr>
+<tr class="odd">
+<td>Bolsa de palabras</td>
+<td>Describe un documento por la frecuencia de cada palabra del vocabulario, ignorando el orden; apilados, los vectores forman una matriz documento-término</td>
+<td><a href="./ch15.html#def-bow">Cap. 15</a></td>
+</tr>
+<tr class="even">
+<td>Bosque aleatorio</td>
+<td>Árboles profundos con bagging que consideran solo un subconjunto aleatorio de <span class="math inline">\(m_{\text{try}}\)</span> características en cada división</td>
+<td><a href="./ch06.html#def-random-forest">Cap. 6</a></td>
+</tr>
+<tr class="odd">
+<td>Cadena de texto (string) y codificación de caracteres</td>
+<td>Una secuencia ordenada de caracteres, y la correspondencia entre caracteres, números y bytes (Unicode, UTF-8)</td>
+<td><a href="./ch15.html#def-string">Cap. 15</a></td>
+</tr>
+<tr class="even">
+<td>Calibración</td>
+<td>Concordancia entre las probabilidades predichas y las frecuencias observadas</td>
+<td><a href="./ch05.html#def-calibration">Cap. 5</a></td>
+</tr>
+<tr class="odd">
+<td>Característica (atributo)</td>
+<td>Una columna (variable) de un conjunto de datos</td>
+<td><a href="./ch01.html#def-instance">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Centroide y medoide</td>
+<td>La media de los miembros de un clúster (un punto sintético) y el miembro más próximo, en promedio, a todos los demás (un punto real)</td>
+<td><a href="./ch11.html#def-centroid">Cap. 11</a></td>
+</tr>
+<tr class="odd">
+<td>Clasificación</td>
+<td>Aprendizaje supervisado con un desenlace categórico</td>
+<td><a href="./ch01.html#sec-learning-types">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Clasificador de textos</td>
+<td>Un modelo supervisado que asigna al vector de un documento una probabilidad para cada clase</td>
+<td><a href="./ch15.html#def-text-classifier">Cap. 15</a></td>
+</tr>
+<tr class="odd">
+<td>Clúster y agrupamiento</td>
+<td>Un grupo de instancias más parecidas entre sí que a las demás; el agrupamiento encuentra esos grupos sin etiquetas</td>
+<td><a href="./ch11.html#def-cluster">Cap. 11</a></td>
+</tr>
+<tr class="even">
+<td>Codificación por pares de bytes (BPE)</td>
+<td>Construye un vocabulario de subpalabras fusionando repetidamente el par de símbolos adyacentes más frecuente</td>
+<td><a href="./ch15.html#def-bpe">Cap. 15</a></td>
+</tr>
+<tr class="odd">
+<td>Codificación posicional</td>
+<td>Un vector que se suma al embedding de cada token para que el modelo sepa dónde está el token</td>
+<td><a href="./ch17.html#def-positional-encoding">Cap. 17</a></td>
+</tr>
+<tr class="even">
+<td>Coeficiente de determinación (<span class="math inline">\(R^2\)</span>)</td>
+<td>Uno menos el cociente entre el error cuadrático del modelo y el de una referencia que predice la media</td>
+<td><a href="./ch03.html#def-regression-metrics">Cap. 3</a></td>
+</tr>
+<tr class="odd">
+<td>Coeficiente (de regresión)</td>
+<td>Diferencia esperada en el desenlace por unidad de un predictor, con los demás fijos; una asociación, no necesariamente un efecto</td>
+<td><a href="./ch04.html#def-coefficient">Cap. 4</a></td>
+</tr>
+<tr class="even">
+<td>Cola de revisión</td>
+<td>Dos umbrales sobre la probabilidad de un clasificador: liberar por debajo de uno, actuar por encima del otro y enviar el resto a una persona</td>
+<td><a href="./ch15.html#def-review-queue">Cap. 15</a></td>
+</tr>
+<tr class="odd">
+<td>Colapso de modos</td>
+<td>Un generador que produce solo unos pocos tipos de ejemplos y pierde gran parte de la variedad de los datos reales</td>
+<td><a href="./ch19.html#sec-ch19-gans">Cap. 19</a></td>
+</tr>
+<tr class="even">
+<td>Colinealidad</td>
+<td>Una característica puede escribirse, exacta o aproximadamente, como suma ponderada de otras; las características contienen información solapada</td>
+<td><a href="./ch10.html#def-collinearity">Cap. 10</a></td>
+</tr>
+<tr class="odd">
+<td>Colisionador</td>
+<td>Una variable causada por otras dos en un camino; ajustar o seleccionar por ella crea una asociación espuria</td>
+<td><a href="./ch13.html#def-collider">Cap. 13</a></td>
+</tr>
+<tr class="even">
+<td>Conexión residual y normalización de capa</td>
+<td>Sumar la entrada de una subcapa a su salida; reescalar cada vector de token a media 0 y desviación típica 1</td>
+<td><a href="./ch17.html#def-residual-layernorm">Cap. 17</a></td>
+</tr>
+<tr class="odd">
+<td>Conjunto de entrenamiento</td>
+<td>Datos usados para ajustar un modelo</td>
+<td><a href="./ch01.html#sec-pipeline">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Conjunto de prueba</td>
+<td>Datos reservados para estimar el rendimiento en casos nuevos</td>
+<td><a href="./ch01.html#sec-pipeline">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td>Conjunto de validación</td>
+<td>Datos usados para comparar modelos o configuraciones candidatos y elegir entre ellos, antes de abrir el conjunto de prueba</td>
+<td><a href="./ch03.html#def-data-splits">Cap. 3</a></td>
+</tr>
+<tr class="even">
+<td>Consulta, clave y valor</td>
+<td>Tres proyecciones aprendidas de cada token: lo que busca, lo que ofrece para ser encontrado y el contenido que transmite</td>
+<td><a href="./ch17.html#def-qkv">Cap. 17</a></td>
+</tr>
+<tr class="odd">
+<td>Contrafáctico</td>
+<td>Una afirmación sobre lo que habría ocurrido con una intervención que no tuvo lugar</td>
+<td><a href="./ch13.html#def-intervention">Cap. 13</a></td>
+</tr>
+<tr class="even">
+<td>Convolución</td>
+<td>Desliza un pequeño filtro de pesos aprendidos sobre una imagen y produce un mapa de características</td>
+<td><a href="./ch07.html#def-convolution">Cap. 7</a></td>
+</tr>
+<tr class="odd">
+<td>Criterio de la puerta trasera (backdoor)</td>
+<td>Un conjunto de variables basta para el ajuste si bloquea todos los caminos de puerta trasera y no contiene ningún descendiente del tratamiento</td>
+<td><a href="./ch13.html#def-backdoor">Cap. 13</a></td>
+</tr>
+<tr class="even">
+<td>Curva de precisión-exhaustividad</td>
+<td>Precisión frente a exhaustividad en todos los umbrales; informativa cuando los positivos son raros</td>
+<td><a href="./ch05.html#def-pr-curve">Cap. 5</a></td>
+</tr>
+<tr class="odd">
+<td>Curva ROC y AUC</td>
+<td>Sensibilidad frente a 1 − especificidad en todos los umbrales; el área bajo ella es la probabilidad de que un caso quede ordenado por encima de un no caso</td>
+<td><a href="./ch05.html#def-roc">Cap. 5</a></td>
+</tr>
+<tr class="even">
+<td>Datos</td>
+<td>Representaciones registradas de hechos, observaciones o mediciones</td>
+<td><a href="./ch01.html#def-data">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td>Datos experimentales</td>
+<td>Datos generados cuando el investigador asigna las exposiciones de forma planificada</td>
+<td><a href="./ch01.html#def-observational">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Datos observacionales</td>
+<td>Datos registrados a medida que suceden las cosas, sin intervención</td>
+<td><a href="./ch01.html#def-observational">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td>Datos sintéticos</td>
+<td>Datos producidos por un modelo generativo en lugar de medidos, hechos para reproducir propiedades elegidas de los datos reales</td>
+<td><a href="./ch19.html#def-synthetic-data">Cap. 19</a></td>
+</tr>
+<tr class="even">
+<td>DBSCAN</td>
+<td>Agrupamiento basado en la densidad: hace crecer clústeres a partir de puntos núcleo con al menos minPts vecinos en el radio <span class="math inline">\(r\)</span>; los demás puntos son ruido</td>
+<td><a href="./ch11.html#def-dbscan">Cap. 11</a></td>
+</tr>
+<tr class="odd">
+<td>Decisión</td>
+<td>Elección de una alternativa dentro de un conjunto, dado un estado de conocimiento</td>
+<td><a href="./ch01.html#def-decision">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Decodificación (temperatura, top-k, top-p)</td>
+<td>Convertir probabilidades del siguiente token en texto: elección voraz o muestreo, modificados por la temperatura <span class="math inline">\(\tau\)</span> y por top-<span class="math inline">\(k\)</span>/top-<span class="math inline">\(p\)</span></td>
+<td><a href="./ch16.html#def-decoding">Cap. 16</a></td>
+</tr>
+<tr class="odd">
+<td>Dependencia parcial y curvas ICE</td>
+<td>Cómo cambia la predicción de un paciente (ICE) o la predicción media (PDP) cuando varía una característica</td>
+<td><a href="./ch12.html#def-pdp-ice">Cap. 12</a></td>
+</tr>
+<tr class="even">
+<td>Descenso del gradiente</td>
+<td>Minimiza una pérdida moviendo repetidamente cada peso un pequeño paso en contra de su gradiente</td>
+<td><a href="./ch07.html#def-gradient-descent">Cap. 7</a></td>
+</tr>
+<tr class="odd">
+<td>Desenlace</td>
+<td>La característica que queremos predecir o explicar (respuesta, objetivo)</td>
+<td><a href="./ch01.html#def-instance">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Desenlaces potenciales</td>
+<td>Los desenlaces que tendría un paciente con cada tratamiento, <span class="math inline">\(Y(1)\)</span> e <span class="math inline">\(Y(0)\)</span>; solo se observa uno de ellos</td>
+<td><a href="./ch13.html#def-potential-outcomes">Cap. 13</a></td>
+</tr>
+<tr class="odd">
+<td>Desvanecimiento del gradiente y LSTM</td>
+<td>Los gradientes se encogen a lo largo de muchos pasos hacia atrás en el tiempo; la LSTM añade una celda de memoria con puertas para conservar la información durante más tiempo</td>
+<td><a href="./ch16.html#def-vanishing-gradient">Cap. 16</a></td>
+</tr>
+<tr class="even">
+<td>Detección de la negación</td>
+<td>Decidir si un hallazgo mencionado se afirma o se niega, usando expresiones desencadenantes y su alcance</td>
+<td><a href="./ch15.html#def-negation">Cap. 15</a></td>
+</tr>
+<tr class="odd">
+<td>Dimensión (datos de alta dimensión)</td>
+<td>El número de características <span class="math inline">\(p\)</span>; los datos son de alta dimensión cuando <span class="math inline">\(p\)</span> es grande en relación con <span class="math inline">\(n\)</span></td>
+<td><a href="./ch10.html#def-dimension">Cap. 10</a></td>
+</tr>
+<tr class="even">
+<td>Distancia</td>
+<td>Una regla que convierte dos vectores de características en un número no negativo (euclídea, Manhattan, coseno, Mahalanobis)</td>
+<td><a href="./ch10.html#def-distance">Cap. 10</a></td>
+</tr>
+<tr class="odd">
+<td>Distribución a priori conjugada</td>
+<td>Una distribución a priori que da una a posteriori de la misma familia (a priori beta con verosimilitud de sí/no)</td>
+<td><a href="./ch08.html#def-conjugate-prior">Cap. 8</a></td>
+</tr>
+<tr class="even">
+<td>Distribución a priori débilmente informativa</td>
+<td>Una distribución a priori que solo excluye valores inverosímiles</td>
+<td><a href="./ch08.html#def-conjugate-prior">Cap. 8</a></td>
+</tr>
+<tr class="odd">
+<td>Distribución a priori y a posteriori</td>
+<td>Lo que se supone sobre un parámetro antes de los datos, y lo que se sabe después: a posteriori ∝ verosimilitud × a priori</td>
+<td><a href="./ch08.html#def-posterior-distribution">Cap. 8</a></td>
+</tr>
+<tr class="even">
+<td>Distribución de probabilidad</td>
+<td>Los valores que puede tomar una variable aleatoria y la probabilidad de cada uno; para una variable continua, una densidad cuya área da las probabilidades</td>
+<td><a href="./ch02.html#def-distribution">Cap. 2</a></td>
+</tr>
+<tr class="odd">
+<td>Distribución predictiva a posteriori</td>
+<td>Distribución de un desenlace futuro, que promedia las predicciones del modelo sobre toda la distribución a posteriori</td>
+<td><a href="./ch08.html#def-posterior-predictive">Cap. 8</a></td>
+</tr>
+<tr class="even">
+<td>Divergencia de Kullback-Leibler</td>
+<td>Entropía cruzada menos entropía; cero solo cuando el modelo coincide con la distribución verdadera</td>
+<td><a href="./ch16.html#def-cross-entropy">Cap. 16</a></td>
+</tr>
+<tr class="odd">
+<td>Efecto medio del tratamiento (ATE, CATE)</td>
+<td><span class="math inline">\(\mathbb{E}[Y(1)] - \mathbb{E}[Y(0)]\)</span> en una población; el CATE es el mismo contraste dentro de un subgrupo</td>
+<td><a href="./ch13.html#def-ate">Cap. 13</a></td>
+</tr>
+<tr class="even">
+<td>Elastic net</td>
+<td>Una mezcla de las penalizaciones lasso y ridge, con un parámetro de mezcla <span class="math inline">\(\alpha\)</span> de 0 (ridge) a 1 (lasso)</td>
+<td><a href="./ch04.html#def-elastic-net">Cap. 4</a></td>
+</tr>
+<tr class="odd">
+<td>Embedding</td>
+<td>Un vector denso de <span class="math inline">\(d\)</span> números aprendidos que representa un token, una fila de la matriz de embeddings</td>
+<td><a href="./ch16.html#def-embedding">Cap. 16</a></td>
+</tr>
+<tr class="even">
+<td>Emparejamiento</td>
+<td>Forma parejas de pacientes tratados con no tratados similares y compara los desenlaces dentro de las parejas; en general estima el efecto en los tratados</td>
+<td><a href="./ch13.html#def-matching">Cap. 13</a></td>
+</tr>
+<tr class="odd">
+<td>Emparejamiento por media predictiva (PMM)</td>
+<td>Imputa copiando el valor observado de un participante cuya predicción es cercana; los valores imputados siempre existen en los datos</td>
+<td><a href="./ch09.html#def-pmm">Cap. 9</a></td>
+</tr>
+<tr class="even">
+<td>Encoder y decoder</td>
+<td>Pilas con atención bidireccional (vectores contextuales) o con atención con máscara causal (generación); unidas por la atención cruzada</td>
+<td><a href="./ch17.html#def-encoder-decoder">Cap. 17</a></td>
+</tr>
+<tr class="odd">
+<td>Entropía</td>
+<td>Sorpresa esperada de una variable aleatoria, en bits; 0 cuando el resultado es seguro</td>
+<td><a href="./ch02.html#def-entropy">Cap. 2</a></td>
+</tr>
+<tr class="even">
+<td>Entropía cruzada</td>
+<td>Sorpresa media cuando resultados de <span class="math inline">\(P\)</span> se predicen con un modelo <span class="math inline">\(Q\)</span>; la pérdida de entrenamiento de los modelos de lenguaje</td>
+<td><a href="./ch16.html#def-cross-entropy">Cap. 16</a></td>
+</tr>
+<tr class="odd">
+<td>Error absoluto medio (MAE)</td>
+<td>Distancia absoluta media entre las predicciones y los desenlaces observados</td>
+<td><a href="./ch01.html#sec-models">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Error cuadrático medio (MSE) y RMSE</td>
+<td>Media de los errores de predicción al cuadrado y su raíz cuadrada, en las unidades del desenlace</td>
+<td><a href="./ch03.html#def-regression-metrics">Cap. 3</a></td>
+</tr>
+<tr class="odd">
+<td>Error fuera de la bolsa (OOB)</td>
+<td>Error de las predicciones hechas por los árboles que no vieron cada instancia; una estimación casi gratuita del error de prueba</td>
+<td><a href="./ch06.html#def-oob">Cap. 6</a></td>
+</tr>
+<tr class="even">
+<td>Esperanza y varianza</td>
+<td>Media a largo plazo de una variable aleatoria y la distancia cuadrática media respecto a ella (su raíz cuadrada es la desviación típica)</td>
+<td><a href="./ch02.html#def-expectation">Cap. 2</a></td>
+</tr>
+<tr class="odd">
+<td>Estadístico H</td>
+<td>Fracción del efecto conjunto de dos características que no explican sus efectos por separado (Friedman-Popescu)</td>
+<td><a href="./ch12.html#sec-ch12-interactions">Cap. 12</a></td>
+</tr>
+<tr class="even">
+<td>Estado, acción y recompensa</td>
+<td>Lo que el agente observa en el instante <span class="math inline">\(t\)</span>, lo que hace y el número que puntúa la consecuencia</td>
+<td><a href="./ch14.html#def-agent">Cap. 14</a></td>
+</tr>
+<tr class="odd">
+<td>Estandarización</td>
+<td>Restar la media de una característica y dividir por su desviación típica, para que las unidades dejen de importar</td>
+<td><a href="./ch10.html#def-standardisation">Cap. 10</a></td>
+</tr>
+<tr class="even">
+<td>Estimación de máxima verosimilitud (EMV)</td>
+<td>El valor del parámetro con la mayor verosimilitud, <span class="math inline">\(\hat\theta\)</span></td>
+<td><a href="./ch02.html#def-mle">Cap. 2</a></td>
+</tr>
+<tr class="odd">
+<td>Etiqueta</td>
+<td>El valor conocido del desenlace de una instancia</td>
+<td><a href="./ch01.html#def-instance">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Exactitud (accuracy)</td>
+<td>Proporción de instancias clasificadas correctamente</td>
+<td><a href="./ch05.html#def-confusion-matrix">Cap. 5</a></td>
+</tr>
+<tr class="odd">
+<td>Explicabilidad</td>
+<td>Métodos que construyen una descripción aparte y más sencilla del comportamiento de un modelo</td>
+<td><a href="./ch12.html#def-interpretability">Cap. 12</a></td>
+</tr>
+<tr class="even">
+<td>Explicación contrafáctica</td>
+<td>Un pequeño cambio en las entradas que alteraría la salida del modelo de un modo especificado; describe el modelo, no al paciente</td>
+<td><a href="./ch12.html#def-counterfactual-explanation">Cap. 12</a></td>
+</tr>
+<tr class="odd">
+<td>Explicaciones globales y locales</td>
+<td>Describen el comportamiento de un modelo en una población, o una predicción para un individuo</td>
+<td><a href="./ch12.html#def-global-local">Cap. 12</a></td>
+</tr>
+<tr class="even">
+<td>Exploración y explotación</td>
+<td>Probar acciones inciertas para aprender sobre ellas, frente a elegir la acción que parece mejor ahora</td>
+<td><a href="./ch14.html#def-exploration">Cap. 14</a></td>
+</tr>
+<tr class="odd">
+<td>Expresión regular</td>
+<td>Un lenguaje compacto para describir patrones de texto que encontrar, extraer o sustituir</td>
+<td><a href="./ch15.html#def-regex">Cap. 15</a></td>
+</tr>
+<tr class="even">
+<td>Factor de confusión</td>
+<td>Una causa común de un tratamiento (exposición) y de un desenlace; abre un camino de puerta trasera</td>
+<td><a href="./ch13.html#def-confounder">Cap. 13</a></td>
+</tr>
+<tr class="odd">
+<td>Faltantes al azar (MAR)</td>
+<td>Dados los valores observados, la probabilidad de un hueco ya no depende de los valores no observados</td>
+<td><a href="./ch09.html#def-mcar-mar-mnar">Cap. 9</a></td>
+</tr>
+<tr class="even">
+<td>Faltantes completamente al azar (MCAR)</td>
+<td>La probabilidad de un hueco no depende de nada de los datos</td>
+<td><a href="./ch09.html#def-mcar-mar-mnar">Cap. 9</a></td>
+</tr>
+<tr class="odd">
+<td>Faltantes no al azar (MNAR)</td>
+<td>La probabilidad de un hueco depende de los propios valores no observados, incluso dados los observados</td>
+<td><a href="./ch09.html#def-mcar-mar-mnar">Cap. 9</a></td>
+</tr>
+<tr class="even">
+<td>Fidelidad, diversidad y privacidad (de los datos sintéticos)</td>
+<td>Los registros sintéticos parecen reales, cubren toda la variedad de los datos reales y no revelan nada de las personas usadas en el entrenamiento</td>
+<td><a href="./ch19.html#def-synthetic-quality">Cap. 19</a></td>
+</tr>
+<tr class="odd">
+<td>Fuga de información</td>
+<td>Información no disponible en el momento de la predicción, o procedente de los datos de evaluación, que llega al modelo durante su desarrollo; produce un rendimiento optimista</td>
+<td><a href="./ch03.html#def-leakage">Cap. 3</a></td>
+</tr>
+<tr class="even">
+<td>Función de activación (ReLU)</td>
+<td>Convierte la suma ponderada de una neurona en su salida: escalón, sigmoide o la unidad lineal rectificada <span class="math inline">\(\max(0, z)\)</span></td>
+<td><a href="./ch07.html#def-activation">Cap. 7</a></td>
+</tr>
+<tr class="odd">
+<td>Función de pérdida</td>
+<td>La penalización <span class="math inline">\(\mathcal{L}(y, \hat y)\)</span> por predecir <span class="math inline">\(\hat y\)</span> cuando el valor verdadero es <span class="math inline">\(y\)</span>; el ajuste minimiza su media</td>
+<td><a href="./ch03.html#sec-ch03-metrics">Cap. 3</a></td>
+</tr>
+<tr class="even">
+<td>Función de valor</td>
+<td>Retorno esperado desde un estado, <span class="math inline">\(V^\pi(s)\)</span>, o desde una acción en un estado, <span class="math inline">\(Q^\pi(s,a)\)</span>, con una política dada</td>
+<td><a href="./ch14.html#def-value-function">Cap. 14</a></td>
+</tr>
+<tr class="odd">
+<td>Función logística (sigmoide)</td>
+<td><span class="math inline">\(\sigma(z) = 1/(1+e^{-z})\)</span>, una curva en S que convierte cualquier número en una probabilidad</td>
+<td><a href="./ch05.html#def-logistic">Cap. 5</a></td>
+</tr>
+<tr class="even">
+<td>Generación aumentada por recuperación (RAG)</td>
+<td>Un recuperador encuentra los fragmentos más parecidos a una pregunta, que se insertan en el prompt para que la respuesta pueda basarse en ellos</td>
+<td><a href="./ch18.html#def-rag">Cap. 18</a></td>
+</tr>
+<tr class="odd">
+<td>Generalización</td>
+<td>Buen rendimiento de un modelo con datos nuevos, aún no vistos</td>
+<td><a href="./ch01.html#sec-pipeline">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Gradient boosting</td>
+<td>Construye un modelo por rondas: cada árbol pequeño se ajusta a los residuos actuales y se suma con una tasa de aprendizaje</td>
+<td><a href="./ch06.html#def-boosting">Cap. 6</a></td>
+</tr>
+<tr class="odd">
+<td>Grafo acíclico dirigido (DAG)</td>
+<td>Un diagrama de supuestos causales: flechas para los efectos directos, sin ciclos; las flechas ausentes son los supuestos más fuertes</td>
+<td><a href="./ch13.html#def-dag">Cap. 13</a></td>
+</tr>
+<tr class="even">
+<td>Hiperparámetro</td>
+<td>Un ajuste que controla cómo se aprende un modelo, elegido con datos no usados en el ajuste (sintonización)</td>
+<td><a href="./ch03.html#def-hyperparameter">Cap. 3</a></td>
+</tr>
+<tr class="odd">
+<td>Hipótesis distribucional</td>
+<td>Las palabras que aparecen en contextos similares tienden a tener significados similares</td>
+<td><a href="./ch16.html#def-distributional">Cap. 16</a></td>
+</tr>
+<tr class="even">
+<td>Importancia por permutación</td>
+<td>Aumento medio del error cuando se baraja la columna de una característica</td>
+<td><a href="./ch12.html#def-permutation-importance">Cap. 12</a></td>
+</tr>
+<tr class="odd">
+<td>Impureza (índice de Gini)</td>
+<td>Lo mezclados que están los desenlaces en un nodo: varianza dentro del nodo, índice de Gini o entropía; las divisiones se eligen para reducirla</td>
+<td><a href="./ch06.html#def-impurity">Cap. 6</a></td>
+</tr>
+<tr class="even">
+<td>Imputación múltiple</td>
+<td>Crea <span class="math inline">\(M\)</span> conjuntos de datos completos con sorteos aleatorios para los huecos, analiza cada uno y combina los resultados</td>
+<td><a href="./ch09.html#def-multiple-imputation">Cap. 9</a></td>
+</tr>
+<tr class="odd">
+<td>Imputación simple</td>
+<td>Rellena cada hueco una sola vez (media, mediana, una predicción) y analiza la tabla como si se hubiera observado por completo</td>
+<td><a href="./ch09.html#def-single-imputation">Cap. 9</a></td>
+</tr>
+<tr class="even">
+<td>Índice de Rand ajustado (ARI)</td>
+<td>Concordancia entre dos particiones sobre todos los pares de instancias, corregida por el azar; 1 = idénticas</td>
+<td><a href="./ch11.html#def-ari">Cap. 11</a></td>
+</tr>
+<tr class="odd">
+<td>Índice de validación interna (silueta)</td>
+<td>Puntúa una partición solo con los datos, equilibrando la compacidad y la separación de los clústeres</td>
+<td><a href="./ch11.html#def-internal-index">Cap. 11</a></td>
+</tr>
+<tr class="even">
+<td>Instancia</td>
+<td>Una fila de un conjunto de datos (un paciente, un lote…)</td>
+<td><a href="./ch01.html#def-instance">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td>Inteligencia artificial (IA)</td>
+<td>Sistemas que realizan tareas que requerirían cognición si las llevaran a cabo seres humanos</td>
+<td><a href="./ch01.html#def-ai">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Interpretabilidad</td>
+<td>Una persona puede entender cómo funciona un modelo a partir de su estructura (una ecuación corta, un árbol pequeño)</td>
+<td><a href="./ch12.html#def-interpretability">Cap. 12</a></td>
+</tr>
+<tr class="odd">
+<td>Intervalo de confianza</td>
+<td>Un intervalo calculado de modo que, en muchas repeticiones del estudio, el 95 % de esos intervalos contendría el valor verdadero</td>
+<td><a href="./ch04.html#def-ci-pvalue">Cap. 4</a></td>
+</tr>
+<tr class="even">
+<td>Intervalo de credibilidad</td>
+<td>Un intervalo que contiene el 95 % de la probabilidad a posteriori: dados el modelo, las distribuciones a priori y los datos, el parámetro está dentro de él con un 95 % de probabilidad</td>
+<td><a href="./ch08.html#def-credible-interval">Cap. 8</a></td>
+</tr>
+<tr class="odd">
+<td>Intervención</td>
+<td>Fijar una variable en un valor elegido en lugar de dejar que tome su propio valor</td>
+<td><a href="./ch13.html#def-intervention">Cap. 13</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(k\)</span> vecinos más próximos (<span class="math inline">\(k\)</span>NN)</td>
+<td>Predice una instancia nueva mediante la media (o la votación) de las <span class="math inline">\(k\)</span> instancias de entrenamiento más próximas</td>
+<td><a href="./ch03.html#def-knn">Cap. 3</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(k\)</span>-medias</td>
+<td>Alterna la asignación de cada instancia al centroide más próximo y el desplazamiento de los centroides a la media de sus miembros</td>
+<td><a href="./ch11.html#def-kmeans">Cap. 11</a></td>
+</tr>
+<tr class="even">
+<td>Lasso</td>
+<td>Regularización con la suma de los valores absolutos de los coeficientes (penalización L1); lleva exactamente a cero algunos coeficientes</td>
+<td><a href="./ch04.html#def-lasso">Cap. 4</a></td>
+</tr>
+<tr class="odd">
+<td>Lote y época</td>
+<td>El subconjunto de instancias usado en un paso del gradiente, y una pasada completa por el conjunto de entrenamiento</td>
+<td><a href="./ch07.html#def-epoch">Cap. 7</a></td>
+</tr>
+<tr class="even">
+<td>Maldición de la dimensionalidad</td>
+<td>A medida que crecen las dimensiones, los datos se vuelven dispersos y las distancias se concentran, y los métodos de vecindad necesitan muchos más datos</td>
+<td><a href="./ch10.html#def-curse">Cap. 10</a></td>
+</tr>
+<tr class="odd">
+<td>Manipulación de la recompensa (reward hacking)</td>
+<td>Un agente que maximiza una recompensa mal especificada de maneras que quien lo diseñó no pretendía</td>
+<td><a href="./ch14.html#sec-ch14-health">Cap. 14</a></td>
+</tr>
+<tr class="even">
+<td>Máscara causal</td>
+<td>Impide que cada posición preste atención a las posiciones siguientes, para que el modelo pueda generar texto de izquierda a derecha</td>
+<td><a href="./ch17.html#def-causal-mask">Cap. 17</a></td>
+</tr>
+<tr class="odd">
+<td>Matriz de confusión</td>
+<td>Tabla cruzada de las clases predichas y reales: verdaderos y falsos positivos, falsos y verdaderos negativos</td>
+<td><a href="./ch05.html#def-confusion-matrix">Cap. 5</a></td>
+</tr>
+<tr class="even">
+<td>Matriz de diseño</td>
+<td>Matriz con una fila por instancia y una columna por coeficiente, con columnas indicadoras 0/1 para las categorías</td>
+<td><a href="./ch04.html#def-design-matrix">Cap. 4</a></td>
+</tr>
+<tr class="odd">
+<td>Mediador</td>
+<td>Una variable en el camino causal del tratamiento al desenlace; ajustar por ella elimina parte del efecto</td>
+<td><a href="./ch13.html#def-mediator">Cap. 13</a></td>
+</tr>
+<tr class="even">
+<td>Métodos agnósticos y específicos del modelo</td>
+<td>Métodos que solo consultan las predicciones de un modelo, frente a métodos que usan su estructura interna</td>
+<td><a href="./ch12.html#def-global-local">Cap. 12</a></td>
+</tr>
+<tr class="odd">
+<td>MICE (ecuaciones encadenadas)</td>
+<td>Imputa varias variables incompletas recorriéndolas en ciclo, cada una predicha a partir de todas las demás</td>
+<td><a href="./ch09.html#def-mice">Cap. 9</a></td>
+</tr>
+<tr class="even">
+<td>Mínimos cuadrados ordinarios (OLS)</td>
+<td>Estima los coeficientes que hacen lo más pequeña posible la suma de los cuadrados de los residuos</td>
+<td><a href="./ch04.html#def-least-squares">Cap. 4</a></td>
+</tr>
+<tr class="odd">
+<td>Modelado del lenguaje enmascarado y autorregresivo</td>
+<td>Recuperar tokens ocultos a partir del resto del texto (BERT), frente a predecir cada token a partir de los anteriores (GPT)</td>
+<td><a href="./ch17.html#def-mlm">Cap. 17</a></td>
+</tr>
+<tr class="even">
+<td>Modelado generativo</td>
+<td>Aprender la distribución de los datos para crear ejemplos nuevos y realistas</td>
+<td><a href="./ch01.html#sec-learning-types">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td>Modelo</td>
+<td>Una representación simplificada de la realidad, construida con un propósito</td>
+<td><a href="./ch01.html#def-model">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Modelo de difusión</td>
+<td>Aprende a invertir un proceso que añade ruido poco a poco; genera ejemplos eliminando el ruido de un ruido puro paso a paso</td>
+<td><a href="./ch19.html#def-diffusion-model">Cap. 19</a></td>
+</tr>
+<tr class="odd">
+<td>Modelo de lenguaje</td>
+<td>Una distribución de probabilidad sobre secuencias de tokens, dada por las probabilidades del siguiente token <span class="math inline">\(P_\theta(w_t \mid w_{&lt;t})\)</span></td>
+<td><a href="./ch16.html#def-language-model">Cap. 16</a></td>
+</tr>
+<tr class="even">
+<td>Modelo de mezcla gaussiana (GMM)</td>
+<td>Supone que cada instancia procede de uno de <span class="math inline">\(K\)</span> componentes normales, elegidos con probabilidades <span class="math inline">\(\omega_k\)</span></td>
+<td><a href="./ch11.html#def-gmm">Cap. 11</a></td>
+</tr>
+<tr class="odd">
+<td>Modelo de n-gramas</td>
+<td>Supone que el siguiente token depende solo de los <span class="math inline">\(n-1\)</span> tokens anteriores; las probabilidades se estiman por recuento</td>
+<td><a href="./ch16.html#def-ngram">Cap. 16</a></td>
+</tr>
+<tr class="even">
+<td>Modelo de referencia</td>
+<td>La predicción sensata más sencilla (la media del entrenamiento, o la práctica actual) que cualquier modelo tiene que superar</td>
+<td><a href="./ch03.html#def-baseline">Cap. 3</a></td>
+</tr>
+<tr class="odd">
+<td>Modelo estadístico</td>
+<td><span class="math inline">\(y = f(\mathbf{x}) + \varepsilon\)</span>: parte sistemática más error</td>
+<td><a href="./ch01.html#sec-models">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Modelo fundacional (LLM)</td>
+<td>Un modelo grande entrenado con datos amplios que puede adaptarse a muchas tareas; un gran modelo de lenguaje es un modelo fundacional para texto</td>
+<td><a href="./ch18.html#def-foundation-model">Cap. 18</a></td>
+</tr>
+<tr class="odd">
+<td>Modelos generativos y discriminativos</td>
+<td>Aprender la distribución de los datos, para poder extraer ejemplos nuevos, frente a aprender el desenlace dadas las características</td>
+<td><a href="./ch19.html#def-generative-model">Cap. 19</a></td>
+</tr>
+<tr class="even">
+<td>Monte Carlo mediante cadenas de Markov (MCMC)</td>
+<td>Produce cadenas de extracciones cuya distribución se aproxima a la a posteriori; se comprueban con gráficos de traza, R-hat y tamaño muestral efectivo</td>
+<td><a href="./ch08.html#def-mcmc">Cap. 8</a></td>
+</tr>
+<tr class="odd">
+<td>Muestra bootstrap</td>
+<td><span class="math inline">\(n\)</span> instancias extraídas al azar con reemplazo de un conjunto de <span class="math inline">\(n\)</span></td>
+<td><a href="./ch06.html#def-bootstrap">Cap. 6</a></td>
+</tr>
+<tr class="even">
+<td>Muestreo de Thompson</td>
+<td>Elige cada acción con la probabilidad a posteriori de que sea la mejor, sorteando de la distribución a posteriori de cada brazo</td>
+<td><a href="./ch14.html#sec-ch14-bandits">Cap. 14</a></td>
+</tr>
+<tr class="odd">
+<td>Neurona artificial (perceptrón)</td>
+<td>Multiplica sus entradas por pesos, suma un sesgo y pasa la suma por una función de activación</td>
+<td><a href="./ch07.html#def-neuron">Cap. 7</a></td>
+</tr>
+<tr class="even">
+<td>Niveles de riesgo del Reglamento de IA (AI Act)</td>
+<td>La clasificación europea de los usos de la IA: prohibidos, de alto riesgo, con obligaciones de transparencia, de riesgo mínimo</td>
+<td><a href="./ch18.html#def-ai-act-risk">Cap. 18</a></td>
+</tr>
+<tr class="odd">
+<td>Odds ratio (OR)</td>
+<td>Cociente entre las odds de dos grupos; en la regresión logística, <span class="math inline">\(e^{\beta_j}\)</span> por unidad de <span class="math inline">\(x_j\)</span></td>
+<td><a href="./ch05.html#def-odds-ratio">Cap. 5</a></td>
+</tr>
+<tr class="even">
+<td>Odds y log-odds</td>
+<td><span class="math inline">\(p/(1-p)\)</span>, cuántas veces es más probable que el evento ocurra que no ocurra; su logaritmo es el logit</td>
+<td><a href="./ch05.html#def-odds">Cap. 5</a></td>
+</tr>
+<tr class="odd">
+<td>Paleta de incertidumbre que suprime valores (VSUP)</td>
+<td>Una escala de colores que funde los tonos a medida que crece la incertidumbre, para que solo destaquen los valores fiables</td>
+<td><a href="./ch12.html#def-vsup">Cap. 12</a></td>
+</tr>
+<tr class="even">
+<td>Parada temprana y dropout</td>
+<td>Conservar los pesos con la menor pérdida de validación; apagar neuronas al azar durante el entrenamiento. Ambos reducen el sobreajuste</td>
+<td><a href="./ch07.html#def-early-stopping">Cap. 7</a></td>
+</tr>
+<tr class="odd">
+<td>Perceptrón multicapa (MLP)</td>
+<td>Neuronas organizadas en capas; cada capa oculta aplica pesos y una activación a la salida de la capa anterior</td>
+<td><a href="./ch07.html#def-mlp">Cap. 7</a></td>
+</tr>
+<tr class="even">
+<td>Pérdida esperada</td>
+<td>Pérdida media de una acción, con cada pérdida ponderada por la probabilidad del estado que la produce; se elige la menor</td>
+<td><a href="./ch02.html#def-expected-loss">Cap. 2</a></td>
+</tr>
+<tr class="odd">
+<td>Perplejidad</td>
+<td>Dos elevado a la entropía cruzada en bits: el número efectivo de opciones igualmente probables en cada paso</td>
+<td><a href="./ch16.html#def-perplexity">Cap. 16</a></td>
+</tr>
+<tr class="even">
+<td>Poda por complejidad</td>
+<td>Poda un árbol cobrando un precio <span class="math inline">\(c_p\)</span> por hoja</td>
+<td><a href="./ch06.html#def-cost-complexity">Cap. 6</a></td>
+</tr>
+<tr class="odd">
+<td>Política</td>
+<td>Una regla para elegir acciones a partir de los estados, <span class="math inline">\(\pi(a \mid s)\)</span></td>
+<td><a href="./ch14.html#def-policy">Cap. 14</a></td>
+</tr>
+<tr class="even">
+<td>Ponderación por el inverso de la probabilidad (IPW)</td>
+<td>Pondera cada paciente por el inverso de la probabilidad del tratamiento recibido y crea una pseudopoblación sin confusión</td>
+<td><a href="./ch13.html#def-ipw">Cap. 13</a></td>
+</tr>
+<tr class="odd">
+<td>Pooling</td>
+<td>Reduce un mapa de características resumiendo pequeños bloques (máximo o media)</td>
+<td><a href="./ch07.html#def-pooling">Cap. 7</a></td>
+</tr>
+<tr class="even">
+<td>Precisión, exhaustividad (recall) y F1</td>
+<td>Valor predictivo positivo, sensibilidad y su media armónica</td>
+<td><a href="./ch05.html#def-confusion-matrix">Cap. 5</a></td>
+</tr>
+<tr class="odd">
+<td>Predicción frente a causalidad</td>
+<td>Un modelo que predice bien no dice necesariamente qué ocurriría si interviniéramos</td>
+<td><a href="./ch01.html#sec-causal">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Predictor</td>
+<td>Una característica usada para hacer una predicción (entrada)</td>
+<td><a href="./ch01.html#def-instance">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td>Preentrenamiento</td>
+<td>Ajustar un modelo de lenguaje a un corpus muy grande minimizando la entropía cruzada del siguiente token</td>
+<td><a href="./ch18.html#def-pretraining">Cap. 18</a></td>
+</tr>
+<tr class="even">
+<td>Prevalencia</td>
+<td>Proporción de la población evaluada que tiene la condición; para un paciente, la probabilidad a priori</td>
+<td><a href="./ch02.html#def-diagnostic">Cap. 2</a></td>
+</tr>
+<tr class="odd">
+<td>Privacidad diferencial</td>
+<td>Una garantía matemática de que el resultado cambia poco con o sin los datos de cualquier persona</td>
+<td><a href="./ch19.html#sec-ch19-synthetic">Cap. 19</a></td>
+</tr>
+<tr class="even">
+<td>Probabilidad a priori y a posteriori</td>
+<td>Probabilidad de un evento antes y después de ver la evidencia</td>
+<td><a href="./ch02.html#def-bayes">Cap. 2</a></td>
+</tr>
+<tr class="odd">
+<td>Procesamiento del lenguaje natural (PLN)</td>
+<td>La disciplina que hace que las máquinas analicen y produzcan lenguaje humano</td>
+<td><a href="./ch15.html#sec-ch15-nlp">Cap. 15</a></td>
+</tr>
+<tr class="even">
+<td>Proceso de decisión de Markov (MDP)</td>
+<td>Estados, acciones, probabilidades de transición y recompensas, con el estado siguiente dependiente solo del estado y la acción actuales</td>
+<td><a href="./ch14.html#def-mdp">Cap. 14</a></td>
+</tr>
+<tr class="odd">
+<td>Prompt</td>
+<td>El texto que se da a un modelo de lenguaje como contexto; puede incluir un prompt de sistema, ejemplos resueltos (few-shot) o la petición de razonar paso a paso</td>
+<td><a href="./ch18.html#def-prompt">Cap. 18</a></td>
+</tr>
+<tr class="even">
+<td>Puntuación de propensión</td>
+<td>La probabilidad de que un paciente reciba el tratamiento dadas las covariables, <span class="math inline">\(e(\mathbf{x})\)</span></td>
+<td><a href="./ch13.html#def-propensity">Cap. 13</a></td>
+</tr>
+<tr class="odd">
+<td>Puntuaciones y cargas</td>
+<td>Las coordenadas de una instancia en los componentes, y la fuerza con la que cada característica se relaciona con cada componente</td>
+<td><a href="./ch10.html#def-scores-loadings">Cap. 10</a></td>
+</tr>
+<tr class="even">
+<td>Q-learning</td>
+<td>Aprende valores de acción con la experiencia, moviendo cada estimación hacia la recompensa más el mejor valor siguiente descontado</td>
+<td><a href="./ch14.html#def-q-learning">Cap. 14</a></td>
+</tr>
+<tr class="odd">
+<td>Red generativa antagónica (GAN)</td>
+<td>Un generador que crea ejemplos sintéticos y un discriminador que intenta distinguirlos de los reales, entrenados el uno contra el otro</td>
+<td><a href="./ch19.html#def-gan">Cap. 19</a></td>
+</tr>
+<tr class="even">
+<td>Red neuronal convolucional (CNN)</td>
+<td>Apila bloques de convolución, activación y pooling, seguidos de capas totalmente conectadas</td>
+<td><a href="./ch07.html#def-cnn">Cap. 7</a></td>
+</tr>
+<tr class="odd">
+<td>Red neuronal recurrente (RNN)</td>
+<td>Lee una secuencia token a token y actualiza un estado oculto con los mismos pesos en todas las posiciones</td>
+<td><a href="./ch16.html#def-rnn">Cap. 16</a></td>
+</tr>
+<tr class="even">
+<td>Régimen de tratamiento dinámico</td>
+<td>Una secuencia de reglas de decisión que asigna un tratamiento a la historia del paciente en cada punto de decisión</td>
+<td><a href="./ch14.html#def-dtr">Cap. 14</a></td>
+</tr>
+<tr class="odd">
+<td>Regla de la cadena de la probabilidad</td>
+<td>La probabilidad de una secuencia es el producto de las probabilidades de cada token dados los anteriores</td>
+<td><a href="./ch16.html#def-chain-rule">Cap. 16</a></td>
+</tr>
+<tr class="even">
+<td>Regla de un error estándar</td>
+<td>Elegir el mayor <span class="math inline">\(\lambda\)</span> cuyo error de validación cruzada queda a menos de un error estándar del mínimo</td>
+<td><a href="./ch04.html#def-one-se-rule">Cap. 4</a></td>
+</tr>
+<tr class="odd">
+<td>Reglas de Rubin</td>
+<td>Combinan los resultados de la imputación múltiple: media de las estimaciones; suma de las varianzas dentro de las imputaciones y entre ellas</td>
+<td><a href="./ch09.html#def-rubin">Cap. 9</a></td>
+</tr>
+<tr class="even">
+<td>Regresión</td>
+<td>Aprendizaje supervisado con un desenlace numérico</td>
+<td><a href="./ch01.html#sec-learning-types">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td>Regresión bayesiana</td>
+<td>Una regresión cuyos coeficientes reciben distribuciones a priori; el resultado es la distribución a posteriori conjunta en lugar de estimaciones únicas</td>
+<td><a href="./ch08.html#def-bayesian-regression">Cap. 8</a></td>
+</tr>
+<tr class="even">
+<td>Regresión lineal</td>
+<td>El desenlace escrito como una ordenada en el origen más una suma ponderada de predictores más un error; lineal en los coeficientes</td>
+<td><a href="./ch04.html#def-linear-regression">Cap. 4</a></td>
+</tr>
+<tr class="odd">
+<td>Regresión logística</td>
+<td>Modela la probabilidad de un desenlace binario como <span class="math inline">\(\sigma(\beta_0 + \beta_1 x_1 + \dots)\)</span>: lineal en la escala de las log-odds</td>
+<td><a href="./ch05.html#def-logistic">Cap. 5</a></td>
+</tr>
+<tr class="even">
+<td>Regresión ridge</td>
+<td>Regularización con la suma de los cuadrados de los coeficientes (penalización L2); encoge todos los coeficientes</td>
+<td><a href="./ch04.html#def-ridge">Cap. 4</a></td>
+</tr>
+<tr class="odd">
+<td>Regularización (contracción)</td>
+<td>Ajuste con una penalización sobre el tamaño de los coeficientes, de intensidad <span class="math inline">\(\lambda\)</span>; añade sesgo y reduce la varianza</td>
+<td><a href="./ch04.html#def-regularisation">Cap. 4</a></td>
+</tr>
+<tr class="even">
+<td>Reproducibilidad</td>
+<td>Otras personas pueden volver a ejecutar el análisis y obtener los mismos resultados</td>
+<td><a href="./ch01.html#sec-reproducibility">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td>Residuo</td>
+<td>Desenlace observado menos el predicho, <span class="math inline">\(e_i = y_i - \hat y_i\)</span></td>
+<td><a href="./ch04.html#def-least-squares">Cap. 4</a></td>
+</tr>
+<tr class="even">
+<td>Retorno y factor de descuento</td>
+<td>La suma descontada de las recompensas futuras, <span class="math inline">\(G_t\)</span>; el factor de descuento <span class="math inline">\(\gamma\)</span> fija cuánto cuentan las recompensas más lejanas</td>
+<td><a href="./ch14.html#def-return">Cap. 14</a></td>
+</tr>
+<tr class="odd">
+<td>Retropropagación</td>
+<td>Calcula el gradiente de la pérdida para cada peso aplicando la regla de la cadena desde la salida hacia atrás hasta la entrada</td>
+<td><a href="./ch07.html#def-backprop">Cap. 7</a></td>
+</tr>
+<tr class="even">
+<td>Sensibilidad y especificidad</td>
+<td>Proporción de personas con la condición que dan positivo y de personas sin ella que dan negativo</td>
+<td><a href="./ch02.html#def-diagnostic">Cap. 2</a></td>
+</tr>
+<tr class="odd">
+<td>Sesgo de automatización</td>
+<td>La tendencia a confiar demasiado en la salida de un sistema automatizado</td>
+<td><a href="./ch18.html#sec-ch18-governance">Cap. 18</a></td>
+</tr>
+<tr class="even">
+<td>Sesgo (de un modelo)</td>
+<td>Error sistemático causado por supuestos demasiado rígidos; lleva al subajuste</td>
+<td><a href="./ch01.html#def-bias-variance">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td>Similitud coseno</td>
+<td>Coseno del ángulo entre dos vectores; para documentos, 0 = ninguna palabra en común, 1 = mismas proporciones</td>
+<td><a href="./ch15.html#def-cosine-similarity">Cap. 15</a></td>
+</tr>
+<tr class="even">
+<td>Skip-gram (word2vec)</td>
+<td>Aprende embeddings prediciendo las palabras dentro de una pequeña ventana alrededor de cada palabra</td>
+<td><a href="./ch16.html#def-skipgram">Cap. 16</a></td>
+</tr>
+<tr class="odd">
+<td>Sobreajuste</td>
+<td>Seguir el ruido de los datos de entrenamiento; buen rendimiento en el entrenamiento, pobre en la prueba</td>
+<td><a href="./ch01.html#def-bias-variance">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Softmax</td>
+<td>Convierte un vector de puntuaciones en probabilidades que suman 1; la versión multiclase de la función logística</td>
+<td><a href="./ch07.html#sec-ch07-layers">Cap. 7</a></td>
+</tr>
+<tr class="odd">
+<td>Software como dispositivo médico</td>
+<td>Software que el fabricante destina a una finalidad médica, como el diagnóstico, la predicción o el tratamiento</td>
+<td><a href="./ch18.html#def-samd">Cap. 18</a></td>
+</tr>
+<tr class="even">
+<td>Stacking</td>
+<td>Un metamodelo aprende a combinar las predicciones fuera del <em>fold</em> de varios modelos base</td>
+<td><a href="./ch06.html#def-stacking">Cap. 6</a></td>
+</tr>
+<tr class="odd">
+<td>Suavizado</td>
+<td>Ajusta las probabilidades basadas en recuentos para que ningún token posible tenga probabilidad cero (add-<span class="math inline">\(\delta\)</span>)</td>
+<td><a href="./ch16.html#def-smoothing">Cap. 16</a></td>
+</tr>
+<tr class="even">
+<td>Supervisión humana</td>
+<td>Diseñar un sistema de alto riesgo para que personas competentes puedan entenderlo, contradecirlo y detenerlo</td>
+<td><a href="./ch18.html#def-human-oversight">Cap. 18</a></td>
+</tr>
+<tr class="odd">
+<td>Tasa de aprendizaje</td>
+<td>Tamaño del paso <span class="math inline">\(\eta\)</span> que escala cada actualización en el boosting y en el descenso del gradiente</td>
+<td><a href="./ch06.html#def-boosting">Cap. 6</a></td>
+</tr>
+<tr class="even">
+<td>Tensor</td>
+<td>Una matriz de números con cualquier número de ejes; su forma indica la longitud de cada eje</td>
+<td><a href="./ch07.html#def-tensor">Cap. 7</a></td>
+</tr>
+<tr class="odd">
+<td>Teorema de Bayes</td>
+<td>Regla que actualiza una probabilidad a priori con la evidencia: a posteriori ∝ verosimilitud × a priori</td>
+<td><a href="./ch02.html#def-bayes">Cap. 2</a></td>
+</tr>
+<tr class="even">
+<td>TF-IDF</td>
+<td>Frecuencia del término por frecuencia inversa de documento: da peso a las palabras frecuentes en un documento pero raras en la colección</td>
+<td><a href="./ch15.html#def-tfidf">Cap. 15</a></td>
+</tr>
+<tr class="odd">
+<td>Token y vocabulario</td>
+<td>La unidad en la que se corta un texto (palabra, subpalabra, carácter, byte) y el conjunto de tokens distintos que conoce un sistema</td>
+<td><a href="./ch15.html#def-token">Cap. 15</a></td>
+</tr>
+<tr class="even">
+<td>Trayectoria de los coeficientes</td>
+<td>Cada coeficiente de un modelo regularizado representado en función de <span class="math inline">\(\lambda\)</span></td>
+<td><a href="./ch04.html#def-coef-path">Cap. 4</a></td>
+</tr>
+<tr class="odd">
+<td>Truco de reparametrización</td>
+<td>Escribir un código aleatorio como <span class="math inline">\(\mathbf{\mu} + \mathbf{\sigma} \odot \mathbf{\varepsilon}\)</span> para que los gradientes puedan atravesar el paso de muestreo</td>
+<td><a href="./ch19.html#sec-ch19-vae">Cap. 19</a></td>
+</tr>
+<tr class="even">
+<td>t-SNE</td>
+<td>Un mapa no lineal que mantiene juntos a los vecinos; las distancias entre grupos alejados no tienen significado</td>
+<td><a href="./ch10.html#def-tsne">Cap. 10</a></td>
+</tr>
+<tr class="odd">
+<td>UMAP</td>
+<td>Construye un grafo de vecinos más próximos y lo dispone en pocas dimensiones; parámetros <code>n_neighbors</code> y <code>min_dist</code></td>
+<td><a href="./ch10.html#def-umap">Cap. 10</a></td>
+</tr>
+<tr class="even">
+<td>Umbral de clasificación</td>
+<td>Probabilidad <span class="math inline">\(t\)</span> por encima de la cual un caso se clasifica como positivo; una decisión de uso, no una propiedad del modelo</td>
+<td><a href="./ch05.html#def-threshold">Cap. 5</a></td>
+</tr>
+<tr class="odd">
+<td>Umbral de decisión</td>
+<td>Probabilidad en la que dos alternativas tienen el mismo valor esperado</td>
+<td><a href="./ch01.html#sec-decisions">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Uso de herramientas y agente (LLM)</td>
+<td>El modelo escribe peticiones que ejecuta software convencional; un agente decide además qué pasos y herramientas usar</td>
+<td><a href="./ch18.html#def-agent">Cap. 18</a></td>
+</tr>
+<tr class="odd">
+<td>Validación cruzada</td>
+<td>Apartar repetidamente una parte de los datos de entrenamiento para estimar el rendimiento</td>
+<td><a href="./ch01.html#def-cv">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Validación cruzada anidada</td>
+<td>Una validación cruzada externa que estima el rendimiento y otra interna que sintoniza los hiperparámetros, de modo que la sintonización entra en la estimación</td>
+<td><a href="./ch03.html#def-nested-cv">Cap. 3</a></td>
+</tr>
+<tr class="odd">
+<td>Valor de la información</td>
+<td>Cuánto se espera que mejore una decisión si una incertidumbre se resuelve antes de decidir</td>
+<td><a href="./ch02.html#sec-ch02-loss">Cap. 2</a></td>
+</tr>
+<tr class="even">
+<td>Valor de Shapley</td>
+<td>La contribución marginal de una característica a una predicción, promediada sobre todos los órdenes en que podrían añadirse las características</td>
+<td><a href="./ch12.html#def-shapley">Cap. 12</a></td>
+</tr>
+<tr class="odd">
+<td>Valor esperado</td>
+<td>Puntuación media de una alternativa, ponderando las consecuencias por sus probabilidades</td>
+<td><a href="./ch01.html#sec-decisions">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Valor faltante</td>
+<td>Un valor que debería haberse registrado, pero no se registró; el indicador <span class="math inline">\(R_{ij}\)</span> registra si se observó</td>
+<td><a href="./ch09.html#def-missing-value">Cap. 9</a></td>
+</tr>
+<tr class="odd">
+<td>Valor p</td>
+<td>Probabilidad de una estimación al menos tan alejada de cero como la observada si el valor verdadero fuera cero y se cumplieran los supuestos</td>
+<td><a href="./ch04.html#def-ci-pvalue">Cap. 4</a></td>
+</tr>
+<tr class="even">
+<td>Valores predictivos (VPP, VPN)</td>
+<td>Probabilidad de tener la condición tras una prueba positiva y de no tenerla tras una negativa</td>
+<td><a href="./ch02.html#def-diagnostic">Cap. 2</a></td>
+</tr>
+<tr class="odd">
+<td>Variable aleatoria</td>
+<td>Una cantidad cuyo valor no se conoce de antemano y se describe mediante probabilidades</td>
+<td><a href="./ch02.html#def-random-variable">Cap. 2</a></td>
+</tr>
+<tr class="even">
+<td>Variable latente</td>
+<td>Una cantidad no observada que ayuda a explicar o a generar las variables observadas</td>
+<td><a href="./ch19.html#def-latent-variable">Cap. 19</a></td>
+</tr>
+<tr class="odd">
+<td>Varianza (de un modelo)</td>
+<td>Sensibilidad de un modelo a su conjunto de entrenamiento concreto</td>
+<td><a href="./ch01.html#def-bias-variance">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td>Varianza explicada (gráfico de codo)</td>
+<td>Fracción de la varianza total que recoge cada componente, mostrada en orden en un gráfico de codo</td>
+<td><a href="./ch10.html#def-explained-variance">Cap. 10</a></td>
+</tr>
+<tr class="odd">
+<td>Verosimilitud</td>
+<td>Probabilidad de los datos observados vista como función del parámetro; no es la probabilidad de que el parámetro sea verdadero</td>
+<td><a href="./ch02.html#def-likelihood">Cap. 2</a></td>
+</tr>
+</tbody>
+</table>
+
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+
+</main> <!-- /main -->
+<script src="assets/book.js"></script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./data-dictionary.html" class="pagination-link" aria-label="Datos usados en este libro">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Datos usados en este libro</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./notation.html" class="pagination-link" aria-label="Notación">
+        <span class="nav-page-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Notación</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

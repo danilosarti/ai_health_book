@@ -1,5 +1,5 @@
 # =====================================================================
-# Chapter 4 — precomputed penalised regressions on ONCO-1 (browser subset)
+# Chapter 4: precomputed penalised regressions on ONCO-1 (browser subset)
 # Produces, in data/precomputed/ch04/:
 #   lambda_path.json   coefficient paths + CV curves for ridge, elastic net, lasso
 #   comparison.csv     train/test MAE and RMSE of OLS, ridge, lasso, elastic net

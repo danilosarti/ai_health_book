@@ -1,5 +1,5 @@
 # =====================================================================
-# Chapter 10 — t-SNE and UMAP embeddings of the Digital Trial dataset
+# Chapter 10: t-SNE and UMAP embeddings of the Digital Trial dataset
 # (500 participants, 11 standardised features), precomputed for the
 # "perplexity grid" widget and the figures. t-SNE and UMAP are too heavy for
 # the browser engines, so every map shown in the chapter comes from here.

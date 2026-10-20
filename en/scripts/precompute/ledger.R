@@ -1,5 +1,5 @@
 # =====================================================================
-# MODEL LEDGER — one source of truth for every model result of the running examples
+# MODEL LEDGER: one source of truth for every model result of the running examples
 # (Ward 7, ONCO-1, HomeBeat). Specification: LEDGER_SPEC (planning) and
 # data/precomputed/ledger/ledger_README.md (definitions of every column).
 #
@@ -94,10 +94,10 @@ w7 <- function(ex, mid, fit_pred, tuning, software, do_oof = TRUE) {
 }
 
 # ---- 1a. regression ------------------------------------------------------------------
-w7("ward7_reg", "mean", function(a, b) rep(mean(a$delta_creatinine_48h), nrow(b)), "—", Rv)
-w7("ward7_reg", "sofa_line", function(a, b) predict(lm(delta_creatinine_48h ~ sofa, a), b), "—", Rv)
-w7("ward7_reg", "p2_line", function(a, b) predict(lm(delta_creatinine_48h ~ sofa + baseline_creat, a), b), "—", Rv)
-w7("ward7_reg", "ols", function(a, b) predict(lm(f10, a), b), "—", Rv)
+w7("ward7_reg", "mean", function(a, b) rep(mean(a$delta_creatinine_48h), nrow(b)), "none", Rv)
+w7("ward7_reg", "sofa_line", function(a, b) predict(lm(delta_creatinine_48h ~ sofa, a), b), "none", Rv)
+w7("ward7_reg", "p2_line", function(a, b) predict(lm(delta_creatinine_48h ~ sofa + baseline_creat, a), b), "none", Rv)
+w7("ward7_reg", "ols", function(a, b) predict(lm(f10, a), b), "none", Rv)
 
 # kNN exactly as in ch03_workflow.R (standardised on the training rows, stable ties)
 knn_all_k <- function(Xtr, ytr, Xte, kmax) {
@@ -214,8 +214,8 @@ note("ward7_reg", "ols_mi", sprintf("mice pmm, m = %d, maxit 10, seed %d; imputa
 
 # ---- 1b. AKI classification ----------------------------------------------------------
 fP5 <- reformulate(P5, "aki")
-w7("ward7_aki", "prevalence", function(a, b) rep(mean(a$aki), nrow(b)), "—", Rv)
-w7("ward7_aki", "logit_sofa", function(a, b) predict(glm(aki ~ sofa, binomial, a), b, type = "response"), "—", Rv)
+w7("ward7_aki", "prevalence", function(a, b) rep(mean(a$aki), nrow(b)), "none", Rv)
+w7("ward7_aki", "logit_sofa", function(a, b) predict(glm(aki ~ sofa, binomial, a), b, type = "response"), "none", Rv)
 w7("ward7_aki", "logit_p5", function(a, b) predict(glm(fP5, binomial, a), b, type = "response"), "unpenalised (Chapter 5)", Rv)
 st5 <- std_fit(as.matrix(train[P5]))
 Z5 <- function(d) std(as.matrix(d[P5]), st5)
@@ -267,7 +267,7 @@ prow <- match(PAT, onco$patient_id)
 stopifnot(all(spO$set[prow] == "test"), all(onco$treatment[prow] == "chemo"))
 yr <- onco$response_percent
 
-# ---- 2a. regression (response %, all patients) — the model matrix of ch04_glmnet.R ----
+# ---- 2a. regression (response %, all patients): the model matrix of ch04_glmnet.R ----
 d <- onco[, setdiff(names(onco), c("patient_id", "high_response", "baseline_tumor_mm", "post_tumor_mm", leaky))]
 d$treatment <- factor(d$treatment, levels = c("no_chemo", "chemo"))
 d$tumor_grade <- factor(d$tumor_grade, levels = c("G1", "G2", "G3"))
@@ -281,10 +281,10 @@ oreg <- function(mid, fp, tuning, software) {          # fp(train rows, new rows
   put("onco1_reg", mid, "oof", onco$patient_id[idx_tr], out)
   note("onco1_reg", mid, tuning, software)
 }
-oreg("mean", function(a, b) rep(mean(yr[a]), length(b)), "—", Rv)
+oreg("mean", function(a, b) rep(mean(yr[a]), length(b)), "none", Rv)
 lmfp <- function(vars) function(a, b) predict(lm(reformulate(vars, "response_percent"), onco[a, ]), onco[b, ])
-oreg("ols_clinical", lmfp(clin), "—", Rv)
-oreg("ols", lmfp(c(clin, g47)), "—", Rv)
+oreg("ols_clinical", lmfp(clin), "none", Rv)
+oreg("ols", lmfp(c(clin, g47)), "none", Rv)
 oreg("ols_leaky", lmfp(c(clin, genes)), "includes the leaky genes 08, 14, 19 (leakage warning only)", Rv)
 ytrO <- yr[idx_tr]
 cvsO <- lapply(alphas, function(a) cv.glmnet(ZO[idx_tr, ], ytrO, alpha = a, foldid = fO, standardize = FALSE,
@@ -302,7 +302,7 @@ for (m in list(list("ridge", 1), list("lasso", 11), list("enet", bestO))) for (r
 }
 enet_alpha_o1 <- alphas[bestO]
 
-# ---- 2b. classification (high response), chemotherapy arm — the code of ch05_precompute.R,
+# ---- 2b. classification (high response), chemotherapy arm: the code of ch05_precompute.R,
 #          with ONE change: genes are standardised with the TRAINING rows' mean and SD ----------
 chemo <- onco[onco$treatment == "chemo", ]
 chemo$tumor_grade <- factor(chemo$tumor_grade, levels = c("G1", "G2", "G3"))
@@ -323,7 +323,7 @@ ocls <- function(mid, fp, tuning, software) {          # fp(train df, new df)
   put("onco1_class", mid, "oof", ctr$patient_id, out)
   note("onco1_class", mid, tuning, software)
 }
-ocls("prevalence", function(a, b) rep(mean(a$high_response), nrow(b)), "—", Rv)
+ocls("prevalence", function(a, b) rep(mean(a$high_response), nrow(b)), "none", Rv)
 ocls("logit_7", function(a, b) predict(glm(f_small, binomial, a), b, type = "response"), "unpenalised", Rv)
 ocls("logit_all", function(a, b) suppressWarnings(predict(suppressWarnings(glm(f_all, binomial, a)), b, type = "response")),
      "unpenalised (quasi-separation warnings: some coefficients very large)", Rv)
@@ -355,8 +355,8 @@ hbm <- function(mid, fp, tuning, software) {
   put("homebeat", mid, "oof", htr$participant_id, oof(fp, htr, fH))
   note("homebeat", mid, tuning, software)
 }
-hbm("mean", function(a, b) rep(mean(a$resting_hr), nrow(b)), "—", Rv)
-hbm("ols", function(a, b) predict(lm(fhb, a), b), "—", Rv)
+hbm("mean", function(a, b) rep(mean(a$resting_hr), nrow(b)), "none", Rv)
+hbm("ols", function(a, b) predict(lm(fhb, a), b), "none", Rv)
 hbm("bayes_lin", function(a, b) {
   f <- stan_glm(resting_hr ~ frailty + age + baseline_inflammation, data = a, family = gaussian(),
                 prior_intercept = normal(60, 20, autoscale = FALSE), prior = normal(0, 20, autoscale = FALSE),

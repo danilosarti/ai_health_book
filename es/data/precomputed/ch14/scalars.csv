@@ -1,0 +1,13 @@
+"key","value"
+"ql_first90",75
+"ql_near_opt_final",1
+"ql_in_range",0.459201760315809
+"ql_hypo",0.00660400182921764
+"V5_target",-3.53857674550033
+"V5_hypo",-25.1333944122479
+"bandit_T",500
+"bandit_reps",200
+"gamma",0.9
+"off_unseen",0.683333333333333
+"off_in_range",0.241646556592129
+"off_hypo",0.2813120947439

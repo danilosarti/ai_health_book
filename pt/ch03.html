@@ -375,6 +375,11 @@ window.Quarto = {
             </a>
           </li>
           <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../es/index.html">
+            Español
+            </a>
+          </li>
+          <li>
             <a class="dropdown-item sidebar-tools-main-item" href="./../it/index.html">
             Italiano
             </a>
@@ -681,7 +686,7 @@ A manhã seguinte na UTI Ala 7
 </div>
 </div>
 <div id="ch03-gate" class="gate" data-success="Boas-vindas ao Capítulo 3.">
-<p>Uma equipe está construindo um modelo da variação da creatinina em 48 horas na UTI Ala 7. Onde cada item se encaixa? Arrisque seu melhor palpite — o capítulo explica cada termo.</p>
+<p>Uma equipe está construindo um modelo da variação da creatinina em 48 horas na UTI Ala 7. Onde cada item se encaixa? Arrisque seu melhor palpite: o capítulo explica cada termo.</p>
 <table class="caption-top table" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
@@ -692,23 +697,23 @@ A manhã seguinte na UTI Ala 7
 <tbody>
 <tr class="odd">
 <td>800 pacientes anteriores cujos prontuários são usados para estimar o intercepto e a inclinação de uma reta.</td>
-<td><select aria-label="Rótulo do item 1" data-answer="treino"><option value="">— escolha —</option><option>treino</option><option>validação</option><option>teste</option><option>implantação</option><option>vazamento</option></select></td>
+<td><select aria-label="Rótulo do item 1" data-answer="treino"><option value="">Escolha…</option><option>treino</option><option>validação</option><option>teste</option><option>implantação</option><option>vazamento</option></select></td>
 </tr>
 <tr class="even">
 <td>Outros 200 pacientes anteriores, usados para decidir se um modelo com 5 ou com 50 vizinhos funciona melhor.</td>
-<td><select aria-label="Rótulo do item 2" data-answer="validação"><option value="">— escolha —</option><option>treino</option><option>validação</option><option>teste</option><option>implantação</option><option>vazamento</option></select></td>
+<td><select aria-label="Rótulo do item 2" data-answer="validação"><option value="">Escolha…</option><option>treino</option><option>validação</option><option>teste</option><option>implantação</option><option>vazamento</option></select></td>
 </tr>
 <tr class="odd">
 <td>250 pacientes anteriores guardados a sete chaves e usados uma única vez, bem no final, para relatar o erro esperado.</td>
-<td><select aria-label="Rótulo do item 3" data-answer="teste"><option value="">— escolha —</option><option>treino</option><option>validação</option><option>teste</option><option>implantação</option><option>vazamento</option></select></td>
+<td><select aria-label="Rótulo do item 3" data-answer="teste"><option value="">Escolha…</option><option>treino</option><option>validação</option><option>teste</option><option>implantação</option><option>vazamento</option></select></td>
 </tr>
 <tr class="even">
 <td>Aoife, Tomás e Priya, os pacientes desta noite, cuja variação da creatinina ninguém conhece ainda.</td>
-<td><select aria-label="Rótulo do item 4" data-answer="implantação"><option value="">— escolha —</option><option>treino</option><option>validação</option><option>teste</option><option>implantação</option><option>vazamento</option></select></td>
+<td><select aria-label="Rótulo do item 4" data-answer="implantação"><option value="">Escolha…</option><option>treino</option><option>validação</option><option>teste</option><option>implantação</option><option>vazamento</option></select></td>
 </tr>
 <tr class="odd">
 <td>A creatinina de cada paciente medida 24 horas após a internação, usada como preditor da variação em 48 horas.</td>
-<td><select aria-label="Rótulo do item 5" data-answer="vazamento"><option value="">— escolha —</option><option>treino</option><option>validação</option><option>teste</option><option>implantação</option><option>vazamento</option></select></td>
+<td><select aria-label="Rótulo do item 5" data-answer="vazamento"><option value="">Escolha…</option><option>treino</option><option>validação</option><option>teste</option><option>implantação</option><option>vazamento</option></select></td>
 </tr>
 </tbody>
 </table>
@@ -2116,7 +2121,7 @@ Figura&nbsp;3.4: Validação cruzada aninhada: o laço interno sintoniza, o laç
 <section id="abrindo-o-conjunto-de-teste" class="level3" data-number="3.8.2">
 <h3 data-number="3.8.2" class="anchored" data-anchor-id="abrindo-o-conjunto-de-teste"><span class="header-section-number">3.8.2</span> Abrindo o conjunto de teste</h3>
 <p>Todas as escolhas estão feitas: <span class="math inline">\(k\)</span>NN com <span class="math inline">\(k\)</span> = 15, SOFA e creatinina basal padronizados. O modelo é reajustado com todos os 1.000 pacientes de treino e, pela primeira e única vez, aplicado aos 250 pacientes de teste. Seu MAE de teste é de 0,176 mg/dL, coerente com a estimativa de validação cruzada (0,179). Para constar, a reta com dois preditores marca 0,171 e o modelo da média 0,236 nos mesmos pacientes: a ordenação encontrada pela validação cruzada se mantém. A concordância entre os erros de validação cruzada e de teste é o que um fluxo de trabalho honesto deve produzir; uma diferença grande seria um sinal de alerta de que algo no processo vazou ou de que os pacientes de teste diferem dos de treino.</p>
-<p>Os dois preditores foram uma escolha didática. Com os dez preditores da UTI Ala 7 — hospital, idade, SOFA, lactato, menor pressão arterial, creatinina basal, adesão ao protocolo, ureia, PCR e albumina, o conjunto que o livro chama de <em>P10</em> e usa a partir do Capítulo 4 —, padronizados da mesma forma nos pacientes de treino, o <span class="math inline">\(k\)</span>NN escolhe <span class="math inline">\(k\)</span> = 22 por validação cruzada e chega a um MAE de teste de 0,168 mg/dL, melhor que os dois modelos com dois preditores. A <a href="#tbl-ch03-comparison" class="quarto-xref">Tabela&nbsp;<span>3.7</span></a> reúne todos os modelos da UTI Ala 7 vistos até aqui. É a primeira <strong>comparação até aqui</strong> do livro: cada capítulo seguinte acrescenta seus modelos a esta mesma tabela, ajustados nos mesmos 1.000 pacientes de treino, julgados nos mesmos 250 pacientes de teste e avaliados com as mesmas métricas, para que um modelo do Capítulo 6 possa ser comparado linha a linha com um do Capítulo 3.</p>
+<p>Os dois preditores foram uma escolha didática. Com os dez preditores da UTI Ala 7 (hospital, idade, SOFA, lactato, menor pressão arterial, creatinina basal, adesão ao protocolo, ureia, PCR e albumina, o conjunto que o livro chama de <em>P10</em> e usa a partir do Capítulo 4), padronizados da mesma forma nos pacientes de treino, o <span class="math inline">\(k\)</span>NN escolhe <span class="math inline">\(k\)</span> = 22 por validação cruzada e chega a um MAE de teste de 0,168 mg/dL, melhor que os dois modelos com dois preditores. A <a href="#tbl-ch03-comparison" class="quarto-xref">Tabela&nbsp;<span>3.7</span></a> reúne todos os modelos da UTI Ala 7 vistos até aqui. É a primeira <strong>comparação até aqui</strong> do livro: cada capítulo seguinte acrescenta seus modelos a esta mesma tabela, ajustados nos mesmos 1.000 pacientes de treino, julgados nos mesmos 250 pacientes de teste e avaliados com as mesmas métricas, para que um modelo do Capítulo 6 possa ser comparado linha a linha com um do Capítulo 3.</p>
 <div class="cell">
 <div id="tbl-ch03-comparison" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -2377,7 +2382,7 @@ Respostas selecionadas
 <li>As <strong>métricas</strong> resumem os erros <span class="math inline">\(e_i = y_i - \hat y_i\)</span>: MAE (erro típico), MSE e RMSE (mais peso para os erros grandes) e <span class="math inline">\(R^2\)</span> (melhoria em relação a prever a média). Escolha a métrica que corresponde ao custo de um erro.</li>
 <li>Todo modelo precisa superar uma <strong>referência</strong>: a média (ou a mediana) e a prática atual.</li>
 <li>A <strong>validação cruzada com <span class="math inline">\(V\)</span> partições</strong> ajusta <span class="math inline">\(V\)</span> vezes e faz a média dos erros nas partes separadas; as partições precisam manter juntos os dados de cada paciente (ou hospital).</li>
-<li>O <strong>vazamento</strong> — atributos que contêm o desfecho, etapas ajustadas em linhas de avaliação ou o mesmo paciente dos dois lados — faz os modelos parecerem melhores do que são. Os genes 08, 14 e 19 do ONCO-1 são o exemplo permanente do livro.</li>
+<li>O <strong>vazamento</strong> (atributos que contêm o desfecho, etapas ajustadas em linhas de avaliação ou o mesmo paciente dos dois lados) faz os modelos parecerem melhores do que são. Os genes 08, 14 e 19 do ONCO-1 são o exemplo permanente do livro.</li>
 <li>O método dos <strong><span class="math inline">\(k\)</span> vizinhos mais próximos</strong> faz a média dos desfechos dos <span class="math inline">\(k\)</span> pacientes de treino mais parecidos; precisa de preditores padronizados, e <span class="math inline">\(k\)</span> troca variância (<span class="math inline">\(k\)</span> pequeno) por viés (<span class="math inline">\(k\)</span> grande).</li>
 <li>Um <strong>hiperparâmetro</strong> como <span class="math inline">\(k\)</span> é sintonizado por validação cruzada; a <strong>validação cruzada aninhada</strong> estima o desempenho do procedimento de sintonização inteiro. Depois, o conjunto de teste é aberto, uma única vez.</li>
 </ul>

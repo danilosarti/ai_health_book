@@ -106,7 +106,7 @@ for(i in 1:18){
 }
 
 # ------------------------------------------------------------
-# 5. Outcome – PASI reduction after 12 weeks
+# 5. Outcome: PASI reduction after 12 weeks
 # Influenced by:
 #  - genomic inflammation (G1)
 #  - microbiome dysbiosis (M1)

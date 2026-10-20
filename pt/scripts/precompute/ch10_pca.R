@@ -1,5 +1,5 @@
 # =====================================================================
-# Chapter 10 — PCA of the full Dermato-ATT cohort (200 patients x 1 850
+# Chapter 10: PCA of the full Dermato-ATT cohort (200 patients x 1 850
 # variables) with FactoMineR, plus the distance and scaling summaries quoted
 # in the text. The browser copy of the data (data/dermato.csv) keeps only 200
 # of the 1 850 variables, so the full-data results are precomputed here.

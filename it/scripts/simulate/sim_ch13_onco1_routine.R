@@ -1,5 +1,5 @@
 # =====================================================================
-# Chapter 13 — "ONCO-1 in routine practice": an observational twin of
+# Chapter 13: "ONCO-1 in routine practice": an observational twin of
 # the randomised ONCO-1 trial (data/onco1.csv).
 #
 # Idea: in ONCO-1 a coin decided who received chemotherapy. Here we
@@ -11,8 +11,8 @@
 #     treated patients are kept with probability e(X),
 #     control patients with probability 1 - e(X),
 # where e(X) = plogis(k * score(X)). Because the trial was 1:1, the kept
-# patients have P(chemo | X) = e(X) — the propensity score is known by
-# construction — and the same covariate distribution as the trial, so the
+# patients have P(chemo | X) = e(X) (the propensity score is known by
+# construction) and the same covariate distribution as the trial, so the
 # trial's difference in means is a fair benchmark for the average effect.
 # k = 0 is "no selection" (a smaller randomised trial); larger k means
 # stronger selection by the oncologists.

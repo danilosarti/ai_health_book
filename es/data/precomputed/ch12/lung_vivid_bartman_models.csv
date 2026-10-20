@@ -1,0 +1,3 @@
+"model","test_MAE","test_RMSE","sigma_mean"
+"Random forest (randomForest, 300 trees)",38.6342825169422,46.9322654926479,NA
+"BART (dbarts, 80 trees)",33.1862135572914,41.5791079040798,30.9730304756721

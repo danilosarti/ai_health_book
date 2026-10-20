@@ -1,5 +1,5 @@
 # =====================================================================
-# Chapter 18 — data for the "guideline assistant" of Ward 7.
+# Chapter 18: data for the "guideline assistant" of Ward 7.
 #
 # 1. data/ch18_guidelines.csv: a small corpus of ILLUSTRATIVE local
 #    guideline paragraphs ("chunks") written for the book. They are a

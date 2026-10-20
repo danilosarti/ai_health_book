@@ -1,5 +1,5 @@
 # =====================================================================
-# Chapter 12 — datasets used to teach interpretability
+# Chapter 12: datasets used to teach interpretability
 # Usage (from the book folder): Rscript scripts/simulate/make_ch12_data.R
 #
 # 1. med_small_sim: a small simulated oncology study (800 patients, standard

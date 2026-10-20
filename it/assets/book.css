@@ -1,5 +1,5 @@
 /* =====================================================================
-   AI & ML for Health Sciences — shared interactive toolkit styles
+   AI & ML for Health Sciences: shared interactive toolkit styles
    Works with Quarto's light (cosmo) and dark (darkly) themes.
    ===================================================================== */
 
@@ -188,3 +188,10 @@ body.quarto-dark .tryit form button { color: #0b1d24; }
 .aihs-langbar a:hover, .aihs-langbar a:focus-visible { border-color: var(--aihs-accent); color: var(--aihs-accent); }
 .aihs-langbar a.current { background: var(--aihs-accent); border-color: var(--aihs-accent); color: #fff; font-weight: 600; }
 body.quarto-dark .aihs-langbar a.current { color: #0b1d24; }
+
+/* phone width: wide tables scroll inside their own box instead of widening the page */
+@media (max-width: 600px) {
+  main table:not(.gate table) { display: block; max-width: 100%; overflow-x: auto; }
+}
+/* long URLs and DOIs in reference lists wrap instead of widening the page */
+.csl-entry, .csl-entry a { overflow-wrap: anywhere; word-break: break-word; }

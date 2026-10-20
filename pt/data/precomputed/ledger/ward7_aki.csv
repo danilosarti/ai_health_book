@@ -1,6 +1,6 @@
 "order","chapter","model_id","model","predictor_set","role","n_train","n_test","cv_logloss","test_AUC","test_Brier","cal_slope","cal_intercept","tuning","software"
-1,1,"prevalence","Prevalence: training AKI rate (no model)","none","reference",1000,250,0.6825103,0.5,0.242356,,0.04113503,"—","R 4.3.3"
-2,5,"logit_sofa","Logistic regression, SOFA only","SOFA","canonical",1000,250,0.5772209,0.7658345,0.1930598,1.013943,0.04655534,"—","R 4.3.3"
+1,1,"prevalence","Prevalence: training AKI rate (no model)","none","reference",1000,250,0.6825103,0.5,0.242356,,0.04113503,"none","R 4.3.3"
+2,5,"logit_sofa","Logistic regression, SOFA only","SOFA","canonical",1000,250,0.5772209,0.7658345,0.1930598,1.013943,0.04655534,"none","R 4.3.3"
 3,5,"logit_p5","Logistic regression (unpenalised), the headline model","P5 (sofa, lactate, map_min, baseline_creat, protocol_adherence)","canonical",1000,250,0.4954041,0.8548973,0.1492463,1.008855,0.03871986,"unpenalised (Chapter 5)","R 4.3.3"
 4,5,"ridge_logit","Ridge logistic regression (λ min)","P5 (sofa, lactate, map_min, baseline_creat, protocol_adherence)","canonical",1000,250,0.4987607,0.8549633,0.1516,1.246228,0.03917809,"alpha = 0, lambda min = 0.02169 (5-fold CV deviance); standardised on training rows","glmnet 4.1.8"
 5,5,"lasso_logit","Lasso logistic regression (λ min)","P5 (sofa, lactate, map_min, baseline_creat, protocol_adherence)","canonical",1000,250,0.4953692,0.8547652,0.1494359,1.02482,0.03819913,"alpha = 1, lambda min = 0.00108 (5-fold CV deviance); standardised on training rows","glmnet 4.1.8"

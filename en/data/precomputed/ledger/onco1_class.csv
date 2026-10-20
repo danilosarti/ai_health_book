@@ -1,5 +1,5 @@
 "order","chapter","model_id","model","predictor_set","role","n_train","n_test","cv_logloss","test_AUC","test_Brier","cal_slope","cal_intercept","tuning","software"
-1,5,"prevalence","Prevalence: training high-response rate (no model)","none","reference",412,84,0.5034967,0.5,0.1898565,,-0.2786049,"—","R 4.3.3"
+1,5,"prevalence","Prevalence: training high-response rate (no model)","none","reference",412,84,0.5034967,0.5,0.1898565,,-0.2786049,"none","R 4.3.3"
 2,5,"logit_7","Logistic regression, 7 chosen predictors (dose, grade, performance, age, genes 01/05/12)","7 chosen predictors","canonical",412,84,0.1505362,0.9871504,0.03751178,1.037069,0.3267671,"unpenalised","R 4.3.3"
 3,5,"logit_all","Logistic regression (unpenalised), all 51 predictors","clinical (dose, age, grade, performance) + 47 non-leaky genes","canonical",412,84,3.022153,0.8960695,0.1096432,0.1451902,-4.891119,"unpenalised (quasi-separation warnings: some coefficients very large)","R 4.3.3"
 4,5,"lasso_logit","Lasso logistic regression (λ min)","clinical (dose, age, grade, performance) + 47 non-leaky genes","canonical",412,84,0.1637712,0.9848828,0.0408299,1.353049,0.2116861,"alpha = 1.0, lambda min = 0.00434 (5-fold CV deviance; glmnet standardize = TRUE), 27 of 52 non-zero","glmnet 4.1.8"

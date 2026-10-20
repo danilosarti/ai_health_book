@@ -1,5 +1,5 @@
 # =========================================================
-# DATASET 5 — Cell & Gene Therapy Manufacturing
+# DATASET 5: Cell & Gene Therapy Manufacturing
 # =========================================================
 
 # Rationale:

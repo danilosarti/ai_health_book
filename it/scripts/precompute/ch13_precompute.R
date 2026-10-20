@@ -1,5 +1,5 @@
 # =====================================================================
-# Chapter 13 — precomputed results (from prediction to causation)
+# Chapter 13: precomputed results (from prediction to causation)
 # Usage (from the book folder): Rscript scripts/precompute/ch13_precompute.R
 # Needs base R only. Runs in a few seconds. Writes small CSV/JSON files to
 # data/precomputed/ch13/ and (re)creates data/ward7_dag.csv and

@@ -1,5 +1,5 @@
 """
-Ward 7 short clinical notes — synthetic corpus for Chapter 16 (language models and embeddings).
+Ward 7 short clinical notes: synthetic corpus for Chapter 16 (language models and embeddings).
 
 Every note is generated from a small grammar of templates, so the corpus describes no real
 person and its statistical regularities are known by construction:

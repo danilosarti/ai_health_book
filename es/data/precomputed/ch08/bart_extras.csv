@@ -1,0 +1,11 @@
+key,value
+lena_mean_hr,85.336
+lena_mean_lo,83.0812
+lena_mean_hi,87.6174
+lena_new_lo,75.1398
+lena_new_hi,95.8329
+lena_p_new_above_88,0.2995
+rmse_wrong_average,13.5422
+rmse_right_average,5.0623
+sigma_homebeat,5.1032
+sigma_ward7,0.1868

@@ -1,5 +1,5 @@
 # =====================================================================
-# Chapter 13 — "Ward 7, extended": data for the DAG adjustment widget.
+# Chapter 13: "Ward 7, extended": data for the DAG adjustment widget.
 #
 # Same generating rules as Ward 7 (scripts/simulate/sim_ward7_icu_aki.R,
 # re-implemented in ward7_scm.R) with a different seed and three extra

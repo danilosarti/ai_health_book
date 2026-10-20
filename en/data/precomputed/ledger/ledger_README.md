@@ -1,4 +1,4 @@
-# Model ledger — definitions
+# Model ledger: definitions
 
 One source of truth for every model result of the book's running examples. Every number for the
 same model is computed once, here, on the same data, split, predictors and metrics; chapters read

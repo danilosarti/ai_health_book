@@ -21,6 +21,6 @@ for k in ka:
         ok = False
         print(f"MISMATCH {k}:\n  only in source: {sorted(set(ka[k]) - set(kb[k]))}\n  only in translation: {sorted(set(kb[k]) - set(ka[k]))}\n  counts {len(ka[k])} vs {len(kb[k])}")
 links = re.findall(r"\]\(((?!https?:|#|data/|scripts/|images/)[^)#]+\.qmd)", b)
-bad = [l for l in links if not re.search(r"\.(pt|it)\.qmd$", l)]
+bad = [l for l in links if not re.search(r"\.(pt|it|es)\.qmd$", l)]
 if bad: ok = False; print("Links still pointing to English files:", sorted(set(bad)))
 print("OK" if ok else "FAILED")

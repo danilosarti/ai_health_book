@@ -1,0 +1,16 @@
+var1,var2,mean,std,cv
+age,age,0.222,0.524,2.359
+age,male,0.527,0.199,0.378
+age,ph.ecog,2.541,0.641,0.252
+age,ph.karno,2.123,0.512,0.241
+age,wt.loss,1.68,0.502,0.299
+male,male,-0.101,0.351,3.482
+male,ph.ecog,0.855,0.403,0.471
+male,ph.karno,1.206,0.62,0.514
+male,wt.loss,1.289,0.428,0.332
+ph.ecog,ph.ecog,39.693,3.558,0.09
+ph.ecog,ph.karno,5.832,1.272,0.218
+ph.ecog,wt.loss,6.107,1.097,0.18
+ph.karno,ph.karno,25.74,3.8,0.148
+ph.karno,wt.loss,5.702,0.866,0.152
+wt.loss,wt.loss,21.154,3.013,0.142

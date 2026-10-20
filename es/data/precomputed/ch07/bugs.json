@@ -1,0 +1,95 @@
+{
+ "exhausted_generator": {
+  "buggy": {
+   "n": 624,
+   "accuracy": 0.625,
+   "sensitivity": 1.0,
+   "specificity": 0.0,
+   "auc": 0.481,
+   "confusion": {
+    "tn": 0,
+    "fp": 234,
+    "fn": 0,
+    "tp": 390
+   }
+  },
+  "fixed": {
+   "n": 624,
+   "accuracy": 0.825,
+   "sensitivity": 0.959,
+   "specificity": 0.603,
+   "auc": 0.937,
+   "confusion": {
+    "tn": 141,
+    "fp": 93,
+    "fn": 16,
+    "tp": 374
+   }
+  },
+  "batches_per_epoch_buggy": [
+   74,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "batches_per_epoch_fixed": [
+   74,
+   74,
+   74,
+   74,
+   74,
+   74,
+   74,
+   74,
+   74,
+   74
+  ]
+ },
+ "size_mismatch": {
+  "buggy": {
+   "n": 624,
+   "accuracy": 0.529,
+   "sensitivity": 0.249,
+   "specificity": 0.996,
+   "auc": 0.914,
+   "confusion": {
+    "tn": 233,
+    "fp": 1,
+    "fn": 293,
+    "tp": 97
+   }
+  },
+  "fixed": {
+   "n": 624,
+   "accuracy": 0.835,
+   "sensitivity": 0.926,
+   "specificity": 0.684,
+   "auc": 0.911,
+   "confusion": {
+    "tn": 160,
+    "fp": 74,
+    "fn": 29,
+    "tp": 361
+   }
+  }
+ },
+ "constant_pneumonia": {
+  "n": 624,
+  "accuracy": 0.625,
+  "sensitivity": 1.0,
+  "specificity": 0.0,
+  "auc": 0.5,
+  "confusion": {
+   "tn": 0,
+   "fp": 234,
+   "fn": 0,
+   "tp": 390
+  }
+ }
+}

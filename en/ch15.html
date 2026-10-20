@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="From words to vectors: how text is stored, searched and counted — strings and encodings, regular expressions, negation, tokens and subwords, bag of words, TF-IDF, cosine similarity — and a first text classifier whose thresholds decide which notes a person must read.">
+<meta name="description" content="From words to vectors: how text is stored, searched and counted (strings and encodings, regular expressions, negation, tokens and subwords, bag of words, TF-IDF, cosine similarity) and a first text classifier whose thresholds decide which notes a person must read.">
 
 <title>15&nbsp; Text as data – AI and Machine Learning for Health Sciences</title>
 <style>
@@ -375,6 +375,11 @@ window.Quarto = {
             </a>
           </li>
           <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../es/index.html">
+            Español
+            </a>
+          </li>
+          <li>
             <a class="dropdown-item sidebar-tools-main-item" href="./../it/index.html">
             Italiano
             </a>
@@ -676,8 +681,8 @@ Tonight on Ward 7, the pharmacist’s list
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>It is still the evening on which Mrs <strong>Aoife Byrne</strong>, 71, was admitted with sepsis, together with <strong>Tomás</strong>, 54, and <strong>Priya</strong>, 38. Each of them already has a short admission note: a few lines of free text written by a busy doctor, listing the antibiotics started tonight and anything that happened after the first doses. <strong>Seán</strong>, the ward pharmacist, has a job that nobody writes about. He reads notes looking for suspected <strong>adverse drug reactions</strong> — a rash after an antibiotic, a rise in creatinine blamed on vancomycin, ringing in the ears on gentamicin — so that they can be acted on, recorded and reported; once a month he goes through the archive of discharge summaries for the same purpose. Across the corridor, the safety team of the ONCO-1 trial does the same with the adverse-event notes of patients receiving chemotherapy.</p>
-<p>There are 450 discharge summaries in the Ward 7 archive and 400 ONCO-1 notes. Seán reads perhaps twenty an hour, on top of tonight’s new notes. Dr <strong>Emma Walsh</strong>, the intensivist, asks him: <em>could a computer read them first, and tell you which ones to look at?</em> To answer, we need to turn text — the most human kind of data — into numbers a model can use. That is what this chapter is about.</p>
+<p>It is still the evening on which Mrs <strong>Aoife Byrne</strong>, 71, was admitted with sepsis, together with <strong>Tomás</strong>, 54, and <strong>Priya</strong>, 38. Each of them already has a short admission note: a few lines of free text written by a busy doctor, listing the antibiotics started tonight and anything that happened after the first doses. <strong>Seán</strong>, the ward pharmacist, has a job that nobody writes about. He reads notes looking for suspected <strong>adverse drug reactions</strong> (a rash after an antibiotic, a rise in creatinine blamed on vancomycin, ringing in the ears on gentamicin) so that they can be acted on, recorded and reported; once a month he goes through the archive of discharge summaries for the same purpose. Across the corridor, the safety team of the ONCO-1 trial does the same with the adverse-event notes of patients receiving chemotherapy.</p>
+<p>There are 450 discharge summaries in the Ward 7 archive and 400 ONCO-1 notes. Seán reads perhaps twenty an hour, on top of tonight’s new notes. Dr <strong>Emma Walsh</strong>, the intensivist, asks him: <em>could a computer read them first, and tell you which ones to look at?</em> To answer, we need to turn text, the most human kind of data, into numbers a model can use. That is what this chapter is about.</p>
 </div>
 </div>
 <div id="ch15-gate" class="gate" data-success="Welcome to Chapter 15.">
@@ -692,23 +697,23 @@ Tonight on Ward 7, the pharmacist’s list
 <tbody>
 <tr class="odd">
 <td>"Itchy rash on both forearms after vancomycin."</td>
-<td><select aria-label="Rash status for sentence 1" data-answer="present"><option value="">— choose —</option><option>present</option><option>absent</option></select></td>
+<td><select aria-label="Rash status for sentence 1" data-answer="present"><option value="">Choose…</option><option>present</option><option>absent</option></select></td>
 </tr>
 <tr class="even">
 <td>"No rash."</td>
-<td><select aria-label="Rash status for sentence 2" data-answer="absent"><option value="">— choose —</option><option>present</option><option>absent</option></select></td>
+<td><select aria-label="Rash status for sentence 2" data-answer="absent"><option value="">Choose…</option><option>present</option><option>absent</option></select></td>
 </tr>
 <tr class="odd">
 <td>"Denies itching or rash."</td>
-<td><select aria-label="Rash status for sentence 3" data-answer="absent"><option value="">— choose —</option><option>present</option><option>absent</option></select></td>
+<td><select aria-label="Rash status for sentence 3" data-answer="absent"><option value="">Choose…</option><option>present</option><option>absent</option></select></td>
 </tr>
 <tr class="even">
 <td>"No fever but a new rash on the trunk."</td>
-<td><select aria-label="Rash status for sentence 4" data-answer="present"><option value="">— choose —</option><option>present</option><option>absent</option></select></td>
+<td><select aria-label="Rash status for sentence 4" data-answer="present"><option value="">Choose…</option><option>present</option><option>absent</option></select></td>
 </tr>
 <tr class="odd">
 <td>"No increase in rash since yesterday."</td>
-<td><select aria-label="Rash status for sentence 5" data-answer="present"><option value="">— choose —</option><option>present</option><option>absent</option></select></td>
+<td><select aria-label="Rash status for sentence 5" data-answer="present"><option value="">Choose…</option><option>present</option><option>absent</option></select></td>
 </tr>
 </tbody>
 </table>
@@ -865,7 +870,7 @@ Notation at a glance (for lookup only)
 </section>
 <section id="sec-ch15-language" class="level2" data-number="15.1">
 <h2 data-number="15.1" class="anchored" data-anchor-id="sec-ch15-language"><span class="header-section-number">15.1</span> Language is symbols; computers need numbers</h2>
-<p>We use language long before we can describe it. Natural languages such as English, Portuguese or Chinese, the mathematical language of equations and the programming languages of this book, R and Python, look very different, but they share one property: they encode information in <strong>symbols governed by rules</strong>, and they work in layers — symbols build structures, structures carry meaning, meaning serves an intention, and all of it depends on context (<a href="#fig-ch15-languages" class="quarto-xref">Figure&nbsp;<span>15.1</span></a>).</p>
+<p>We use language long before we can describe it. Natural languages such as English, Portuguese or Chinese, the mathematical language of equations and the programming languages of this book, R and Python, look very different, but they share one property: they encode information in <strong>symbols governed by rules</strong>, and they work in layers: symbols build structures, structures carry meaning, meaning serves an intention, and all of it depends on context (<a href="#fig-ch15-languages" class="quarto-xref">Figure&nbsp;<span>15.1</span></a>).</p>
 <div id="fig-ch15-languages" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A trapezoid of five stacked layers labelled, from the bottom, symbols, structure, meaning, intention and context, with the caption structured symbols governed by rules. Arrows lead to three boxes: natural language (speech bubbles saying hello in English and Chinese, with flags), mathematical language (equations), and programming languages (the R, Python and C++ logos).">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ch15-languages-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -983,7 +988,7 @@ Figure&nbsp;15.2: Natural language processing draws on four disciplines and turn
 </figcaption>
 </figure>
 </div>
-<p>A collection of texts assembled for analysis is a <strong>corpus</strong> (plural <em>corpora</em>). Language models are trained on corpora of billions of words — encyclopaedias, web pages, books, and in medicine the abstracts and articles of PubMed — and what they learn depends on what those corpora contain. Our corpus is much smaller and entirely synthetic, but it has the shape of the real thing (<a href="#tbl-ch15-corpus" class="quarto-xref">Table&nbsp;<span>15.2</span></a>). Each Ward 7 note is attached to one of the 1 250 simulated Ward 7 patients and each ONCO-1 note to a simulated trial participant, so every note inherits its patient’s train/test assignment. Two pharmacists labelled, in our story, whether each note reports a suspected adverse drug reaction; the leaflet sentences carry no label and are used only for searching.</p>
+<p>A collection of texts assembled for analysis is a <strong>corpus</strong> (plural <em>corpora</em>). Language models are trained on corpora of billions of words (encyclopaedias, web pages, books, and in medicine the abstracts and articles of PubMed), and what they learn depends on what those corpora contain. Our corpus is much smaller and entirely synthetic, but it has the shape of the real thing (<a href="#tbl-ch15-corpus" class="quarto-xref">Table&nbsp;<span>15.2</span></a>). Each Ward 7 note is attached to one of the 1 250 simulated Ward 7 patients and each ONCO-1 note to a simulated trial participant, so every note inherits its patient’s train/test assignment. Two pharmacists labelled, in our story, whether each note reports a suspected adverse drug reaction; the leaflet sentences carry no label and are used only for searching.</p>
 <div class="cell">
 <div id="tbl-ch15-corpus" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1033,7 +1038,7 @@ Table&nbsp;15.2: The synthetic corpus of this chapter. ‘Suspected ADR’ is th
 <td style="text-align: right;">34</td>
 <td style="text-align: right;">0</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: left;">—</td>
+<td style="text-align: left;">n/a</td>
 <td style="text-align: right;">12</td>
 </tr>
 </tbody>
@@ -1047,7 +1052,7 @@ Table&nbsp;15.2: The synthetic corpus of this chapter. ‘Suspected ADR’ is th
 <blockquote class="blockquote">
 <p>Ms Priya Nair, 38, admitted to ICU tonight with pneumonia with septic shock. Vancomycin 1500 mg and gentamicin 5 mg/kg given, with a noradrenaline infusion. Flushing and itching of the face within an hour of starting vancomycin, probably related to vancomycin. Infusion slowed and treated with an antihistamine. Reported to the pharmacy team.</p>
 </blockquote>
-<p>A sentence can be represented in more than one way. As a <strong>sequence</strong>, it is a row of characters or words in order. As a <strong>tree</strong>, it is nested phrases: <em>[the patient] [reports [chest pain]]</em>. As a <strong>graph</strong>, it is a set of relations: <em>reports</em> has subject <em>patient</em> and object <em>pain</em>, and <em>pain</em> is modified by <em>chest</em>. The same surface can hide several structures — “the doctor saw the patient with the stethoscope” (who had the stethoscope?) — and much of the difficulty of NLP is ambiguity <span class="citation" data-cites="jurafsky2025slp3">(<a href="#ref-jurafsky2025slp3" role="doc-biblioref">Jurafsky and Martin 2026</a>)</span>. In this chapter we stay with the simplest representation, the sequence, and see how far it takes us.</p>
+<p>A sentence can be represented in more than one way. As a <strong>sequence</strong>, it is a row of characters or words in order. As a <strong>tree</strong>, it is nested phrases: <em>[the patient] [reports [chest pain]]</em>. As a <strong>graph</strong>, it is a set of relations: <em>reports</em> has subject <em>patient</em> and object <em>pain</em>, and <em>pain</em> is modified by <em>chest</em>. The same surface can hide several structures (“the doctor saw the patient with the stethoscope”: who had the stethoscope?), and much of the difficulty of NLP is ambiguity <span class="citation" data-cites="jurafsky2025slp3">(<a href="#ref-jurafsky2025slp3" role="doc-biblioref">Jurafsky and Martin 2026</a>)</span>. In this chapter we stay with the simplest representation, the sequence, and see how far it takes us.</p>
 </section>
 <section id="sec-ch15-regex" class="level2" data-number="15.3">
 <h2 data-number="15.3" class="anchored" data-anchor-id="sec-ch15-regex"><span class="header-section-number">15.3</span> Finding patterns: regular expressions</h2>
@@ -1113,7 +1118,7 @@ Table&nbsp;15.3: The regular-expression symbols used in this chapter.
 </div>
 <p>One more symbol completes the kit: a vertical bar means <em>or</em>, so <code>(rash|hives|urticaria)</code> matches any of the three words.</p>
 <p>In our labelled notes, the pattern <code>\\brash\\b</code> (ignoring capitals) matches 181 notes. Only 70 of them were labelled as reporting a suspected drug reaction. The rest say “no rash”, “skin intact, no rash”, or describe a rash present before any antibiotic. A keyword <strong>finds the word, not what is said about it</strong>. The v1 edition of this book showed the same with <em>pain</em>: “the patient reports pain”, “the patient denies pain” and “pain was discussed as a possible risk” all match the same pattern.</p>
-<p>Regular expressions are also <strong>brittle</strong>. The same fact can be written in many ways, and each way needs its own pattern. The Ward 7 notes record dates in four styles — <code>12/03/2026</code>, <code>2026-03-12</code>, <code>12 March 2026</code> and <code>12th of March</code> — and a pattern written for one style finds only those dates:</p>
+<p>Regular expressions are also <strong>brittle</strong>. The same fact can be written in many ways, and each way needs its own pattern. The Ward 7 notes record dates in four styles (<code>12/03/2026</code>, <code>2026-03-12</code>, <code>12 March 2026</code> and <code>12th of March</code>), and a pattern written for one style finds only those dates:</p>
 <div class="cell">
 <div id="tbl-ch15-dates" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1158,7 +1163,7 @@ Table&nbsp;15.4: Ward 7 notes containing at least one date in each style, found 
 </figure>
 </div>
 </div>
-<p>Together the four patterns find a date in 450 of the 450 notes; any one of them alone misses most. Every new style (“March 12th”, “12.03.26”) needs another rule, and rules start to overlap and conflict. This is the central weakness of hand-written rules, and the reason the rest of the chapter moves towards representations from which a model can <em>learn</em> patterns instead. Regular expressions remain indispensable for well-defined formats — doses, dates, laboratory values, identifiers — and for cleaning text before anything else is done with it.</p>
+<p>Together the four patterns find a date in 450 of the 450 notes; any one of them alone misses most. Every new style (“March 12th”, “12.03.26”) needs another rule, and rules start to overlap and conflict. This is the central weakness of hand-written rules, and the reason the rest of the chapter moves towards representations from which a model can <em>learn</em> patterns instead. Regular expressions remain indispensable for well-defined formats (doses, dates, laboratory values, identifiers) and for cleaning text before anything else is done with it.</p>
 <div id="ch15-qc-regex" class="quick-check">
 <p>The pattern <code>\\brash\\b</code> is run on four sentences. Which one does it <strong>not</strong> match?</p>
 <ul class="task-list">
@@ -1463,9 +1468,9 @@ Figure&nbsp;15.3: How a NegEx-style rule reads one sentence. “No” opens a sc
 <h2 data-number="15.5" class="anchored" data-anchor-id="sec-ch15-tokens"><span class="header-section-number">15.5</span> Tokens and vocabularies</h2>
 <p>Regular expressions and negation rules work on the raw string. To <em>learn</em> from text, a model needs discrete units it can count and index. These units are called tokens.</p>
 <div id="def-token" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 15.4 (Token, tokenisation and vocabulary)</strong></span> A <strong>token</strong> is the basic unit into which a text is cut before it is processed: a word, a piece of a word, a character or a byte. <strong>Tokenisation</strong> is the cutting. The set of distinct tokens a system knows is its <strong>vocabulary</strong> <span class="math inline">\(\mathcal{V}\)</span>, of size <span class="math inline">\(\lvert\mathcal{V}\rvert\)</span>; each token in it is given an integer <strong>token ID</strong>, and a text becomes a sequence of tokens <span class="math inline">\(w_1, w_2, \dots, w_T\)</span> — that is, a sequence of IDs.</p>
+<p><span class="theorem-title"><strong>Definition 15.4 (Token, tokenisation and vocabulary)</strong></span> A <strong>token</strong> is the basic unit into which a text is cut before it is processed: a word, a piece of a word, a character or a byte. <strong>Tokenisation</strong> is the cutting. The set of distinct tokens a system knows is its <strong>vocabulary</strong> <span class="math inline">\(\mathcal{V}\)</span>, of size <span class="math inline">\(\lvert\mathcal{V}\rvert\)</span>; each token in it is given an integer <strong>token ID</strong>, and a text becomes a sequence of tokens <span class="math inline">\(w_1, w_2, \dots, w_T\)</span>, that is, a sequence of IDs.</p>
 </div>
-<p><a href="#fig-ch15-tokens" class="quarto-xref">Figure&nbsp;<span>15.4</span></a> follows one sentence through the steps. The token IDs are only labels — token 4 is not “twice” token 2 — so a model cannot use them as numbers directly. The classical solution is the <strong>one-hot</strong> vector: a vector as long as the vocabulary, with a 1 in the token’s own position and 0 everywhere else. Modern models instead learn a short <strong>dense</strong> vector for each token, an <em>embedding</em>; how such vectors are learned, and why similar words end up close together, is the subject of Chapter 16.</p>
+<p><a href="#fig-ch15-tokens" class="quarto-xref">Figure&nbsp;<span>15.4</span></a> follows one sentence through the steps. The token IDs are only labels (token 4 is not “twice” token 2), so a model cannot use them as numbers directly. The classical solution is the <strong>one-hot</strong> vector: a vector as long as the vocabulary, with a 1 in the token’s own position and 0 everywhere else. Modern models instead learn a short <strong>dense</strong> vector for each token, an <em>embedding</em>; how such vectors are learned, and why similar words end up close together, is the subject of Chapter 16.</p>
 <div id="fig-ch15-tokens" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-ch15-tokens-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1509,8 +1514,8 @@ Figure&nbsp;15.4: From text to numbers: tokens, token IDs from a vocabulary, and
 </div>
 <section id="words-characters-and-bytes" class="level3" data-number="15.5.1">
 <h3 data-number="15.5.1" class="anchored" data-anchor-id="words-characters-and-bytes"><span class="header-section-number">15.5.1</span> Words, characters and bytes</h3>
-<p>The most intuitive choice is <strong>word-level</strong> tokenisation: split at spaces and punctuation. It is transparent and works well when the vocabulary is stable, but it has two weaknesses. First, the vocabulary keeps growing: our 687 training notes contain 36 930 word tokens but already 376 distinct words (counting numbers such as <em>1000</em> as words), and every new drug, misspelling or abbreviation adds more. Second, a word that was never seen in training is <strong>out of vocabulary</strong> (OOV): a word-level model has no representation for it and usually replaces it with a generic <code>&lt;UNK&gt;</code> token. If we take the vocabulary of the training notes and read the leaflet sentences with it, 130 distinct leaflet words are unknown — <em>dizziness</em>, <em>kidneys</em>, <em>bleeding</em>, <em>drowsy</em>, <em>toothbrush</em>, <em>fits</em> among them — and 52 % of the leaflet’s word tokens become <code>&lt;UNK&gt;</code>. Word tokens also treat <em>treat</em>, <em>treats</em>, <em>treated</em> and <em>treatment</em> as unrelated, so nothing learned about one helps with the others.</p>
-<p><strong>Character-level</strong> tokenisation goes to the other extreme. The vocabulary is tiny — the training notes use only 44 distinct characters, counting letters, digits, spaces and punctuation — and there is no OOV problem: any new word, misspelling (“paim” for “pain”) or mixed-language note can be spelled out. The price is length. A typical training note has about 54 words but 299 characters, so a model must read many more steps and learn for itself that <em>r-a-s-h</em> is a unit. <strong>Byte-level</strong> tokenisation takes the idea one step further: 256 possible bytes cover every UTF-8 text in every script, with a fixed vocabulary <span class="citation" data-cites="radford2019gpt2">(<a href="#ref-radford2019gpt2" role="doc-biblioref">Radford et al. 2019</a>)</span>. Chinese and accented characters then cost two to four tokens each, so the same message is longer, and more expensive to process, in some languages than in others <span class="citation" data-cites="petrov2023tokenizer">(<a href="#ref-petrov2023tokenizer" role="doc-biblioref">Petrov et al. 2023</a>)</span>.</p>
+<p>The most intuitive choice is <strong>word-level</strong> tokenisation: split at spaces and punctuation. It is transparent and works well when the vocabulary is stable, but it has two weaknesses. First, the vocabulary keeps growing: our 687 training notes contain 36 930 word tokens but already 376 distinct words (counting numbers such as <em>1000</em> as words), and every new drug, misspelling or abbreviation adds more. Second, a word that was never seen in training is <strong>out of vocabulary</strong> (OOV): a word-level model has no representation for it and usually replaces it with a generic <code>&lt;UNK&gt;</code> token. If we take the vocabulary of the training notes and read the leaflet sentences with it, 130 distinct leaflet words are unknown, <em>dizziness</em>, <em>kidneys</em>, <em>bleeding</em>, <em>drowsy</em>, <em>toothbrush</em>, <em>fits</em> among them, and 52 % of the leaflet’s word tokens become <code>&lt;UNK&gt;</code>. Word tokens also treat <em>treat</em>, <em>treats</em>, <em>treated</em> and <em>treatment</em> as unrelated, so nothing learned about one helps with the others.</p>
+<p><strong>Character-level</strong> tokenisation goes to the other extreme. The vocabulary is tiny (the training notes use only 44 distinct characters, counting letters, digits, spaces and punctuation), and there is no OOV problem: any new word, misspelling (“paim” for “pain”) or mixed-language note can be spelled out. The price is length. A typical training note has about 54 words but 299 characters, so a model must read many more steps and learn for itself that <em>r-a-s-h</em> is a unit. <strong>Byte-level</strong> tokenisation takes the idea one step further: 256 possible bytes cover every UTF-8 text in every script, with a fixed vocabulary <span class="citation" data-cites="radford2019gpt2">(<a href="#ref-radford2019gpt2" role="doc-biblioref">Radford et al. 2019</a>)</span>. Chinese and accented characters then cost two to four tokens each, so the same message is longer, and more expensive to process, in some languages than in others <span class="citation" data-cites="petrov2023tokenizer">(<a href="#ref-petrov2023tokenizer" role="doc-biblioref">Petrov et al. 2023</a>)</span>.</p>
 <div id="ch15-m2" class="mission">
 <p><strong>How big is the vocabulary?</strong> The training notes are loaded as <code>train</code>. Turn the text to lower case, replace every character that is <strong>not a letter a–z</strong> by a space, split at spaces and count the distinct words. Fill in the regular expression.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
@@ -1700,7 +1705,7 @@ eyJhdHRyIjp7ImNoZWNrIjp0cnVlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImNo
 <div id="def-bow" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 15.6 (Bag of words and document-term matrix)</strong></span> A <strong>bag-of-words</strong> representation describes a document by how many times each vocabulary word occurs in it, ignoring the order of the words. Stacking the vectors of <span class="math inline">\(n\)</span> documents gives the <strong>document-term matrix</strong>: <span class="math inline">\(n\)</span> rows (documents, our instances), <span class="math inline">\(\lvert\mathcal{V}\rvert\)</span> columns (words, our features), and in each cell the count of word <span class="math inline">\(w\)</span> in document <span class="math inline">\(i\)</span>. Most cells are zero: the matrix is <strong>sparse</strong>.</p>
 </div>
-<p>In the language of <a href="ch01.html#def-instance" class="quarto-xref">Definition&nbsp;<span>1.7</span></a>, each note becomes a row <span class="math inline">\(\mathbf{x}_i\)</span> and each vocabulary word a feature. The training notes give a matrix with 687 rows and 376 columns, almost all of them zeros in any given row. Bag-of-words vectors made the first scalable text classifiers possible — spam filters, document routing, search engines <span class="citation" data-cites="manning2008ir">(<a href="#ref-manning2008ir" role="doc-biblioref">Manning, Raghavan, and Schütze 2008</a>)</span> — but the price of ignoring order is easy to see. Here are two sentences with opposite clinical meanings:</p>
+<p>In the language of <a href="ch01.html#def-instance" class="quarto-xref">Definition&nbsp;<span>1.7</span></a>, each note becomes a row <span class="math inline">\(\mathbf{x}_i\)</span> and each vocabulary word a feature. The training notes give a matrix with 687 rows and 376 columns, almost all of them zeros in any given row. Bag-of-words vectors made the first scalable text classifiers possible (spam filters, document routing, search engines <span class="citation" data-cites="manning2008ir">(<a href="#ref-manning2008ir" role="doc-biblioref">Manning, Raghavan, and Schütze 2008</a>)</span>), but the price of ignoring order is easy to see. Here are two sentences with opposite clinical meanings:</p>
 <div class="cell">
 <div id="tbl-ch15-bow" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -1756,7 +1761,7 @@ Table&nbsp;15.5: Two sentences with opposite meanings and identical bag-of-words
 </section>
 <section id="sec-ch15-tfidf" class="level2" data-number="15.8">
 <h2 data-number="15.8" class="anchored" data-anchor-id="sec-ch15-tfidf"><span class="header-section-number">15.8</span> TF-IDF: weighting words by what they tell you</h2>
-<p>Raw counts treat every word as equally informative. But a word that appears in almost every note — <em>the</em>, <em>with</em>, <em>creatinine</em> in an ICU archive — says little about any particular note, whereas a word that appears in a few — <em>hives</em>, <em>tinnitus</em> — says a lot. <strong>TF-IDF</strong> formalises this intuition <span class="citation" data-cites="sparckjones1972idf salton1988term">(<a href="#ref-sparckjones1972idf" role="doc-biblioref">Spärck Jones 1972</a>; <a href="#ref-salton1988term" role="doc-biblioref">Salton and Buckley 1988</a>)</span>.</p>
+<p>Raw counts treat every word as equally informative. But a word that appears in almost every note (<em>the</em>, <em>with</em>, <em>creatinine</em> in an ICU archive) says little about any particular note, whereas a word that appears in a few (<em>hives</em>, <em>tinnitus</em>) says a lot. <strong>TF-IDF</strong> formalises this intuition <span class="citation" data-cites="sparckjones1972idf salton1988term">(<a href="#ref-sparckjones1972idf" role="doc-biblioref">Spärck Jones 1972</a>; <a href="#ref-salton1988term" role="doc-biblioref">Salton and Buckley 1988</a>)</span>.</p>
 <div id="def-tfidf" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 15.7 (TF-IDF)</strong></span> For a collection of <span class="math inline">\(n\)</span> documents, the <strong>term frequency</strong> <span class="math inline">\(\text{tf}(w, i)\)</span> is the number of times word <span class="math inline">\(w\)</span> occurs in document <span class="math inline">\(i\)</span>; the <strong>document frequency</strong> <span class="math inline">\(\text{df}(w)\)</span> is the number of documents that contain <span class="math inline">\(w\)</span> at least once; the <strong>inverse document frequency</strong> is <span class="math display">\[
 \text{idf}(w) = \log \frac{n}{\text{df}(w)},
@@ -1853,7 +1858,7 @@ Table&nbsp;15.6: TF-IDF on four miniature notes (A: ‘No rash. Vancomycin stopp
 </section>
 <section id="sec-ch15-search" class="level2" data-number="15.9">
 <h2 data-number="15.9" class="anchored" data-anchor-id="sec-ch15-search"><span class="header-section-number">15.9</span> Searching notes: cosine similarity</h2>
-<p>With every document a vector, <em>finding</em> documents becomes geometry. A query — a few words typed by Seán — is turned into a vector in the same way, and the documents whose vectors point in the most similar direction are returned first.</p>
+<p>With every document a vector, <em>finding</em> documents becomes geometry. A query, a few words typed by Seán, is turned into a vector in the same way, and the documents whose vectors point in the most similar direction are returned first.</p>
 <div id="def-cosine-similarity" class="theorem definition">
 <p><span class="theorem-title"><strong>Definition 15.8 (Cosine similarity of documents)</strong></span> The <strong>cosine similarity</strong> of two document vectors is the cosine of the angle between them, <span id="eq-ch15-cosine"><span class="math display">\[
 \cos(\mathbf{x}_i, \mathbf{x}_{i'}) = \frac{\sum_{w} x_{iw}\, x_{i'w}}{\sqrt{\sum_w x_{iw}^2}\,\sqrt{\sum_w x_{i'w}^2}} ,
@@ -2033,7 +2038,7 @@ eyJhdHRyIjp7ImNoZWNrIjp0cnVlLCJlZGl0Ijp0cnVlLCJldmFsIjp0cnVlLCJleGVyY2lzZSI6ImNo
 <h2 data-number="15.10" class="anchored" data-anchor-id="sec-ch15-classifier"><span class="header-section-number">15.10</span> A first text classifier: flagging adverse drug reactions</h2>
 <p>Search answers Seán’s questions one at a time. What he really wants is a list, every morning, of the notes most likely to report a suspected adverse drug reaction (ADR): a harmful, unintended response to a medicine that warrants changing treatment, monitoring or future prescribing <span class="citation" data-cites="edwards2000adr">(<a href="#ref-edwards2000adr" role="doc-biblioref">Edwards and Aronson 2000</a>)</span>. Reactions found in clinical notes are a recognised and under-used source of safety signals, and finding them automatically is a long-standing goal of clinical NLP <span class="citation" data-cites="harpaz2014text wang2018clinical">(<a href="#ref-harpaz2014text" role="doc-biblioref">Harpaz et al. 2014</a>; <a href="#ref-wang2018clinical" role="doc-biblioref">Wang et al. 2018</a>)</span>.</p>
 <div id="def-text-classifier" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 15.9 (Text classifier)</strong></span> A <strong>text classifier</strong> is a supervised model whose input is a document, represented as a vector (for example TF-IDF weights), and whose output is a class or, better, a probability for each class. It is trained on documents whose class was assigned by people — the <em>labels</em> — and evaluated on documents it has not seen.</p>
+<p><span class="theorem-title"><strong>Definition 15.9 (Text classifier)</strong></span> A <strong>text classifier</strong> is a supervised model whose input is a document, represented as a vector (for example TF-IDF weights), and whose output is a class or, better, a probability for each class. It is trained on documents whose class was assigned by people (the <em>labels</em>) and evaluated on documents it has not seen.</p>
 </div>
 <p>Nothing here is new except the input. The 687 training notes become a TF-IDF matrix; the label is 1 if the pharmacists judged that the note reports a suspected ADR (34 % of labelled notes) and 0 otherwise; and a <strong>logistic regression with a ridge penalty</strong> <span class="citation" data-cites="lecessie1992ridge">(<a href="#ref-lecessie1992ridge" role="doc-biblioref">Cessie and Houwelingen 1992</a>)</span> (<a href="./ch05.html">Chapter 5</a>, <a href="./ch04.html">Chapter 4</a>) estimates the probability <span class="math inline">\(\hat p\)</span> that a note reports one. With hundreds of word features and a few hundred notes, the penalty is not optional: without it, the model would memorise the training notes. The fitted model is evaluated on the 163 test notes. <a href="#tbl-ch15-models" class="quarto-xref">Table&nbsp;<span>15.7</span></a> compares it with two rule-based screens, a keyword list of reaction words (<em>rash</em>, <em>hives</em>, <em>nausea</em>, <em>neutropenia</em>, …) and the same list with NegEx-lite ignoring negated mentions.</p>
 <div class="cell">
@@ -2066,16 +2071,16 @@ Table&nbsp;15.7: Five ways of flagging suspected adverse drug reactions, evaluat
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">Keyword list</td>
-<td style="text-align: left;">—</td>
-<td style="text-align: left;">—</td>
+<td style="text-align: left;">n/a</td>
+<td style="text-align: left;">n/a</td>
 <td style="text-align: left;">0.61</td>
 <td style="text-align: left;">0.55</td>
 <td style="text-align: left;">0.41</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">Keyword list + NegEx-lite</td>
-<td style="text-align: left;">—</td>
-<td style="text-align: left;">—</td>
+<td style="text-align: left;">n/a</td>
+<td style="text-align: left;">n/a</td>
 <td style="text-align: left;">0.48</td>
 <td style="text-align: left;">0.81</td>
 <td style="text-align: left;">0.57</td>
@@ -2111,7 +2116,7 @@ Table&nbsp;15.7: Five ways of flagging suspected adverse drug reactions, evaluat
 </figure>
 </div>
 </div>
-<p>The keyword list catches 61 % of the reactions but flags so many notes without one that its PPV is only 0.41: reaction words appear just as often in notes saying “rash after gardening, unrelated to the study drug”. NegEx-lite removes the “no rash” mentions and raises the PPV to 0.57, at the cost of some sensitivity. The learned models do far better, with an AUC of 0.974 for single words and 0.976 when word pairs are added. Marking negations changes nothing here: in these notes, what decides the label is not <em>whether</em> a symptom is present but <em>what it is attributed to</em>, and that is carried by words such as <em>related</em>, <em>attributed</em> and <em>unrelated</em>. A different task — “does the patient have a rash?” — would reward negation handling much more.</p>
+<p>The keyword list catches 61 % of the reactions but flags so many notes without one that its PPV is only 0.41: reaction words appear just as often in notes saying “rash after gardening, unrelated to the study drug”. NegEx-lite removes the “no rash” mentions and raises the PPV to 0.57, at the cost of some sensitivity. The learned models do far better, with an AUC of 0.974 for single words and 0.976 when word pairs are added. Marking negations changes nothing here: in these notes, what decides the label is not <em>whether</em> a symptom is present but <em>what it is attributed to</em>, and that is carried by words such as <em>related</em>, <em>attributed</em> and <em>unrelated</em>. A different task, “does the patient have a rash?”, would reward negation handling much more.</p>
 <p>What has the model learned? <a href="#tbl-ch15-terms" class="quarto-xref">Table&nbsp;<span>15.8</span></a> lists the features with the largest coefficients of the model with word pairs (each coefficient is the change in log-odds for one unit of TF-IDF weight).</p>
 <div class="cell">
 <div id="tbl-ch15-terms" class="cell quarto-float quarto-figure quarto-figure-center anchored">
@@ -2176,7 +2181,7 @@ Table&nbsp;15.8: The words and word pairs that push the predicted probability of
 </figure>
 </div>
 </div>
-<p>Most of these make sense — <em>related to</em>, <em>probably related</em>, <em>effect of</em> up; <em>not</em>, <em>unrelated to</em>, <em>the infection</em> down. Others are artefacts of how notes are written: <em>on day</em> rises because the reaction sentences usually say when the reaction started. A model that leans on such phrasing will stumble when a new hospital writes differently. Reading the largest weights is the simplest way to look inside a text classifier, with all the caveats of <a href="./ch12.html">Chapter 12</a>: a weight is an association with the label in these notes, not a reason.</p>
+<p>Most of these make sense: <em>related to</em>, <em>probably related</em>, <em>effect of</em> up; <em>not</em>, <em>unrelated to</em>, <em>the infection</em> down. Others are artefacts of how notes are written: <em>on day</em> rises because the reaction sentences usually say when the reaction started. A model that leans on such phrasing will stumble when a new hospital writes differently. Reading the largest weights is the simplest way to look inside a text classifier, with all the caveats of <a href="./ch12.html">Chapter 12</a>: a weight is an association with the label in these notes, not a reason.</p>
 <p>Finally, the model reads tonight’s notes. Tomás’s (“No adverse drug reactions so far”) gets <span class="math inline">\(\hat p\)</span> = 0.06; Priya’s, with flushing and itching “probably related to vancomycin”, 0.99; Aoife’s, with a mild itch since the first antibiotic dose, “cause unclear”, 0.49. Aoife’s note is precisely the kind on which two pharmacists might disagree. These are probabilities that each <em>note reports a suspected adverse drug reaction</em>, not the risks of acute kidney injury that the logistic model of <a href="./ch05.html">Chapter 5</a> gives the same three patients (0.49 / 0.07 / 0.99): the numbers happen to be close, but they answer a different question, and whether the kidneys will be injured belongs to the models of Part II.</p>
 </section>
 <section id="sec-ch15-queue" class="level2" data-number="15.11">
@@ -2310,7 +2315,7 @@ t_{\text{low}} = \frac{C_{\text{R}}}{C_{\text{FN}}} \;&lt;\; \hat p \;&lt;\; 1 -
 </div>
 <span class="checkpoint" id="ch15-tryit-queue" hidden=""></span>
 </div>
-<p>With a single threshold of 0.5, the model misses 9 of the 56 reactions and sends 3 false reports. With <span class="math inline">\(t_{\text{low}} = 0.10\)</span> and <span class="math inline">\(t_{\text{high}} = 0.65\)</span>, Seán reads 43 of the 163 notes (26 %), finds 18 reactions among them, and the automatic streams miss 1 reaction and send 1 false report. The notes in the band are the ones written ambiguously — “cause unclear”, “a drug cause cannot be excluded” — exactly where human judgement is worth its cost. With these thresholds Aoife’s note (0.49) goes to Seán for review, Tomás’s (0.06) to the cleared stream and Priya’s (0.99) to the flagged stream.</p>
+<p>With a single threshold of 0.5, the model misses 9 of the 56 reactions and sends 3 false reports. With <span class="math inline">\(t_{\text{low}} = 0.10\)</span> and <span class="math inline">\(t_{\text{high}} = 0.65\)</span>, Seán reads 43 of the 163 notes (26 %), finds 18 reactions among them, and the automatic streams miss 1 reaction and send 1 false report. The notes in the band are the ones written ambiguously (“cause unclear”, “a drug cause cannot be excluded”), exactly where human judgement is worth its cost. With these thresholds Aoife’s note (0.49) goes to Seán for review, Tomás’s (0.06) to the cleared stream and Priya’s (0.99) to the flagged stream.</p>
 <p>A review queue is also how a classifier keeps learning. The notes Seán reads, with his decisions, are new labelled examples from the place the model is used, and the ones in the band are the most informative of all, because the model was unsure about them. Feeding them back is a simple form of <em>active learning</em> <span class="citation" data-cites="settles2009active">(<a href="#ref-settles2009active" role="doc-biblioref">Settles 2009</a>)</span>. It has a catch: if only the uncertain notes are ever checked, errors in the automatic streams go unseen. A sensible queue also sends a small random sample of cleared and flagged notes for review, to keep measuring the error rates the thresholds were chosen for.</p>
 <div id="ch15-qc-queue" class="quick-check">
 <p>The pharmacy team widens the review band, lowering <span class="math inline">\(t_{\text{low}}\)</span> and raising <span class="math inline">\(t_{\text{high}}\)</span>. What happens?</p>

@@ -2,10 +2,13 @@
 import sys, os
 HDR = {"": "# Chapter {n} Lab\n# AI and Machine Learning for Health Sciences\n# Run from the book folder (the one that contains data/), or change the paths.\n",
        "pt": "# Laboratório do capítulo {n}\n# Inteligência Artificial e Aprendizado de Máquina para as Ciências da Saúde\n# Execute a partir da pasta do livro (a que contém data/) ou ajuste os caminhos.\n",
-       "it": "# Laboratorio del capitolo {n}\n# Intelligenza Artificiale e Apprendimento Automatico per le Scienze della Salute\n# Esegui dalla cartella del libro (quella che contiene data/) o modifica i percorsi.\n"}
+       "it": "# Laboratorio del capitolo {n}\n# Intelligenza Artificiale e Apprendimento Automatico per le Scienze della Salute\n# Esegui dalla cartella del libro (quella che contiene data/) o modifica i percorsi.\n",
+       "es": "# Laboratorio del capítulo {n}\n# Inteligencia Artificial y Aprendizaje Automático para las Ciencias de la Salud\n# Ejecútalo desde la carpeta del libro (la que contiene data/) o ajusta las rutas.\n"}
 ch = sys.argv[1]  # e.g. ch01
 n = int(ch[2:])
-for lang in ["", "pt", "it"]:
+for lang in ["", "pt", "it", "es"]:
+    import os as _os
+    if lang and not _os.path.exists(f"{ch}.{lang}.qmd"): continue
     src = f"{ch}.qmd" if not lang else f"{ch}.{lang}.qmd"
     if not os.path.exists(src): continue
     s = open(src).read()

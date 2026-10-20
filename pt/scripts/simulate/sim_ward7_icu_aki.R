@@ -1,5 +1,5 @@
 # =========================================================
-# DATASET 2 — ICU Acute Kidney Injury (AKI) Risk and Early Trajectory
+# DATASET 2: ICU Acute Kidney Injury (AKI) Risk and Early Trajectory
 # =========================================================
 
 # Rationale:

@@ -1,5 +1,5 @@
 # =====================================================================
-# Chapter 8 — Bayesian models fitted with Stan (rstanarm), precomputed.
+# Chapter 8: Bayesian models fitted with Stan (rstanarm), precomputed.
 # Usage (from the book folder): Rscript scripts/precompute/ch08_stan.R
 # Writes small CSV/JSON files to data/precomputed/ch08/.
 # Needs: rstanarm, posterior. Runtime: about two minutes on one core.

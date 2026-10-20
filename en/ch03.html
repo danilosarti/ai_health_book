@@ -375,6 +375,11 @@ window.Quarto = {
             </a>
           </li>
           <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../es/index.html">
+            Español
+            </a>
+          </li>
+          <li>
             <a class="dropdown-item sidebar-tools-main-item" href="./../it/index.html">
             Italiano
             </a>
@@ -692,23 +697,23 @@ The morning after on Ward 7
 <tbody>
 <tr class="odd">
 <td>800 past patients whose records are used to estimate the intercept and slope of a straight line.</td>
-<td><select aria-label="Label for item 1" data-answer="training"><option value="">— choose —</option><option>training</option><option>validation</option><option>test</option><option>deployment</option><option>leakage</option></select></td>
+<td><select aria-label="Label for item 1" data-answer="training"><option value="">Choose…</option><option>training</option><option>validation</option><option>test</option><option>deployment</option><option>leakage</option></select></td>
 </tr>
 <tr class="even">
 <td>200 other past patients, used to decide whether a model with 5 or with 50 neighbours works better.</td>
-<td><select aria-label="Label for item 2" data-answer="validation"><option value="">— choose —</option><option>training</option><option>validation</option><option>test</option><option>deployment</option><option>leakage</option></select></td>
+<td><select aria-label="Label for item 2" data-answer="validation"><option value="">Choose…</option><option>training</option><option>validation</option><option>test</option><option>deployment</option><option>leakage</option></select></td>
 </tr>
 <tr class="odd">
 <td>250 past patients locked away and used once, at the very end, to report the error to expect.</td>
-<td><select aria-label="Label for item 3" data-answer="test"><option value="">— choose —</option><option>training</option><option>validation</option><option>test</option><option>deployment</option><option>leakage</option></select></td>
+<td><select aria-label="Label for item 3" data-answer="test"><option value="">Choose…</option><option>training</option><option>validation</option><option>test</option><option>deployment</option><option>leakage</option></select></td>
 </tr>
 <tr class="even">
 <td>Aoife, Tomás and Priya, tonight's patients, whose creatinine change nobody knows yet.</td>
-<td><select aria-label="Label for item 4" data-answer="deployment"><option value="">— choose —</option><option>training</option><option>validation</option><option>test</option><option>deployment</option><option>leakage</option></select></td>
+<td><select aria-label="Label for item 4" data-answer="deployment"><option value="">Choose…</option><option>training</option><option>validation</option><option>test</option><option>deployment</option><option>leakage</option></select></td>
 </tr>
 <tr class="odd">
 <td>Each patient's creatinine measured 24 hours after admission, used as a predictor of the 48-hour change.</td>
-<td><select aria-label="Label for item 5" data-answer="leakage"><option value="">— choose —</option><option>training</option><option>validation</option><option>test</option><option>deployment</option><option>leakage</option></select></td>
+<td><select aria-label="Label for item 5" data-answer="leakage"><option value="">Choose…</option><option>training</option><option>validation</option><option>test</option><option>deployment</option><option>leakage</option></select></td>
 </tr>
 </tbody>
 </table>
@@ -2116,7 +2121,7 @@ Figure&nbsp;3.4: Nested cross-validation: the inner loop tunes, the outer loop j
 <section id="opening-the-test-set" class="level3" data-number="3.8.2">
 <h3 data-number="3.8.2" class="anchored" data-anchor-id="opening-the-test-set"><span class="header-section-number">3.8.2</span> Opening the test set</h3>
 <p>All choices are now made: <span class="math inline">\(k\)</span>NN with <span class="math inline">\(k\)</span> = 15, standardised SOFA and baseline creatinine. The model is refitted on all 1 000 training patients and, for the first and only time, applied to the 250 test patients. Its test MAE is 0.176 mg/dL, in line with the cross-validated estimate (0.179). For the record, the two-predictor straight line scores 0.171 and the average model 0.236 on the same patients: the ranking found by cross-validation holds. The agreement between cross-validated and test errors is what an honest workflow should produce; a large gap would be a warning that something in the process leaked or that the test patients differ from the training ones.</p>
-<p>Two predictors were a teaching choice. Given all ten predictors of Ward 7 — site, age, SOFA, lactate, lowest blood pressure, baseline creatinine, protocol adherence, urea, CRP and albumin, the set the book calls <em>P10</em> and uses from Chapter 4 on — and standardised on the training patients in the same way, <span class="math inline">\(k\)</span>NN chooses <span class="math inline">\(k\)</span> = 22 by cross-validation and reaches a test MAE of 0.168 mg/dL, better than both two-predictor models. <a href="#tbl-ch03-comparison" class="quarto-xref">Table&nbsp;<span>3.7</span></a> gathers every Ward 7 model met so far. It is the book’s first <strong>comparison so far</strong>: each later chapter adds its models to this same table, fitted on the same 1 000 training patients, judged on the same 250 test patients and scored with the same metrics, so that a model of Chapter 6 can be set against one of Chapter 3 row by row.</p>
+<p>Two predictors were a teaching choice. Given all ten predictors of Ward 7 (site, age, SOFA, lactate, lowest blood pressure, baseline creatinine, protocol adherence, urea, CRP and albumin, the set the book calls <em>P10</em> and uses from Chapter 4 on) and standardised on the training patients in the same way, <span class="math inline">\(k\)</span>NN chooses <span class="math inline">\(k\)</span> = 22 by cross-validation and reaches a test MAE of 0.168 mg/dL, better than both two-predictor models. <a href="#tbl-ch03-comparison" class="quarto-xref">Table&nbsp;<span>3.7</span></a> gathers every Ward 7 model met so far. It is the book’s first <strong>comparison so far</strong>: each later chapter adds its models to this same table, fitted on the same 1 000 training patients, judged on the same 250 test patients and scored with the same metrics, so that a model of Chapter 6 can be set against one of Chapter 3 row by row.</p>
 <div class="cell">
 <div id="tbl-ch03-comparison" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -2370,7 +2375,7 @@ Selected answers
 <li><strong>Metrics</strong> summarise errors <span class="math inline">\(e_i = y_i - \hat y_i\)</span>: MAE (typical miss), MSE and RMSE (big misses weighted up), and <span class="math inline">\(R^2\)</span> (improvement over predicting the mean). Choose the metric that matches what an error costs.</li>
 <li>Every model must beat a <strong>baseline</strong>: the mean (or median) and current practice.</li>
 <li><strong><span class="math inline">\(V\)</span>-fold cross-validation</strong> fits <span class="math inline">\(V\)</span> times and averages the held-out errors; folds must keep each patient (or site) together.</li>
-<li><strong>Leakage</strong> — features that contain the outcome, steps fitted on evaluation rows, or the same patient on both sides — makes models look better than they are. ONCO-1’s genes 08, 14 and 19 are the book’s standing example.</li>
+<li><strong>Leakage</strong> (features that contain the outcome, steps fitted on evaluation rows, or the same patient on both sides) makes models look better than they are. ONCO-1’s genes 08, 14 and 19 are the book’s standing example.</li>
 <li><strong><span class="math inline">\(k\)</span>-nearest neighbours</strong> averages the outcomes of the <span class="math inline">\(k\)</span> most similar training patients; it needs standardised predictors, and <span class="math inline">\(k\)</span> trades variance (small <span class="math inline">\(k\)</span>) for bias (large <span class="math inline">\(k\)</span>).</li>
 <li>A <strong>hyperparameter</strong> such as <span class="math inline">\(k\)</span> is tuned by cross-validation; <strong>nested cross-validation</strong> estimates the performance of the whole tuning procedure. Then the test set is opened, once.</li>
 </ul>

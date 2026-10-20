@@ -1,0 +1,5 @@
+"strategy","label","regret","regret_sd","engaged","share_best","wrong_lock"
+"equal","Equal allocation",33.37,1.46,141.3,0.3324,0.65
+"greedy","Greedy",23.22,27.3,152.1,0.4615,0.535
+"epsilon","Epsilon-greedy (0.1)",13.93,12.7,161.2,0.6115,0.28
+"thompson","Thompson sampling",12.97,6.56,161.9,0.6491,0.135

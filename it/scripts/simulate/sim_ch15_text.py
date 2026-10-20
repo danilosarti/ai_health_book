@@ -1,5 +1,5 @@
 # =====================================================================
-# Chapter 15 · Text as data — a small, fully SYNTHETIC clinical corpus
+# Chapter 15 · Text as data: a small, fully SYNTHETIC clinical corpus
 # ---------------------------------------------------------------------
 # Every sentence below is invented from templates. No real patient, note,
 # report or medicine leaflet was used. Patient identifiers are those of the

@@ -1,0 +1,66 @@
+# Laboratório do capítulo 6
+# Inteligência Artificial e Aprendizado de Máquina para as Ciências da Saúde
+# Execute a partir da pasta do livro (a que contém data/) ou ajuste os caminhos.
+# 0. Pacotes e dados -----------------------------------------------------------
+import pandas as pd
+import numpy as np
+from sklearn.tree import DecisionTreeRegressor, export_text
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import GridSearchCV, PredefinedSplit
+
+icu = pd.read_csv("data/icu_aki.csv")
+tonight = pd.read_csv("data/ward7_tonight.csv")
+feat = ["site", "age", "sofa", "lactate", "map_min", "baseline_creat",
+        "protocol_adherence", "bun", "crp", "albumin"]
+X = pd.get_dummies(icu[feat], drop_first=True, dtype=float)
+y = icu["delta_creatinine_48h"]
+split = pd.read_csv("data/splits/ward7_split.csv")          # divisão compartilhada do Capítulo 3
+m = split["set"].eq("train").to_numpy()
+Xtr, Xte, ytr, yte = X[m], X[~m], y[m], y[~m]
+folds = PredefinedSplit(split.loc[m, "fold"].astype(int).to_numpy() - 1)   # cinco partições fixas
+Xnew = pd.get_dummies(tonight[feat], dtype=float).reindex(columns=X.columns, fill_value=0.0)
+mae = lambda a, b: float(np.mean(np.abs(np.asarray(a) - np.asarray(b))))
+
+# 1. Escolher a profundidade de uma árvore por VC com 5 partições (compartilhadas)
+grid = GridSearchCV(DecisionTreeRegressor(random_state=2026), {"max_depth": list(range(1, 9))},
+                    cv=folds, scoring="neg_mean_absolute_error").fit(Xtr, ytr)
+tree = grid.best_estimator_     # a árvore do scikit-learn; as tabelas do livro usam a árvore 1-SE do rpart (Lab em R)
+print("profundidade escolhida:", grid.best_params_["max_depth"])
+print(export_text(DecisionTreeRegressor(max_depth=2).fit(Xtr, ytr), feature_names=list(X.columns)))
+
+# 2. A floresta de 500 árvores das comparações do livro (cerca de 10 s) ----------
+rf = RandomForestRegressor(n_estimators=500, max_features=1/3, oob_score=True,
+                           random_state=2026).fit(Xtr, ytr)
+print("MAE OOB:", round(mae(ytr, rf.oob_prediction_), 3))
+
+# 3. Comparar nos pacientes de teste ----------------------------------------------
+lin = LinearRegression().fit(Xtr, ytr)
+print({"average": round(mae(yte, np.full(len(yte), ytr.mean())), 3),
+       "tree": round(mae(yte, tree.predict(Xte)), 3),
+       "forest": round(mae(yte, rf.predict(Xte)), 3),
+       "linear": round(mae(yte, lin.predict(Xte)), 3)})
+# O XGBoost não roda no navegador: leia-o, e todos os outros modelos, do ledger do livro
+led = pd.read_csv("data/precomputed/ledger/ward7_reg.csv")
+print(led.loc[(led["chapter"] <= 6) & (led["role"] != "variant"), ["model", "test_MAE"]].round(3).to_string(index=False))
+
+# 4. Os pacientes desta noite -------------------------------------------------------
+print(pd.DataFrame({"name": tonight["name"], "tree": tree.predict(Xnew).round(2),
+                    "forest": rf.predict(Xnew).round(2)}))
+
+# 5. ONCO-1: triagem de vazamentos antes de modelar --------------------------------
+onco = pd.read_csv("data/onco1.csv")
+om = pd.read_csv("data/splits/onco1_split.csv")["set"].eq("train").to_numpy()
+otr, ote = onco[om], onco[~om]
+genes = [c for c in onco.columns if c.startswith("gene_")]
+print(otr[genes].corrwith(otr["response_percent"]).round(2).sort_values(ascending=False).head(5))
+
+# 6. ...e ver o que os genes com vazamento fazem com uma árvore de regressão -----
+drop = ["patient_id", "baseline_tumor_mm", "post_tumor_mm", "high_response", "response_percent"]
+Xo = pd.get_dummies(onco.drop(columns=drop), drop_first=True, dtype=float)
+clean = [c for c in Xo.columns if c not in ["gene_08", "gene_14", "gene_19"]]
+yo = onco["response_percent"]
+t_all = DecisionTreeRegressor(max_depth=5, random_state=0).fit(Xo[om], yo[om])
+t_cln = DecisionTreeRegressor(max_depth=5, random_state=0).fit(Xo[om][clean], yo[om])
+print({"with_leaky_genes": round(mae(yo[~om], t_all.predict(Xo[~om])), 2),
+       "without_leaky_genes": round(mae(yo[~om], t_cln.predict(Xo[~om][clean])), 2)})

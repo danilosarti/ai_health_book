@@ -1,5 +1,5 @@
 /* =====================================================================
-   AI & ML for Health Sciences — shared interactive toolkit
+   AI & ML for Health Sciences: shared interactive toolkit
    Components: progress store, gate, quick checks, challenges, missions,
    progress panel, sticky counter, reset, book-wide dashboard.
    State lives only in this browser (localStorage, one key per chapter).
@@ -13,13 +13,57 @@
   // ---------------------------------------------------------------- i18n
   var LANG = (document.documentElement.getAttribute("lang") || "en").slice(0, 2);
   var I18N = {
+ "es": {
+  "Click again to confirm": "Haz clic de nuevo para confirmar",
+  "Before you start": "Antes de empezar",
+  "Check my answers": "Comprobar mis respuestas",
+  "Skip for now": "Saltar por ahora",
+  "Complete or skip the task above to unlock the chapter.": "Completa o salta la tarea de arriba para desbloquear el capítulo.",
+  "All correct: the chapter is open. ": "Todo correcto: el capítulo está desbloqueado. ",
+  "{a} of {b} correct. Red cells need another look.": "{a} de {b} correctas. Revisa las celdas en rojo.",
+  "Skipped. You can come back to this task at any time.": "Tarea saltada. Puedes volver a ella cuando quieras.",
+  "Completed earlier.": "Completada anteriormente.",
+  "Quick check": "Comprobación rápida",
+  "Correct.": "Correcto.",
+  "Not quite.": "No exactamente.",
+  "Challenge": "Desafío",
+  "Answer for item {a}": "Respuesta del ítem {a}",
+  "Choose…": "Elige…",
+  "Check": "Comprobar",
+  "All {a} correct!": "¡Las {a} correctas!",
+  "{a} of {b} correct: try again.": "{a} de {b} correctas: inténtalo de nuevo.",
+  "Mission": "Misión",
+  "R and Python": "R y Python",
+  "Starting|Under way|Halfway|Nearly there|Complete": "Inicio|En marcha|A mitad de camino|Casi listo|Completo",
+  "{a} / {b} checkpoints ({c}%)": "{a} / {b} etapas ({c}%)",
+  "Level: ": "Nivel: ",
+  "Badge earned: ": "Insignia conseguida: ",
+  "Chapter complete": "Capítulo completado",
+  "Your progress": "Tu progreso",
+  "Chapter progress": "Progreso en el capítulo",
+  "Reset this chapter": "Reiniciar este capítulo",
+  "Progress is saved only in this browser. Nothing is sent anywhere.": "El progreso se guarda solo en este navegador. No se envía nada a ningún sitio.",
+  "Chapter progress summary": "Resumen del progreso en el capítulo",
+  "Chapter": "Capítulo",
+  "Progress": "Progreso",
+  "Stars": "Estrellas",
+  "Status": "Estado",
+  "coming soon": "próximamente",
+  "not started": "sin empezar",
+  "complete ✓": "completado ✓",
+  "in progress": "en curso",
+  "Chapters completed: {a} · Stars collected: ★ {b}": "Capítulos completados: {a} · Estrellas: ★ {b}",
+  "Reset the whole book": "Reiniciar todo el libro",
+  "Try it": "Pruébalo",
+  "Language": "Idioma"
+ },
  "pt": {
   "Click again to confirm": "Clique de novo para confirmar",
   "Before you start": "Antes de começar",
   "Check my answers": "Verificar minhas respostas",
   "Skip for now": "Pular por enquanto",
   "Complete or skip the task above to unlock the chapter.": "Complete ou pule a tarefa acima para liberar o capítulo.",
-  "All correct — the chapter is open. ": "Tudo certo — o capítulo está liberado. ",
+  "All correct: the chapter is open. ": "Tudo certo: o capítulo está liberado. ",
   "{a} of {b} correct. Red cells need another look.": "{a} de {b} corretas. Revise as células em vermelho.",
   "Skipped. You can come back to this task at any time.": "Tarefa pulada. Você pode voltar a ela quando quiser.",
   "Completed earlier.": "Concluída anteriormente.",
@@ -28,10 +72,10 @@
   "Not quite.": "Não exatamente.",
   "Challenge": "Desafio",
   "Answer for item {a}": "Resposta do item {a}",
-  "— choose —": "— escolha —",
+  "Choose…": "Escolha…",
   "Check": "Verificar",
   "All {a} correct!": "Todas as {a} corretas!",
-  "{a} of {b} correct — try again.": "{a} de {b} corretas — tente de novo.",
+  "{a} of {b} correct: try again.": "{a} de {b} corretas: tente de novo.",
   "Mission": "Missão",
   "R and Python": "R e Python",
   "Starting|Under way|Halfway|Nearly there|Complete": "Início|Em andamento|Metade|Quase lá|Completo",
@@ -63,7 +107,7 @@
   "Check my answers": "Verifica le mie risposte",
   "Skip for now": "Salta per ora",
   "Complete or skip the task above to unlock the chapter.": "Completa o salta il compito qui sopra per sbloccare il capitolo.",
-  "All correct — the chapter is open. ": "Tutto corretto: il capitolo è sbloccato. ",
+  "All correct: the chapter is open. ": "Tutto corretto: il capitolo è sbloccato. ",
   "{a} of {b} correct. Red cells need another look.": "{a} su {b} corrette. Ricontrolla le celle in rosso.",
   "Skipped. You can come back to this task at any time.": "Compito saltato. Puoi tornarci quando vuoi.",
   "Completed earlier.": "Completato in precedenza.",
@@ -72,10 +116,10 @@
   "Not quite.": "Non proprio.",
   "Challenge": "Sfida",
   "Answer for item {a}": "Risposta per l'elemento {a}",
-  "— choose —": "— scegli —",
+  "Choose…": "Scegli…",
   "Check": "Verifica",
   "All {a} correct!": "Tutte le {a} corrette!",
-  "{a} of {b} correct — try again.": "{a} su {b} corrette: riprova.",
+  "{a} of {b} correct: try again.": "{a} su {b} corrette: riprova.",
   "Mission": "Missione",
   "R and Python": "R e Python",
   "Starting|Under way|Halfway|Nearly there|Complete": "Inizio|In corso|A metà|Quasi fatto|Completato",
@@ -234,7 +278,7 @@
       });
       if (right === cells.length) {
         fb.className = "aihs-feedback ok";
-        fb.textContent = T("All correct — the chapter is open. ") + (g.getAttribute("data-success") || "");
+        fb.textContent = T("All correct: the chapter is open. ") + (g.getAttribute("data-success") || "");
         state.gate = "passed"; g.classList.add("done");
         complete(id, true); unlock();
       } else {
@@ -300,7 +344,7 @@
       li.setAttribute("data-key", a ? a.textContent.trim() : "");
       if (a) a.remove();
       var sel = el("select", { "aria-label": T("Answer for item {a}", {a: k + 1}), "autocomplete": "off" });
-      sel.appendChild(el("option", { "value": "" }, T("— choose —")));
+      sel.appendChild(el("option", { "value": "" }, T("Choose…")));
       opts.forEach(function (o) { sel.appendChild(el("option", { "value": o }, o)); });
       li.appendChild(sel);
     });
@@ -315,7 +359,7 @@
         fb.className = "aihs-feedback ok"; fb.textContent = T("All {a} correct!", {a: right});
         c.classList.add("done"); complete(id, firstTry);
       } else {
-        fb.className = "aihs-feedback bad"; fb.textContent = T("{a} of {b} correct — try again.", {a: right, b: lis.length});
+        fb.className = "aihs-feedback bad"; fb.textContent = T("{a} of {b} correct: try again.", {a: right, b: lis.length});
         firstTry = false;
       }
     });
@@ -446,8 +490,8 @@
     document.querySelectorAll(".mindmap .mm-link[data-href]").forEach(function (g) {
       var go = function () {
         var h = g.getAttribute("data-href");
-        var m = (window.location.pathname.split("/").pop() || "").match(/\.(pt|it)\.html$/);
-        window.location.href = (m && !/\.(pt|it)\.html$/.test(h)) ? h.replace(/\.html$/, "." + m[1] + ".html") : h;
+        var m = (window.location.pathname.split("/").pop() || "").match(/\.(pt|it|es)\.html$/);
+        window.location.href = (m && !/\.(pt|it|es)\.html$/.test(h)) ? h.replace(/\.html$/, "." + m[1] + ".html") : h;
       };
       g.addEventListener("click", go);
       g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
@@ -456,7 +500,7 @@
     try { window.localStorage.setItem("aihs:lang", LANG); } catch (e) { /* ignore */ }
     var page = (window.location.pathname.split("/").pop() || "index.html");
     function langOf(href) {
-      var m = String(href || "").match(/(?:^|\/)(en|pt|it)\/(?:index\.html)?(?:[?#].*)?$/);
+      var m = String(href || "").match(/(?:^|\/)(en|pt|it|es)\/(?:index\.html)?(?:[?#].*)?$/);
       return m ? m[1] : null;
     }
     document.querySelectorAll(".sidebar-tools-main-item, .quarto-navigation-tool + .dropdown-menu a").forEach(function (a) {
@@ -467,26 +511,26 @@
       a.addEventListener("click", function (ev) {
         ev.preventDefault();
         // two layouts: one folder per language (en/ch01.html) or a single folder (ch01.pt.html)
-        var foldered = /\/(en|pt|it)\/[^\/]*$/.test(window.location.pathname);
+        var foldered = /\/(en|pt|it|es)\/[^\/]*$/.test(window.location.pathname);
         if (foldered) {
           window.location.href = "../" + l + "/" + page + window.location.hash;
         } else {
-          var base = page.replace(/\.(pt|it)\.html$/, ".html");
+          var base = page.replace(/\.(pt|it|es)\.html$/, ".html");
           window.location.href = (l === "en" ? base : base.replace(/\.html$/, "." + l + ".html")) + window.location.hash;
         }
       });
     });
     // visible language bar at the top of every page: EN · PT · IT
     function langHref(l) {
-      var foldered = /\/(en|pt|it)\/[^\/]*$/.test(window.location.pathname);
+      var foldered = /\/(en|pt|it|es)\/[^\/]*$/.test(window.location.pathname);
       if (foldered) return "../" + l + "/" + page;
-      var base = page.replace(/\.(pt|it)\.html$/, ".html");
+      var base = page.replace(/\.(pt|it|es)\.html$/, ".html");
       return l === "en" ? base : base.replace(/\.html$/, "." + l + ".html");
     }
     var main = document.querySelector("main#quarto-document-content") || document.querySelector("main");
     if (main && !document.querySelector(".aihs-langbar")) {
       var bar = el("nav", { "class": "aihs-langbar", "aria-label": T("Language") });
-      [["en", "English"], ["pt", "Português"], ["it", "Italiano"]].forEach(function (x) {
+      [["en", "English"], ["pt", "Português"], ["es", "Español"], ["it", "Italiano"]].forEach(function (x) {
         var a = el("a", { "href": langHref(x[0]), "hreflang": x[0], "lang": x[0], "title": x[1] }, x[0].toUpperCase());
         if (x[0] === LANG) { a.setAttribute("aria-current", "true"); a.className = "current"; }
         a.addEventListener("click", function (ev) { ev.preventDefault(); window.location.href = langHref(x[0]) + window.location.hash; });

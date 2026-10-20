@@ -1,5 +1,5 @@
 # =====================================================================
-# Chapter 14 — precomputed results (sequential decisions: reinforcement learning)
+# Chapter 14: precomputed results (sequential decisions: reinforcement learning)
 # Usage (from the book folder): Rscript scripts/precompute/ch14_rl.R
 # Needs base R and jsonlite. Runs in a few seconds on one core. Writes small
 # CSV/JSON files to data/precomputed/ch14/.

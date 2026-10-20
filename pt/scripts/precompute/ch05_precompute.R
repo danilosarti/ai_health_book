@@ -1,5 +1,5 @@
 # =====================================================================
-# Chapter 5 — precomputed results (classification, thresholds, calibration)
+# Chapter 5: precomputed results (classification, thresholds, calibration)
 # Usage (from the book folder): Rscript scripts/precompute/ch05_precompute.R
 # Writes small CSV files to data/precomputed/ch05/. Needs base R + glmnet.
 # =====================================================================

@@ -1,4 +1,4 @@
-"""Chapter 8 — BART (Bayesian additive regression trees), precomputed, with honest test-set
+"""Chapter 8: BART (Bayesian additive regression trees), precomputed, with honest test-set
 comparisons against random forests, XGBoost and linear regression.
 
 Usage (from the book folder):  python3 scripts/precompute/ch08_bart.py

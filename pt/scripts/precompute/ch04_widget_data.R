@@ -1,4 +1,4 @@
-# Chapter 4 — small data for the "drag a patient" widget.
+# Chapter 4: small data for the "drag a patient" widget.
 # 30 Ward 7 patients (fixed seed) with SOFA and the 48-hour change in creatinine.
 # Run from the book folder:  Rscript scripts/precompute/ch04_widget_data.R
 icu <- read.csv("data/icu_aki.csv")

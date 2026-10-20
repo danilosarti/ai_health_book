@@ -1,5 +1,5 @@
 # =====================================================================
-# HomeBeat digital (decentralised) trial with wearables — simulation
+# HomeBeat digital (decentralised) trial with wearables: simulation
 # (Running example 3). Source: v1 book, introd_bayesian.qmd (author:
 # D. A. Sarti), unchanged except for the output path at the end.
 # =====================================================================

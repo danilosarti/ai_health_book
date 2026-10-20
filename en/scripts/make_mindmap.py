@@ -27,6 +27,14 @@ B = {
           ("V · Linguaggio e IA generativa", [("ch15","15 Il testo come dato"),("ch16","16 Modelli linguistici"),("ch17","17 Attenzione e transformer"),("ch18","18 Dall'LLM all'assistente clinico"),("ch19","19 Generativi oltre il testo")]),
           ("Appendici", [("setup","A Configurazione: R, Python, Git"),("data-dictionary","B Dati"),("glossary","C Glossario"),("notation","D Notazione")])],
    title="Mappa mentale del libro", desc="Il tema centrale del libro, IA e apprendimento automatico per le scienze della salute visti attraverso il ciclo decisionale, si dirama in cinque parti e nelle appendici, ciascuna con i suoi capitoli."),
+ "es": dict(center=["IA y aprendizaje automático", "para las ciencias de la salud"], tag="el ciclo de decisión",
+   parts=[("I · Fundamentos", [("ch01","1 Datos, modelos y decisiones"),("ch02","2 Incertidumbre y probabilidad"),("ch03","3 Aprender de los datos")]),
+          ("II · Predecir desenlaces", [("ch04","4 Modelos lineales, regularización"),("ch05","5 Clasificación y umbrales"),("ch06","6 Árboles y ensambles"),("ch07","7 Redes neuronales, deep learning"),("ch08","8 Aprendizaje bayesiano"),("ch09","9 Cuando faltan datos")]),
+          ("III · Encontrar estructura", [("ch10","10 Datos de alta dimensión"),("ch11","11 Agrupar pacientes")]),
+          ("IV · Confiar en los modelos", [("ch12","12 IA interpretable"),("ch13","13 Predicción y causalidad"),("ch14","14 Aprendizaje por refuerzo")]),
+          ("V · Lenguaje e IA generativa", [("ch15","15 El texto como dato"),("ch16","16 Modelos de lenguaje"),("ch17","17 Atención y transformers"),("ch18","18 Del LLM al asistente clínico"),("ch19","19 Generativos más allá del texto")]),
+          ("Apéndices", [("setup","A Configuración: R, Python, Git"),("data-dictionary","B Datos"),("glossary","C Glosario"),("notation","D Notación")])],
+   title="Mapa mental del libro", desc="El tema central del libro, la IA y el aprendizaje automático para las ciencias de la salud vistos a través del ciclo de decisión, se ramifica en cinco partes y en los apéndices, cada una con sus capítulos."),
 }
 W, H, CX, CY, LH = 1600, 560, 800, 280, 24
 

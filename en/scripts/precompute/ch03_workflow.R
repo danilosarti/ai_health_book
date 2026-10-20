@@ -1,5 +1,5 @@
 # =====================================================================
-# Chapter 3 — precomputed results (light: base R only, runs in seconds)
+# Chapter 3: precomputed results (light: base R only, runs in seconds)
 # Usage (from the book folder): Rscript scripts/precompute/ch03_workflow.R
 # Writes data/precomputed/ch03/:
 #   knn_curve.csv     k, training MAE, 5-fold CV MAE (+ SE), test MAE (Ward 7, 2 features)

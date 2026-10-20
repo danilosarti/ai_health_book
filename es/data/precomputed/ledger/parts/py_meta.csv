@@ -1,0 +1,24 @@
+example,model_id,tuning,software
+ward7_reg,tree_sklearn_full,no pruning (min_samples_leaf = 1),scikit-learn 1.9.1
+ward7_reg,tree_sklearn_depthcv,"max_depth = 3 (5-fold CV on shared folds, MAE)",scikit-learn 1.9.1
+ward7_reg,bagging500,"500 bootstrap trees, all 12 columns at each split",scikit-learn 1.9.1
+ward7_reg,rf500,"500 trees, max_features = 1/3, seed 2026",scikit-learn 1.9.1
+ward7_reg,xgb,"152 rounds (5-fold CV, MAE); eta 0.05, depth 3, subsample 0.8, colsample 0.8",xgboost 3.4.1
+ward7_reg,mlp,"32-16 ReLU, alpha 1e-3, batch 32, 30 epochs (5-fold CV, MAE)",scikit-learn 1.9.1
+ward7_aki,rf500,"500 trees, max_features = sqrt (default), seed 2026",scikit-learn 1.9.1
+ward7_aki,xgb,"87 rounds (5-fold CV, log-loss); eta 0.05, depth 3, subsample 0.8, colsample 0.8",xgboost 3.4.1
+ward7_aki,mlp,"32-16 ReLU, alpha 1e-3, batch 32, 10 epochs (5-fold CV, log-loss)",scikit-learn 1.9.1
+onco1_reg,rf500,"500 trees, max_features = 1/3, seed 2026",scikit-learn 1.9.1
+onco1_reg,xgb,"353 rounds (5-fold CV, MAE); eta 0.05, depth 3, subsample 0.8, colsample 0.8",xgboost 3.4.1
+onco1_class,ridge_logistic_C1_sklearn,"L2 penalty, C = 1 (scikit-learn default), standardised on training rows; the Chapter 6 'logistic regression'",scikit-learn 1.9.1
+onco1_class,tree_depth4,"max_depth = 4 (fixed, as in Chapter 6)",scikit-learn 1.9.1
+onco1_class,rf500,"500 trees, max_features = sqrt (default), seed 2026",scikit-learn 1.9.1
+onco1_class,xgb,"136 rounds (5-fold CV, log-loss); eta 0.05, depth 3, subsample 0.8, colsample 0.8",xgboost 3.4.1
+onco1_reg,mlp_multi,"one network, two heads (response %, high response); 53 inputs, 32-16, dropout 0.2, Adam 1e-3, weight decay 1e-4; 110 epochs (5-fold CV, combined loss); trained on all 800 training patients",PyTorch 2.14.1+cu130
+onco1_class,mlp_multi,"one network, two heads (response %, high response); 53 inputs, 32-16, dropout 0.2, Adam 1e-3, weight decay 1e-4; 110 epochs (5-fold CV, combined loss); trained on all 800 training patients; evaluated on the chemotherapy-arm patients",PyTorch 2.14.1+cu130
+homebeat,rf500,"500 trees, max_features = 1/3, seed 2026 (as in Chapter 8)",scikit-learn 1.9.1
+homebeat,xgb300,"300 rounds fixed, eta 0.05, depth 3 (the Chapter 8 setting)",xgboost 3.4.1
+homebeat,xgb,"150 rounds (5-fold CV, MAE); eta 0.05, depth 3, subsample 0.8, colsample 0.8",xgboost 3.4.1
+homebeat,bart,50 trees; 2 chains x 1 000 draws + 1 000 tuning; posterior mean of f(x),"pymc 6.3.2, pymc-bart 0.13.1"
+ward7_reg,bart,50 trees; 2 chains x 1 000 draws + 1 000 tuning; posterior mean of f(x),"pymc 6.3.2, pymc-bart 0.13.1"
+ward7_aki,bart_p10,50 trees; 2 chains x 1 000 draws + 1 000 tuning; P(new Δ ≥ 0.3) from the posterior predictive draws,"pymc 6.3.2, pymc-bart 0.13.1"
