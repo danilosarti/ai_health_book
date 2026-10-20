@@ -476,6 +476,24 @@
         }
       });
     });
+    // visible language bar at the top of every page: EN · PT · IT
+    function langHref(l) {
+      var foldered = /\/(en|pt|it)\/[^\/]*$/.test(window.location.pathname);
+      if (foldered) return "../" + l + "/" + page;
+      var base = page.replace(/\.(pt|it)\.html$/, ".html");
+      return l === "en" ? base : base.replace(/\.html$/, "." + l + ".html");
+    }
+    var main = document.querySelector("main#quarto-document-content") || document.querySelector("main");
+    if (main && !document.querySelector(".aihs-langbar")) {
+      var bar = el("nav", { "class": "aihs-langbar", "aria-label": T("Language") });
+      [["en", "English"], ["pt", "Português"], ["it", "Italiano"]].forEach(function (x) {
+        var a = el("a", { "href": langHref(x[0]), "hreflang": x[0], "lang": x[0], "title": x[1] }, x[0].toUpperCase());
+        if (x[0] === LANG) { a.setAttribute("aria-current", "true"); a.className = "current"; }
+        a.addEventListener("click", function (ev) { ev.preventDefault(); window.location.href = langHref(x[0]) + window.location.hash; });
+        bar.appendChild(a);
+      });
+      main.insertBefore(bar, main.firstChild);
+    }
     var tgl = document.querySelector(".bi-translate");
     if (tgl && tgl.parentElement) { tgl.parentElement.setAttribute("aria-label", T("Language")); tgl.parentElement.setAttribute("title", T("Language")); }
     if (CH) { persist(); render(); }

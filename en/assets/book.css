@@ -181,3 +181,10 @@ body.quarto-dark { --mm0:#6cc3e0; --mm1:#b79cff; --mm2:#ffb36b; --mm3:#6fd39b; -
 body.quarto-dark .tryit form button { color: #0b1d24; }
 .mindmap .mm-link { cursor: pointer; }
 .mindmap .mm-link:hover .mm-leaf { fill: var(--aihs-accent); }
+
+/* language bar (top of every page) */
+.aihs-langbar { display: flex; justify-content: flex-end; gap: 0.3rem; margin: 0 0 0.6rem; font-size: 0.85rem; }
+.aihs-langbar a { padding: 0.15rem 0.6rem; border: 1px solid var(--aihs-border); border-radius: 999px; text-decoration: none; color: inherit; }
+.aihs-langbar a:hover, .aihs-langbar a:focus-visible { border-color: var(--aihs-accent); color: var(--aihs-accent); }
+.aihs-langbar a.current { background: var(--aihs-accent); border-color: var(--aihs-accent); color: #fff; font-weight: 600; }
+body.quarto-dark .aihs-langbar a.current { color: #0b1d24; }
