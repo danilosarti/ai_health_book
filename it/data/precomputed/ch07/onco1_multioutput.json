@@ -1,0 +1,36 @@
+{
+ "n_train": 700,
+ "n_test": 300,
+ "without_leaky_genes": {
+  "linear_and_logistic": {
+   "mae": 3.35,
+   "rmse": 4.28,
+   "accuracy": 0.953,
+   "auc": 0.995
+  },
+  "multi_output_network": {
+   "mae": 4.25,
+   "rmse": 5.37,
+   "accuracy": 0.967,
+   "auc": 0.994,
+   "epochs_run": 76
+  },
+  "n_features": 53
+ },
+ "with_leaky_genes": {
+  "linear_and_logistic": {
+   "mae": 1.58,
+   "rmse": 1.99,
+   "accuracy": 0.983,
+   "auc": 0.999
+  },
+  "multi_output_network": {
+   "mae": 2.85,
+   "rmse": 3.68,
+   "accuracy": 0.983,
+   "auc": 0.999,
+   "epochs_run": 84
+  },
+  "n_features": 56
+ }
+}

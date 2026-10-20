@@ -1,0 +1,2338 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="it" xml:lang="it"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Appendice D — Notazione – Intelligenza Artificiale e Apprendimento Automatico per le Scienze della Salute</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./glossary.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-1ed442b0bca6acdbb302262e5862e895.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-ea2dfcc467e7465021677e6f977f9eb2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-1ed442b0bca6acdbb302262e5862e895.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nessun risultato",
+    "search-matching-documents-text": "documenti trovati",
+    "search-copy-link-title": "Copiare il link nella ricerca",
+    "search-hide-matches-text": "Nascondere i risultati aggiuntivi",
+    "search-more-match-text": "ci sono altri risultati in questo documento",
+    "search-more-matches-text": "ulteriori risultati in questo documento",
+    "search-clear-button-title": "Pulire",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancellare",
+    "search-submit-button-title": "Inviare",
+    "search-label": "Ricerca"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="assets/vendor/mathjax/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="assets/book.css">
+</head>
+
+<body class="floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Attiva/disattiva la barra laterale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./setup.html">Appendici</a></li><li class="breadcrumb-item"><a href="./notation.html"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Notazione</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Attiva/disattiva la barra laterale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Ricerca" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Intelligenza Artificiale e Apprendimento Automatico per le Scienze della Salute</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-translate"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../en/index.html">
+            English
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../pt/index.html">
+            Português
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../it/index.html">
+            Italiano
+            </a>
+          </li>
+      </ul>
+    </div>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Attiva/disattiva la modalità oscura"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Ricerca"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Benvenuti</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Fondamenti: dati, modelli, decisioni</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Attiva/disattiva sezione">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dati, modelli e decisioni</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Incertezza e probabilità per chi prende decisioni</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Imparare dai dati: il flusso di lavoro</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Predire gli esiti</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Attiva/disattiva sezione">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelli lineari e regolarizzazione</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Classificazione, soglie e calibrazione</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Alberi ed ensemble</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Reti neurali e apprendimento profondo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Apprendimento bayesiano e incertezza predittiva</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Quando mancano i dati</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Trovare struttura</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Attiva/disattiva sezione">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Dati ad alta dimensionalità e riduzione della dimensionalità</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Raggruppare i pazienti</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Fidarsi dei modelli e agire</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Attiva/disattiva sezione">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">IA interpretabile e spiegabile</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Dalla previsione alla causalità</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Decisioni sequenziali: apprendimento per rinforzo</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Linguaggio, modelli generativi e LLM</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Attiva/disattiva sezione">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Il testo come dato</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Prevedere la parola successiva: modelli linguistici ed embedding</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">L’attenzione e il transformer</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Dal modello linguistico all’assistente clinico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Modelli generativi oltre il testo</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendici</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Attiva/disattiva sezione">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configurare R, Python, Git e GitHub</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-dictionary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Dati utilizzati in questo libro</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Glossario</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notation.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Notazione</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Bibliografia</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Indice</h2>
+   
+  <ul>
+  <li><a href="#simboli-usati-in-tutto-il-libro" id="toc-simboli-usati-in-tutto-il-libro" class="nav-link active" data-scroll-target="#simboli-usati-in-tutto-il-libro"><span class="header-section-number">D.1</span> Simboli usati in tutto il libro</a></li>
+  <li><a href="#simboli-aggiunti-capitolo-per-capitolo" id="toc-simboli-aggiunti-capitolo-per-capitolo" class="nav-link" data-scroll-target="#simboli-aggiunti-capitolo-per-capitolo"><span class="header-section-number">D.2</span> Simboli aggiunti capitolo per capitolo</a>
+  <ul class="collapse">
+  <li><a href="#capitolo-2-incertezza-e-probabilità-per-chi-prende-decisioni" id="toc-capitolo-2-incertezza-e-probabilità-per-chi-prende-decisioni" class="nav-link" data-scroll-target="#capitolo-2-incertezza-e-probabilità-per-chi-prende-decisioni"><span class="header-section-number">D.2.1</span> Capitolo 2 · Incertezza e probabilità per chi prende decisioni</a></li>
+  <li><a href="#capitolo-3-imparare-dai-dati-il-flusso-di-lavoro" id="toc-capitolo-3-imparare-dai-dati-il-flusso-di-lavoro" class="nav-link" data-scroll-target="#capitolo-3-imparare-dai-dati-il-flusso-di-lavoro"><span class="header-section-number">D.2.2</span> Capitolo 3 · Imparare dai dati: il flusso di lavoro</a></li>
+  <li><a href="#capitolo-4-modelli-lineari-e-regolarizzazione" id="toc-capitolo-4-modelli-lineari-e-regolarizzazione" class="nav-link" data-scroll-target="#capitolo-4-modelli-lineari-e-regolarizzazione"><span class="header-section-number">D.2.3</span> Capitolo 4 · Modelli lineari e regolarizzazione</a></li>
+  <li><a href="#capitolo-5-classificazione-soglie-e-calibrazione" id="toc-capitolo-5-classificazione-soglie-e-calibrazione" class="nav-link" data-scroll-target="#capitolo-5-classificazione-soglie-e-calibrazione"><span class="header-section-number">D.2.4</span> Capitolo 5 · Classificazione, soglie e calibrazione</a></li>
+  <li><a href="#capitolo-6-alberi-ed-ensemble" id="toc-capitolo-6-alberi-ed-ensemble" class="nav-link" data-scroll-target="#capitolo-6-alberi-ed-ensemble"><span class="header-section-number">D.2.5</span> Capitolo 6 · Alberi ed ensemble</a></li>
+  <li><a href="#capitolo-7-reti-neurali-e-apprendimento-profondo" id="toc-capitolo-7-reti-neurali-e-apprendimento-profondo" class="nav-link" data-scroll-target="#capitolo-7-reti-neurali-e-apprendimento-profondo"><span class="header-section-number">D.2.6</span> Capitolo 7 · Reti neurali e apprendimento profondo</a></li>
+  <li><a href="#capitolo-8-apprendimento-bayesiano-e-incertezza-predittiva" id="toc-capitolo-8-apprendimento-bayesiano-e-incertezza-predittiva" class="nav-link" data-scroll-target="#capitolo-8-apprendimento-bayesiano-e-incertezza-predittiva"><span class="header-section-number">D.2.7</span> Capitolo 8 · Apprendimento bayesiano e incertezza predittiva</a></li>
+  <li><a href="#capitolo-9-quando-mancano-i-dati" id="toc-capitolo-9-quando-mancano-i-dati" class="nav-link" data-scroll-target="#capitolo-9-quando-mancano-i-dati"><span class="header-section-number">D.2.8</span> Capitolo 9 · Quando mancano i dati</a></li>
+  <li><a href="#capitolo-10-dati-ad-alta-dimensionalità-e-riduzione-della-dimensionalità" id="toc-capitolo-10-dati-ad-alta-dimensionalità-e-riduzione-della-dimensionalità" class="nav-link" data-scroll-target="#capitolo-10-dati-ad-alta-dimensionalità-e-riduzione-della-dimensionalità"><span class="header-section-number">D.2.9</span> Capitolo 10 · Dati ad alta dimensionalità e riduzione della dimensionalità</a></li>
+  <li><a href="#capitolo-11-raggruppare-i-pazienti" id="toc-capitolo-11-raggruppare-i-pazienti" class="nav-link" data-scroll-target="#capitolo-11-raggruppare-i-pazienti"><span class="header-section-number">D.2.10</span> Capitolo 11 · Raggruppare i pazienti</a></li>
+  <li><a href="#capitolo-12-ia-interpretabile-e-spiegabile" id="toc-capitolo-12-ia-interpretabile-e-spiegabile" class="nav-link" data-scroll-target="#capitolo-12-ia-interpretabile-e-spiegabile"><span class="header-section-number">D.2.11</span> Capitolo 12 · IA interpretabile e spiegabile</a></li>
+  <li><a href="#capitolo-13-dalla-previsione-alla-causalità" id="toc-capitolo-13-dalla-previsione-alla-causalità" class="nav-link" data-scroll-target="#capitolo-13-dalla-previsione-alla-causalità"><span class="header-section-number">D.2.12</span> Capitolo 13 · Dalla previsione alla causalità</a></li>
+  <li><a href="#capitolo-14-decisioni-sequenziali-apprendimento-per-rinforzo" id="toc-capitolo-14-decisioni-sequenziali-apprendimento-per-rinforzo" class="nav-link" data-scroll-target="#capitolo-14-decisioni-sequenziali-apprendimento-per-rinforzo"><span class="header-section-number">D.2.13</span> Capitolo 14 · Decisioni sequenziali: apprendimento per rinforzo</a></li>
+  <li><a href="#capitolo-15-il-testo-come-dato" id="toc-capitolo-15-il-testo-come-dato" class="nav-link" data-scroll-target="#capitolo-15-il-testo-come-dato"><span class="header-section-number">D.2.14</span> Capitolo 15 · Il testo come dato</a></li>
+  <li><a href="#capitolo-16-prevedere-la-parola-successiva-modelli-linguistici-ed-embedding" id="toc-capitolo-16-prevedere-la-parola-successiva-modelli-linguistici-ed-embedding" class="nav-link" data-scroll-target="#capitolo-16-prevedere-la-parola-successiva-modelli-linguistici-ed-embedding"><span class="header-section-number">D.2.15</span> Capitolo 16 · Prevedere la parola successiva: modelli linguistici ed embedding</a></li>
+  <li><a href="#capitolo-17-lattenzione-e-il-transformer" id="toc-capitolo-17-lattenzione-e-il-transformer" class="nav-link" data-scroll-target="#capitolo-17-lattenzione-e-il-transformer"><span class="header-section-number">D.2.16</span> Capitolo 17 · L’attenzione e il transformer</a></li>
+  <li><a href="#capitolo-18-dal-modello-linguistico-allassistente-clinico" id="toc-capitolo-18-dal-modello-linguistico-allassistente-clinico" class="nav-link" data-scroll-target="#capitolo-18-dal-modello-linguistico-allassistente-clinico"><span class="header-section-number">D.2.17</span> Capitolo 18 · Dal modello linguistico all’assistente clinico</a></li>
+  <li><a href="#capitolo-19-modelli-generativi-oltre-il-testo" id="toc-capitolo-19-modelli-generativi-oltre-il-testo" class="nav-link" data-scroll-target="#capitolo-19-modelli-generativi-oltre-il-testo"><span class="header-section-number">D.2.18</span> Capitolo 19 · Modelli generativi oltre il testo</a></li>
+  </ul></li>
+  <li><a href="#simboli-con-più-di-un-significato" id="toc-simboli-con-più-di-un-significato" class="nav-link" data-scroll-target="#simboli-con-più-di-un-significato"><span class="header-section-number">D.3</span> Simboli con più di un significato</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./setup.html">Appendici</a></li><li class="breadcrumb-item"><a href="./notation.html"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Notazione</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Appendice D — Notazione</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Un simbolo per ogni idea, in tutto il libro. I vettori sono indicati in grassetto minuscolo (<span class="math inline">\(\mathbf{x}\)</span>), le matrici in grassetto maiuscolo (<span class="math inline">\(\mathbf{X}\)</span>) e le stime portano un cappello (<span class="math inline">\(\hat f\)</span>). La prima tabella elenca i simboli usati in tutto il libro; le successive elencano, capitolo per capitolo, i simboli che ogni capitolo aggiunge (ogni capitolo si apre anche con il proprio riquadro di “notazione in breve”). Alcune lettere hanno inevitabilmente più di un significato, perché la letteratura di ciascun campo le usa così; l’ultima tabella le raccoglie, con il capitolo in cui vale ciascun significato.</p>
+<section id="simboli-usati-in-tutto-il-libro" class="level2" data-number="D.1">
+<h2 data-number="D.1" class="anchored" data-anchor-id="simboli-usati-in-tutto-il-libro"><span class="header-section-number">D.1</span> Simboli usati in tutto il libro</h2>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(n\)</span></td>
+<td>numero di istanze (righe)</td>
+<td><a href="./ch01.html#sec-anatomy">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(p\)</span></td>
+<td>numero di predittori (colonne usate come input)</td>
+<td><a href="./ch01.html#sec-anatomy">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(i\)</span></td>
+<td>indice di un’istanza, <span class="math inline">\(i = 1, \dots, n\)</span></td>
+<td><a href="./ch01.html#sec-anatomy">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{x}_i = (x_{i1},\dots,x_{ip})\)</span></td>
+<td>predittori dell’istanza <span class="math inline">\(i\)</span></td>
+<td><a href="./ch01.html#sec-anatomy">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(y_i\)</span></td>
+<td>esito dell’istanza <span class="math inline">\(i\)</span></td>
+<td><a href="./ch01.html#sec-anatomy">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(f\)</span></td>
+<td>relazione vera e ignota in <span class="math inline">\(y = f(\mathbf{x}) + \varepsilon\)</span></td>
+<td><a href="./ch01.html#sec-models">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\varepsilon\)</span></td>
+<td>termine di errore</td>
+<td><a href="./ch01.html#sec-models">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\hat f\)</span>, <span class="math inline">\(\hat y\)</span></td>
+<td>modello stimato, previsione</td>
+<td><a href="./ch01.html#sec-models">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathcal{A}\)</span></td>
+<td>insieme delle alternative di una decisione</td>
+<td><a href="./ch01.html#sec-decisions">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{K}\)</span></td>
+<td>stato di conoscenza di chi decide</td>
+<td><a href="./ch01.html#sec-decisions">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(a\)</span></td>
+<td>un’alternativa scelta</td>
+<td><a href="./ch01.html#sec-decisions">Cap. 1</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(p_{\text{AKI}}\)</span></td>
+<td>probabilità di danno renale acuto</td>
+<td><a href="./ch01.html#sec-decisions">Cap. 1</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(V\)</span></td>
+<td>numero di blocchi nella validazione incrociata</td>
+<td><a href="./ch01.html#def-cv">Cap. 1</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="simboli-aggiunti-capitolo-per-capitolo" class="level2" data-number="D.2">
+<h2 data-number="D.2" class="anchored" data-anchor-id="simboli-aggiunti-capitolo-per-capitolo"><span class="header-section-number">D.2</span> Simboli aggiunti capitolo per capitolo</h2>
+<section id="capitolo-2-incertezza-e-probabilità-per-chi-prende-decisioni" class="level3" data-number="D.2.1">
+<h3 data-number="D.2.1" class="anchored" data-anchor-id="capitolo-2-incertezza-e-probabilità-per-chi-prende-decisioni"><span class="header-section-number">D.2.1</span> Capitolo 2 · Incertezza e probabilità per chi prende decisioni</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(X\)</span>, <span class="math inline">\(x\)</span></td>
+<td>una variabile aleatoria e un valore che può assumere</td>
+<td><a href="./ch02.html#sec-ch02-distributions">Cap. 2</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(P(A)\)</span>, <span class="math inline">\(P(A \mid B)\)</span></td>
+<td>probabilità di <span class="math inline">\(A\)</span>; probabilità di <span class="math inline">\(A\)</span> dato che <span class="math inline">\(B\)</span> è vero</td>
+<td><a href="./ch02.html#sec-ch02-distributions">Cap. 2</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\theta\)</span></td>
+<td>un parametro; qui per lo più la probabilità di AKI</td>
+<td><a href="./ch02.html#sec-ch02-distributions">Cap. 2</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbb{E}[X]\)</span>, <span class="math inline">\(\operatorname{Var}(X)\)</span></td>
+<td>valore atteso (media di lungo periodo) e varianza di <span class="math inline">\(X\)</span></td>
+<td><a href="./ch02.html#sec-ch02-distributions">Cap. 2</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma\)</span></td>
+<td>media e deviazione standard di una distribuzione normale</td>
+<td><a href="./ch02.html#sec-ch02-distributions">Cap. 2</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(L(\theta)\)</span>, <span class="math inline">\(\ell(\theta)\)</span></td>
+<td>verosimiglianza e log-verosimiglianza</td>
+<td><a href="./ch02.html#sec-ch02-likelihood">Cap. 2</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\hat\theta\)</span></td>
+<td>stima di massima verosimiglianza (“cappello” = stimato)</td>
+<td><a href="./ch02.html#sec-ch02-likelihood">Cap. 2</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\pi\)</span></td>
+<td>prevalenza, o probabilità a priori della malattia</td>
+<td><a href="./ch02.html#sec-ch02-bayes">Cap. 2</a></td>
+</tr>
+<tr class="odd">
+<td>Se, Sp</td>
+<td>sensibilità e specificità di un test</td>
+<td><a href="./ch02.html#sec-ch02-bayes">Cap. 2</a></td>
+</tr>
+<tr class="even">
+<td>VPP, VPN</td>
+<td>valore predittivo positivo e negativo</td>
+<td><a href="./ch02.html#sec-ch02-bayes">Cap. 2</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(C_{\text{FP}}\)</span>, <span class="math inline">\(C_{\text{FN}}\)</span></td>
+<td>perdita di una decisione falsa positiva e di una decisione falsa negativa</td>
+<td><a href="./ch02.html#sec-ch02-loss">Cap. 2</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(t\)</span></td>
+<td>soglia decisionale sulla scala della probabilità</td>
+<td><a href="./ch02.html#sec-ch02-loss">Cap. 2</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(H\)</span></td>
+<td>entropia, in bit</td>
+<td><a href="./ch02.html#sec-ch02-entropy">Cap. 2</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-3-imparare-dai-dati-il-flusso-di-lavoro" class="level3" data-number="D.2.2">
+<h3 data-number="D.2.2" class="anchored" data-anchor-id="capitolo-3-imparare-dai-dati-il-flusso-di-lavoro"><span class="header-section-number">D.2.2</span> Capitolo 3 · Imparare dai dati: il flusso di lavoro</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(e_i = y_i - \hat y_i\)</span></td>
+<td>errore di previsione per l’istanza <span class="math inline">\(i\)</span></td>
+<td><a href="./ch03.html#sec-ch03-metrics">Cap. 3</a></td>
+</tr>
+<tr class="even">
+<td>MAE, MSE, RMSE</td>
+<td>errore assoluto medio, errore quadratico medio, radice dell’errore quadratico medio</td>
+<td><a href="./ch03.html#sec-ch03-metrics">Cap. 3</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(R^2\)</span></td>
+<td>quota dell’errore quadratico del riferimento eliminata dal modello</td>
+<td><a href="./ch03.html#sec-ch03-metrics">Cap. 3</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{L}(y, \hat y)\)</span></td>
+<td>perdita: la penalità per aver previsto <span class="math inline">\(\hat y\)</span> quando il valore vero è <span class="math inline">\(y\)</span></td>
+<td><a href="./ch03.html#sec-ch03-metrics">Cap. 3</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(V\)</span>, <span class="math inline">\(v\)</span></td>
+<td>numero di blocchi della validazione incrociata, indice di un blocco</td>
+<td><a href="./ch03.html#sec-ch03-cv">Cap. 3</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(k\)</span></td>
+<td>numero di vicini nel metodo dei <span class="math inline">\(k\)</span> vicini più prossimi</td>
+<td><a href="./ch03.html#sec-ch03-knn">Cap. 3</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(N_k(\mathbf{x})\)</span></td>
+<td>le <span class="math inline">\(k\)</span> istanze di addestramento più vicine a <span class="math inline">\(\mathbf{x}\)</span></td>
+<td><a href="./ch03.html#sec-ch03-knn">Cap. 3</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-4-modelli-lineari-e-regolarizzazione" class="level3" data-number="D.2.3">
+<h3 data-number="D.2.3" class="anchored" data-anchor-id="capitolo-4-modelli-lineari-e-regolarizzazione"><span class="header-section-number">D.2.3</span> Capitolo 4 · Modelli lineari e regolarizzazione</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_j\)</span></td>
+<td>intercetta e coefficiente del predittore <span class="math inline">\(j\)</span></td>
+<td><a href="./ch04.html#sec-ch04-least-squares">Cap. 4</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\hat\beta_j\)</span></td>
+<td>coefficiente stimato (“cappello” = stimato dai dati)</td>
+<td><a href="./ch04.html#sec-ch04-least-squares">Cap. 4</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(e_i = y_i - \hat y_i\)</span></td>
+<td>residuo dell’istanza <span class="math inline">\(i\)</span></td>
+<td><a href="./ch04.html#sec-ch04-least-squares">Cap. 4</a></td>
+</tr>
+<tr class="even">
+<td>RSS</td>
+<td>somma dei quadrati dei residui, <span class="math inline">\(\sum_i e_i^2\)</span></td>
+<td><a href="./ch04.html#sec-ch04-least-squares">Cap. 4</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{X}\)</span>, <span class="math inline">\(\mathbf{\beta}\)</span></td>
+<td>matrice del disegno (<span class="math inline">\(n\)</span> righe, una colonna per coefficiente) e vettore dei coefficienti</td>
+<td><a href="./ch04.html#sec-ch04-multiple">Cap. 4</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(h_{ii}\)</span></td>
+<td>leva dell’istanza <span class="math inline">\(i\)</span></td>
+<td><a href="./ch04.html#sec-ch04-diagnostics">Cap. 4</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(D_i\)</span></td>
+<td>distanza di Cook dell’istanza <span class="math inline">\(i\)</span></td>
+<td><a href="./ch04.html#sec-ch04-diagnostics">Cap. 4</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\lambda\)</span></td>
+<td>intensità della penalità (un iperparametro)</td>
+<td><a href="./ch04.html#sec-ch04-regularisation">Cap. 4</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\alpha\)</span></td>
+<td>parametro di miscelazione dell’elastic net, da 0 (ridge) a 1 (lasso)</td>
+<td><a href="./ch04.html#sec-ch04-regularisation">Cap. 4</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-5-classificazione-soglie-e-calibrazione" class="level3" data-number="D.2.4">
+<h3 data-number="D.2.4" class="anchored" data-anchor-id="capitolo-5-classificazione-soglie-e-calibrazione"><span class="header-section-number">D.2.4</span> Capitolo 5 · Classificazione, soglie e calibrazione</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(p\)</span>, <span class="math inline">\(\hat p\)</span></td>
+<td>probabilità dell’evento (qui l’AKI) e sua stima da parte di un modello</td>
+<td><a href="./ch05.html#sec-ch05-odds">Cap. 5</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(z\)</span></td>
+<td>predittore lineare <span class="math inline">\(\beta_0 + \beta_1 x_1 + \dots + \beta_p x_p\)</span>, sulla scala dei log-odds</td>
+<td><a href="./ch05.html#sec-ch05-logistic">Cap. 5</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\sigma(z)\)</span></td>
+<td>funzione logistica (sigmoide) <span class="math inline">\(1/(1+e^{-z})\)</span></td>
+<td><a href="./ch05.html#sec-ch05-logistic">Cap. 5</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\beta_j\)</span>, <span class="math inline">\(e^{\beta_j}\)</span></td>
+<td>coefficiente della variabile <span class="math inline">\(j\)</span> e relativo odds ratio</td>
+<td><a href="./ch05.html#sec-ch05-or">Cap. 5</a></td>
+</tr>
+<tr class="odd">
+<td>TP, FP, FN, TN</td>
+<td>veri positivi, falsi positivi, falsi negativi, veri negativi</td>
+<td><a href="./ch05.html#sec-ch05-confusion">Cap. 5</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(C_{\text{FP}}\)</span>, <span class="math inline">\(C_{\text{FN}}\)</span></td>
+<td>danno di un falso positivo, di un falso negativo</td>
+<td><a href="./ch05.html#sec-ch05-threshold">Cap. 5</a></td>
+</tr>
+<tr class="odd">
+<td>NB<span class="math inline">\((t)\)</span></td>
+<td>beneficio netto (<em>net benefit</em>) alla soglia <span class="math inline">\(t\)</span></td>
+<td><a href="./ch05.html#sec-ch05-dca">Cap. 5</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-6-alberi-ed-ensemble" class="level3" data-number="D.2.5">
+<h3 data-number="D.2.5" class="anchored" data-anchor-id="capitolo-6-alberi-ed-ensemble"><span class="header-section-number">D.2.5</span> Capitolo 6 · Alberi ed ensemble</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(R_1, \dots, R_{\lvert T\rvert}\)</span></td>
+<td>le regioni (foglie) di un albero <span class="math inline">\(T\)</span>; <span class="math inline">\(\lvert T\rvert\)</span> è il numero di foglie</td>
+<td><a href="./ch06.html#sec-ch06-learn">Cap. 6</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\bar y_{R}\)</span></td>
+<td>esito medio delle istanze di addestramento nella regione <span class="math inline">\(R\)</span></td>
+<td><a href="./ch06.html#sec-ch06-learn">Cap. 6</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(I(S)\)</span>, <span class="math inline">\(\Delta I\)</span></td>
+<td>impurità di un nodo <span class="math inline">\(S\)</span>, riduzione di impurità di una suddivisione</td>
+<td><a href="./ch06.html#sec-ch06-learn">Cap. 6</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\hat p_g\)</span></td>
+<td>proporzione della classe <span class="math inline">\(g\)</span> in un nodo, <span class="math inline">\(g = 1, \dots, G\)</span></td>
+<td><a href="./ch06.html#sec-ch06-learn">Cap. 6</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(c_p\)</span></td>
+<td>parametro di complessità della potatura costo-complessità (il <code>cp</code> di rpart)</td>
+<td><a href="./ch06.html#sec-ch06-pruning">Cap. 6</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(B\)</span></td>
+<td>numero di campioni bootstrap, o di alberi in un ensemble</td>
+<td><a href="./ch06.html#sec-ch06-bagging">Cap. 6</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(m_{\text{try}}\)</span></td>
+<td>numero di variabili che una foresta casuale considera a ogni suddivisione</td>
+<td><a href="./ch06.html#sec-ch06-forest">Cap. 6</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\eta\)</span></td>
+<td>tasso di apprendimento del boosting</td>
+<td><a href="./ch06.html#sec-ch06-boosting">Cap. 6</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-7-reti-neurali-e-apprendimento-profondo" class="level3" data-number="D.2.6">
+<h3 data-number="D.2.6" class="anchored" data-anchor-id="capitolo-7-reti-neurali-e-apprendimento-profondo"><span class="header-section-number">D.2.6</span> Capitolo 7 · Reti neurali e apprendimento profondo</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(x_1, \dots, x_p\)</span>; <span class="math inline">\(\mathbf{x}\)</span></td>
+<td>input di un neurone (le variabili)</td>
+<td><a href="./ch07.html#sec-ch07-neuron">Cap. 7</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(w_1, \dots, w_p\)</span>; <span class="math inline">\(\mathbf{w}\)</span></td>
+<td>pesi di un neurone</td>
+<td><a href="./ch07.html#sec-ch07-neuron">Cap. 7</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(b\)</span></td>
+<td>bias di un neurone</td>
+<td><a href="./ch07.html#sec-ch07-neuron">Cap. 7</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(z = \mathbf{w}^{\top}\mathbf{x} + b\)</span></td>
+<td>somma pesata (pre-attivazione)</td>
+<td><a href="./ch07.html#sec-ch07-neuron">Cap. 7</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(g(\cdot)\)</span></td>
+<td>funzione di attivazione</td>
+<td><a href="./ch07.html#sec-ch07-neuron">Cap. 7</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{W}^{(l)}\)</span>, <span class="math inline">\(\mathbf{b}^{(l)}\)</span></td>
+<td>matrice dei pesi e vettore dei bias dello strato <span class="math inline">\(l\)</span></td>
+<td><a href="./ch07.html#sec-ch07-layers">Cap. 7</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{h}^{(l)}\)</span></td>
+<td>rappresentazione nascosta (output) dello strato <span class="math inline">\(l\)</span></td>
+<td><a href="./ch07.html#sec-ch07-layers">Cap. 7</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-8-apprendimento-bayesiano-e-incertezza-predittiva" class="level3" data-number="D.2.7">
+<h3 data-number="D.2.7" class="anchored" data-anchor-id="capitolo-8-apprendimento-bayesiano-e-incertezza-predittiva"><span class="header-section-number">D.2.7</span> Capitolo 8 · Apprendimento bayesiano e incertezza predittiva</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(p(\theta)\)</span>, <span class="math inline">\(p(\theta \mid \mathbf{y})\)</span></td>
+<td>distribuzione a priori e a posteriori di <span class="math inline">\(\theta\)</span></td>
+<td><a href="./ch08.html#sec-ch08-learning">Cap. 8</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\text{Beta}(a, b)\)</span></td>
+<td>distribuzione beta; <span class="math inline">\(a\)</span> e <span class="math inline">\(b\)</span> fanno da conteggi a priori di “sì” e “no”</td>
+<td><a href="./ch08.html#sec-ch08-beta">Cap. 8</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\beta_0, \beta_1, \sigma\)</span></td>
+<td>intercetta, pendenza e deviazione standard residua di una regressione</td>
+<td><a href="./ch08.html#sec-ch08-regression">Cap. 8</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\theta^{(s)}\)</span>, <span class="math inline">\(S\)</span></td>
+<td>la <span class="math inline">\(s\)</span>-esima di <span class="math inline">\(S\)</span> estrazioni dalla distribuzione a posteriori</td>
+<td><a href="./ch08.html#sec-ch08-mcmc">Cap. 8</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\widehat{R}\)</span>, ESS</td>
+<td>R-hat e dimensione campionaria effettiva, due diagnostiche MCMC</td>
+<td><a href="./ch08.html#sec-ch08-mcmc">Cap. 8</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\tilde y\)</span></td>
+<td>un esito futuro di un nuovo paziente</td>
+<td><a href="./ch08.html#sec-ch08-predictive">Cap. 8</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(m\)</span></td>
+<td>numero di alberi nel BART</td>
+<td><a href="./ch08.html#sec-ch08-bart">Cap. 8</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-9-quando-mancano-i-dati" class="level3" data-number="D.2.8">
+<h3 data-number="D.2.8" class="anchored" data-anchor-id="capitolo-9-quando-mancano-i-dati"><span class="header-section-number">D.2.8</span> Capitolo 9 · Quando mancano i dati</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(R_{ij}\)</span></td>
+<td>indicatore di dato mancante: 1 se il valore della variabile <span class="math inline">\(j\)</span> per l’istanza <span class="math inline">\(i\)</span> è osservato, 0 se manca</td>
+<td><a href="./ch09.html#sec-ch09-why">Cap. 9</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{D}\)</span>, <span class="math inline">\(\mathbf{D}_{\text{obs}}\)</span>, <span class="math inline">\(\mathbf{D}_{\text{mis}}\)</span></td>
+<td>l’intera tabella dei dati, la sua parte osservata, la sua parte mancante</td>
+<td><a href="./ch09.html#sec-ch09-mechanisms">Cap. 9</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(M\)</span></td>
+<td>numero di imputazioni (dataset completati)</td>
+<td><a href="./ch09.html#sec-ch09-mi">Cap. 9</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\hat\theta_m\)</span>, <span class="math inline">\(\bar\theta\)</span></td>
+<td>stima ottenuta dal dataset completato <span class="math inline">\(m\)</span>; stima combinata</td>
+<td><a href="./ch09.html#sec-ch09-mi">Cap. 9</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(V_W\)</span>, <span class="math inline">\(V_B\)</span>, <span class="math inline">\(V_T\)</span></td>
+<td>varianza entro le imputazioni, varianza tra le imputazioni e varianza totale</td>
+<td><a href="./ch09.html#sec-ch09-mi">Cap. 9</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\delta\)</span></td>
+<td>spostamento applicato ai valori imputati in un’analisi di sensibilità</td>
+<td><a href="./ch09.html#sec-ch09-mnar">Cap. 9</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-10-dati-ad-alta-dimensionalità-e-riduzione-della-dimensionalità" class="level3" data-number="D.2.9">
+<h3 data-number="D.2.9" class="anchored" data-anchor-id="capitolo-10-dati-ad-alta-dimensionalità-e-riduzione-della-dimensionalità"><span class="header-section-number">D.2.9</span> Capitolo 10 · Dati ad alta dimensionalità e riduzione della dimensionalità</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(d(\mathbf{x}_i, \mathbf{x}_{i'})\)</span></td>
+<td>distanza tra le istanze <span class="math inline">\(i\)</span> e <span class="math inline">\(i'\)</span></td>
+<td><a href="./ch10.html#sec-ch10-distance">Cap. 10</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{S}\)</span></td>
+<td>matrice di covarianza delle variabili (matrice di correlazione dopo la standardizzazione)</td>
+<td><a href="./ch10.html#sec-ch10-distance">Cap. 10</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{u}_m\)</span></td>
+<td>direzione (vettore unitario di coefficienti) della componente principale <span class="math inline">\(m\)</span></td>
+<td><a href="./ch10.html#sec-ch10-pca">Cap. 10</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(z_{im}\)</span>, <span class="math inline">\(\mathbf{z}_i\)</span></td>
+<td>punteggio dell’istanza <span class="math inline">\(i\)</span> sulla componente <span class="math inline">\(m\)</span>; la sua rappresentazione a bassa dimensionalità</td>
+<td><a href="./ch10.html#sec-ch10-pca">Cap. 10</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(s_m^2\)</span></td>
+<td>varianza dei punteggi sulla componente <span class="math inline">\(m\)</span> (un autovalore di <span class="math inline">\(\mathbf{S}\)</span>)</td>
+<td><a href="./ch10.html#sec-ch10-pca">Cap. 10</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(q\)</span></td>
+<td>numero di componenti o di dimensioni della mappa conservate</td>
+<td><a href="./ch10.html#sec-ch10-pca">Cap. 10</a></td>
+</tr>
+<tr class="odd">
+<td>Perp</td>
+<td>perplessità di t-SNE, il numero effettivo di vicini</td>
+<td><a href="./ch10.html#sec-ch10-tsne">Cap. 10</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-11-raggruppare-i-pazienti" class="level3" data-number="D.2.10">
+<h3 data-number="D.2.10" class="anchored" data-anchor-id="capitolo-11-raggruppare-i-pazienti"><span class="header-section-number">D.2.10</span> Capitolo 11 · Raggruppare i pazienti</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(K\)</span></td>
+<td>numero di cluster</td>
+<td><a href="./ch11.html#sec-ch11-what">Cap. 11</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(C_k\)</span>, <span class="math inline">\(n_k\)</span></td>
+<td>il cluster <span class="math inline">\(k\)</span> e il numero di istanze che contiene</td>
+<td><a href="./ch11.html#sec-ch11-what">Cap. 11</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{\mu}_k\)</span></td>
+<td>centroide (vettore delle medie) del cluster <span class="math inline">\(k\)</span></td>
+<td><a href="./ch11.html#sec-ch11-what">Cap. 11</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(g_i\)</span></td>
+<td>etichetta di cluster dell’istanza <span class="math inline">\(i\)</span>, un numero da 1 a <span class="math inline">\(K\)</span></td>
+<td><a href="./ch11.html#sec-ch11-kmeans">Cap. 11</a></td>
+</tr>
+<tr class="odd">
+<td>WSS, BSS</td>
+<td>somme dei quadrati entro i cluster e tra i cluster</td>
+<td><a href="./ch11.html#sec-ch11-kmeans">Cap. 11</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(s(i)\)</span></td>
+<td>silhouette dell’istanza <span class="math inline">\(i\)</span></td>
+<td><a href="./ch11.html#sec-ch11-indices">Cap. 11</a></td>
+</tr>
+<tr class="odd">
+<td>ARI</td>
+<td>indice di Rand aggiustato</td>
+<td><a href="./ch11.html#sec-ch11-ari">Cap. 11</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(r\)</span>, minPts</td>
+<td>raggio dell’intorno in DBSCAN (<code>eps</code> nei software) e numero minimo di vicini</td>
+<td><a href="./ch11.html#sec-ch11-density">Cap. 11</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\omega_k\)</span>, <span class="math inline">\(\mathbf{\Sigma}_k\)</span></td>
+<td>proporzione di mistura e matrice di covarianza della componente <span class="math inline">\(k\)</span></td>
+<td><a href="./ch11.html#sec-ch11-gmm">Cap. 11</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-12-ia-interpretabile-e-spiegabile" class="level3" data-number="D.2.11">
+<h3 data-number="D.2.11" class="anchored" data-anchor-id="capitolo-12-ia-interpretabile-e-spiegabile"><span class="header-section-number">D.2.11</span> Capitolo 12 · IA interpretabile e spiegabile</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\mathcal{L}(\hat f, D)\)</span></td>
+<td>errore di <span class="math inline">\(\hat f\)</span> sui dati <span class="math inline">\(D\)</span> (qui l’errore assoluto medio, MAE)</td>
+<td><a href="./ch12.html#sec-ch12-permutation">Cap. 12</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(D^{(j,m)}\)</span></td>
+<td>i dati con la colonna <span class="math inline">\(j\)</span> rimescolata per la <span class="math inline">\(m\)</span>-esima volta, <span class="math inline">\(m = 1, \dots, N_s\)</span></td>
+<td><a href="./ch12.html#sec-ch12-permutation">Cap. 12</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\text{imp}_j\)</span></td>
+<td>importanza per permutazione della variabile <span class="math inline">\(j\)</span></td>
+<td><a href="./ch12.html#sec-ch12-permutation">Cap. 12</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{x}_S\)</span>, <span class="math inline">\(\mathbf{x}_C\)</span></td>
+<td>le variabili di interesse (insieme <span class="math inline">\(S\)</span>) e tutte le altre (il suo complementare <span class="math inline">\(C\)</span>)</td>
+<td><a href="./ch12.html#sec-ch12-pdp">Cap. 12</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\hat f_S(\mathbf{x}_S)\)</span></td>
+<td>funzione di dipendenza parziale</td>
+<td><a href="./ch12.html#sec-ch12-pdp">Cap. 12</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\hat f^{(i)}_S(\mathbf{x}_S)\)</span></td>
+<td>curva di aspettativa condizionata individuale (ICE) del paziente <span class="math inline">\(i\)</span></td>
+<td><a href="./ch12.html#sec-ch12-pdp">Cap. 12</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(H_{jk}\)</span></td>
+<td>intensità di interazione di Friedman–Popescu tra le variabili <span class="math inline">\(j\)</span> e <span class="math inline">\(k\)</span></td>
+<td><a href="./ch12.html#sec-ch12-interactions">Cap. 12</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(v(S)\)</span>, <span class="math inline">\(\phi_j\)</span>, <span class="math inline">\(\phi_0\)</span></td>
+<td>valore di una coalizione <span class="math inline">\(S\)</span>, valore di Shapley della variabile <span class="math inline">\(j\)</span>, previsione di riferimento</td>
+<td><a href="./ch12.html#sec-ch12-shap">Cap. 12</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-13-dalla-previsione-alla-causalità" class="level3" data-number="D.2.12">
+<h3 data-number="D.2.12" class="anchored" data-anchor-id="capitolo-13-dalla-previsione-alla-causalità"><span class="header-section-number">D.2.12</span> Capitolo 13 · Dalla previsione alla causalità</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(A\)</span></td>
+<td>trattamento o esposizione (chemioterapia sì/no; aderenza al protocollo)</td>
+<td><a href="./ch13.html#sec-ch13-counterfactuals">Cap. 13</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(Y\)</span></td>
+<td>esito (riduzione del tumore; variazione della creatinina)</td>
+<td><a href="./ch13.html#sec-ch13-counterfactuals">Cap. 13</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(Y(1)\)</span>, <span class="math inline">\(Y(0)\)</span>, <span class="math inline">\(Y(a)\)</span></td>
+<td>esiti potenziali: l’esito che un paziente <em>avrebbe</em> con il trattamento, senza trattamento o con il livello di esposizione <span class="math inline">\(a\)</span></td>
+<td><a href="./ch13.html#sec-ch13-counterfactuals">Cap. 13</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbb{E}[Y(1)] - \mathbb{E}[Y(0)]\)</span></td>
+<td>effetto medio del trattamento (ATE)</td>
+<td><a href="./ch13.html#sec-ch13-counterfactuals">Cap. 13</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\tau(\mathbf{x})\)</span></td>
+<td>effetto medio condizionato del trattamento (CATE) per i pazienti con variabili <span class="math inline">\(\mathbf{x}\)</span></td>
+<td><a href="./ch13.html#sec-ch13-counterfactuals">Cap. 13</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(L\)</span></td>
+<td>un confondente, o un insieme di confondenti</td>
+<td><a href="./ch13.html#sec-ch13-dags">Cap. 13</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(e(\mathbf{x})\)</span></td>
+<td>punteggio di propensione: probabilità di trattamento date le variabili <span class="math inline">\(\mathbf{x}\)</span></td>
+<td><a href="./ch13.html#sec-ch13-adjustment">Cap. 13</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(w_i\)</span></td>
+<td>peso per l’inverso della probabilità del paziente <span class="math inline">\(i\)</span></td>
+<td><a href="./ch13.html#sec-ch13-adjustment">Cap. 13</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-14-decisioni-sequenziali-apprendimento-per-rinforzo" class="level3" data-number="D.2.13">
+<h3 data-number="D.2.13" class="anchored" data-anchor-id="capitolo-14-decisioni-sequenziali-apprendimento-per-rinforzo"><span class="header-section-number">D.2.13</span> Capitolo 14 · Decisioni sequenziali: apprendimento per rinforzo</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(s_t\)</span>, <span class="math inline">\(a_t\)</span></td>
+<td>stato e azione all’istante di decisione <span class="math inline">\(t\)</span></td>
+<td><a href="./ch14.html#sec-ch14-agent">Cap. 14</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(r_{t+1}\)</span></td>
+<td>ricompensa ricevuta dopo l’azione <span class="math inline">\(a_t\)</span></td>
+<td><a href="./ch14.html#sec-ch14-agent">Cap. 14</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\pi(a \mid s)\)</span></td>
+<td>politica: probabilità di scegliere l’azione <span class="math inline">\(a\)</span> nello stato <span class="math inline">\(s\)</span> (nel Capitolo 2 <span class="math inline">\(\pi\)</span> era una prevalenza)</td>
+<td><a href="./ch14.html#sec-ch14-agent">Cap. 14</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mu_k\)</span>, <span class="math inline">\(\hat\mu_k\)</span></td>
+<td>ricompensa media vera e stimata del braccio <span class="math inline">\(k\)</span> di un bandito</td>
+<td><a href="./ch14.html#sec-ch14-bandits">Cap. 14</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\epsilon\)</span></td>
+<td>tasso di esplorazione di <span class="math inline">\(\epsilon\)</span>-greedy (non è il termine d’errore <span class="math inline">\(\varepsilon\)</span> del Capitolo 1)</td>
+<td><a href="./ch14.html#sec-ch14-bandits">Cap. 14</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(P(s' \mid s, a)\)</span></td>
+<td>probabilità di transizione: probabilità di passare a <span class="math inline">\(s'\)</span> dopo l’azione <span class="math inline">\(a\)</span> nello stato <span class="math inline">\(s\)</span></td>
+<td><a href="./ch14.html#sec-ch14-mdp">Cap. 14</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\gamma\)</span></td>
+<td>fattore di sconto, <span class="math inline">\(0 \le \gamma &lt; 1\)</span></td>
+<td><a href="./ch14.html#sec-ch14-mdp">Cap. 14</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(G_t\)</span></td>
+<td>ritorno: somma scontata delle ricompense future a partire dall’istante <span class="math inline">\(t\)</span></td>
+<td><a href="./ch14.html#sec-ch14-mdp">Cap. 14</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(V^\pi(s)\)</span>, <span class="math inline">\(V^*(s)\)</span></td>
+<td>valore dello stato <span class="math inline">\(s\)</span> sotto la politica <span class="math inline">\(\pi\)</span> e sotto la politica migliore</td>
+<td><a href="./ch14.html#sec-ch14-mdp">Cap. 14</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(Q^\pi(s, a)\)</span>, <span class="math inline">\(Q^*(s, a)\)</span></td>
+<td>valore di compiere l’azione <span class="math inline">\(a\)</span> nello stato <span class="math inline">\(s\)</span> e poi seguire <span class="math inline">\(\pi\)</span> (o la politica migliore)</td>
+<td><a href="./ch14.html#sec-ch14-mdp">Cap. 14</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-15-il-testo-come-dato" class="level3" data-number="D.2.14">
+<h3 data-number="D.2.14" class="anchored" data-anchor-id="capitolo-15-il-testo-come-dato"><span class="header-section-number">D.2.14</span> Capitolo 15 · Il testo come dato</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(w_t\)</span></td>
+<td>il token in posizione <span class="math inline">\(t\)</span> di un testo</td>
+<td><a href="./ch15.html#sec-ch15-tokens">Cap. 15</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathcal{V}\)</span>, <span class="math inline">\(\lvert\mathcal{V}\rvert\)</span></td>
+<td>vocabolario (l’insieme dei token distinti) e la sua dimensione</td>
+<td><a href="./ch15.html#sec-ch15-tokens">Cap. 15</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(n\)</span></td>
+<td>numero di documenti di una collezione (i documenti sono le istanze)</td>
+<td><a href="./ch15.html#sec-ch15-tfidf">Cap. 15</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\text{tf}(w, i)\)</span></td>
+<td>frequenza del termine: quante volte il token <span class="math inline">\(w\)</span> compare nel documento <span class="math inline">\(i\)</span></td>
+<td><a href="./ch15.html#sec-ch15-tfidf">Cap. 15</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\text{df}(w)\)</span>, <span class="math inline">\(\text{idf}(w)\)</span></td>
+<td>frequenza di documento di <span class="math inline">\(w\)</span> e la sua frequenza inversa di documento <span class="math inline">\(\log(n/\text{df}(w))\)</span></td>
+<td><a href="./ch15.html#sec-ch15-tfidf">Cap. 15</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{x}_i\)</span></td>
+<td>il vettore del documento <span class="math inline">\(i\)</span> (conteggi o pesi TF-IDF, un elemento per parola del vocabolario)</td>
+<td><a href="./ch15.html#sec-ch15-bow">Cap. 15</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\cos(\mathbf{x}_i, \mathbf{x}_{i'})\)</span></td>
+<td>similarità del coseno tra due documenti</td>
+<td><a href="./ch15.html#sec-ch15-search">Cap. 15</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(t_{\text{low}}\)</span>, <span class="math inline">\(t_{\text{high}}\)</span></td>
+<td>le due soglie di una coda di revisione</td>
+<td><a href="./ch15.html#sec-ch15-queue">Cap. 15</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(C_{\text{R}}\)</span></td>
+<td>costo dell'invio di un documento a un revisore umano</td>
+<td><a href="./ch15.html#sec-ch15-queue">Cap. 15</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-16-prevedere-la-parola-successiva-modelli-linguistici-ed-embedding" class="level3" data-number="D.2.15">
+<h3 data-number="D.2.15" class="anchored" data-anchor-id="capitolo-16-prevedere-la-parola-successiva-modelli-linguistici-ed-embedding"><span class="header-section-number">D.2.15</span> Capitolo 16 · Prevedere la parola successiva: modelli linguistici ed embedding</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\mathcal{V}\)</span>, <span class="math inline">\(\lvert\mathcal{V}\rvert\)</span></td>
+<td>vocabolario e sua dimensione</td>
+<td><a href="./ch16.html#sec-ch16-lm">Cap. 16</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(w_t\)</span>, <span class="math inline">\(w_{1:N}\)</span></td>
+<td>token in posizione <span class="math inline">\(t\)</span>; una sequenza di <span class="math inline">\(N\)</span> token</td>
+<td><a href="./ch16.html#sec-ch16-lm">Cap. 16</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(w_{&lt;t}\)</span></td>
+<td>tutti i token prima della posizione <span class="math inline">\(t\)</span> (il contesto)</td>
+<td><a href="./ch16.html#sec-ch16-lm">Cap. 16</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(P_\theta(w_t \mid w_{&lt;t})\)</span></td>
+<td>probabilità del token successivo data da un modello con parametri <span class="math inline">\(\theta\)</span></td>
+<td><a href="./ch16.html#sec-ch16-lm">Cap. 16</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(c(\cdot)\)</span></td>
+<td>numero di volte in cui un token o una sequenza compare nelle note di addestramento</td>
+<td><a href="./ch16.html#sec-ch16-ngrams">Cap. 16</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\delta\)</span></td>
+<td>pseudoconteggio aggiunto nello smoothing add-<span class="math inline">\(\delta\)</span></td>
+<td><a href="./ch16.html#sec-ch16-ngrams">Cap. 16</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(H(P)\)</span>, <span class="math inline">\(H(P, Q)\)</span></td>
+<td>entropia ed entropia incrociata, in bit</td>
+<td><a href="./ch16.html#sec-ch16-perplexity">Cap. 16</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(D_{\text{KL}}(P \,\Vert\, Q)\)</span></td>
+<td>divergenza di Kullback–Leibler</td>
+<td><a href="./ch16.html#sec-ch16-perplexity">Cap. 16</a></td>
+</tr>
+<tr class="odd">
+<td>PPL</td>
+<td>perplessità</td>
+<td><a href="./ch16.html#sec-ch16-perplexity">Cap. 16</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{z}\)</span>, <span class="math inline">\(z_j\)</span></td>
+<td>logit (punteggi prima della softmax)</td>
+<td><a href="./ch16.html#sec-ch16-sampling">Cap. 16</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\tau\)</span></td>
+<td>temperatura di campionamento</td>
+<td><a href="./ch16.html#sec-ch16-sampling">Cap. 16</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{e}_w\)</span>, <span class="math inline">\(\mathbf{E}\)</span>, <span class="math inline">\(d\)</span></td>
+<td>embedding del token <span class="math inline">\(w\)</span>; matrice degli embedding; dimensione dell’embedding</td>
+<td><a href="./ch16.html#sec-ch16-embeddings">Cap. 16</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{h}_t\)</span></td>
+<td>stato nascosto dopo la lettura del token <span class="math inline">\(t\)</span></td>
+<td><a href="./ch16.html#sec-ch16-rnn">Cap. 16</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-17-lattenzione-e-il-transformer" class="level3" data-number="D.2.16">
+<h3 data-number="D.2.16" class="anchored" data-anchor-id="capitolo-17-lattenzione-e-il-transformer"><span class="header-section-number">D.2.16</span> Capitolo 17 · L’attenzione e il transformer</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(T\)</span></td>
+<td>numero di token nella sequenza (la sua lunghezza)</td>
+<td><a href="./ch17.html#sec-ch17-context">Cap. 17</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{x}_t\)</span>, <span class="math inline">\(\mathbf{X}\)</span></td>
+<td>vettore del token <span class="math inline">\(t\)</span> che entra in uno strato; la matrice <span class="math inline">\(T \times d\)</span> di tutti questi vettori</td>
+<td><a href="./ch17.html#sec-ch17-qkv">Cap. 17</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(d\)</span></td>
+<td>dimensione del modello: lunghezza di ciascun vettore di token</td>
+<td><a href="./ch17.html#sec-ch17-qkv">Cap. 17</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{q}_t, \mathbf{k}_t, \mathbf{v}_t\)</span>; <span class="math inline">\(\mathbf{Q}, \mathbf{K}, \mathbf{V}\)</span></td>
+<td>query, chiave e valore del token <span class="math inline">\(t\)</span>; le loro matrici</td>
+<td><a href="./ch17.html#sec-ch17-qkv">Cap. 17</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{W}_Q, \mathbf{W}_K, \mathbf{W}_V, \mathbf{W}_O\)</span></td>
+<td>matrici di proiezione apprese</td>
+<td><a href="./ch17.html#sec-ch17-qkv">Cap. 17</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(d_k\)</span></td>
+<td>lunghezza dei vettori di query e di chiave</td>
+<td><a href="./ch17.html#sec-ch17-qkv">Cap. 17</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\alpha_{ts}\)</span></td>
+<td>peso di attenzione della posizione di query <span class="math inline">\(t\)</span> sulla posizione di chiave <span class="math inline">\(s\)</span></td>
+<td><a href="./ch17.html#sec-ch17-attention">Cap. 17</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{c}_t\)</span></td>
+<td>output dell’attenzione per la posizione <span class="math inline">\(t\)</span> (il suo vettore di contesto)</td>
+<td><a href="./ch17.html#sec-ch17-attention">Cap. 17</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{M}\)</span></td>
+<td>matrice di maschera (0 = consentito, <span class="math inline">\(-\infty\)</span> = bloccato)</td>
+<td><a href="./ch17.html#sec-ch17-mask">Cap. 17</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(h\)</span></td>
+<td>numero di teste di attenzione</td>
+<td><a href="./ch17.html#sec-ch17-multihead">Cap. 17</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{p}_t\)</span></td>
+<td>codifica posizionale della posizione <span class="math inline">\(t\)</span></td>
+<td><a href="./ch17.html#sec-ch17-position">Cap. 17</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\operatorname{LN}\)</span>, <span class="math inline">\(\operatorname{FFN}\)</span></td>
+<td>normalizzazione di strato; rete feed-forward applicata posizione per posizione</td>
+<td><a href="./ch17.html#sec-ch17-block">Cap. 17</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(d_{\text{ff}}\)</span>, <span class="math inline">\(N\)</span></td>
+<td>larghezza dello strato nascosto della rete feed-forward; numero di blocchi impilati</td>
+<td><a href="./ch17.html#sec-ch17-block">Cap. 17</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{z}_t\)</span></td>
+<td>logit: un punteggio per ogni token del vocabolario in posizione <span class="math inline">\(t\)</span></td>
+<td><a href="./ch17.html#sec-ch17-output">Cap. 17</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-18-dal-modello-linguistico-allassistente-clinico" class="level3" data-number="D.2.17">
+<h3 data-number="D.2.17" class="anchored" data-anchor-id="capitolo-18-dal-modello-linguistico-allassistente-clinico"><span class="header-section-number">D.2.17</span> Capitolo 18 · Dal modello linguistico all’assistente clinico</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span></td>
+<td>un prompt e una risposta</td>
+<td><a href="./ch18.html#sec-ch18-training">Cap. 18</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(r(x, y)\)</span></td>
+<td>ricompensa: un punteggio di quanto le persone preferiscono la risposta <span class="math inline">\(y\)</span> al prompt <span class="math inline">\(x\)</span></td>
+<td><a href="./ch18.html#sec-ch18-training">Cap. 18</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\pi_\theta\)</span>, <span class="math inline">\(\pi_{\text{ref}}\)</span></td>
+<td>il modello visto come una politica che sceglie le risposte; il modello prima dell’ottimizzazione sulle preferenze</td>
+<td><a href="./ch18.html#sec-ch18-training">Cap. 18</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\lambda\)</span></td>
+<td>intensità della penalità che tiene <span class="math inline">\(\pi_\theta\)</span> vicino a <span class="math inline">\(\pi_{\text{ref}}\)</span></td>
+<td><a href="./ch18.html#sec-ch18-training">Cap. 18</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{q}\)</span>, <span class="math inline">\(\mathbf{d}_j\)</span></td>
+<td>vettore di una query; vettore del frammento <span class="math inline">\(j\)</span></td>
+<td><a href="./ch18.html#sec-ch18-rag">Cap. 18</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(J\)</span>, <span class="math inline">\(k\)</span></td>
+<td>numero di frammenti nella raccolta; numero di frammenti recuperati</td>
+<td><a href="./ch18.html#sec-ch18-rag">Cap. 18</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\mathbf{W}_0\)</span>, <span class="math inline">\(\mathbf{A}\)</span>, <span class="math inline">\(\mathbf{B}\)</span>, <span class="math inline">\(m\)</span></td>
+<td>una matrice di pesi congelata; le due piccole matrici di un aggiornamento LoRA; il loro rango</td>
+<td><a href="./ch18.html#sec-ch18-adapt">Cap. 18</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="capitolo-19-modelli-generativi-oltre-il-testo" class="level3" data-number="D.2.18">
+<h3 data-number="D.2.18" class="anchored" data-anchor-id="capitolo-19-modelli-generativi-oltre-il-testo"><span class="header-section-number">D.2.18</span> Capitolo 19 · Modelli generativi oltre il testo</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significato</th>
+<th>Introdotto in</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(p(\mathbf{x})\)</span>, <span class="math inline">\(p(\mathbf{x}, y)\)</span></td>
+<td>distribuzione dei dati (insieme all’esito)</td>
+<td><a href="./ch19.html#sec-ch19-two-questions">Cap. 19</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{z}\)</span></td>
+<td>variabili latenti: un codice breve da cui viene generato un esempio</td>
+<td><a href="./ch19.html#sec-ch19-autoencoders">Cap. 19</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\hat{\mathbf{x}}\)</span></td>
+<td>ricostruzione o esempio generato</td>
+<td><a href="./ch19.html#sec-ch19-autoencoders">Cap. 19</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{\mu}\)</span>, <span class="math inline">\(\mathbf{\sigma}\)</span></td>
+<td>media e deviazione standard di un codice, prodotte dal codificatore di un VAE</td>
+<td><a href="./ch19.html#sec-ch19-vae">Cap. 19</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\varepsilon\)</span>, <span class="math inline">\(\mathbf{\varepsilon}\)</span></td>
+<td>rumore normale standard, <span class="math inline">\(\mathcal{N}(0, 1)\)</span>, iniettato dal modello</td>
+<td><a href="./ch19.html#sec-ch19-vae">Cap. 19</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathrm{KL}(q \,\|\, p)\)</span></td>
+<td>divergenza di Kullback–Leibler tra due distribuzioni</td>
+<td><a href="./ch19.html#sec-ch19-vae">Cap. 19</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(G\)</span>, <span class="math inline">\(D\)</span></td>
+<td>generatore e discriminatore di una GAN</td>
+<td><a href="./ch19.html#sec-ch19-gans">Cap. 19</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(t\)</span>, <span class="math inline">\(T\)</span></td>
+<td>passo di diffusione e numero di passi</td>
+<td><a href="./ch19.html#sec-ch19-diffusion">Cap. 19</a></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\beta_t\)</span>, <span class="math inline">\(\bar\alpha_t\)</span></td>
+<td>rumore aggiunto al passo <span class="math inline">\(t\)</span>; quota del segnale originale rimasta dopo <span class="math inline">\(t\)</span> passi</td>
+<td><a href="./ch19.html#sec-ch19-diffusion">Cap. 19</a></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mathbf{x}_t\)</span></td>
+<td>l’esempio dopo <span class="math inline">\(t\)</span> passi di aggiunta di rumore (<span class="math inline">\(\mathbf{x}_0\)</span> è quello pulito)</td>
+<td><a href="./ch19.html#sec-ch19-diffusion">Cap. 19</a></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="simboli-con-più-di-un-significato" class="level2" data-number="D.3">
+<h2 data-number="D.3" class="anchored" data-anchor-id="simboli-con-più-di-un-significato"><span class="header-section-number">D.3</span> Simboli con più di un significato</h2>
+<p>Quando una lettera compare qui sotto, il suo significato è sempre quello del capitolo che stai leggendo; il riquadro di notazione di ogni capitolo lo indica.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Simbolo</th>
+<th>Significati (capitolo)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(p\)</span></td>
+<td>numero di predittori (Cap. 1, 10); probabilità di un evento e sua stima <span class="math inline">\(\hat p\)</span> (Cap. 5, 15)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\pi\)</span></td>
+<td>prevalenza o probabilità a priori di malattia (Cap. 2); politica <span class="math inline">\(\pi(a \mid s)\)</span> (Cap. 14) e modello linguistico visto come politica <span class="math inline">\(\pi_\theta\)</span> (Cap. 18)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\sigma\)</span></td>
+<td>deviazione standard (Cap. 2, 8; di un codice di VAE, Cap. 19); funzione logistica (sigmoide) <span class="math inline">\(\sigma(z)\)</span> (Cap. 5, 7, 16)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\mu\)</span></td>
+<td>media di una distribuzione normale (Cap. 2); centroide <span class="math inline">\(\mathbf{\mu}_k\)</span> (Cap. 11); ricompensa media <span class="math inline">\(\mu_k\)</span> di un braccio del bandito (Cap. 14); media di un codice di VAE <span class="math inline">\(\mathbf{\mu}\)</span> (Cap. 19)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(V\)</span></td>
+<td>numero di blocchi della validazione incrociata (Cap. 1, 3); varianze entro, tra e totale <span class="math inline">\(V_W\)</span>, <span class="math inline">\(V_B\)</span>, <span class="math inline">\(V_T\)</span> (Cap. 9); valore di uno stato <span class="math inline">\(V^\pi(s)\)</span> (Cap. 14); matrice dei valori <span class="math inline">\(\mathbf{V}\)</span> (Cap. 17)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(Q\)</span></td>
+<td>valore d’azione <span class="math inline">\(Q^\pi(s, a)\)</span> (Cap. 14); distribuzione del modello <span class="math inline">\(Q\)</span> nell’entropia incrociata (Cap. 16); matrice delle query <span class="math inline">\(\mathbf{Q}\)</span> (Cap. 17)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(K\)</span>, <span class="math inline">\(k\)</span></td>
+<td><span class="math inline">\(K\)</span>: numero di cluster (Cap. 11), numero di bracci del bandito (Cap. 14), matrice delle chiavi <span class="math inline">\(\mathbf{K}\)</span> (Cap. 17); <span class="math inline">\(k\)</span>: vicini nel <span class="math inline">\(k\)</span>NN (Cap. 3), campionamento top-<span class="math inline">\(k\)</span> (Cap. 16), frammenti recuperati (Cap. 18)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(T\)</span>, <span class="math inline">\(t\)</span></td>
+<td><span class="math inline">\(T\)</span>: un albero con <span class="math inline">\(\lvert T\rvert\)</span> foglie (Cap. 6), lunghezza della sequenza (Cap. 17), numero di passi di diffusione (Cap. 19); <span class="math inline">\(t\)</span>: soglia decisionale o di classificazione (Cap. 2, 5; <span class="math inline">\(t_{\text{low}}\)</span>, <span class="math inline">\(t_{\text{high}}\)</span> nel Cap. 15), istante o posizione (Cap. 14, 16, 17, 19)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\varepsilon\)</span>, <span class="math inline">\(\epsilon\)</span></td>
+<td><span class="math inline">\(\varepsilon\)</span>: termine di errore (Cap. 1, 4), rumore normale standard immesso da un VAE o da un modello di diffusione (Cap. 19); <span class="math inline">\(\epsilon\)</span>: tasso di esplorazione di <span class="math inline">\(\epsilon\)</span>-greedy (Cap. 14)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\alpha\)</span></td>
+<td>parametro di miscelazione dell’elastic net (Cap. 4); peso di attenzione <span class="math inline">\(\alpha_{ts}\)</span> (Cap. 17); quota di segnale rimasta dopo <span class="math inline">\(t\)</span> passi di diffusione, <span class="math inline">\(\bar\alpha_t\)</span> (Cap. 19)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\beta\)</span></td>
+<td>coefficienti di regressione <span class="math inline">\(\beta_j\)</span> (dal Cap. 4 in poi); rumore aggiunto al passo di diffusione <span class="math inline">\(t\)</span>, <span class="math inline">\(\beta_t\)</span> (Cap. 19)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\delta\)</span></td>
+<td>spostamento dei valori imputati in un’analisi di sensibilità (Cap. 9); pseudo-conteggio dello smoothing add-<span class="math inline">\(\delta\)</span> (Cap. 16)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\tau\)</span></td>
+<td>effetto medio condizionato del trattamento <span class="math inline">\(\tau(\mathbf{x})\)</span> (Cap. 13); temperatura di campionamento (Cap. 16)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(H\)</span>, <span class="math inline">\(h\)</span></td>
+<td><span class="math inline">\(H\)</span>: entropia (Cap. 2, 16), intensità di interazione <span class="math inline">\(H_{jk}\)</span> (Cap. 12); <span class="math inline">\(h\)</span>: leva <span class="math inline">\(h_{ii}\)</span> (Cap. 4), numero di teste di attenzione (Cap. 17); <span class="math inline">\(\mathbf{h}\)</span> in grassetto: strato o stato nascosto (Cap. 7, 16)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(M\)</span>, <span class="math inline">\(m\)</span></td>
+<td><span class="math inline">\(M\)</span>: numero di imputazioni (Cap. 9), matrice di maschera <span class="math inline">\(\mathbf{M}\)</span> (Cap. 17); <span class="math inline">\(m\)</span>: numero di alberi in BART (Cap. 8), indice di una componente principale (Cap. 10), di un rimescolamento (Cap. 12) o di un dataset completato (Cap. 9), rango di un aggiornamento LoRA (Cap. 18)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(N\)</span></td>
+<td>le <span class="math inline">\(k\)</span> istanze di addestramento più vicine <span class="math inline">\(N_k(\mathbf{x})\)</span> (Cap. 3); numero di rimescolamenti <span class="math inline">\(N_s\)</span> (Cap. 12); numero di token di una sequenza (Cap. 16); numero di blocchi transformer impilati (Cap. 17)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(L\)</span>, <span class="math inline">\(\mathcal{L}\)</span></td>
+<td>verosimiglianza <span class="math inline">\(L(\theta)\)</span> (Cap. 2); un confondente o un insieme di confondenti <span class="math inline">\(L\)</span> (Cap. 13); perdita <span class="math inline">\(\mathcal{L}\)</span> (Cap. 3, 7, 12)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(G\)</span>, <span class="math inline">\(g\)</span></td>
+<td><span class="math inline">\(G\)</span>: numero di classi (Cap. 6), ritorno <span class="math inline">\(G_t\)</span> (Cap. 14), generatore di una GAN (Cap. 19); <span class="math inline">\(g\)</span>: funzione di attivazione (Cap. 7), etichetta di cluster <span class="math inline">\(g_i\)</span> (Cap. 11), guadagno della normalizzazione di strato <span class="math inline">\(\mathbf{g}\)</span> (Cap. 17)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(D\)</span></td>
+<td>un evento, come una malattia (Cap. 2); distanza di Cook <span class="math inline">\(D_i\)</span> (Cap. 4); la tabella dei dati <span class="math inline">\(\mathbf{D}\)</span> (Cap. 9); un dataset <span class="math inline">\(D\)</span> (Cap. 12); discriminatore di una GAN (Cap. 19)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(R\)</span>, <span class="math inline">\(r\)</span></td>
+<td><span class="math inline">\(R^2\)</span> (Cap. 3); regioni (foglie) <span class="math inline">\(R_m\)</span> (Cap. 6); indicatore di dato mancante <span class="math inline">\(R_{ij}\)</span> (Cap. 9); R-hat <span class="math inline">\(\widehat{R}\)</span> (Cap. 8); <span class="math inline">\(r\)</span>: raggio di DBSCAN (Cap. 11), ricompensa <span class="math inline">\(r_{t+1}\)</span> o <span class="math inline">\(r(x, y)\)</span> (Cap. 14, 18)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(e\)</span></td>
+<td>errore di previsione o residuo <span class="math inline">\(e_i\)</span> (Cap. 3, 4); punteggio di propensione <span class="math inline">\(e(\mathbf{x})\)</span> (Cap. 13); embedding <span class="math inline">\(\mathbf{e}_w\)</span> (Cap. 16, 17)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(w\)</span></td>
+<td>peso di un neurone <span class="math inline">\(w_j\)</span> (Cap. 7); peso dell’inverso della probabilità <span class="math inline">\(w_i\)</span> (Cap. 13); token <span class="math inline">\(w_t\)</span> (Cap. 15–18)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(z\)</span></td>
+<td>predittore lineare o somma pesata (Cap. 5, 7); punteggi delle componenti principali <span class="math inline">\(\mathbf{z}_i\)</span> (Cap. 10); logit <span class="math inline">\(\mathbf{z}\)</span>, <span class="math inline">\(\mathbf{z}_t\)</span> (Cap. 16, 17); codice latente <span class="math inline">\(\mathbf{z}\)</span> (Cap. 19)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(d\)</span></td>
+<td>distanza <span class="math inline">\(d(\mathbf{x}_i, \mathbf{x}_{i'})\)</span> (Cap. 10); dimensione dell’embedding o del modello (Cap. 16, 17), con <span class="math inline">\(d_k\)</span> e <span class="math inline">\(d_{\text{ff}}\)</span> (Cap. 17); vettore di un frammento <span class="math inline">\(\mathbf{d}_j\)</span> (Cap. 18)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(S\)</span>, <span class="math inline">\(s\)</span></td>
+<td><span class="math inline">\(S\)</span>: un nodo di un albero (Cap. 6), numero di estrazioni dalla distribuzione a posteriori (Cap. 8), un insieme di variabili (Cap. 12); <span class="math inline">\(\mathbf{S}\)</span>: matrice di covarianza (Cap. 10); <span class="math inline">\(s\)</span>: indice di un’estrazione dalla distribuzione a posteriori (Cap. 8), silhouette <span class="math inline">\(s(i)\)</span> (Cap. 11), stato <span class="math inline">\(s_t\)</span> (Cap. 14), posizione della chiave (Cap. 17)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(C\)</span></td>
+<td>perdite <span class="math inline">\(C_{\text{FP}}\)</span>, <span class="math inline">\(C_{\text{FN}}\)</span> (Cap. 2, 5) e costo di revisione <span class="math inline">\(C_{\text{R}}\)</span> (Cap. 15); cluster <span class="math inline">\(C_k\)</span> (Cap. 11); complemento di un insieme di variabili, <span class="math inline">\(\mathbf{x}_C\)</span> (Cap. 12)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(A\)</span>, <span class="math inline">\(\mathcal{A}\)</span></td>
+<td>insieme delle alternative o azioni <span class="math inline">\(\mathcal{A}\)</span> (Cap. 1, 14); trattamento o esposizione <span class="math inline">\(A\)</span> (Cap. 13); matrice LoRA <span class="math inline">\(\mathbf{A}\)</span> (Cap. 18)</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(B\)</span>, <span class="math inline">\(\mathbf{b}\)</span></td>
+<td><span class="math inline">\(B\)</span>: numero di campioni bootstrap o di alberi (Cap. 6); matrice LoRA <span class="math inline">\(\mathbf{B}\)</span> (Cap. 18); <span class="math inline">\(b\)</span>, <span class="math inline">\(\mathbf{b}\)</span>: bias di un neurone o di uno strato (Cap. 7), spostamento della normalizzazione di strato (Cap. 17); conteggi a priori di <span class="math inline">\(\text{Beta}(a, b)\)</span> (Cap. 8)</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(n\)</span></td>
+<td>numero di istanze (Cap. 1), compresi i documenti di una raccolta (Cap. 15); la <span class="math inline">\(n\)</span> di un <span class="math inline">\(n\)</span>-gramma, senza relazione (Cap. 16)</td>
+</tr>
+</tbody>
+</table>
+
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+</section>
+
+</main> <!-- /main -->
+<script src="assets/book.js"></script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiato!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiato!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./glossary.html" class="pagination-link" aria-label="Glossario">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Glossario</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link" aria-label="Bibliografia">
+        <span class="nav-page-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Bibliografia</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

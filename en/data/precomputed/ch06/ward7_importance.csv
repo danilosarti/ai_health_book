@@ -1,0 +1,13 @@
+feature,rf_impurity,xgb_gain_share
+sofa,0.2562,0.34
+bun,0.1381,0.1041
+baseline_creat,0.1106,0.0924
+map_min,0.1014,0.0678
+protocol_adherence,0.0913,0.0551
+crp,0.0847,0.0608
+albumin,0.0809,0.0575
+lactate,0.0583,0.0436
+age,0.0461,0.028
+site_ICU_D,0.0178,0.0839
+site_ICU_B,0.0079,0.0371
+site_ICU_C,0.0066,0.0296

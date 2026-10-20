@@ -1,0 +1,11 @@
+var1,var2,H,H_raw
+new_therapy,biomarker,0.478,1.312
+new_therapy,stage_num,0.07,0.163
+new_therapy,crp,0.088,0.189
+new_therapy,age,0.013,0.032
+biomarker,stage_num,0.068,0.153
+biomarker,crp,0.039,0.084
+biomarker,age,0.13,0.315
+stage_num,crp,0.083,0.135
+stage_num,age,0.039,0.082
+crp,age,0.027,0.055

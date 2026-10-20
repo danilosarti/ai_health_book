@@ -1,0 +1,6 @@
+method,auc,ap,sensitivity,specificity,ppv,tp,fp,fn,tn
+Keyword list,,,0.607,0.551,0.415,34,48,22,59
+Keyword list + NegEx-lite,,,0.482,0.813,0.574,27,20,29,87
+TF-IDF words + logistic regression,0.974,0.953,0.786,0.963,0.917,44,4,12,103
+TF-IDF words and word pairs + logistic regression,0.976,0.961,0.839,0.972,0.94,47,3,9,104
+"TF-IDF words, negations marked + logistic regression",0.974,0.954,0.786,0.963,0.917,44,4,12,103

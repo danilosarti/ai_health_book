@@ -1,0 +1,30 @@
+data,model,train_MAE,test_MAE,train_RMSE,test_RMSE,variant,test_AUC,n_train,n_test,train_AUC
+ward7,Average (no model),0.2412,0.2356,0.3018,0.2969,,,,,
+ward7,Linear regression,0.1454,0.1413,0.1818,0.174,,,,,
+ward7,Fully grown tree,0.0,0.2283,0.0,0.2896,,,,,
+ward7,"Tree, depth 3 (chosen by 5-fold CV)",0.1828,0.1856,0.2265,0.2307,,,,,
+ward7,Random forest (500 trees),0.0608,0.1528,0.076,0.1909,,,,,
+ward7,"XGBoost (172 rounds, early stopping)",0.1219,0.148,0.1548,0.1862,,,,,
+onco1_class,Treatment arm alone,,,,,treatment arm only,0.9234,,,
+onco1_class,Logistic regression,,,,,all features,0.9983,800.0,200.0,0.9999
+onco1_class,Tree (depth 4),,,,,all features,0.9895,800.0,200.0,0.9928
+onco1_class,Random forest (500 trees),,,,,all features,0.9997,800.0,200.0,1.0
+onco1_class,XGBoost,,,,,all features,0.9993,800.0,200.0,0.9995
+onco1_reg,Linear regression,1.4093,1.7221,,,all features,,,,
+onco1_reg,Random forest (500 trees),0.5704,1.5531,,,all features,,,,
+onco1_reg,XGBoost,1.1293,1.5037,,,all features,,,,
+onco1_class,Logistic regression,,,,,"without genes 08, 14, 19",0.9964,800.0,200.0,0.9989
+onco1_class,Tree (depth 4),,,,,"without genes 08, 14, 19",0.967,800.0,200.0,0.9953
+onco1_class,Random forest (500 trees),,,,,"without genes 08, 14, 19",0.9949,800.0,200.0,1.0
+onco1_class,XGBoost,,,,,"without genes 08, 14, 19",0.9943,800.0,200.0,0.9994
+onco1_reg,Linear regression,3.0489,3.4699,,,"without genes 08, 14, 19",,,,
+onco1_reg,Random forest (500 trees),1.3208,3.3995,,,"without genes 08, 14, 19",,,,
+onco1_reg,XGBoost,1.7191,2.7383,,,"without genes 08, 14, 19",,,,
+onco1_class_chemo,Logistic regression,,,,,all features,0.9947,412.0,84.0,0.9996
+onco1_class_chemo,Tree (depth 4),,,,,all features,0.9777,412.0,84.0,0.9648
+onco1_class_chemo,Random forest (500 trees),,,,,all features,0.9985,412.0,84.0,1.0
+onco1_class_chemo,XGBoost,,,,,all features,0.9955,412.0,84.0,0.9991
+onco1_class_chemo,Logistic regression,,,,,"without genes 08, 14, 19",0.9773,412.0,84.0,0.9963
+onco1_class_chemo,Tree (depth 4),,,,,"without genes 08, 14, 19",0.8896,412.0,84.0,0.9922
+onco1_class_chemo,Random forest (500 trees),,,,,"without genes 08, 14, 19",0.9565,412.0,84.0,1.0
+onco1_class_chemo,XGBoost,,,,,"without genes 08, 14, 19",0.9501,412.0,84.0,0.991

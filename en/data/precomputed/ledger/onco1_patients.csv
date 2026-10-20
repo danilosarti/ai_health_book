@@ -1,0 +1,49 @@
+"label","patient_id","set","treatment","dose_intensity","patient_age","tumor_grade","performance_score","response_percent","high_response","example","quantity","order","chapter","model_id","model","role","prediction"
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_reg","predicted response %",1,3,"mean","Training mean (no model)","reference",21.99562
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_reg","predicted response %",1,3,"mean","Training mean (no model)","reference",21.99562
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_reg","predicted response %",2,3,"ols_clinical","Linear regression, clinical predictors only","canonical",35.13618
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_reg","predicted response %",2,3,"ols_clinical","Linear regression, clinical predictors only","canonical",35.6453
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_reg","predicted response %",3,3,"ols_leaky","Linear regression WITH the leaky genes 08, 14, 19 (leakage warning only)","warning",34.66976
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_reg","predicted response %",3,3,"ols_leaky","Linear regression WITH the leaky genes 08, 14, 19 (leakage warning only)","warning",20.13292
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_reg","predicted response %",4,3,"ols","Linear regression (OLS)","canonical",31.9249
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_reg","predicted response %",4,3,"ols","Linear regression (OLS)","canonical",25.99432
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_reg","predicted response %",5,4,"ridge_min","Ridge regression (λ min)","canonical",31.99951
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_reg","predicted response %",5,4,"ridge_min","Ridge regression (λ min)","canonical",26.34153
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_reg","predicted response %",6,4,"ridge_1se","Ridge regression (λ 1-SE)","canonical",31.93267
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_reg","predicted response %",6,4,"ridge_1se","Ridge regression (λ 1-SE)","canonical",26.75787
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_reg","predicted response %",7,4,"lasso_min","Lasso (λ min)","canonical",32.12571
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_reg","predicted response %",7,4,"lasso_min","Lasso (λ min)","canonical",26.27149
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_reg","predicted response %",8,4,"lasso_1se","Lasso (λ 1-SE)","canonical",32.35493
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_reg","predicted response %",8,4,"lasso_1se","Lasso (λ 1-SE)","canonical",28.53353
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_reg","predicted response %",9,4,"enet_min","Elastic net (α = 0.8, λ min)","canonical",32.15744
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_reg","predicted response %",9,4,"enet_min","Elastic net (α = 0.8, λ min)","canonical",26.31972
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_reg","predicted response %",10,4,"enet_1se","Elastic net (α = 0.8, λ 1-SE)","canonical",32.46881
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_reg","predicted response %",10,4,"enet_1se","Elastic net (α = 0.8, λ 1-SE)","canonical",28.51501
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_reg","predicted response %",11,6,"rf500","Random forest (500 trees)","canonical",35.667
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_reg","predicted response %",11,6,"rf500","Random forest (500 trees)","canonical",29.9068
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_reg","predicted response %",12,6,"xgb","XGBoost (353 rounds, number chosen by 5-fold CV)","canonical",35.64745
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_reg","predicted response %",12,6,"xgb","XGBoost (353 rounds, number chosen by 5-fold CV)","canonical",27.49314
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_reg","predicted response %",13,7,"mlp_multi","Multi-output neural network, response-% head (PyTorch, 110 epochs)","canonical",30.86016
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_reg","predicted response %",13,7,"mlp_multi","Multi-output neural network, response-% head (PyTorch, 110 epochs)","canonical",21.5576
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_class","P(high response)",1,5,"prevalence","Prevalence: training high-response rate (no model)","reference",0.7985437
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_class","P(high response)",1,5,"prevalence","Prevalence: training high-response rate (no model)","reference",0.7985437
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_class","P(high response)",2,5,"logit_7","Logistic regression, 7 chosen predictors (dose, grade, performance, age, genes 01/05/12)","canonical",0.7817157
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_class","P(high response)",2,5,"logit_7","Logistic regression, 7 chosen predictors (dose, grade, performance, age, genes 01/05/12)","canonical",0.01762053
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_class","P(high response)",3,5,"logit_all","Logistic regression (unpenalised), all 51 predictors","canonical",1
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_class","P(high response)",3,5,"logit_all","Logistic regression (unpenalised), all 51 predictors","canonical",2.220446e-16
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_class","P(high response)",4,5,"lasso_logit","Lasso logistic regression (λ min)","canonical",0.751581
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_class","P(high response)",4,5,"lasso_logit","Lasso logistic regression (λ min)","canonical",0.1781206
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_class","P(high response)",5,5,"enet_logit","Elastic net logistic regression (α = 0.5, λ min)","canonical",0.8255222
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_class","P(high response)",5,5,"enet_logit","Elastic net logistic regression (α = 0.5, λ min)","canonical",0.2127232
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_class","P(high response)",6,5,"ridge_logit","Ridge logistic regression (λ min)","canonical",0.8055954
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_class","P(high response)",6,5,"ridge_logit","Ridge logistic regression (λ min)","canonical",0.3689006
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_class","P(high response)",7,6,"ridge_logistic_C1_sklearn","Ridge logistic regression (C = 1, scikit-learn; the old Chapter 6 'logistic regression')","variant",0.9299092
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_class","P(high response)",7,6,"ridge_logistic_C1_sklearn","Ridge logistic regression (C = 1, scikit-learn; the old Chapter 6 'logistic regression')","variant",0.1532408
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_class","P(high response)",8,6,"tree_depth4","Classification tree, depth 4 (scikit-learn)","canonical",1
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_class","P(high response)",8,6,"tree_depth4","Classification tree, depth 4 (scikit-learn)","canonical",0
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_class","P(high response)",9,6,"rf500","Random forest classifier (500 trees)","canonical",0.896
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_class","P(high response)",9,6,"rf500","Random forest classifier (500 trees)","canonical",0.42
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_class","P(high response)",10,6,"xgb","XGBoost classifier (136 rounds, number chosen by 5-fold CV)","canonical",0.7997516
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_class","P(high response)",10,6,"xgb","XGBoost classifier (136 rounds, number chosen by 5-fold CV)","canonical",0.2236721
+"#0042","P5440","test","chemo",1.072,37,"G1",2,36.6,1,"onco1_class","P(high response)",11,7,"mlp_multi","Multi-output neural network, high-response head (PyTorch; trained on all 800 training patients)","canonical",0.9221852
+"#0917","P9541","test","chemo",1.067,46,"G1",2,20.4,0,"onco1_class","P(high response)",11,7,"mlp_multi","Multi-output neural network, high-response head (PyTorch; trained on all 800 training patients)","canonical",0.1224079

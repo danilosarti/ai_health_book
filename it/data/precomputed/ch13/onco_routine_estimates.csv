@@ -1,0 +1,12 @@
+"key","value"
+"trial_ate",32.887
+"trial_att",34.483
+"n_routine",509
+"n_treated",252
+"n_pairs",144
+"naive",38.6671
+"regression",33.2989
+"ipw",33.6315
+"matching",33.4208
+"ps_min",0.0146
+"ps_max",0.9808

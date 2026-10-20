@@ -1,0 +1,6 @@
+"person_id","phenotype_true","map_cluster","p_max","p_second"
+"W772","post_operative",2,0.565,0.435
+"W256","high_stress",2,0.996,0.004
+"W223","high_stress",2,0.999,0.001
+"W314","high_stress",2,0.999,0.001
+"W777","post_operative",3,0.999,0.001

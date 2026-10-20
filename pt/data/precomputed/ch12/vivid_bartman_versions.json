@@ -1,0 +1,11 @@
+{
+ "R": "4.3.3",
+ "randomForest": "4.7.1.1",
+ "vivid": "0.2.8",
+ "dbarts": "0.9.34",
+ "bartMan": "0.1.1",
+ "ggplot2": "3.4.4",
+ "seed": 2026,
+ "pdpZen_drawn": false,
+ "seconds": 141
+}

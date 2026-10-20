@@ -1,0 +1,242 @@
+{
+ "seed": 2026,
+ "n_train": 6000,
+ "n_val": 500,
+ "n_test": 1000,
+ "vocab_size": 66,
+ "max_len": 43,
+ "config": {
+  "d": 32,
+  "h": 2,
+  "L": 2,
+  "d_ff": 128
+ },
+ "n_params": 28960,
+ "params_per_block": 12704,
+ "params_embeddings": 3488,
+ "steps": 1500,
+ "batch": 64,
+ "final_train_loss": 0.5099,
+ "final_val_loss": 0.5144,
+ "acc_last_word_tf": 1.0,
+ "acc_pronoun_tf": 1.0,
+ "chance_last_word": 0.265,
+ "dist_drug_median": 19.0,
+ "dist_drug_max": 36,
+ "dist_drug_min": 8,
+ "example_predictions": [
+  {
+   "sentence": 1,
+   "target": "creatinine",
+   "top": [
+    [
+     "creatinine",
+     0.9997
+    ],
+    [
+     "pulse",
+     0.0001
+    ],
+    [
+     "lines",
+     0.0001
+    ]
+   ]
+  },
+  {
+   "sentence": 2,
+   "target": "inr",
+   "top": [
+    [
+     "inr",
+     0.9996
+    ],
+    [
+     "thursday",
+     0.0002
+    ],
+    [
+     "breathing",
+     0.0001
+    ]
+   ]
+  },
+  {
+   "sentence": 3,
+   "target": "glucose",
+   "top": [
+    [
+     "glucose",
+     0.9998
+    ],
+    [
+     "potassium",
+     0.0
+    ],
+    [
+     "his",
+     0.0
+    ]
+   ]
+  },
+  {
+   "sentence": 4,
+   "target": "potassium",
+   "top": [
+    [
+     "potassium",
+     0.9923
+    ],
+    [
+     "pulse",
+     0.0041
+    ],
+    [
+     "his",
+     0.0016
+    ]
+   ]
+  },
+  {
+   "sentence": 5,
+   "target": "platelets",
+   "top": [
+    [
+     "platelets",
+     1.0
+    ],
+    [
+     "glucose",
+     0.0
+    ],
+    [
+     "pulse",
+     0.0
+    ]
+   ]
+  }
+ ],
+ "drug_focus": [
+  {
+   "sentence": 1,
+   "layer": 1,
+   "head": 1,
+   "weight_on_drug": 0.8871
+  },
+  {
+   "sentence": 1,
+   "layer": 1,
+   "head": 2,
+   "weight_on_drug": 0.3789
+  },
+  {
+   "sentence": 1,
+   "layer": 2,
+   "head": 1,
+   "weight_on_drug": 0.0
+  },
+  {
+   "sentence": 1,
+   "layer": 2,
+   "head": 2,
+   "weight_on_drug": 0.0
+  },
+  {
+   "sentence": 2,
+   "layer": 1,
+   "head": 1,
+   "weight_on_drug": 0.956
+  },
+  {
+   "sentence": 2,
+   "layer": 1,
+   "head": 2,
+   "weight_on_drug": 0.4763
+  },
+  {
+   "sentence": 2,
+   "layer": 2,
+   "head": 1,
+   "weight_on_drug": 0.0
+  },
+  {
+   "sentence": 2,
+   "layer": 2,
+   "head": 2,
+   "weight_on_drug": 0.0
+  },
+  {
+   "sentence": 3,
+   "layer": 1,
+   "head": 1,
+   "weight_on_drug": 0.9857
+  },
+  {
+   "sentence": 3,
+   "layer": 1,
+   "head": 2,
+   "weight_on_drug": 0.6586
+  },
+  {
+   "sentence": 3,
+   "layer": 2,
+   "head": 1,
+   "weight_on_drug": 0.0
+  },
+  {
+   "sentence": 3,
+   "layer": 2,
+   "head": 2,
+   "weight_on_drug": 0.0
+  },
+  {
+   "sentence": 4,
+   "layer": 1,
+   "head": 1,
+   "weight_on_drug": 0.5525
+  },
+  {
+   "sentence": 4,
+   "layer": 1,
+   "head": 2,
+   "weight_on_drug": 0.4408
+  },
+  {
+   "sentence": 4,
+   "layer": 2,
+   "head": 1,
+   "weight_on_drug": 0.0
+  },
+  {
+   "sentence": 4,
+   "layer": 2,
+   "head": 2,
+   "weight_on_drug": 0.0
+  },
+  {
+   "sentence": 5,
+   "layer": 1,
+   "head": 1,
+   "weight_on_drug": 0.9206
+  },
+  {
+   "sentence": 5,
+   "layer": 1,
+   "head": 2,
+   "weight_on_drug": 0.4326
+  },
+  {
+   "sentence": 5,
+   "layer": 2,
+   "head": 1,
+   "weight_on_drug": 0.0
+  },
+  {
+   "sentence": 5,
+   "layer": 2,
+   "head": 2,
+   "weight_on_drug": 0.0
+  }
+ ],
+ "runtime_seconds": 377.1
+}

@@ -1,0 +1,5 @@
+"model","test_mae","adherence_coef"
+"Adherence only",0.2224,-0.5159
+"Adherence + SOFA",0.1872,-0.2945
+"Adherence + every variable except SOFA",0.1542,-0.4091
+"Adherence + every variable",0.1413,-0.2997

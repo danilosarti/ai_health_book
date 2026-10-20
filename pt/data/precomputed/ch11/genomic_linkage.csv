@@ -1,0 +1,21 @@
+"linkage","K","ari","silhouette"
+"ward.D2",2,0.563,0.355
+"ward.D2",3,1,0.413
+"ward.D2",4,0.866,0.299
+"ward.D2",5,0.718,0.205
+"complete",2,0.563,0.355
+"complete",3,1,0.413
+"complete",4,0.866,0.299
+"complete",5,0.718,0.2
+"average",2,0.563,0.355
+"average",3,1,0.413
+"average",4,0.887,0.293
+"average",5,0.86,0.205
+"single",2,0.563,0.301
+"single",3,1,0.413
+"single",4,0.975,0.292
+"single",5,0.951,0.208
+"correlation + average",2,0.539,NA
+"correlation + average",3,0.95,NA
+"correlation + average",4,0.975,NA
+"correlation + average",5,0.951,NA

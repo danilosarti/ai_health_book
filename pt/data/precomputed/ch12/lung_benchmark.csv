@@ -1,0 +1,8 @@
+model,test_RMSE,test_MAE
+Average (no model),117.81,102.9
+Linear regression,52.65,43.68
+Lasso,53.3,45.01
+"Tree (depth 4, chosen by CV)",45.37,33.22
+Random forest,39.67,30.76
+XGBoost,40.92,32.41
+Neural network (2 hidden layers),43.34,32.71

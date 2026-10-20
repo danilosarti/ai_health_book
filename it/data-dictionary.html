@@ -1,0 +1,1952 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="it" xml:lang="it"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Appendice B — Dati utilizzati in questo libro – Intelligenza Artificiale e Apprendimento Automatico per le Scienze della Salute</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./glossary.html" rel="next">
+<link href="./setup.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-1ed442b0bca6acdbb302262e5862e895.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-ea2dfcc467e7465021677e6f977f9eb2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-1ed442b0bca6acdbb302262e5862e895.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nessun risultato",
+    "search-matching-documents-text": "documenti trovati",
+    "search-copy-link-title": "Copiare il link nella ricerca",
+    "search-hide-matches-text": "Nascondere i risultati aggiuntivi",
+    "search-more-match-text": "ci sono altri risultati in questo documento",
+    "search-more-matches-text": "ulteriori risultati in questo documento",
+    "search-clear-button-title": "Pulire",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancellare",
+    "search-submit-button-title": "Inviare",
+    "search-label": "Ricerca"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="assets/vendor/mathjax/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="assets/book.css">
+</head>
+
+<body class="floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Attiva/disattiva la barra laterale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./setup.html">Appendici</a></li><li class="breadcrumb-item"><a href="./data-dictionary.html"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Dati utilizzati in questo libro</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Attiva/disattiva la barra laterale" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Ricerca" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Intelligenza Artificiale e Apprendimento Automatico per le Scienze della Salute</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-translate"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../en/index.html">
+            English
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../pt/index.html">
+            Português
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../it/index.html">
+            Italiano
+            </a>
+          </li>
+      </ul>
+    </div>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Attiva/disattiva la modalità oscura"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Ricerca"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Benvenuti</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Fondamenti: dati, modelli, decisioni</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Attiva/disattiva sezione">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dati, modelli e decisioni</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Incertezza e probabilità per chi prende decisioni</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Imparare dai dati: il flusso di lavoro</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Predire gli esiti</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Attiva/disattiva sezione">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelli lineari e regolarizzazione</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Classificazione, soglie e calibrazione</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Alberi ed ensemble</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Reti neurali e apprendimento profondo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Apprendimento bayesiano e incertezza predittiva</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Quando mancano i dati</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Trovare struttura</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Attiva/disattiva sezione">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Dati ad alta dimensionalità e riduzione della dimensionalità</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Raggruppare i pazienti</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Fidarsi dei modelli e agire</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Attiva/disattiva sezione">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">IA interpretabile e spiegabile</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Dalla previsione alla causalità</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Decisioni sequenziali: apprendimento per rinforzo</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Linguaggio, modelli generativi e LLM</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Attiva/disattiva sezione">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Il testo come dato</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Prevedere la parola successiva: modelli linguistici ed embedding</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">L’attenzione e il transformer</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Dal modello linguistico all’assistente clinico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Modelli generativi oltre il testo</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendici</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Attiva/disattiva sezione">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configurare R, Python, Git e GitHub</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-dictionary.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Dati utilizzati in questo libro</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Glossario</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Notazione</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Bibliografia</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Indice</h2>
+   
+  <ul>
+  <li><a href="#sec-dd-icu" id="toc-sec-dd-icu" class="nav-link active" data-scroll-target="#sec-dd-icu"><span class="header-section-number">B.1</span> Esempio 1 · Terapia intensiva del Reparto 7: danno renale acuto</a></li>
+  <li><a href="#sec-dd-onco" id="toc-sec-dd-onco" class="nav-link" data-scroll-target="#sec-dd-onco"><span class="header-section-number">B.2</span> Esempio 2 · Studio di chemioterapia ONCO-1</a></li>
+  <li><a href="#sec-dd-homebeat" id="toc-sec-dd-homebeat" class="nav-link" data-scroll-target="#sec-dd-homebeat"><span class="header-section-number">B.3</span> Esempio 3 · Studio digitale HomeBeat</a></li>
+  <li><a href="#sec-dd-cell" id="toc-sec-dd-cell" class="nav-link" data-scroll-target="#sec-dd-cell"><span class="header-section-number">B.4</span> Esempio 4 · Produzione CellWorks</a></li>
+  <li><a href="#sec-dd-splits" id="toc-sec-dd-splits" class="nav-link" data-scroll-target="#sec-dd-splits"><span class="header-section-number">B.5</span> Dal Capitolo 3 · Suddivisioni e fold comuni a tutto il libro</a></li>
+  <li><a href="#sec-dd-pneumonia" id="toc-sec-dd-pneumonia" class="nav-link" data-scroll-target="#sec-dd-pneumonia"><span class="header-section-number">B.6</span> Dati di immagini · Radiografie del torace pediatriche (PneumoniaMNIST)</a></li>
+  <li><a href="#sec-dd-icu-missing" id="toc-sec-dd-icu-missing" class="nav-link" data-scroll-target="#sec-dd-icu-missing"><span class="header-section-number">B.7</span> Capitolo 9 · Reparto 7 con valori mancanti</a></li>
+  <li><a href="#sec-dd-ch10" id="toc-sec-dd-ch10" class="nav-link" data-scroll-target="#sec-dd-ch10"><span class="header-section-number">B.8</span> Capitolo 10 · Dermato-ATT e il Digital Trial</a></li>
+  <li><a href="#sec-dd-ch11" id="toc-sec-dd-ch11" class="nav-link" data-scroll-target="#sec-dd-ch11"><span class="header-section-number">B.9</span> Capitolo 11 · Fenotipi dai dispositivi indossabili e sottotipi di espressione genica</a></li>
+  <li><a href="#sec-dd-lung" id="toc-sec-dd-lung" class="nav-link" data-scroll-target="#sec-dd-lung"><span class="header-section-number">B.10</span> Capitolo 12 · Ambulatorio per il tumore del polmone</a></li>
+  <li><a href="#sec-dd-medsmall" id="toc-sec-dd-medsmall" class="nav-link" data-scroll-target="#sec-dd-medsmall"><span class="header-section-number">B.11</span> Capitolo 12 · Piccolo studio oncologico: terapia × biomarcatore</a></li>
+  <li><a href="#sec-dd-ch13" id="toc-sec-dd-ch13" class="nav-link" data-scroll-target="#sec-dd-ch13"><span class="header-section-number">B.12</span> Capitolo 13 · Reparto 7, versione estesa, e ONCO-1 nella pratica clinica corrente</a></li>
+  <li><a href="#sec-dd-ch15" id="toc-sec-dd-ch15" class="nav-link" data-scroll-target="#sec-dd-ch15"><span class="header-section-number">B.13</span> Capitolo 15 · Testo clinico sintetico</a></li>
+  <li><a href="#sec-dd-ch16" id="toc-sec-dd-ch16" class="nav-link" data-scroll-target="#sec-dd-ch16"><span class="header-section-number">B.14</span> Capitolo 16 · Note brevi del Reparto 7</a></li>
+  <li><a href="#sec-dd-ch18" id="toc-sec-dd-ch18" class="nav-link" data-scroll-target="#sec-dd-ch18"><span class="header-section-number">B.15</span> Capitolo 18 · Corpus di linee guida e valutazione dell’assistente</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./setup.html">Appendici</a></li><li class="breadcrumb-item"><a href="./data-dictionary.html"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Dati utilizzati in questo libro</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Appendice B — Dati utilizzati in questo libro</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Tutti i dataset tabellari sono <strong>simulati</strong>. Riproducono la struttura di dati clinici e di produzione reali, ma non descrivono alcuna persona, lotto o ospedale reale. Ciascuno è accompagnato dallo script R o Python che lo ha generato (con un seme casuale fissato, così da ottenere esattamente lo stesso file), e puoi scaricarlo e riutilizzarlo liberamente. Le tabelle seguono l’ordine dei capitoli.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Dataset</th>
+<th>Esempio ricorrente</th>
+<th>Righe × colonne</th>
+<th>Download</th>
+<th>Script di simulazione</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Terapia intensiva del Reparto 7 — danno renale acuto</td>
+<td><a href="./ch01.html#sec-running-examples">Esempio 1</a></td>
+<td>1.250 × 12</td>
+<td><a href="data/icu_aki.csv">icu_aki.csv</a></td>
+<td><a href="scripts/simulate/sim_ward7_icu_aki.R">sim_ward7_icu_aki.R</a></td>
+</tr>
+<tr class="even">
+<td>Esempio delle cinque persone (frequenza cardiaca e SpO₂)</td>
+<td>Capitolo 1</td>
+<td>5 × 6</td>
+<td><a href="data/micro5.csv">micro5.csv</a></td>
+<td>scritto a mano (Capitolo 1)</td>
+</tr>
+<tr class="odd">
+<td>Reparto 7 — i tre pazienti di stasera</td>
+<td>Esempio 1</td>
+<td>3 × 12</td>
+<td><a href="data/ward7_tonight.csv">ward7_tonight.csv</a></td>
+<td>scritto a mano (Capitolo 1)</td>
+</tr>
+<tr class="even">
+<td>Studio di chemioterapia ONCO-1 (versione per il browser)</td>
+<td><a href="./ch01.html#sec-running-examples">Esempio 2</a></td>
+<td>1.000 × 60</td>
+<td><a href="data/onco1.csv">onco1.csv</a></td>
+<td><a href="scripts/simulate/sim_onco1.R">sim_onco1.R</a> → <a href="scripts/simulate/make_browser_versions.R">make_browser_versions.R</a></td>
+</tr>
+<tr class="odd">
+<td>Studio digitale HomeBeat</td>
+<td><a href="./ch01.html#sec-running-examples">Esempio 3</a></td>
+<td>500 × 11</td>
+<td><a href="data/homebeat.csv">homebeat.csv</a>, <a href="data/homebeat_missing.csv">con valori mancanti</a></td>
+<td><a href="scripts/simulate/sim_homebeat.R">sim_homebeat.R</a></td>
+</tr>
+<tr class="even">
+<td>Lotti di produzione CellWorks</td>
+<td><a href="./ch01.html#sec-running-examples">Esempio 4</a></td>
+<td>420 × 10</td>
+<td><a href="data/cell.csv">cell.csv</a></td>
+<td><a href="scripts/simulate/sim_cellworks.R">sim_cellworks.R</a></td>
+</tr>
+<tr class="odd">
+<td>Suddivisioni addestramento/test e fold di validazione incrociata comuni a tutto il libro (<a href="#sec-dd-splits">dettagli</a>)</td>
+<td>Dal Capitolo 3 in poi</td>
+<td>1.250 × 3 (Reparto 7), 1.000 × 3 (ONCO-1), 228 × 2 (ambulatorio del polmone)</td>
+<td><a href="data/splits/ward7_split.csv">ward7_split.csv</a>, <a href="data/splits/onco1_split.csv">onco1_split.csv</a>, <a href="data/splits/lung_split.csv">lung_split.csv</a></td>
+<td><a href="scripts/simulate/make_splits.R">make_splits.R</a> (semi 2026, 2027); polmone: <a href="scripts/simulate/make_ch12_data.R">make_ch12_data.R</a> (seme 2026)</td>
+</tr>
+<tr class="even">
+<td>Radiografie del torace pediatriche (PneumoniaMNIST)</td>
+<td>Dati di immagini, Capitolo 7</td>
+<td>5.856 immagini</td>
+<td><a href="https://medmnist.com/">MedMNIST</a> (pubblico, CC BY 4.0)</td>
+<td>immagini reali, non simulate</td>
+</tr>
+<tr class="odd">
+<td>Campione di PneumoniaMNIST per il browser</td>
+<td>Capitolo 7</td>
+<td>400 × 787 (200 immagini di addestramento + 200 di test)</td>
+<td><a href="data/pneumonia_subset.csv">pneumonia_subset.csv</a></td>
+<td>estratto da <a href="scripts/precompute/ch07_pneumonia_cnn.py">ch07_pneumonia_cnn.py</a> (seme 2026)</td>
+</tr>
+<tr class="even">
+<td>Terapia intensiva del Reparto 7 con valori mancanti (<a href="#sec-dd-icu-missing">dettagli</a>)</td>
+<td>Esempio 1, Capitolo 9</td>
+<td>1.250 × 12</td>
+<td><a href="data/icu_aki_missing.csv">icu_aki_missing.csv</a></td>
+<td><a href="scripts/simulate/sim_ward7_missing.R">sim_ward7_missing.R</a> (seme 909)</td>
+</tr>
+<tr class="odd">
+<td>Coorte multi-omica sulla psoriasi Dermato-ATT (versione per il browser)</td>
+<td>Capitolo 10</td>
+<td>200 × 202 (su 1.852)</td>
+<td><a href="data/dermato.csv">dermato.csv</a>, <a href="data/dermato_latent.csv">fattori nascosti</a></td>
+<td><a href="scripts/simulate/sim_dermato_att.R">sim_dermato_att.R</a></td>
+</tr>
+<tr class="even">
+<td>Dataset delle varietà del Digital Trial</td>
+<td>Capitolo 10</td>
+<td>500 × 14</td>
+<td><a href="data/digital_trial.csv">digital_trial.csv</a>, <a href="data/digital_trial_truth.csv">verità nascosta</a></td>
+<td><a href="scripts/simulate/sim_digital_trial.R">sim_digital_trial.R</a></td>
+</tr>
+<tr class="odd">
+<td>Pilota HomeBeat: fenotipi dai dispositivi indossabili (<a href="#sec-dd-ch11">dettagli</a>)</td>
+<td>Esempio 3, Capitolo 11</td>
+<td>800 × 8</td>
+<td><a href="data/wearable_phenotypes.csv">wearable_phenotypes.csv</a></td>
+<td><a href="scripts/simulate/make_ch11_data.R">make_ch11_data.R</a> (seme 2025)</td>
+</tr>
+<tr class="even">
+<td>Profili di espressione genica con tre sottotipi molecolari</td>
+<td>Capitolo 11</td>
+<td>60 × 302</td>
+<td><a href="data/genomic_subtypes.csv">genomic_subtypes.csv</a></td>
+<td>prima edizione (generatore non disponibile); convertito da <a href="scripts/simulate/make_ch11_data.R">make_ch11_data.R</a></td>
+</tr>
+<tr class="odd">
+<td>Ambulatorio per il tumore del polmone (dati didattici della prima edizione)</td>
+<td>Capitolo 12</td>
+<td>228 × 9</td>
+<td><a href="data/lung_sim_complete.csv">lung_sim_complete.csv</a></td>
+<td>prima edizione (script non disponibile); suddivisione: <a href="scripts/simulate/make_ch12_data.R">make_ch12_data.R</a></td>
+</tr>
+<tr class="even">
+<td>Piccolo studio oncologico: terapia × biomarcatore (versione per il browser)</td>
+<td>Capitolo 12</td>
+<td>800 × 33</td>
+<td><a href="data/med_small_sim.csv">med_small_sim.csv</a> (completo: <a href="data/med_small_sim.rds">med_small_sim.rds</a>, 800 × 133)</td>
+<td><a href="scripts/simulate/make_ch12_data.R">make_ch12_data.R</a></td>
+</tr>
+<tr class="odd">
+<td>Reparto 7, versione estesa: personale infermieristico, un mediatore e un collider (<a href="#sec-dd-ch13">dettagli</a>)</td>
+<td>Esempio 1, Capitolo 13</td>
+<td>1.250 × 8</td>
+<td><a href="data/ward7_dag.csv">ward7_dag.csv</a></td>
+<td><a href="scripts/simulate/sim_ch13_ward7_dag.R">sim_ch13_ward7_dag.R</a> con <a href="scripts/simulate/ward7_scm.R">ward7_scm.R</a> (seme 1313)</td>
+</tr>
+<tr class="even">
+<td>ONCO-1 nella pratica clinica corrente (gemello osservazionale dello studio)</td>
+<td>Esempio 2, Capitolo 13</td>
+<td>509 × 8</td>
+<td><a href="data/onco1_routine.csv">onco1_routine.csv</a></td>
+<td><a href="scripts/simulate/sim_ch13_onco1_routine.R">sim_ch13_onco1_routine.R</a> (seme 1313)</td>
+</tr>
+<tr class="odd">
+<td>Note cliniche sintetiche: lettere di dimissione del Reparto 7 e note di ricovero di stasera, note sugli eventi avversi di ONCO-1, frasi di foglietti illustrativi</td>
+<td>Capitolo 15</td>
+<td>887 × 7</td>
+<td><a href="data/clinical_notes.csv">clinical_notes.csv</a></td>
+<td><a href="scripts/simulate/sim_ch15_text.py">sim_ch15_text.py</a> (Python, seme 1515)</td>
+</tr>
+<tr class="even">
+<td>Frasi con negazione</td>
+<td>Capitolo 15</td>
+<td>93 × 5</td>
+<td><a href="data/negation_sentences.csv">negation_sentences.csv</a></td>
+<td><a href="scripts/simulate/sim_ch15_text.py">sim_ch15_text.py</a></td>
+</tr>
+<tr class="odd">
+<td>Note brevi del Reparto 7 (<a href="#sec-dd-ch16">dettagli</a>)</td>
+<td>Capitolo 16</td>
+<td>8.000 × 3</td>
+<td><a href="data/ward7_notes.csv">ward7_notes.csv</a></td>
+<td><a href="scripts/simulate/sim_ch16_ward7_notes.py">sim_ch16_ward7_notes.py</a> (Python, seme 1607)</td>
+</tr>
+<tr class="even">
+<td>Corpus di linee guida del Reparto 7 (illustrativo, non è un’indicazione clinica) (<a href="#sec-dd-ch18">dettagli</a>)</td>
+<td>Capitolo 18</td>
+<td>31 × 4</td>
+<td><a href="data/ch18_guidelines.csv">ch18_guidelines.csv</a></td>
+<td><a href="scripts/simulate/sim_ch18_assistant.py">sim_ch18_assistant.py</a> (Python, seme 1818)</td>
+</tr>
+<tr class="odd">
+<td>Valutazione simulata di un assistente per le linee guida</td>
+<td>Capitolo 18</td>
+<td>300 × 7 (150 domande × 2 configurazioni)</td>
+<td><a href="data/ch18_eval.csv">ch18_eval.csv</a></td>
+<td><a href="scripts/simulate/sim_ch18_assistant.py">sim_ch18_assistant.py</a></td>
+</tr>
+</tbody>
+</table>
+<p>Lo studio ONCO-1 completo (10.000 pazienti × 2.000 geni, circa 140 MB) è troppo grande per il browser; esegui <code>sim_onco1.R</code> sul tuo computer per rigenerarlo.</p>
+<section id="sec-dd-icu" class="level2" data-number="B.1">
+<h2 data-number="B.1" class="anchored" data-anchor-id="sec-dd-icu"><span class="header-section-number">B.1</span> Esempio 1 · Terapia intensiva del Reparto 7: danno renale acuto</h2>
+<p>Una riga per ogni paziente di terapia intensiva, da quattro unità. L’esito è la variazione della creatinina sierica in 48 ore; un aumento di almeno 0,3 mg/dL entro 48 ore è uno dei criteri di danno renale acuto (AKI) previsti dalla linea guida KDIGO <span class="citation" data-cites="kdigo2012aki">(<a href="#ref-kdigo2012aki" role="doc-biblioref">Kidney Disease: Improving Global Outcomes (KDIGO) Acute Kidney Injury Work Group 2012</a>)</span>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variabile</th>
+<th>Significato</th>
+<th>Unità / valori</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>patient_id</code></td>
+<td>Identificativo (da non usare mai come predittore)</td>
+<td>ICU_0001 … ICU_1250</td>
+</tr>
+<tr class="even">
+<td><code>site</code></td>
+<td>Terapia intensiva in cui il paziente è stato trattato</td>
+<td>ICU_A, ICU_B, ICU_C, ICU_D</td>
+</tr>
+<tr class="odd">
+<td><code>age</code></td>
+<td>Età</td>
+<td>anni</td>
+</tr>
+<tr class="even">
+<td><code>sofa</code></td>
+<td>Punteggio SOFA (<em>Sequential Organ Failure Assessment</em>) <span class="citation" data-cites="vincent1996sofa">(<a href="#ref-vincent1996sofa" role="doc-biblioref">Vincent et al. 1996</a>)</span></td>
+<td>0–24 (qui 0–18)</td>
+</tr>
+<tr class="odd">
+<td><code>lactate</code></td>
+<td>Lattato ematico (perfusione tissutale)</td>
+<td>mmol/L</td>
+</tr>
+<tr class="even">
+<td><code>map_min</code></td>
+<td>Pressione arteriosa media minima</td>
+<td>mmHg</td>
+</tr>
+<tr class="odd">
+<td><code>baseline_creat</code></td>
+<td>Creatinina prima del ricovero in terapia intensiva</td>
+<td>mg/dL</td>
+</tr>
+<tr class="even">
+<td><code>protocol_adherence</code></td>
+<td>Quota del protocollo assistenziale effettivamente applicata</td>
+<td>0–1</td>
+</tr>
+<tr class="odd">
+<td><code>bun</code></td>
+<td>Azoto ureico ematico</td>
+<td>mg/dL</td>
+</tr>
+<tr class="even">
+<td><code>crp</code></td>
+<td>Proteina C reattiva (infiammazione)</td>
+<td>mg/L</td>
+</tr>
+<tr class="odd">
+<td><code>albumin</code></td>
+<td>Albumina sierica</td>
+<td>g/dL</td>
+</tr>
+<tr class="even">
+<td><code>delta_creatinine_48h</code></td>
+<td><strong>Esito</strong>: variazione della creatinina in 48 h</td>
+<td>mg/dL</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sec-dd-onco" class="level2" data-number="B.2">
+<h2 data-number="B.2" class="anchored" data-anchor-id="sec-dd-onco"><span class="header-section-number">B.2</span> Esempio 2 · Studio di chemioterapia ONCO-1</h2>
+<p>Uno studio randomizzato (1:1) che confronta la chemioterapia con nessuna chemioterapia in pazienti con tumori solidi.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variabile</th>
+<th>Significato</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>patient_id</code></td>
+<td>Identificativo</td>
+</tr>
+<tr class="even">
+<td><code>treatment</code></td>
+<td><code>chemo</code> o <code>no_chemo</code> (randomizzato)</td>
+</tr>
+<tr class="odd">
+<td><code>dose_intensity</code></td>
+<td>Intensità di dose relativa (0 per <code>no_chemo</code>)</td>
+</tr>
+<tr class="even">
+<td><code>patient_age</code>, <code>tumor_grade</code> (G1–G3), <code>performance_score</code> (simile all’ECOG, 0–2)</td>
+<td>Covariate cliniche</td>
+</tr>
+<tr class="odd">
+<td><code>baseline_tumor_mm</code>, <code>post_tumor_mm</code></td>
+<td>Dimensioni del tumore prima e dopo il trattamento (mm)</td>
+</tr>
+<tr class="even">
+<td><code>response_percent</code></td>
+<td><strong>Esito</strong>: riduzione del tumore (%)</td>
+</tr>
+<tr class="odd">
+<td><code>high_response</code></td>
+<td><strong>Esito</strong>: 1 se la riduzione è ≥ 30% (una regola ispirata ai criteri RECIST <span class="citation" data-cites="eisenhauer2009recist">(<a href="#ref-eisenhauer2009recist" role="doc-biblioref">Eisenhauer et al. 2009</a>)</span>)</td>
+</tr>
+<tr class="even">
+<td><code>gene_01</code> … <code>gene_50</code></td>
+<td>Espressione genica (log₂ CPM <span class="citation" data-cites="law2014voom">(<a href="#ref-law2014voom" role="doc-biblioref">Law et al. 2014</a>)</span>; i primi 50 di 2.000 geni)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sec-dd-homebeat" class="level2" data-number="B.3">
+<h2 data-number="B.3" class="anchored" data-anchor-id="sec-dd-homebeat"><span class="header-section-number">B.3</span> Esempio 3 · Studio digitale HomeBeat</h2>
+<p>Partecipanti seguiti a distanza che indossano uno smartwatch in uno studio decentralizzato.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variabile</th>
+<th>Significato</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>participant_id</code></td>
+<td>Identificativo</td>
+</tr>
+<tr class="even">
+<td><code>age</code>, <code>baseline_inflammation</code>, <code>frailty</code></td>
+<td>Caratteristiche al basale</td>
+</tr>
+<tr class="odd">
+<td><code>resting_hr</code>, <code>hrv</code>, <code>skin_temp</code>, <code>activity_index</code></td>
+<td>Segnali del dispositivo indossabile</td>
+</tr>
+<tr class="even">
+<td><code>stress_score</code></td>
+<td><strong>Esito</strong>: punteggio di stress fisiologico</td>
+</tr>
+<tr class="odd">
+<td><code>event_risk</code>, <code>event_occurred</code></td>
+<td>Rischio simulato e verificarsi di un evento di peggioramento</td>
+</tr>
+</tbody>
+</table>
+<p><code>homebeat_missing.csv</code> è lo stesso dataset con alcuni valori cancellati di proposito (viene usato nel capitolo sui dati mancanti).</p>
+</section>
+<section id="sec-dd-cell" class="level2" data-number="B.4">
+<h2 data-number="B.4" class="anchored" data-anchor-id="sec-dd-cell"><span class="header-section-number">B.4</span> Esempio 4 · Produzione CellWorks</h2>
+<p>Una riga per ogni lotto di produzione di una terapia cellulare, da diversi stabilimenti.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variabile</th>
+<th>Significato</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>batch_id</code>, <code>facility</code></td>
+<td>Identificativo del lotto, stabilimento di produzione</td>
+</tr>
+<tr class="even">
+<td><code>culture_days</code>, <code>temp_dev</code>, <code>ph_dev</code>, <code>shear_stress</code></td>
+<td>Condizioni e deviazioni di processo</td>
+</tr>
+<tr class="odd">
+<td><code>transduction_eff</code>, <code>viability</code>, <code>yield_millions</code></td>
+<td>Misure di produzione</td>
+</tr>
+<tr class="even">
+<td><code>potency_score</code></td>
+<td><strong>Esito</strong>: potenza del lotto</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sec-dd-splits" class="level2" data-number="B.5">
+<h2 data-number="B.5" class="anchored" data-anchor-id="sec-dd-splits"><span class="header-section-number">B.5</span> Dal Capitolo 3 · Suddivisioni e fold comuni a tutto il libro</h2>
+<p>Per confrontare i modelli in modo equo, tutti i capitoli dal Capitolo 3 in poi usano <strong>gli stessi</strong> pazienti di addestramento e di test. I file in <code>data/splits/</code> assegnano ogni paziente una volta per tutte.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Righe</th>
+<th>Colonne</th>
+<th>Contenuto</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>ward7_split.csv</code></td>
+<td>1.250</td>
+<td><code>patient_id</code>, <code>set</code>, <code>fold</code></td>
+<td>1.000 pazienti di addestramento e 250 di test di <code>icu_aki.csv</code>; i pazienti di addestramento sono assegnati ai fold di validazione incrociata 1–5 (200 ciascuno)</td>
+</tr>
+<tr class="even">
+<td><code>onco1_split.csv</code></td>
+<td>1.000</td>
+<td><code>patient_id</code>, <code>set</code>, <code>fold</code></td>
+<td>800 pazienti di addestramento e 200 di test di <code>onco1.csv</code>, con i fold 1–5 (160 ciascuno)</td>
+</tr>
+<tr class="odd">
+<td><code>lung_split.csv</code></td>
+<td>228</td>
+<td><code>patient_id</code>, <code>set</code></td>
+<td>171 pazienti di addestramento e 57 di test dell’ambulatorio del polmone (Capitolo 12)</td>
+</tr>
+</tbody>
+</table>
+<p><code>set</code> vale <code>train</code> o <code>test</code>; <code>fold</code> è vuoto per i pazienti di test. I file derivati dagli stessi pazienti (<code>icu_aki_missing.csv</code>, le note del Reparto 7 e di ONCO-1 del Capitolo 15) ereditano la stessa suddivisione tramite <code>patient_id</code>.</p>
+</section>
+<section id="sec-dd-pneumonia" class="level2" data-number="B.6">
+<h2 data-number="B.6" class="anchored" data-anchor-id="sec-dd-pneumonia"><span class="header-section-number">B.6</span> Dati di immagini · Radiografie del torace pediatriche (PneumoniaMNIST)</h2>
+<p>A differenza dei quattro esempi ricorrenti, queste sono <strong>immagini reali e anonimizzate</strong>, rese pubbliche per la ricerca e la didattica. Le radiografie del torace sono state raccolte su bambini da uno a cinque anni in un ospedale di Guangzhou, in Cina, ed etichettate da medici esperti <span class="citation" data-cites="kermany2018cell">(<a href="#ref-kermany2018cell" role="doc-biblioref">Kermany et al. 2018</a>)</span>; sono distribuite anche su Kaggle <span class="citation" data-cites="mooney2018chestxray">(<a href="#ref-mooney2018chestxray" role="doc-biblioref">Mooney 2018</a>)</span>. Il progetto MedMNIST le ha standardizzate come <strong>PneumoniaMNIST</strong>, una delle sue raccolte di riferimento <span class="citation" data-cites="medmnistv2">(<a href="#ref-medmnistv2" role="doc-biblioref">Yang et al. 2023</a>)</span>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Proprietà</th>
+<th>Valore</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Compito</td>
+<td>Classificazione binaria: <code>0</code> = normale, <code>1</code> = polmonite</td>
+</tr>
+<tr class="even">
+<td>Immagini</td>
+<td>5.856 radiografie del torace in scala di grigi: 4.708 per l’addestramento, 524 per la validazione, 624 per il test</td>
+</tr>
+<tr class="odd">
+<td>Dimensione</td>
+<td>28 × 28 pixel nella versione standard (sono disponibili anche versioni più grandi, fino a 224 × 224)</td>
+</tr>
+<tr class="even">
+<td>Bilanciamento delle classi</td>
+<td>Circa tre immagini di polmonite per ogni immagine normale</td>
+</tr>
+<tr class="odd">
+<td>Licenza</td>
+<td>Creative Commons Attribuzione 4.0 (cita le fonti indicate sopra quando le riutilizzi)</td>
+</tr>
+<tr class="even">
+<td>Come ottenerlo</td>
+<td>Python: <code>pip install medmnist</code>, poi <code>from medmnist import PneumoniaMNIST</code>; oppure scarica <code>pneumoniamnist.npz</code> dal sito di MedMNIST</td>
+</tr>
+</tbody>
+</table>
+<p>Il campione per il browser <code>pneumonia_subset.csv</code> ha una riga per immagine: <code>split</code> (addestramento o test), <code>orig_index</code> (posizione dell’immagine in quella parte del file MedMNIST), <code>label</code> e i 784 valori dei pixel <code>px000</code> … <code>px783</code> (0–255, riga per riga a partire dall’angolo in alto a sinistra).</p>
+<p>Nel Capitolo 7 queste immagini servono a mostrare che, per una rete neurale, una radiografia è soltanto una griglia di numeri con un’etichetta, e a confrontare reti piccole e grandi, comprese quelle preaddestrate. Altre raccolte MedMNIST (per esempio immagini dermatologiche e di cellule del sangue) seguono lo stesso formato.</p>
+</section>
+<section id="sec-dd-icu-missing" class="level2" data-number="B.7">
+<h2 data-number="B.7" class="anchored" data-anchor-id="sec-dd-icu-missing"><span class="header-section-number">B.7</span> Capitolo 9 · Reparto 7 con valori mancanti</h2>
+<p><code>icu_aki_missing.csv</code> è <code>icu_aki.csv</code> con valori cancellati di proposito secondo tre meccanismi documentati <span class="citation" data-cites="rubin1976missing">(<a href="#ref-rubin1976missing" role="doc-biblioref">Rubin 1976</a>)</span>. Righe, ordine e <code>patient_id</code> non cambiano, quindi vale la suddivisione comune; l’esito e tutte le altre colonne sono completi, e 529 pazienti hanno almeno un dato mancante.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variabile</th>
+<th>Meccanismo</th>
+<th>Regola usata per cancellare i valori</th>
+<th>Mancanti</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>albumin</code></td>
+<td>MCAR</td>
+<td>un guasto di un analizzatore di laboratorio: ogni paziente ha la stessa probabilità dell’8 %</td>
+<td>7,2 %</td>
+</tr>
+<tr class="even">
+<td><code>lactate</code></td>
+<td>MAR (dipende dal SOFA)</td>
+<td>richiesto meno spesso per i pazienti che sembrano stare bene: <span class="math inline">\(P = \operatorname{logistica}(-1{,}55 - 0{,}40\,(\text{SOFA} - 7))\)</span></td>
+<td>21,0 %</td>
+</tr>
+<tr class="odd">
+<td><code>baseline_creat</code></td>
+<td>MNAR (dipende dal valore stesso e dall’età)</td>
+<td>esiste solo se il paziente ha fatto un esame del sangue prima del ricovero, cosa più rara nelle persone più giovani e più sane: <span class="math inline">\(P = \operatorname{logistica}(-1{,}70 - 0{,}03\,(\text{età} - 64) - 3{,}0\,(\text{creatinina} - 1{,}0))\)</span></td>
+<td>21,8 %</td>
+</tr>
+</tbody>
+</table>
+<p>In <code>icu_aki.csv</code> il lattato è stato simulato indipendentemente dal SOFA, quindi i dati mancanti MAR non distorcono la media del lattato; il Capitolo 9 ne fa un punto didattico.</p>
+</section>
+<section id="sec-dd-ch10" class="level2" data-number="B.8">
+<h2 data-number="B.8" class="anchored" data-anchor-id="sec-dd-ch10"><span class="header-section-number">B.8</span> Capitolo 10 · Dermato-ATT e il Digital Trial</h2>
+<p><strong>Dermato-ATT</strong> simula 200 persone con psoriasi che iniziano un farmaco biologico anti-IL-17 <span class="citation" data-cites="griffiths2021psoriasis">(<a href="#ref-griffiths2021psoriasis" role="doc-biblioref">Griffiths et al. 2021</a>)</span>, con 1.850 misure al basale: 2 punteggi clinici (<code>PASI_baseline</code>, <code>DLQI</code>) <span class="citation" data-cites="fredriksson1978pasi finlay1994dlqi">(<a href="#ref-fredriksson1978pasi" role="doc-biblioref">Fredriksson e Pettersson 1978</a>; <a href="#ref-finlay1994dlqi" role="doc-biblioref">Finlay e Khan 1994</a>)</span>, 18 citochine nel sangue, 30 variabili dell’esposoma (<code>NO2</code>, <code>PM10</code>, <code>UV_index</code>, <code>temperature</code>, <code>humidity</code>, <code>expo_6</code> … <code>expo_30</code>), 1.500 geni e 300 caratteristiche del microbioma (<code>ASV_1</code> … <code>ASV_300</code>), oltre all’esito <code>Outcome_PASI12</code>, la variazione del PASI dopo 12 settimane. Il file per il browser conserva tutte le colonne cliniche, delle citochine e dell’esposoma, i primi 100 geni e le prime 50 caratteristiche del microbioma; esegui <code>sim_dermato_att.R</code> per rigenerare la tabella completa. I quattro fattori nascosti che generano i blocchi (<code>latent_G1</code>, <code>latent_G2</code>, <code>latent_M1</code>, <code>latent_M2</code>) sono in <code>dermato_latent.csv</code>; i nomi di geni e microbi sono etichette, e non viene simulata alcuna via biologica con un nome.</p>
+<p>Il dataset del <strong>Digital Trial</strong> simula 500 partecipanti con quattro citochine, quattro sintesi da dispositivi indossabili, tre variabili cliniche, una risposta <code>delta_score</code> e un’etichetta <code>responder</code>. Le sue caratteristiche sono funzioni di punti estratti su due forme geometriche, un’elica (350 partecipanti) e un rotolo svizzero (150); <code>digital_trial_truth.csv</code> riporta per ogni partecipante la forma, la posizione lungo di essa e le coordinate <code>X1</code>–<code>X3</code>. Il Capitolo 10 tiene nascosto questo file finché non ha mostrato le mappe t-SNE e UMAP <span class="citation" data-cites="vandermaaten2008tsne mcinnes2018umap">(<a href="#ref-vandermaaten2008tsne" role="doc-biblioref">Maaten e Hinton 2008</a>; <a href="#ref-mcinnes2018umap" role="doc-biblioref">McInnes, Healy, e Melville 2018</a>)</span>.</p>
+</section>
+<section id="sec-dd-ch11" class="level2" data-number="B.9">
+<h2 data-number="B.9" class="anchored" data-anchor-id="sec-dd-ch11"><span class="header-section-number">B.9</span> Capitolo 11 · Fenotipi dai dispositivi indossabili e sottotipi di espressione genica</h2>
+<p><code>wearable_phenotypes.csv</code> descrive una <strong>coorte pilota di HomeBeat</strong> di 800 persone che indossano un orologio più recente. Cinque fenotipi di 160 persone ciascuno sono stati simulati da distribuzioni normali multivariate con medie diverse e una matrice di covarianza comune (simulazione della prima edizione, seme 2025). Il fenotipo vero è conservato solo a scopo didattico: un clustering reale non lo vede mai.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variabile</th>
+<th>Significato</th>
+<th>Unità / valori</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>person_id</code></td>
+<td>Identificatore</td>
+<td>W001 … W800</td>
+</tr>
+<tr class="even">
+<td><code>HR_mean</code></td>
+<td>Frequenza cardiaca media</td>
+<td>battiti al minuto</td>
+</tr>
+<tr class="odd">
+<td><code>HRV_sdnn</code></td>
+<td>Variabilità della frequenza cardiaca (SDNN) <span class="citation" data-cites="taskforce1996hrv">(<a href="#ref-taskforce1996hrv" role="doc-biblioref">Task Force of the European Society of Cardiology and the North American Society of Pacing and Electrophysiology 1996</a>)</span></td>
+<td>ms</td>
+</tr>
+<tr class="even">
+<td><code>steps_mean</code></td>
+<td>Passi giornalieri medi</td>
+<td>passi</td>
+</tr>
+<tr class="odd">
+<td><code>skin_temp</code></td>
+<td>Temperatura cutanea media</td>
+<td>°C</td>
+</tr>
+<tr class="even">
+<td><code>spo2</code></td>
+<td>Saturazione media di ossigeno</td>
+<td>%</td>
+</tr>
+<tr class="odd">
+<td><code>sleep_eff</code></td>
+<td>Efficienza del sonno (quota del tempo a letto trascorsa dormendo)</td>
+<td>0–1 (la simulazione lascia superare 1 ad alcuni valori, fino a 1,35)</td>
+</tr>
+<tr class="even">
+<td><code>phenotype_true</code></td>
+<td><strong>Verità nascosta</strong>: fenotipo simulato</td>
+<td><code>healthy_active</code>, <code>high_stress</code>, <code>sedentary_calm</code>, <code>fever_infection</code>, <code>post_operative</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>genomic_subtypes.csv</code> contiene 60 pazienti simulati (<code>patient_id</code> P01 … P60) con l’espressione di 300 geni (<code>gene_001</code> … <code>gene_300</code>, espressione su scala logaritmica) e una colonna <code>subtype</code> con tre sottotipi molecolari di 20 pazienti ciascuno (<code>A_IFN</code>, <code>B_Inflam</code>, <code>C_Metab</code>). Proviene dalla prima edizione, il cui script generatore non si è conservato; il Capitolo 11 lo usa per il clustering gerarchico.</p>
+</section>
+<section id="sec-dd-lung" class="level2" data-number="B.10">
+<h2 data-number="B.10" class="anchored" data-anchor-id="sec-dd-lung"><span class="header-section-number">B.10</span> Capitolo 12 · Ambulatorio per il tumore del polmone</h2>
+<p>Un piccolo dataset di follow-up, completo e simulato, usato nella prima edizione per insegnare l’interpretabilità, ispirato ai dati <code>lung</code> del pacchetto R <em>survival</em> <span class="citation" data-cites="loprinzi1994lung therneau2024survival">(<a href="#ref-loprinzi1994lung" role="doc-biblioref">Loprinzi et al. 1994</a>; <a href="#ref-therneau2024survival" role="doc-biblioref">Therneau 2024</a>)</span>. La suddivisione comune 75/25 è in <code>data/splits/lung_split.csv</code> (seme 2026).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variabile</th>
+<th>Significato</th>
+<th>Unità / valori</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>patient_id</code></td>
+<td>Identificatore</td>
+<td>1 … 228</td>
+</tr>
+<tr class="even">
+<td><code>age</code>, <code>sex</code></td>
+<td>Età; sesso</td>
+<td>anni; femmina, maschio</td>
+</tr>
+<tr class="odd">
+<td><code>ph.ecog</code></td>
+<td>Performance status ECOG valutato dal medico <span class="citation" data-cites="oken1982ecog">(<a href="#ref-oken1982ecog" role="doc-biblioref">Oken et al. 1982</a>)</span></td>
+<td>0 (pienamente attivo) … 3</td>
+</tr>
+<tr class="even">
+<td><code>ph.karno</code></td>
+<td>Indice di Karnofsky <span class="citation" data-cites="karnofsky1948nitrogen">(<a href="#ref-karnofsky1948nitrogen" role="doc-biblioref">Karnofsky et al. 1948</a>)</span> valutato dal medico</td>
+<td>40–100 (100 = normale)</td>
+</tr>
+<tr class="odd">
+<td><code>wt.loss</code></td>
+<td>Peso perso nei sei mesi precedenti</td>
+<td>kg</td>
+</tr>
+<tr class="even">
+<td><code>time</code></td>
+<td>Giorni di follow-up (almeno 30)</td>
+<td>giorni</td>
+</tr>
+<tr class="odd">
+<td><code>status</code>, <code>status_bin</code></td>
+<td>Stato alla fine del follow-up</td>
+<td>vivo / deceduto; 0 / 1</td>
+</tr>
+</tbody>
+</table>
+<p>Per i pazienti con <code>status = alive</code>, <code>time</code> è <strong>censurato</strong>: sono sopravvissuti almeno per quel tempo. Il Capitolo 12 spiega perché trattare <code>time</code> come un esito ordinario è una semplificazione.</p>
+</section>
+<section id="sec-dd-medsmall" class="level2" data-number="B.11">
+<h2 data-number="B.11" class="anchored" data-anchor-id="sec-dd-medsmall"><span class="header-section-number">B.11</span> Capitolo 12 · Piccolo studio oncologico: terapia × biomarcatore</h2>
+<p>Ottocento pazienti simulati, randomizzati 1:1 alla terapia standard o a una nuova terapia. Il beneficio della nuova terapia cresce con un biomarcatore nel sangue; i geni 001–012 seguono in parte il biomarcatore e gli altri sono rumore.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variabile</th>
+<th>Significato</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>patient_id</code></td>
+<td>Identificatore</td>
+</tr>
+<tr class="even">
+<td><code>tumor_shrinkage_pct</code></td>
+<td><strong>Esito</strong>: riduzione del tumore (%)</td>
+</tr>
+<tr class="odd">
+<td><code>high_response</code></td>
+<td>1 se la riduzione è ≥ 30 %</td>
+</tr>
+<tr class="even">
+<td><code>age</code>, <code>sex</code>, <code>bmi</code>, <code>stage</code> (I–III), <code>baseline_mm</code>, <code>crp</code>, <code>egfr</code></td>
+<td>Covariate cliniche</td>
+</tr>
+<tr class="odd">
+<td><code>treatment</code></td>
+<td><code>standard</code> o <code>new_therapy</code> (randomizzato)</td>
+</tr>
+<tr class="even">
+<td><code>adherence</code></td>
+<td>Quota delle dosi previste effettivamente assunte (0–1)</td>
+</tr>
+<tr class="odd">
+<td><code>biomarker</code></td>
+<td>Biomarcatore nel sangue standardizzato che modifica l’effetto del trattamento</td>
+</tr>
+<tr class="even">
+<td><code>gene_001</code> … <code>gene_020</code></td>
+<td>Espressione genica (standardizzata; il file RDS completo ha 120 geni)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="sec-dd-ch13" class="level2" data-number="B.12">
+<h2 data-number="B.12" class="anchored" data-anchor-id="sec-dd-ch13"><span class="header-section-number">B.12</span> Capitolo 13 · Reparto 7, versione estesa, e ONCO-1 nella pratica clinica corrente</h2>
+<p>Il <strong>Reparto 7, versione estesa</strong> (<code>ward7_dag.csv</code>) è un reparto simulato a sé (identificatori <code>X7_0001</code> … <code>X7_1250</code>, non i pazienti di <code>icu_aki.csv</code>). Segue le stesse regole di generazione del Reparto 7 (reimplementate in <code>ward7_scm.R</code>) e aggiunge tre variabili registrate il cui ruolo causale è noto <span class="citation" data-cites="hernan2020whatif">(<a href="#ref-hernan2020whatif" role="doc-biblioref">Hernán e Robins 2020</a>)</span>. L’effetto totale dell’aderenza al protocollo è −0,28 mg/dL per unità, come nel Reparto 7 (diretto −0,18; circa −0,10 attraverso i farmaci nefrotossici).</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variabile</th>
+<th>Significato</th>
+<th>Ruolo causale</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>patient_id</code></td>
+<td>Identificatore</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td><code>sofa</code>, <code>baseline_creat</code></td>
+<td>Punteggio SOFA; creatinina prima del ricovero (mg/dL)</td>
+<td>confondenti</td>
+</tr>
+<tr class="odd">
+<td><code>staffing</code></td>
+<td>Dotazione di personale infermieristico (standardizzata)</td>
+<td>influisce solo sull’aderenza (simile a uno strumento)</td>
+</tr>
+<tr class="even">
+<td><code>protocol_adherence</code></td>
+<td>Quota del protocollo assistenziale applicata (0–1)</td>
+<td>trattamento</td>
+</tr>
+<tr class="odd">
+<td><code>nephrotox</code></td>
+<td>Esposizione a farmaci nefrotossici in 48 h (dosi-giorno)</td>
+<td><strong>mediatore</strong>: ridotto dal protocollo, aumenta la creatinina</td>
+</tr>
+<tr class="even">
+<td><code>creat_tests</code></td>
+<td>Dosaggi di creatinina richiesti in 48 h</td>
+<td><strong>collider</strong>: aumentati dal protocollo e da una creatinina in salita</td>
+</tr>
+<tr class="odd">
+<td><code>delta_creatinine_48h</code></td>
+<td><strong>Esito</strong>: variazione della creatinina in 48 h (mg/dL)</td>
+<td>esito</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ONCO-1 nella pratica clinica corrente</strong> (<code>onco1_routine.csv</code>) è un gemello osservazionale dello studio ONCO-1. Invece di una moneta, a “scegliere” sono stati gli oncologi: ogni paziente dello studio è stato conservato con una probabilità che dipende dal braccio e da età, grado del tumore, performance status e <code>gene_05</code> (la chemioterapia è stata proposta più spesso a pazienti più giovani, in condizioni migliori, con tumori di grado più alto o con <code>gene_05</code> basso). I pazienti conservati hanno un punteggio di propensione <span class="citation" data-cites="rosenbaum1983propensity">(<a href="#ref-rosenbaum1983propensity" role="doc-biblioref">Rosenbaum e Rubin 1983</a>)</span> noto e la stessa distribuzione delle covariate dello studio, per cui la differenza tra le medie dello studio è un riferimento equo. Colonne: <code>patient_id</code>, <code>chemo</code> (1 = chemioterapia; 252 pazienti su 509), <code>patient_age</code>, <code>tumor_grade</code>, <code>performance_score</code>, <code>gene_05</code>, <code>dose_intensity</code> e l’esito <code>response_percent</code>, come in <code>onco1.csv</code>. Il vero punteggio di propensione non viene salvato: nella realtà nessuno lo conosce.</p>
+</section>
+<section id="sec-dd-ch15" class="level2" data-number="B.13">
+<h2 data-number="B.13" class="anchored" data-anchor-id="sec-dd-ch15"><span class="header-section-number">B.13</span> Capitolo 15 · Testo clinico sintetico</h2>
+<p><strong>Ogni frase è inventata</strong> a partire da modelli da <code>sim_ch15_text.py</code>; nessuna nota, referto o foglietto illustrativo reale è stato usato o copiato. <code>clinical_notes.csv</code> ha una riga per documento: <code>doc_id</code>; <code>source</code> (<code>ward7_discharge</code>, 450 lettere di dimissione; <code>ward7_tonight</code>, le note di ricovero scritte stasera per Aoife, Tomás e Priya, che non rivelano alcun esito; <code>onco1_ae</code>, 400 note sugli eventi avversi; <code>leaflet</code>, 34 frasi di foglietti illustrativi per i pazienti); <code>patient_id</code> (un paziente simulato del Reparto 7 o di ONCO-1, così ogni nota eredita la suddivisione comune di <code>data/splits/</code>); <code>set</code> (<code>train</code>, <code>test</code>, <code>tonight</code> o <code>none</code>); <code>adr</code> (1 se la nota riporta una sospetta reazione avversa a un farmaco <span class="citation" data-cites="edwards2000adr">(<a href="#ref-edwards2000adr" role="doc-biblioref">Edwards e Aronson 2000</a>)</span>, 0 altrimenti, vuoto per i foglietti e per le note di stasera); <code>drug</code> (il farmaco sospettato, <code>unclear</code> per le note di confine etichettate 1); e <code>text</code>. Ogni nota è costruita a partire da un sintomo, un’attribuzione (a un farmaco, a un’altra causa o incerta) e un’azione, così le stesse parole compaiono in note con e senza reazione; le note con attribuzione incerta sono etichettate 1 o 0 a caso, il che imita il disaccordo tra revisori. Le lettere di dimissione citano la creatinina basale e a 48 ore simulate del paziente in <code>icu_aki.csv</code>; le note di ONCO-1 citano le dimensioni del tumore e il performance status di <code>onco1.csv</code>. <code>negation_sentences.csv</code> elenca frasi brevi con un reperto (<code>finding</code>), un’etichetta di riferimento <code>negated</code> (1 = negato o assente) e lo schema (<code>pattern</code>) che ciascuna illustra (innesco semplice, lista lunga, terminazione, pseudo-negazione, post-negazione, difficile) <span class="citation" data-cites="chapman2001negex">(<a href="#ref-chapman2001negex" role="doc-biblioref">Chapman et al. 2001</a>)</span>.</p>
+</section>
+<section id="sec-dd-ch16" class="level2" data-number="B.14">
+<h2 data-number="B.14" class="anchored" data-anchor-id="sec-dd-ch16"><span class="header-section-number">B.14</span> Capitolo 16 · Note brevi del Reparto 7</h2>
+<p><code>ward7_notes.csv</code> contiene 8.000 note brevi generate da una piccola grammatica di modelli, così il corpus non descrive alcuna persona reale e le sue regolarità sono note per costruzione. Colonne: <code>note_id</code> (N0001 … N8000), <code>set</code> (<code>train</code>, 7.147 note; <code>test</code>, 853 note) e <code>text</code>. I token sono parole minuscole e i segni di punteggiatura <code>,</code> <code>.</code> <code>:</code>, separati da spazi singoli, per cui dividere sugli spazi li recupera. Le note sono in inglese. La grammatica pianta le regolarità che il Capitolo 16 scopre: i farmaci della stessa classe compaiono in contesti simili; ogni marcatore di laboratorio va con un organo e una specialità; i ruoli del personale sono seguiti da “she” o “he” con frequenze volutamente diseguali (una distorsione che gli embedding ereditano <span class="citation" data-cites="caliskan2017semantics">(<a href="#ref-caliskan2017semantics" role="doc-biblioref">Caliskan, Bryson, e Narayanan 2017</a>)</span>); “meropenem” non segue mai “started”; e alcune note nominano il farmaco iniziato e, una o due proposizioni dopo, chiedono di controllare il livello di quello stesso farmaco (una dipendenza a lungo raggio).</p>
+</section>
+<section id="sec-dd-ch18" class="level2" data-number="B.15">
+<h2 data-number="B.15" class="anchored" data-anchor-id="sec-dd-ch18"><span class="header-section-number">B.15</span> Capitolo 18 · Corpus di linee guida e valutazione dell’assistente</h2>
+<p><code>ch18_guidelines.csv</code> è un piccolo corpus di paragrafi <strong>illustrativi</strong> di linee guida locali, scritti per il libro (in inglese). È un corpus didattico per il recupero, <strong>non un’indicazione clinica</strong>. Ogni riga è un frammento: <code>chunk_id</code> (per esempio <code>AKI-1</code>, <code>VAN-2</code>), <code>document</code> (11 documenti: per lo più linee guida del Reparto 7 su danno renale acuto, vancomicina, gentamicina, sepsi, mezzo di contrasto ed esami della funzione renale, più alcuni di ONCO-1, CellWorks e HomeBeat, così che il recupero debba scegliere il documento giusto), <code>section</code> e <code>text</code>.</p>
+<p><code>ch18_eval.csv</code> è una valutazione <strong>simulata</strong>: le stesse 150 domande del personale con le risposte di due configurazioni, quindi 300 righe. I numeri sono inventati per illustrare schemi tipici; non sono risultati di un sistema reale.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variabile</th>
+<th>Significato</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>question_id</code></td>
+<td>Identificatore della domanda (Q001 … Q150)</td>
+</tr>
+<tr class="even">
+<td><code>category</code></td>
+<td><code>dosing</code> (dosaggio), <code>monitoring</code> (monitoraggio), <code>interaction</code> (interazione) o <code>out_of_scope</code> (fuori ambito)</td>
+</tr>
+<tr class="odd">
+<td><code>config</code></td>
+<td><code>model_only</code> (solo il modello linguistico) o <code>rag</code> (il modello con recupero dal corpus <span class="citation" data-cites="lewis2020rag">(<a href="#ref-lewis2020rag" role="doc-biblioref">Lewis et al. 2020</a>)</span>)</td>
+</tr>
+<tr class="even">
+<td><code>correct</code></td>
+<td>1 se la risposta è stata giudicata corretta (per le domande fuori ambito, la risposta corretta è dire che le linee guida non trattano l’argomento)</td>
+</tr>
+<tr class="odd">
+<td><code>abstained</code></td>
+<td>1 se l’assistente ha detto di non poter rispondere</td>
+</tr>
+<tr class="even">
+<td><code>hallucinated</code></td>
+<td>1 se la risposta contiene almeno un’affermazione non supportata dalle linee guida <span class="citation" data-cites="ji2023hallucination">(<a href="#ref-ji2023hallucination" role="doc-biblioref">Ji et al. 2023</a>)</span></td>
+</tr>
+<tr class="odd">
+<td><code>stated_conf</code></td>
+<td>La fiducia dichiarata dall’assistente per la propria risposta (0–1)</td>
+</tr>
+</tbody>
+</table>
+<p>I risultati precalcolati letti dai capitoli (output dei modelli, embedding, sintesi delle simulazioni) si trovano in <code>data/precomputed/chNN/</code>; ogni file è prodotto dallo script dello stesso capitolo in <code>scripts/precompute/</code>.</p>
+
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-caliskan2017semantics" class="csl-entry" role="listitem">
+Caliskan, Aylin, Joanna J. Bryson, e Arvind Narayanan. 2017. <span>«Semantics Derived Automatically from Language Corpora Contain Human-like Biases»</span>. <em>Science</em> 356 (6334): 183–86. <a href="https://doi.org/10.1126/science.aal4230">https://doi.org/10.1126/science.aal4230</a>.
+</div>
+<div id="ref-chapman2001negex" class="csl-entry" role="listitem">
+Chapman, Wendy W., Will Bridewell, Paul Hanbury, Gregory F. Cooper, e Bruce G. Buchanan. 2001. <span>«A Simple Algorithm for Identifying Negated Findings and Diseases in Discharge Summaries»</span>. <em>Journal of Biomedical Informatics</em> 34 (5): 301–10. <a href="https://doi.org/10.1006/jbin.2001.1029">https://doi.org/10.1006/jbin.2001.1029</a>.
+</div>
+<div id="ref-edwards2000adr" class="csl-entry" role="listitem">
+Edwards, I. Ralph, e Jeffrey K. Aronson. 2000. <span>«Adverse Drug Reactions: Definitions, Diagnosis, and Management»</span>. <em>The Lancet</em> 356 (9237): 1255–59. <a href="https://doi.org/10.1016/S0140-6736(00)02799-9">https://doi.org/10.1016/S0140-6736(00)02799-9</a>.
+</div>
+<div id="ref-eisenhauer2009recist" class="csl-entry" role="listitem">
+Eisenhauer, Elizabeth A., Patrick Therasse, Jan Bogaerts, Lawrence H. Schwartz, Daniel Sargent, Rebecca Ford, Janet Dancey, et al. 2009. <span>«New Response Evaluation Criteria in Solid Tumours: Revised <span>RECIST</span> Guideline (Version 1.1)»</span>. <em>European Journal of Cancer</em> 45 (2): 228–47. <a href="https://doi.org/10.1016/j.ejca.2008.10.026">https://doi.org/10.1016/j.ejca.2008.10.026</a>.
+</div>
+<div id="ref-finlay1994dlqi" class="csl-entry" role="listitem">
+Finlay, A. Y., e G. K. Khan. 1994. <span>«Dermatology Life Quality Index (<span>DLQI</span>) – A Simple Practical Measure for Routine Clinical Use»</span>. <em>Clinical and Experimental Dermatology</em> 19 (3): 210–16. <a href="https://doi.org/10.1111/j.1365-2230.1994.tb01167.x">https://doi.org/10.1111/j.1365-2230.1994.tb01167.x</a>.
+</div>
+<div id="ref-fredriksson1978pasi" class="csl-entry" role="listitem">
+Fredriksson, T., e U. Pettersson. 1978. <span>«Severe Psoriasis – Oral Therapy with a New Retinoid»</span>. <em>Dermatologica</em> 157 (4): 238–44. <a href="https://doi.org/10.1159/000250839">https://doi.org/10.1159/000250839</a>.
+</div>
+<div id="ref-griffiths2021psoriasis" class="csl-entry" role="listitem">
+Griffiths, Christopher E. M., April W. Armstrong, Johann E. Gudjonsson, e Jonathan N. W. N. Barker. 2021. <span>«Psoriasis»</span>. <em>The Lancet</em> 397 (10281): 1301–15. <a href="https://doi.org/10.1016/S0140-6736(20)32549-6">https://doi.org/10.1016/S0140-6736(20)32549-6</a>.
+</div>
+<div id="ref-hernan2020whatif" class="csl-entry" role="listitem">
+Hernán, Miguel A., e James M. Robins. 2020. <em>Causal Inference: What If</em>. Boca Raton: Chapman &amp; Hall/CRC.
+</div>
+<div id="ref-ji2023hallucination" class="csl-entry" role="listitem">
+Ji, Ziwei, Nayeon Lee, Rita Frieske, et al. 2023. <span>«Survey of Hallucination in Natural Language Generation»</span>. <em>ACM Computing Surveys</em> 55 (12): 1–38. <a href="https://doi.org/10.1145/3571730">https://doi.org/10.1145/3571730</a>.
+</div>
+<div id="ref-karnofsky1948nitrogen" class="csl-entry" role="listitem">
+Karnofsky, David A., Walter H. Abelmann, Lloyd F. Craver, e Joseph H. Burchenal. 1948. <span>«The Use of the Nitrogen Mustards in the Palliative Treatment of Carcinoma. With Particular Reference to Bronchogenic Carcinoma»</span>. <em>Cancer</em> 1 (4): 634–56. <a href="https://doi.org/10.1002/1097-0142(194811)1:4<634::AID-CNCR2820010410>3.0.CO;2-L">https://doi.org/10.1002/1097-0142(194811)1:4&lt;634::AID-CNCR2820010410&gt;3.0.CO;2-L</a>.
+</div>
+<div id="ref-kermany2018cell" class="csl-entry" role="listitem">
+Kermany, Daniel S., Michael Goldbaum, Wenjia Cai, et al. 2018. <span>«Identifying Medical Diagnoses and Treatable Diseases by Image-Based Deep Learning»</span>. <em>Cell</em> 172 (5): 1122–1131.e9. <a href="https://doi.org/10.1016/j.cell.2018.02.010">https://doi.org/10.1016/j.cell.2018.02.010</a>.
+</div>
+<div id="ref-kdigo2012aki" class="csl-entry" role="listitem">
+Kidney Disease: Improving Global Outcomes (KDIGO) Acute Kidney Injury Work Group. 2012. <span>«<span>KDIGO</span> Clinical Practice Guideline for Acute Kidney Injury»</span>. <em>Kidney International Supplements</em> 2 (1): 1–138.
+</div>
+<div id="ref-law2014voom" class="csl-entry" role="listitem">
+Law, Charity W., Yunshun Chen, Wei Shi, e Gordon K. Smyth. 2014. <span>«voom: Precision Weights Unlock Linear Model Analysis Tools for <span>RNA-seq</span> Read Counts»</span>. <em>Genome Biology</em> 15 (2): R29. <a href="https://doi.org/10.1186/gb-2014-15-2-r29">https://doi.org/10.1186/gb-2014-15-2-r29</a>.
+</div>
+<div id="ref-lewis2020rag" class="csl-entry" role="listitem">
+Lewis, Patrick, Ethan Perez, Aleksandra Piktus, et al. 2020. <span>«Retrieval-Augmented Generation for Knowledge-Intensive <span>NLP</span> Tasks»</span>. In <em>Advances in Neural Information Processing Systems 33</em>, 9459–74.
+</div>
+<div id="ref-loprinzi1994lung" class="csl-entry" role="listitem">
+Loprinzi, Charles L., John A. Laurie, H. Sam Wieand, James E. Krook, Paul J. Novotny, John W. Kugler, et al. 1994. <span>«Prospective Evaluation of Prognostic Variables from Patient-Completed Questionnaires. <span>North Central Cancer Treatment Group</span>»</span>. <em>Journal of Clinical Oncology</em> 12 (3): 601–7. <a href="https://doi.org/10.1200/JCO.1994.12.3.601">https://doi.org/10.1200/JCO.1994.12.3.601</a>.
+</div>
+<div id="ref-vandermaaten2008tsne" class="csl-entry" role="listitem">
+Maaten, Laurens van der, e Geoffrey Hinton. 2008. <span>«Visualizing Data Using t-<span>SNE</span>»</span>. <em>Journal of Machine Learning Research</em> 9: 2579–2605. <a href="https://www.jmlr.org/papers/v9/vandermaaten08a.html">https://www.jmlr.org/papers/v9/vandermaaten08a.html</a>.
+</div>
+<div id="ref-mcinnes2018umap" class="csl-entry" role="listitem">
+McInnes, Leland, John Healy, e James Melville. 2018. <span>«<span>UMAP</span>: Uniform Manifold Approximation and Projection for Dimension Reduction»</span>. arXiv:1802.03426. <a href="https://arxiv.org/abs/1802.03426">https://arxiv.org/abs/1802.03426</a>.
+</div>
+<div id="ref-mooney2018chestxray" class="csl-entry" role="listitem">
+Mooney, Paul. 2018. <span>«Chest X-Ray Images (Pneumonia)»</span>. Kaggle dataset. <a href="https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia">https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia</a>.
+</div>
+<div id="ref-oken1982ecog" class="csl-entry" role="listitem">
+Oken, Martin M., Richard H. Creech, Douglass C. Tormey, John Horton, Thomas E. Davis, Eleanor T. McFadden, e Paul P. Carbone. 1982. <span>«Toxicity and Response Criteria of the <span>Eastern Cooperative Oncology Group</span>»</span>. <em>American Journal of Clinical Oncology</em> 5 (6). <a href="https://doi.org/10.1097/00000421-198212000-00014">https://doi.org/10.1097/00000421-198212000-00014</a>.
+</div>
+<div id="ref-rosenbaum1983propensity" class="csl-entry" role="listitem">
+Rosenbaum, Paul R., e Donald B. Rubin. 1983. <span>«The Central Role of the Propensity Score in Observational Studies for Causal Effects»</span>. <em>Biometrika</em> 70 (1): 41–55. <a href="https://doi.org/10.1093/biomet/70.1.41">https://doi.org/10.1093/biomet/70.1.41</a>.
+</div>
+<div id="ref-rubin1976missing" class="csl-entry" role="listitem">
+Rubin, Donald B. 1976. <span>«Inference and Missing Data»</span>. <em>Biometrika</em> 63 (3): 581–92. <a href="https://doi.org/10.1093/biomet/63.3.581">https://doi.org/10.1093/biomet/63.3.581</a>.
+</div>
+<div id="ref-taskforce1996hrv" class="csl-entry" role="listitem">
+Task Force of the European Society of Cardiology and the North American Society of Pacing and Electrophysiology. 1996. <span>«Heart Rate Variability: Standards of Measurement, Physiological Interpretation, and Clinical Use»</span>. <em>Circulation</em> 93 (5): 1043–65. <a href="https://doi.org/10.1161/01.CIR.93.5.1043">https://doi.org/10.1161/01.CIR.93.5.1043</a>.
+</div>
+<div id="ref-therneau2024survival" class="csl-entry" role="listitem">
+Therneau, Terry M. 2024. <em>A Package for Survival Analysis in <span>R</span></em>. <a href="https://CRAN.R-project.org/package=survival">https://CRAN.R-project.org/package=survival</a>.
+</div>
+<div id="ref-vincent1996sofa" class="csl-entry" role="listitem">
+Vincent, Jean-Louis, Rui Moreno, Jukka Takala, Sheila Willatts, Arnaldo De Mendonça, Hajo Bruining, C. K. Reinhart, Peter M. Suter, e L. G. Thijs. 1996. <span>«The <span>SOFA</span> (<span>S</span>epsis-related <span>O</span>rgan <span>F</span>ailure <span>A</span>ssessment) Score to Describe Organ Dysfunction/Failure»</span>. <em>Intensive Care Medicine</em> 22 (7): 707–10. <a href="https://doi.org/10.1007/BF01709751">https://doi.org/10.1007/BF01709751</a>.
+</div>
+<div id="ref-medmnistv2" class="csl-entry" role="listitem">
+Yang, Jiancheng, Rui Shi, Donglai Wei, Zequan Liu, Lin Zhao, Bilian Ke, Hanspeter Pfister, e Bingbing Ni. 2023. <span>«<span>MedMNIST</span> v2 – A Large-Scale Lightweight Benchmark for <span>2D</span> and <span>3D</span> Biomedical Image Classification»</span>. <em>Scientific Data</em> 10: 41. <a href="https://doi.org/10.1038/s41597-022-01721-8">https://doi.org/10.1038/s41597-022-01721-8</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script src="assets/book.js"></script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiato!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiato!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./setup.html" class="pagination-link" aria-label="Configurare R, Python, Git e GitHub">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configurare R, Python, Git e GitHub</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./glossary.html" class="pagination-link" aria-label="Glossario">
+        <span class="nav-page-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Glossario</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

@@ -1,0 +1,61 @@
+model,feature,importance
+XGBoost,age,0.172
+XGBoost,male,0.029
+XGBoost,bmi,0.106
+XGBoost,stage_num,0.336
+XGBoost,baseline_mm,0.013
+XGBoost,crp,0.177
+XGBoost,egfr,0.171
+XGBoost,new_therapy,0.928
+XGBoost,adherence,0.006
+XGBoost,biomarker,0.758
+XGBoost,gene_001,-0.024
+XGBoost,gene_002,0.013
+XGBoost,gene_003,-0.031
+XGBoost,gene_004,0.088
+XGBoost,gene_005,0.105
+XGBoost,gene_006,0.076
+XGBoost,gene_007,0.135
+XGBoost,gene_008,0.147
+XGBoost,gene_009,0.027
+XGBoost,gene_010,0.015
+XGBoost,gene_011,0.025
+XGBoost,gene_012,0.092
+XGBoost,gene_013,0.047
+XGBoost,gene_014,-0.016
+XGBoost,gene_015,-0.063
+XGBoost,gene_016,-0.008
+XGBoost,gene_017,0.02
+XGBoost,gene_018,-0.037
+XGBoost,gene_019,0.005
+XGBoost,gene_020,0.044
+Linear regression,age,0.191
+Linear regression,male,0.171
+Linear regression,bmi,0.093
+Linear regression,stage_num,0.846
+Linear regression,baseline_mm,-0.036
+Linear regression,crp,0.244
+Linear regression,egfr,0.231
+Linear regression,new_therapy,1.144
+Linear regression,adherence,0.002
+Linear regression,biomarker,0.524
+Linear regression,gene_001,0.127
+Linear regression,gene_002,-0.018
+Linear regression,gene_003,-0.006
+Linear regression,gene_004,0.037
+Linear regression,gene_005,0.004
+Linear regression,gene_006,0.055
+Linear regression,gene_007,0.019
+Linear regression,gene_008,0.085
+Linear regression,gene_009,-0.036
+Linear regression,gene_010,0.002
+Linear regression,gene_011,-0.002
+Linear regression,gene_012,0.004
+Linear regression,gene_013,0.011
+Linear regression,gene_014,-0.021
+Linear regression,gene_015,0.039
+Linear regression,gene_016,0.028
+Linear regression,gene_017,-0.015
+Linear regression,gene_018,-0.014
+Linear regression,gene_019,0.014
+Linear regression,gene_020,0.007

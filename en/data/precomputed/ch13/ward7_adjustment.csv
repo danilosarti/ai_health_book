@@ -1,0 +1,7 @@
+"set","estimate","se","lo","hi"
+"Nothing (naive)",-0.5349,0.0459,-0.6249,-0.4449
+"SOFA",-0.2994,0.0386,-0.3752,-0.2236
+"SOFA and every other recorded variable",-0.2925,0.03,-0.3514,-0.2336
+"Every recorded variable except SOFA",-0.4049,0.0333,-0.4703,-0.3394
+"Lowest blood pressure only (a proxy of SOFA)",-0.5258,0.0434,-0.6109,-0.4407
+"Lactate and baseline creatinine (causes of the outcome only)",-0.5149,0.0425,-0.5983,-0.4315

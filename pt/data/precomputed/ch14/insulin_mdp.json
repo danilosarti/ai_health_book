@@ -1,0 +1,24 @@
+{
+  "bands": ["<4", "4-6", "6-10", "10-14", ">14"],
+  "rates": ["off", "low", "medium", "high"],
+  "actions": ["decrease", "keep", "increase"],
+  "moves": [
+    [0.02, 0.38, 0.6],
+    [0.1, 0.6, 0.3],
+    [0.3, 0.6, 0.1],
+    [0.6, 0.38, 0.02]
+  ],
+  "presets": {
+    "clinical": [-10, 0, 1, 0, -1],
+    "tir_only": [0, 0, 1, 0, 0],
+    "below_10": [1, 1, 1, 0, 0],
+    "custom": [-10, 0, 1, 0, -1]
+  },
+  "gamma": 0.9,
+  "start": {
+    "band": 4,
+    "rate": 0
+  },
+  "nudges": ["breathing exercise", "short walk", "sleep tip"],
+  "p_true": [0.2, 0.35, 0.3]
+}

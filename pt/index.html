@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt" xml:lang="pt"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Danilo Augusto Sarti">
+
+<title>Inteligência Artificial e Aprendizado de Máquina para as Ciências da Saúde</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./ch01.html" rel="next">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-2fef5ea3f8957b3e4ecc936fc74692ca.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-1ed442b0bca6acdbb302262e5862e895.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-ea2dfcc467e7465021677e6f977f9eb2.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-1ed442b0bca6acdbb302262e5862e895.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-contrib/live-runtime/live-runtime.js" type="module"></script>
+<link href="site_libs/quarto-contrib/live-runtime/live-runtime.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "Nenhum resultado",
+    "search-matching-documents-text": "documentos correspondentes",
+    "search-copy-link-title": "Copiar link para a busca",
+    "search-hide-matches-text": "Esconder correspondências adicionais",
+    "search-more-match-text": "mais correspondência neste documento",
+    "search-more-matches-text": "mais correspondências neste documento",
+    "search-clear-button-title": "Limpar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Procurar"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+<script type="module" src="site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="assets/book.css">
+</head>
+
+<body class="floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Boas-vindas</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Inteligência Artificial e Aprendizado de Máquina para as Ciências da Saúde</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" role="link" aria-label=""><i class="bi bi-translate"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../en/index.html">
+            English
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../pt/index.html">
+            Português
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="./../it/index.html">
+            Italiano
+            </a>
+          </li>
+      </ul>
+    </div>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Alternar modo escuro"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Procurar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Boas-vindas</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Fundamentos: dados, modelos, decisões</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch01.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dados, modelos e decisões</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch02.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Incerteza e probabilidade para quem toma decisões</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch03.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Aprendendo com os dados: o fluxo de trabalho</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Predizer desfechos</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch04.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Modelos lineares e regularização</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch05.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Classificação, limiares e calibração</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch06.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Árvores e ensembles</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch07.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Redes neurais e aprendizado profundo</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch08.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Aprendizado bayesiano e incerteza preditiva</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch09.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Quando faltam dados</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Encontrar estrutura</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch10.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Dados de alta dimensão e redução de dimensionalidade</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Agrupando pacientes</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Confiar nos modelos e agir</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">IA interpretável e explicável</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Da predição à causalidade</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch14.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Decisões sequenciais: aprendizado por reforço</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Linguagem, modelos generativos e LLMs</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch15.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Texto como dado</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch16.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Prevendo a próxima palavra: modelos de linguagem e embeddings</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch17.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Atenção e o transformer</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch18.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Do modelo de linguagem ao assistente clínico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch19.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Modelos generativos além do texto</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Apêndices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Alternar seção">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Configurando R, Python, Git e GitHub</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./data-dictionary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Dados usados neste livro</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Glossário</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">D</span>&nbsp; <span class="chapter-title">Notação</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">E</span>&nbsp; <span class="chapter-title">Referências</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Índice</h2>
+   
+  <ul>
+  <li><a href="#boas-vindas" id="toc-boas-vindas" class="nav-link active" data-scroll-target="#boas-vindas">Boas-vindas</a>
+  <ul class="collapse">
+  <li><a href="#o-livro-num-relance" id="toc-o-livro-num-relance" class="nav-link" data-scroll-target="#o-livro-num-relance">O livro num relance</a></li>
+  <li><a href="#a-ideia-que-atravessa-o-livro" id="toc-a-ideia-que-atravessa-o-livro" class="nav-link" data-scroll-target="#a-ideia-que-atravessa-o-livro">A ideia que atravessa o livro</a></li>
+  <li><a href="#como-usar-este-livro" id="toc-como-usar-este-livro" class="nav-link" data-scroll-target="#como-usar-este-livro">Como usar este livro</a></li>
+  <li><a href="#roteiros-de-leitura" id="toc-roteiros-de-leitura" class="nav-link" data-scroll-target="#roteiros-de-leitura">Roteiros de leitura</a></li>
+  <li><a href="#progresso-estrelas-e-medalhas" id="toc-progresso-estrelas-e-medalhas" class="nav-link" data-scroll-target="#progresso-estrelas-e-medalhas">Progresso, estrelas e medalhas</a></li>
+  <li><a href="#para-quem-é-este-livro" id="toc-para-quem-é-este-livro" class="nav-link" data-scroll-target="#para-quem-é-este-livro">Para quem é este livro</a></li>
+  <li><a href="#os-dados-deste-livro" id="toc-os-dados-deste-livro" class="nav-link" data-scroll-target="#os-dados-deste-livro">Os dados deste livro</a></li>
+  <li><a href="#autor" id="toc-autor" class="nav-link" data-scroll-target="#autor">Autor</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content page-columns page-full" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Inteligência Artificial e Aprendizado de Máquina para as Ciências da Saúde</h1>
+<p class="subtitle lead">Uma introdução interativa com R e Python</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Autor</div>
+    <div class="quarto-title-meta-contents">
+             <p>Danilo Augusto Sarti </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Data de Publicação</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">19 de outubro de 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="boas-vindas" class="level1 unnumbered page-columns page-full">
+<h1 class="unnumbered">Boas-vindas</h1>
+<p>Este é um livro interativo. Você não vai apenas lê-lo: vai preencher tabelas, responder perguntas rápidas, mover controles deslizantes e executar e editar código <strong>R</strong> e <strong>Python</strong> de verdade, sem instalar nada. Cada capítulo é um passo no mesmo caminho, de <em>“o que é um modelo?”</em> até ser capaz de julgar se um assistente de IA merece confiança numa decisão clínica.</p>
+<section id="o-livro-num-relance" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="o-livro-num-relance">O livro num relance</h2>
+<div class="column-page">
+<figure class="mindmap-fig figure"><svg class="aihs-svg mindmap" viewbox="0 0 1600 560" role="img" aria-labelledby="mm-title mm-desc">
+<title id="mm-title">Mapa mental do livro</title><desc id="mm-desc">O tema central do livro, IA e aprendizado de máquina para as ciências da saúde vistos pelo ciclo de decisão, se ramifica em cinco partes e nos apêndices, cada um com os seus capítulos.</desc>
+<path d="M652,280 C620,280 635,155.2 585,155.2" class="mm-branch mm-c0"></path>
+<rect x="441" y="140.2" width="144" height="30" rx="15" class="mm-part mm-c0"></rect>
+<text x="513.0" y="160.2" text-anchor="middle" font-size="13" font-weight="700" class="mm-part-text">I · Fundamentos</text>
+<path d="M441,155.2 C423,155.2 425,131.2 411,131.2" class="mm-leaf-line mm-c0"></path>
+<g class="mm-link" data-href="ch01.html" role="link" tabindex="0"><text x="407" y="135.2" text-anchor="end" font-size="13" class="mm-leaf ready">1 Dados, modelos e decisões</text></g>
+<path d="M441,155.2 C423,155.2 425,155.2 411,155.2" class="mm-leaf-line mm-c0"></path>
+<g class="mm-link" data-href="ch02.html" role="link" tabindex="0"><text x="407" y="159.2" text-anchor="end" font-size="13" class="mm-leaf ready">2 Incerteza e probabilidade</text></g>
+<path d="M441,155.2 C423,155.2 425,179.2 411,179.2" class="mm-leaf-line mm-c0"></path>
+<g class="mm-link" data-href="ch03.html" role="link" tabindex="0"><text x="407" y="183.2" text-anchor="end" font-size="13" class="mm-leaf ready">3 Aprender com dados</text></g>
+<path d="M652,280 C620,280 635,292.0 585,292.0" class="mm-branch mm-c1"></path>
+<rect x="393" y="277.0" width="192" height="30" rx="15" class="mm-part mm-c1"></rect>
+<text x="489.0" y="297.0" text-anchor="middle" font-size="13" font-weight="700" class="mm-part-text">II · Prever desfechos</text>
+<path d="M393,292.0 C375,292.0 377,232.0 363,232.0" class="mm-leaf-line mm-c1"></path>
+<g class="mm-link" data-href="ch04.html" role="link" tabindex="0"><text x="359" y="236.0" text-anchor="end" font-size="13" class="mm-leaf ready">4 Modelos lineares, regularização</text></g>
+<path d="M393,292.0 C375,292.0 377,256.0 363,256.0" class="mm-leaf-line mm-c1"></path>
+<g class="mm-link" data-href="ch05.html" role="link" tabindex="0"><text x="359" y="260.0" text-anchor="end" font-size="13" class="mm-leaf ready">5 Classificação e limiares</text></g>
+<path d="M393,292.0 C375,292.0 377,280.0 363,280.0" class="mm-leaf-line mm-c1"></path>
+<g class="mm-link" data-href="ch06.html" role="link" tabindex="0"><text x="359" y="284.0" text-anchor="end" font-size="13" class="mm-leaf ready">6 Árvores e comitês</text></g>
+<path d="M393,292.0 C375,292.0 377,304.0 363,304.0" class="mm-leaf-line mm-c1"></path>
+<g class="mm-link" data-href="ch07.html" role="link" tabindex="0"><text x="359" y="308.0" text-anchor="end" font-size="13" class="mm-leaf ready">7 Redes neurais, deep learning</text></g>
+<path d="M393,292.0 C375,292.0 377,328.0 363,328.0" class="mm-leaf-line mm-c1"></path>
+<g class="mm-link" data-href="ch08.html" role="link" tabindex="0"><text x="359" y="332.0" text-anchor="end" font-size="13" class="mm-leaf ready">8 Aprendizado bayesiano</text></g>
+<path d="M393,292.0 C375,292.0 377,352.0 363,352.0" class="mm-leaf-line mm-c1"></path>
+<g class="mm-link" data-href="ch09.html" role="link" tabindex="0"><text x="359" y="356.0" text-anchor="end" font-size="13" class="mm-leaf ready">9 Quando faltam dados</text></g>
+<path d="M652,280 C620,280 635,416.8 585,416.8" class="mm-branch mm-c2"></path>
+<rect x="361" y="401.8" width="224" height="30" rx="15" class="mm-part mm-c2"></rect>
+<text x="473.0" y="421.8" text-anchor="middle" font-size="13" font-weight="700" class="mm-part-text">III · Encontrar estrutura</text>
+<path d="M361,416.8 C343,416.8 345,404.8 331,404.8" class="mm-leaf-line mm-c2"></path>
+<g class="mm-link" data-href="ch10.html" role="link" tabindex="0"><text x="327" y="408.8" text-anchor="end" font-size="13" class="mm-leaf ready">10 Dados de alta dimensão</text></g>
+<path d="M361,416.8 C343,416.8 345,428.8 331,428.8" class="mm-leaf-line mm-c2"></path>
+<g class="mm-link" data-href="ch11.html" role="link" tabindex="0"><text x="327" y="432.8" text-anchor="end" font-size="13" class="mm-leaf ready">11 Agrupamento de pacientes</text></g>
+<path d="M948,280 C980,280 965,143.2 1015,143.2" class="mm-branch mm-c3"></path>
+<rect x="1015" y="128.2" width="216" height="30" rx="15" class="mm-part mm-c3"></rect>
+<text x="1123.0" y="148.2" text-anchor="middle" font-size="13" font-weight="700" class="mm-part-text">IV · Confiar nos modelos</text>
+<path d="M1231,143.2 C1249,143.2 1247,119.19999999999999 1261,119.19999999999999" class="mm-leaf-line mm-c3"></path>
+<g class="mm-link" data-href="ch12.html" role="link" tabindex="0"><text x="1265" y="123.19999999999999" text-anchor="start" font-size="13" class="mm-leaf ready">12 IA interpretável</text></g>
+<path d="M1231,143.2 C1249,143.2 1247,143.2 1261,143.2" class="mm-leaf-line mm-c3"></path>
+<g class="mm-link" data-href="ch13.html" role="link" tabindex="0"><text x="1265" y="147.2" text-anchor="start" font-size="13" class="mm-leaf ready">13 Predição × causalidade</text></g>
+<path d="M1231,143.2 C1249,143.2 1247,167.2 1261,167.2" class="mm-leaf-line mm-c3"></path>
+<g class="mm-link" data-href="ch14.html" role="link" tabindex="0"><text x="1265" y="171.2" text-anchor="start" font-size="13" class="mm-leaf ready">14 Aprendizado por reforço</text></g>
+<path d="M948,280 C980,280 965,268.0 1015,268.0" class="mm-branch mm-c4"></path>
+<rect x="1015" y="253.0" width="256" height="30" rx="15" class="mm-part mm-c4"></rect>
+<text x="1143.0" y="273.0" text-anchor="middle" font-size="13" font-weight="700" class="mm-part-text">V · Linguagem e IA generativa</text>
+<path d="M1271,268.0 C1289,268.0 1287,220.0 1301,220.0" class="mm-leaf-line mm-c4"></path>
+<g class="mm-link" data-href="ch15.html" role="link" tabindex="0"><text x="1305" y="224.0" text-anchor="start" font-size="13" class="mm-leaf ready">15 Texto como dado</text></g>
+<path d="M1271,268.0 C1289,268.0 1287,244.0 1301,244.0" class="mm-leaf-line mm-c4"></path>
+<g class="mm-link" data-href="ch16.html" role="link" tabindex="0"><text x="1305" y="248.0" text-anchor="start" font-size="13" class="mm-leaf ready">16 Modelos de linguagem</text></g>
+<path d="M1271,268.0 C1289,268.0 1287,268.0 1301,268.0" class="mm-leaf-line mm-c4"></path>
+<g class="mm-link" data-href="ch17.html" role="link" tabindex="0"><text x="1305" y="272.0" text-anchor="start" font-size="13" class="mm-leaf ready">17 Atenção e transformers</text></g>
+<path d="M1271,268.0 C1289,268.0 1287,292.0 1301,292.0" class="mm-leaf-line mm-c4"></path>
+<g class="mm-link" data-href="ch18.html" role="link" tabindex="0"><text x="1305" y="296.0" text-anchor="start" font-size="13" class="mm-leaf ready">18 Do LLM ao assistente clínico</text></g>
+<path d="M1271,268.0 C1289,268.0 1287,316.0 1301,316.0" class="mm-leaf-line mm-c4"></path>
+<g class="mm-link" data-href="ch19.html" role="link" tabindex="0"><text x="1305" y="320.0" text-anchor="start" font-size="13" class="mm-leaf ready">19 Generativos além do texto</text></g>
+<path d="M948,280 C980,280 965,404.8 1015,404.8" class="mm-branch mm-c5"></path>
+<rect x="1015" y="389.8" width="96" height="30" rx="15" class="mm-part mm-c5"></rect>
+<text x="1063.0" y="409.8" text-anchor="middle" font-size="13" font-weight="700" class="mm-part-text">Apêndices</text>
+<path d="M1111,404.8 C1129,404.8 1127,368.8 1141,368.8" class="mm-leaf-line mm-c5"></path>
+<text x="1145" y="372.8" text-anchor="start" font-size="13" class="mm-leaf">A Configuração: R, Python, Git</text>
+<path d="M1111,404.8 C1129,404.8 1127,392.8 1141,392.8" class="mm-leaf-line mm-c5"></path>
+<text x="1145" y="396.8" text-anchor="start" font-size="13" class="mm-leaf">B Dados</text>
+<path d="M1111,404.8 C1129,404.8 1127,416.8 1141,416.8" class="mm-leaf-line mm-c5"></path>
+<text x="1145" y="420.8" text-anchor="start" font-size="13" class="mm-leaf">C Glossário</text>
+<path d="M1111,404.8 C1129,404.8 1127,440.8 1141,440.8" class="mm-leaf-line mm-c5"></path>
+<text x="1145" y="444.8" text-anchor="start" font-size="13" class="mm-leaf">D Notação</text>
+<ellipse cx="800" cy="280" rx="150" ry="60" class="mm-center"></ellipse>
+<text x="800" y="268" text-anchor="middle" font-size="15" font-weight="700">IA e aprendizado de máquina</text>
+<text x="800" y="288" text-anchor="middle" font-size="15" font-weight="700">para as ciências da saúde</text>
+<text x="800" y="310" text-anchor="middle" font-size="12" class="muted">o ciclo de decisão</text>
+</svg></figure>
+</div>
+</section>
+<section id="a-ideia-que-atravessa-o-livro" class="level2">
+<h2 class="anchored" data-anchor-id="a-ideia-que-atravessa-o-livro">A ideia que atravessa o livro</h2>
+<blockquote class="blockquote">
+<p><strong>Um modelo vale tanto quanto a decisão que ele melhora.</strong></p>
+</blockquote>
+<p>A saúde está cheia de decisões tomadas sob incerteza: iniciar ou não um tratamento esta noite, qual lote de uma terapia celular liberar, qual paciente chamar primeiro. Os dados descrevem o que aconteceu; os modelos transformam dados em informação; as pessoas usam essa informação para decidir; e as decisões geram novos dados. Chamamos isso de <strong>ciclo de decisão</strong>, e todo capítulo termina perguntando onde o seu método se encaixa no ciclo, o que pode dar errado e quem continua no controle.</p>
+</section>
+<section id="como-usar-este-livro" class="level2">
+<h2 class="anchored" data-anchor-id="como-usar-este-livro">Como usar este livro</h2>
+<ul>
+<li><strong>Leia do seu jeito.</strong> Os capítulos contam uma única história, dos dados às decisões e aos modelos de linguagem, e lê-los em ordem é o caminho mais suave. Mas cada capítulo também se sustenta sozinho: ele começa com um quadro <strong>Começando por aqui?</strong> que retoma, em poucas linhas, tudo o que toma emprestado dos capítulos anteriores e reapresenta os exemplos do livro, e cada termo técnico tem um link para a sua definição (passe o mouse sobre o link para vê-la sem sair da página).</li>
+<li><strong>Faça a tarefa de entrada.</strong> Cada capítulo começa com uma tarefa curta que verifica se você está pronto. Você pode pulá-la.</li>
+<li><strong>Responda às verificações rápidas.</strong> Uma pergunta, algumas opções e uma explicação para cada opção — inclusive as erradas. Errar faz parte de aprender; não custa nada.</li>
+<li><strong>Brinque com os widgets “Experimente”.</strong> Mude um número e veja a figura reagir.</li>
+<li><strong>Complete as missões.</strong> Tarefas curtas de programação, corrigidas na hora no seu navegador. Cada uma tem uma dica e uma solução. Escolha <strong>R</strong> ou <strong>Python</strong> nas abas; sua escolha é lembrada em todo o livro.</li>
+<li><strong>Rode o Laboratório.</strong> Um código mais longo no fim de cada capítulo, que também pode ser baixado como script <code>.R</code> e <code>.py</code> para rodar no seu computador.</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+O código roda no seu navegador — e se ele não carregar?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Os motores de R e Python (webR e Pyodide) são baixados na primeira vez em que você clica em <em>Run code</em>, o que pode levar de 10 a 30 segundos numa conexão lenta. Se eles não carregarem (por exemplo, numa rede institucional restrita), o texto, as verificações rápidas, as tarefas de entrada e os widgets continuam funcionando, e todos os Laboratórios podem ser baixados e executados no RStudio, Positron, VS Code ou Jupyter.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="roteiros-de-leitura" class="level2">
+<h2 class="anchored" data-anchor-id="roteiros-de-leitura">Roteiros de leitura</h2>
+<p>Se você só precisa de parte do livro, estes roteiros funcionam bem. O capítulo 1 é útil para todos, porque apresenta os exemplos e o ciclo de decisão a que todos os capítulos seguintes se referem.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Se você quer…</th>
+<th>Leia</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Entender o que são IA e aprendizado de máquina e como apoiam decisões</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>Construir e avaliar modelos de predição</td>
+<td>1 → 2 → 3, depois qualquer um entre 4 e 9</td>
+</tr>
+<tr class="odd">
+<td>Explorar e agrupar dados de alta dimensão (ômicas, dispositivos vestíveis)</td>
+<td>1 → 3 → 10 → 11</td>
+</tr>
+<tr class="even">
+<td>Explicar modelos e distinguir predição de causalidade</td>
+<td>1 → 3 → 12 → 13</td>
+</tr>
+<tr class="odd">
+<td>Entender como funcionam os grandes modelos de linguagem e como usá-los com segurança na saúde</td>
+<td>1 → 15 → 16 → 17 → 18</td>
+</tr>
+<tr class="even">
+<td>Modelos generativos para imagens, moléculas e dados sintéticos</td>
+<td>1 → 7 → 19</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="progresso-estrelas-e-medalhas" class="level2">
+<h2 class="anchored" data-anchor-id="progresso-estrelas-e-medalhas">Progresso, estrelas e medalhas</h2>
+<p>Cada capítulo tem uma barra de progresso, níveis com nome, estrelas (por perguntas acertadas na primeira tentativa e missões resolvidas sem abrir a solução) e uma medalha quando você o completa. Seu resumo está abaixo.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Privacidade
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Suas respostas e seu progresso ficam guardados <strong>apenas neste navegador</strong> (armazenamento local). Nada é enviado ao autor nem a qualquer servidor. Limpar os dados do navegador, usar uma janela anônima ou trocar de dispositivo faz você começar do zero. Você pode reiniciar qualquer capítulo, ou o livro inteiro, a qualquer momento.</p>
+</div>
+</div>
+</div>
+<div class="aihs-dashboard" data-chapters="[
+ {&quot;id&quot;:&quot;ch01&quot;,&quot;title&quot;:&quot;1 · Dados, modelos e decisões&quot;,&quot;href&quot;:&quot;ch01.html&quot;},
+ {&quot;id&quot;:&quot;ch02&quot;,&quot;title&quot;:&quot;2 · Incerteza e probabilidade para quem decide&quot;,&quot;href&quot;:&quot;ch02.html&quot;},
+ {&quot;id&quot;:&quot;ch03&quot;,&quot;title&quot;:&quot;3 · Aprender com dados: o fluxo de trabalho&quot;,&quot;href&quot;:&quot;ch03.html&quot;},
+ {&quot;id&quot;:&quot;ch04&quot;,&quot;title&quot;:&quot;4 · Modelos lineares e regularização&quot;,&quot;href&quot;:&quot;ch04.html&quot;},
+ {&quot;id&quot;:&quot;ch05&quot;,&quot;title&quot;:&quot;5 · Classificação, limiares e calibração&quot;,&quot;href&quot;:&quot;ch05.html&quot;},
+ {&quot;id&quot;:&quot;ch06&quot;,&quot;title&quot;:&quot;6 · Árvores e comitês de modelos&quot;,&quot;href&quot;:&quot;ch06.html&quot;},
+ {&quot;id&quot;:&quot;ch07&quot;,&quot;title&quot;:&quot;7 · Redes neurais e aprendizado profundo&quot;,&quot;href&quot;:&quot;ch07.html&quot;},
+ {&quot;id&quot;:&quot;ch08&quot;,&quot;title&quot;:&quot;8 · Aprendizado bayesiano e incerteza preditiva&quot;,&quot;href&quot;:&quot;ch08.html&quot;},
+ {&quot;id&quot;:&quot;ch09&quot;,&quot;title&quot;:&quot;9 · Quando faltam dados&quot;,&quot;href&quot;:&quot;ch09.html&quot;},
+ {&quot;id&quot;:&quot;ch10&quot;,&quot;title&quot;:&quot;10 · Dados de alta dimensão e redução de dimensionalidade&quot;,&quot;href&quot;:&quot;ch10.html&quot;},
+ {&quot;id&quot;:&quot;ch11&quot;,&quot;title&quot;:&quot;11 · Agrupamento de pacientes&quot;,&quot;href&quot;:&quot;ch11.html&quot;},
+ {&quot;id&quot;:&quot;ch12&quot;,&quot;title&quot;:&quot;12 · IA interpretável e explicável&quot;,&quot;href&quot;:&quot;ch12.html&quot;},
+ {&quot;id&quot;:&quot;ch13&quot;,&quot;title&quot;:&quot;13 · Da predição à causalidade&quot;,&quot;href&quot;:&quot;ch13.html&quot;},
+ {&quot;id&quot;:&quot;ch14&quot;,&quot;title&quot;:&quot;14 · Decisões sequenciais: aprendizado por reforço&quot;,&quot;href&quot;:&quot;ch14.html&quot;},
+ {&quot;id&quot;:&quot;ch15&quot;,&quot;title&quot;:&quot;15 · Texto como dado&quot;,&quot;href&quot;:&quot;ch15.html&quot;},
+ {&quot;id&quot;:&quot;ch16&quot;,&quot;title&quot;:&quot;16 · Modelos de linguagem e representações vetoriais&quot;,&quot;href&quot;:&quot;ch16.html&quot;},
+ {&quot;id&quot;:&quot;ch17&quot;,&quot;title&quot;:&quot;17 · Atenção e o transformer&quot;,&quot;href&quot;:&quot;ch17.html&quot;},
+ {&quot;id&quot;:&quot;ch18&quot;,&quot;title&quot;:&quot;18 · Do modelo de linguagem ao assistente clínico&quot;,&quot;href&quot;:&quot;ch18.html&quot;},
+ {&quot;id&quot;:&quot;ch19&quot;,&quot;title&quot;:&quot;19 · Modelos generativos além do texto&quot;,&quot;href&quot;:&quot;ch19.html&quot;}
+]"></div>
+</section>
+<section id="para-quem-é-este-livro" class="level2">
+<h2 class="anchored" data-anchor-id="para-quem-é-este-livro">Para quem é este livro</h2>
+<p>Para qualquer profissional ou estudante da saúde — medicina, enfermagem, farmácia, ciências biomédicas, saúde pública, tecnologias terapêuticas e outras áreas — que queira entender, usar e questionar a IA e o aprendizado de máquina com rigor. É preciso ter alguma base de estatística; não é preciso saber programar, e nenhum conhecimento prévio de IA é pressuposto. A matemática aparece quando importa, introduzida passo a passo: cada termo é definido na primeira vez em que é usado, e o <a href="./glossary.html">glossário</a> está sempre a um clique.</p>
+</section>
+<section id="os-dados-deste-livro" class="level2">
+<h2 class="anchored" data-anchor-id="os-dados-deste-livro">Os dados deste livro</h2>
+<p>Todos os conjuntos de dados deste livro são <strong>simulados</strong>: parecem dados clínicos reais, mas não descrevem nenhuma pessoa real. Isso permite compartilhá-los com segurança — todos podem ser baixados no <a href="./data-dictionary.html">apêndice de dados</a>, junto com o código que os gerou — e nos dá um superpoder que dados reais nunca têm: <em>conhecemos a verdade</em>, e por isso podemos verificar se um método a encontra.</p>
+</section>
+<section id="autor" class="level2">
+<h2 class="anchored" data-anchor-id="autor">Autor</h2>
+<p>Danilo Augusto Sarti</p>
+
+
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<div id="exercise-loading-indicator" class="exercise-loading-indicator d-none d-flex align-items-center gap-2">
+<div id="exercise-loading-status" class="d-flex gap-2">
+
+</div>
+<div class="spinner-grow spinner-grow-sm">
+
+</div>
+</div>
+<script type="vfs-file">
+W10=
+</script>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script src="assets/book.js"></script>
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W119
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../..";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiada");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiada");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./ch01.html" class="pagination-link" aria-label="Dados, modelos e decisões">
+        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Dados, modelos e decisões</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

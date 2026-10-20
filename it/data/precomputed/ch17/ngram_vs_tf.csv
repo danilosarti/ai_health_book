@@ -1,0 +1,10 @@
+model,window,acc_last_word,acc_pronoun,drug_visible
+n-gram,1,0.265,0.653,0.0
+n-gram,2,0.265,0.653,0.0
+n-gram,3,0.265,0.653,0.0
+n-gram,4,0.265,0.653,0.0
+n-gram,6,0.265,0.705,0.0
+n-gram,8,0.399,0.865,0.177
+n-gram,12,0.359,0.983,0.221
+n-gram,16,0.414,0.86,0.352
+transformer,43,1.0,1.0,1.0

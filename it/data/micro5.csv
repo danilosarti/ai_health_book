@@ -1,0 +1,6 @@
+patient_id,heart_condition,activity,age_years,heart_rate_bpm,spo2_percent
+P01,Healthy,Rest,52.4,73,98.9
+P02,HeartCondition,Moderate,73.1,88,93.4
+P03,HeartCondition,Rest,61.2,73,95.8
+P04,HeartCondition,Moderate,36.0,90,94.0
+P05,Healthy,Rest,53.7,72,98.0

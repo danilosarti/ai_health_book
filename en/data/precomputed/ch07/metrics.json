@@ -1,0 +1,62 @@
+{
+ "prevalence_test": 0.625,
+ "n_train": 4708,
+ "n_val": 524,
+ "n_test": 624,
+ "logistic_pixels": {
+  "n": 624,
+  "accuracy": 0.829,
+  "sensitivity": 0.985,
+  "specificity": 0.568,
+  "auc": 0.918,
+  "confusion": {
+   "tn": 133,
+   "fp": 101,
+   "fn": 6,
+   "tp": 384
+  }
+ },
+ "mlp": {
+  "n": 624,
+  "accuracy": 0.806,
+  "sensitivity": 0.99,
+  "specificity": 0.5,
+  "auc": 0.914,
+  "confusion": {
+   "tn": 117,
+   "fp": 117,
+   "fn": 4,
+   "tp": 386
+  },
+  "parameters": 50305
+ },
+ "cnn": {
+  "n": 624,
+  "accuracy": 0.862,
+  "sensitivity": 0.954,
+  "specificity": 0.709,
+  "auc": 0.922,
+  "confusion": {
+   "tn": 166,
+   "fp": 68,
+   "fn": 18,
+   "tp": 372
+  },
+  "test_loss": 0.44,
+  "parameters": 26401,
+  "best_epoch": 10,
+  "at_threshold_0.3": {
+   "n": 624,
+   "accuracy": 0.848,
+   "sensitivity": 0.985,
+   "specificity": 0.62,
+   "auc": 0.922,
+   "confusion": {
+    "tn": 145,
+    "fp": 89,
+    "fn": 6,
+    "tp": 384
+   }
+  }
+ }
+}

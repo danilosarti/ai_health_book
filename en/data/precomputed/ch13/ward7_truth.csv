@@ -1,0 +1,13 @@
+"key","value"
+"ate_per_unit",-0.28
+"policy_mean_increase",0.21365
+"policy_true_change",-0.05983
+"policy_naive_change",-0.11428
+"policy_adj_change",-0.06396
+"aki_observed",0.58
+"aki_policy_true",0.4952
+"aki_policy_naive",0.424
+"aki_policy_adj",0.4904
+"sofa_total_effect",0.06016
+"sofa_direct_coef_full_model",0.04149
+"sofa_simulation_direct",0.04

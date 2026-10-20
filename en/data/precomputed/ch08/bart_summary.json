@@ -1,0 +1,25 @@
+{
+ "homebeat_split": "rng = np.random.default_rng(2026); first 400 of a permutation = training",
+ "seed": 2026,
+ "lena_bart": {
+  "mean_hr": 85.33598436732508,
+  "mean_lo": 83.08123162138706,
+  "mean_hi": 87.61738743819195,
+  "new_lo": 75.13978211532255,
+  "new_hi": 95.83287169822198,
+  "p_new_above_88": 0.2995
+ },
+ "v1_bug": {
+  "rmse_wrong_average": 13.542220994064598,
+  "rmse_right_average": 5.062267626575343
+ },
+ "sigma_homebeat": 5.10321784613549,
+ "sigma_ward7": 0.1867640906714377,
+ "versions": {
+  "pymc": "6.3.2",
+  "pymc_bart": "0.13.1",
+  "scikit_learn": "1.9.1",
+  "xgboost": "3.4.1",
+  "numpy": "2.5.3"
+ }
+}

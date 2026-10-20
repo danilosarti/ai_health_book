@@ -1,0 +1,36 @@
+{
+  "wss_truth": 1381.3,
+  "wss_k5": 1257.8,
+  "spread": {
+    "HR_mean": 0.199,
+    "HRV_sdnn": 0.448,
+    "steps_mean": 0.056,
+    "skin_temp": 0.633,
+    "spo2": 0.552,
+    "sleep_eff": 0.884
+  },
+  "gmm_model": "EEE",
+  "gmm_G": 5,
+  "gmm_ari": 0.997,
+  "gmm4_model": "VVV",
+  "gmm4_ari": 0.782,
+  "gmm_n_uncertain": 1,
+  "optics_wear_clusters": 4,
+  "optics_wear_noise": 3,
+  "rings_dbscan_clusters": 2,
+  "rings_dbscan_noise": 21,
+  "rings_kmeans_ari": 0.008,
+  "ward_heights_top": [118.9, 92.6, 32.5, 25.9],
+  "homebeat_partial": {
+    "n_incomplete": 134,
+    "agreement": 0.873,
+    "n_signals_missing_mean": 1.15
+  },
+  "homebeat_soft": {
+    "model": "EEE",
+    "share_pmax_below_08": 0.618,
+    "share_pmax_below_06": 0.364
+  },
+  "wear_soft_share_pmax_below_08": 0.001,
+  "homebeat_event_rate": 0.824
+}
