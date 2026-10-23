@@ -1,71 +1,81 @@
 # Laboratorio del capítulo 19
 # Inteligencia Artificial y Aprendizaje Automático para las Ciencias de la Salud
 # Ejecútalo desde la carpeta del libro (la que contiene data/) o ajusta las rutas.
-# 1. Reparametrización y la penalización KL -----------------------------------
-kl_normal <- function(mu, sigma) 0.5 * (mu^2 + sigma^2 - log(sigma^2) - 1)
-kl_normal(0, 1)        # 0: idéntica a la normal estándar
-kl_normal(2, 1)        # código lejos del origen
-kl_normal(0, 0.1)      # código encogido hasta un punto
-set.seed(19)
-z <- 1.2 + 0.5 * rnorm(10000)          # z = mu + sigma * eps
-c(mean = mean(z), sd = sd(z))
-
-# 2. Difusión directa sobre una radiografía -----------------------------------
-px   <- read.csv("data/pneumonia_subset.csv")
-x0   <- as.numeric(px[px$label == 1, grep("^px", names(px))][1, ]) / 127.5 - 1
-beta <- seq(1e-4, 0.02, length.out = 1000)
-abar <- cumprod(1 - beta)
-which(abar < 0.5)[1]                   # primer paso con más ruido que señal
-set.seed(19)
-eps   <- rnorm(length(x0))
-steps <- c(0, 50, 100, 250, 500, 1000)
-op <- par(mfrow = c(1, 6), mar = c(0.5, 0.5, 2, 0.5))
-for (t in steps) {
-  a  <- if (t == 0) 1 else abar[t]
-  xt <- sqrt(a) * x0 + sqrt(1 - a) * eps
-  image(matrix(pmin(pmax(xt, -1), 1), 28, 28)[, 28:1], col = gray.colors(64, 0, 1),
-        axes = FALSE, main = paste("t =", t), asp = 1)
+# 1. Cargar los fragmentos de las guías y construir un índice TF-IDF ------------------------
+guidelines <- read.csv("data/ch19_guidelines.csv", encoding = "UTF-8")
+stop_words <- c("a","an","and","are","as","at","be","by","can","do","does","for","from","has","have",
+  "how","i","if","in","is","it","its","not","of","on","or","our","should","so","that","the","their",
+  "them","then","there","these","they","this","to","was","we","what","when","which","while","who",
+  "will","with","without","you","been","into","than","after","before","more","most","also","all",
+  "any","every","each","may","only","other","such","whenever","where","one","two")
+tokens <- function(x) {
+  w <- unlist(strsplit(tolower(x), "[^a-z0-9]+"))
+  w[nchar(w) >= 2 & !(w %in% stop_words)]
 }
-par(op)
-
-# 3. Una cópula gaussiana para HomeBeat, desde cero ---------------------------
-hb   <- read.csv("data/homebeat.csv")
-vars <- c("age", "baseline_inflammation", "frailty", "resting_hr", "hrv",
-          "skin_temp", "activity_index", "stress_score")
-spl  <- read.csv("data/splits/homebeat_split.csv")   # la partición fija de HomeBeat del libro (como en el Capítulo 8)
-spl  <- spl[order(spl$perm_order), ]
-real <- hb[match(spl$participant_id[spl$set == "train"], hb$participant_id), vars]  # el generador ve estos
-hold <- hb[match(spl$participant_id[spl$set == "test"], hb$participant_id), vars]   # personas reales nuevas, nunca vistas
-set.seed(2026)
-n <- nrow(real)
-scores <- sapply(real, function(v) qnorm(rank(v, ties.method = "average") / (n + 1)))  # paso 1
-R <- cor(scores)                                                                       # paso 2
-Z <- matrix(rnorm(400 * length(vars)), ncol = length(vars)) %*% chol(R)                # paso 3
-U <- pnorm(Z)                                                                          # paso 4
-fake <- as.data.frame(sapply(seq_along(vars), function(j)
-  quantile(real[[j]], U[, j], type = 8, names = FALSE)))
-names(fake) <- vars
-
-# 4. Fidelidad: marginales y relaciones ---------------------------------------
-round(rbind(real = sapply(real, mean), synthetic = sapply(fake, mean)), 2)
-round(c(real = cor(real$resting_hr, real$hrv), synthetic = cor(fake$resting_hr, fake$hrv)), 2)
-gap <- cor(fake) - cor(real)
-mean(abs(gap[upper.tri(gap)]))         # diferencia media de correlación
-
-# 5. Privacidad: distancia al registro real de entrenamiento más cercano ------
-mu <- colMeans(real); s <- apply(real, 2, sd)
-std <- function(d) scale(d, center = mu, scale = s)
-dcr <- function(a, b) {                # para cada fila de a, distancia a la fila más cercana de b
-  A <- std(a); B <- std(b)
-  apply(A, 1, function(r) sqrt(min(colSums((t(B) - r)^2))))
+docs  <- lapply(paste(guidelines$section, guidelines$text), tokens)
+vocab <- sort(unique(unlist(docs)))
+tf    <- t(sapply(docs, function(d) table(factor(d, levels = vocab))))
+idf   <- log((1 + nrow(tf)) / (1 + colSums(tf > 0))) + 1
+X     <- sweep(tf, 2, idf, "*")
+X     <- X / sqrt(rowSums(X^2))
+embed <- function(q) {
+  v <- as.numeric(table(factor(tokens(q), levels = vocab))) * idf
+  if (sum(v^2) > 0) v / sqrt(sum(v^2)) else v
 }
-d_hold <- dcr(hold, real)
-d_fake <- dcr(fake, real)
-thr <- quantile(d_hold, 0.05)
-c(median_new_real = median(d_hold), median_synthetic = median(d_fake),
-  share_too_close = mean(d_fake < thr))
+retrieve <- function(q, k = 3) {
+  s <- as.vector(X %*% embed(q)); o <- order(-s)[1:k]
+  data.frame(chunk_id = guidelines$chunk_id[o], score = round(s[o], 3), text = guidelines$text[o])
+}
+c(chunks = nrow(X), terms = ncol(X))
 
-# 6. Utilidad: entrenar con lo sintético, probar con lo real ------------------
-f <- stress_score ~ age + baseline_inflammation + frailty + resting_hr + hrv + skin_temp + activity_index
-rmse <- function(m) sqrt(mean((hold$stress_score - predict(m, hold))^2))
-c(train_on_real = rmse(lm(f, real)), train_on_synthetic = rmse(lm(f, fake)))
+# 2. Recuperar fragmentos para la pregunta de Seán ------------------------------------------------
+question <- paste("Mrs Byrne is on vancomycin and piperacillin-tazobactam, and her creatinine rose from",
+                  "1.0 to 1.4 mg/dL in 36 hours. Should we change the vancomycin, and how often should",
+                  "we check creatinine?")
+hits <- retrieve(question, k = 3)
+hits[, c("chunk_id", "score")]
+
+# 3. Montar el prompt fundamentado (esto es lo que se enviaría al modelo) ------
+prompt <- paste(c(
+  "Eres el asistente de guías de la UCI Sala 7. Responde SOLO a partir de los fragmentos numerados de abajo.",
+  "Cita el identificador del fragmento en cada afirmación. Si los fragmentos no contienen la respuesta, dilo.",
+  "", paste0("[", hits$chunk_id, "] ", hits$text), "", paste("Pregunta:", question)), collapse = "\n")
+cat(prompt, "\n")
+
+# 4. Comprobación rudimentaria de la fundamentación de una respuesta fija ----------------------------------
+# Cada frase se compara con los fragmentos recuperados; similitud baja = señalar para revisión.
+answer <- c("Do not stop vancomycin without discussing it with the microbiology team.",
+            "Consider an alternative beta-lactam to piperacillin-tazobactam and monitor creatinine daily.",
+            "Mrs Byrne's risk of needing dialysis is about 10 percent.")
+Xhits   <- X[match(hits$chunk_id, guidelines$chunk_id), , drop = FALSE]
+support <- sapply(answer, function(s) max(Xhits %*% embed(s)))
+data.frame(sentence = substr(answer, 1, 45), best_support = round(support, 2), flag = support < 0.2,
+           row.names = NULL)
+
+# 5. Evaluación: exactitud y alucinación por configuración ---------------------
+ev <- read.csv("data/ch19_eval.csv")
+wilson <- function(k, n, z = 1.96) {
+  p <- k / n; c0 <- (p + z^2 / (2 * n)) / (1 + z^2 / n)
+  h <- z * sqrt(p * (1 - p) / n + z^2 / (4 * n^2)) / (1 + z^2 / n); c(c0 - h, c0 + h)
+}
+summ <- do.call(rbind, lapply(split(ev, ev$config), function(d) {
+  ci <- wilson(sum(d$hallucinated), nrow(d))
+  data.frame(config = d$config[1], accuracy = mean(d$correct), hallucinated = mean(d$hallucinated),
+             hall_lo = ci[1], hall_hi = ci[2], abstained = mean(d$abstained))
+}))
+print(summ, digits = 3, row.names = FALSE)
+round(tapply(ev$correct, list(ev$category, ev$config), mean), 2)
+
+# 6. Calibración y respuesta selectiva -----------------------------------------
+tapply(ev$stated_conf, ev$config, mean) - tapply(ev$correct, ev$config, mean)   # exceso de confianza
+rag <- ev[ev$config == "rag", ]
+thr <- round(seq(0.5, 0.95, by = 0.05), 2)
+data.frame(threshold = thr,
+           coverage  = sapply(thr, function(t) mean(rag$stated_conf >= t)),
+           accuracy  = sapply(thr, function(t) mean(rag$correct[rag$stated_conf >= t])))
+
+# 7. Rentosertib, fase 2a: comparación aproximada a partir de los intervalos publicados --------
+ci60 <- c(10.9, 185.9); cipl <- c(-116.1, 75.6)        # cambio de la CVF a las 12 semanas (mL)
+se   <- c(diff(ci60), diff(cipl)) / (2 * 1.96)
+diff_fvc <- mean(ci60) - mean(cipl); se_diff <- sqrt(sum(se^2))
+round(c(difference = diff_fvc, lower = diff_fvc - 1.96 * se_diff, upper = diff_fvc + 1.96 * se_diff), 1)

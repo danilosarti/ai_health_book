@@ -564,13 +564,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Train your first GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
   </div>
 </li>
       </ul>
@@ -1390,7 +1396,7 @@ Figure&nbsp;13.4: In ONCO-1 a coin decided who received chemotherapy, so nothing
 </figure>
 </div>
 <p>In the ONCO-1 sample of 1000 patients, 496 were randomised to chemotherapy and 504 to no chemotherapy. Randomisation does not make the two arms identical, but it makes their differences small and due to chance alone. A standard way to check is the <strong>standardised mean difference</strong> (SMD): the difference between the arms’ means divided by the pooled standard deviation. Values below about 0.1 are usually taken as good balance <span class="citation" data-cites="austin2011introduction">(<a href="#ref-austin2011introduction" role="doc-biblioref">Austin 2011</a>)</span>. The first column of <a href="#tbl-ch13-balance" class="quarto-xref">Table&nbsp;<span>13.3</span></a> shows that every covariate is balanced in the trial.</p>
-<p>Because the arms are exchangeable, the simplest comparison estimates the average treatment effect: average shrinkage was 37.8 % with chemotherapy and 4.9 % without, a difference of <strong>32.9 percentage points</strong> (95 % confidence interval 31.8 to 34.0). No model, no adjustment, no assumption about which genes matter: that is the power of randomisation. It is why regulators ask for randomised trials before approving treatments, and why a new drug discovered with AI still has to pass one (Chapter 18 returns to this).</p>
+<p>Because the arms are exchangeable, the simplest comparison estimates the average treatment effect: average shrinkage was 37.8 % with chemotherapy and 4.9 % without, a difference of <strong>32.9 percentage points</strong> (95 % confidence interval 31.8 to 34.0). No model, no adjustment, no assumption about which genes matter: that is the power of randomisation. It is why regulators ask for randomised trials before approving treatments, and why a new drug discovered with AI still has to pass one (Chapter 19 returns to this).</p>
 <p>Randomisation has limits too. Trials are expensive and slow; they enrol selected patients, who may differ from those treated in practice; some exposures (smoking, severity, a hospital’s staffing) cannot be randomised; and patients do not always take the treatment they were assigned. For these reasons most of the data a health system holds are observational, and the next section is about analysing them as if they came from a trial.</p>
 <div id="ch13-m1" class="mission">
 <p><strong>The trial’s answer.</strong> In ONCO-1 treatment was randomised, so the difference between the average shrinkage of the two arms estimates the effect of chemotherapy. Complete the last line.</p>
@@ -2192,11 +2198,11 @@ Selected answers
 </tr>
 <tr class="odd">
 <td>Randomised trials as the evidence bar for AI-discovered drugs</td>
-<td>Chapter 18 (from language model to clinical assistant)</td>
+<td>Chapter 19 (from language model to clinical assistant)</td>
 </tr>
 <tr class="even">
 <td>Synthetic data from a known generating process</td>
-<td>Chapter 19 (generative models)</td>
+<td>Chapter 20 (generative models)</td>
 </tr>
 </tbody>
 </table>

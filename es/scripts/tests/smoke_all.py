@@ -8,7 +8,7 @@ async def main():
         for w in (1280, 390):
             pg = await b.new_page(viewport={"width": w, "height": 900})
             for lang in ["en", "pt", "es", "it"]:
-                for i in range(1, 20):
+                for i in range(1, 21):
                     errs = []
                     pg.on("pageerror", lambda e: errs.append(str(e)[:120]))
                     url = f"http://localhost:8765/{lang}/ch{i:02d}.html"

@@ -500,13 +500,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Train your first GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
   </div>
 </li>
       </ul>
@@ -581,8 +587,8 @@ window.Quarto = {
   <li><a href="#chapter-15-text-as-data" id="toc-chapter-15-text-as-data" class="nav-link" data-scroll-target="#chapter-15-text-as-data"><span class="header-section-number">D.2.14</span> Chapter 15 · Text as data</a></li>
   <li><a href="#chapter-16-predicting-the-next-word-language-models-and-embeddings" id="toc-chapter-16-predicting-the-next-word-language-models-and-embeddings" class="nav-link" data-scroll-target="#chapter-16-predicting-the-next-word-language-models-and-embeddings"><span class="header-section-number">D.2.15</span> Chapter 16 · Predicting the next word: language models and embeddings</a></li>
   <li><a href="#chapter-17-attention-and-the-transformer" id="toc-chapter-17-attention-and-the-transformer" class="nav-link" data-scroll-target="#chapter-17-attention-and-the-transformer"><span class="header-section-number">D.2.16</span> Chapter 17 · Attention and the transformer</a></li>
-  <li><a href="#chapter-18-from-language-model-to-clinical-assistant" id="toc-chapter-18-from-language-model-to-clinical-assistant" class="nav-link" data-scroll-target="#chapter-18-from-language-model-to-clinical-assistant"><span class="header-section-number">D.2.17</span> Chapter 18 · From language model to clinical assistant</a></li>
-  <li><a href="#chapter-19-generative-models-beyond-text" id="toc-chapter-19-generative-models-beyond-text" class="nav-link" data-scroll-target="#chapter-19-generative-models-beyond-text"><span class="header-section-number">D.2.18</span> Chapter 19 · Generative models beyond text</a></li>
+  <li><a href="#chapter-19-from-language-model-to-clinical-assistant" id="toc-chapter-19-from-language-model-to-clinical-assistant" class="nav-link" data-scroll-target="#chapter-19-from-language-model-to-clinical-assistant"><span class="header-section-number">D.2.17</span> Chapter 19 · From language model to clinical assistant</a></li>
+  <li><a href="#chapter-20-generative-models-beyond-text" id="toc-chapter-20-generative-models-beyond-text" class="nav-link" data-scroll-target="#chapter-20-generative-models-beyond-text"><span class="header-section-number">D.2.18</span> Chapter 20 · Generative models beyond text</a></li>
   </ul></li>
   <li><a href="#symbols-with-more-than-one-meaning" id="toc-symbols-with-more-than-one-meaning" class="nav-link" data-scroll-target="#symbols-with-more-than-one-meaning"><span class="header-section-number">D.3</span> Symbols with more than one meaning</a></li>
   </ul>
@@ -1627,8 +1633,8 @@ window.Quarto = {
 </tbody>
 </table>
 </section>
-<section id="chapter-18-from-language-model-to-clinical-assistant" class="level3" data-number="D.2.17">
-<h3 data-number="D.2.17" class="anchored" data-anchor-id="chapter-18-from-language-model-to-clinical-assistant"><span class="header-section-number">D.2.17</span> Chapter 18 · From language model to clinical assistant</h3>
+<section id="chapter-19-from-language-model-to-clinical-assistant" class="level3" data-number="D.2.17">
+<h3 data-number="D.2.17" class="anchored" data-anchor-id="chapter-19-from-language-model-to-clinical-assistant"><span class="header-section-number">D.2.17</span> Chapter 19 · From language model to clinical assistant</h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1641,43 +1647,43 @@ window.Quarto = {
 <tr class="odd">
 <td><span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span></td>
 <td>a prompt and a response</td>
-<td><a href="./ch18.html#sec-ch18-training">Ch. 18</a></td>
+<td><a href="./ch19.html#sec-ch19-training">Ch. 19</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(r(x, y)\)</span></td>
 <td>reward: a score for how much people prefer response <span class="math inline">\(y\)</span> to prompt <span class="math inline">\(x\)</span></td>
-<td><a href="./ch18.html#sec-ch18-training">Ch. 18</a></td>
+<td><a href="./ch19.html#sec-ch19-training">Ch. 19</a></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\pi_\theta\)</span>, <span class="math inline">\(\pi_{\text{ref}}\)</span></td>
 <td>the model seen as a policy that chooses responses; the model before preference tuning</td>
-<td><a href="./ch18.html#sec-ch18-training">Ch. 18</a></td>
+<td><a href="./ch19.html#sec-ch19-training">Ch. 19</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\lambda\)</span></td>
 <td>strength of the penalty that keeps <span class="math inline">\(\pi_\theta\)</span> close to <span class="math inline">\(\pi_{\text{ref}}\)</span></td>
-<td><a href="./ch18.html#sec-ch18-training">Ch. 18</a></td>
+<td><a href="./ch19.html#sec-ch19-training">Ch. 19</a></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\mathbf{q}\)</span>, <span class="math inline">\(\mathbf{d}_j\)</span></td>
 <td>vector of a query; vector of chunk <span class="math inline">\(j\)</span></td>
-<td><a href="./ch18.html#sec-ch18-rag">Ch. 18</a></td>
+<td><a href="./ch19.html#sec-ch19-rag">Ch. 19</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(J\)</span>, <span class="math inline">\(k\)</span></td>
 <td>number of chunks in the collection; number of chunks retrieved</td>
-<td><a href="./ch18.html#sec-ch18-rag">Ch. 18</a></td>
+<td><a href="./ch19.html#sec-ch19-rag">Ch. 19</a></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\mathbf{W}_0\)</span>, <span class="math inline">\(\mathbf{A}\)</span>, <span class="math inline">\(\mathbf{B}\)</span>, <span class="math inline">\(m\)</span></td>
 <td>a frozen weight matrix; the two small matrices of a LoRA update; their rank</td>
-<td><a href="./ch18.html#sec-ch18-adapt">Ch. 18</a></td>
+<td><a href="./ch19.html#sec-ch19-adapt">Ch. 19</a></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="chapter-19-generative-models-beyond-text" class="level3" data-number="D.2.18">
-<h3 data-number="D.2.18" class="anchored" data-anchor-id="chapter-19-generative-models-beyond-text"><span class="header-section-number">D.2.18</span> Chapter 19 · Generative models beyond text</h3>
+<section id="chapter-20-generative-models-beyond-text" class="level3" data-number="D.2.18">
+<h3 data-number="D.2.18" class="anchored" data-anchor-id="chapter-20-generative-models-beyond-text"><span class="header-section-number">D.2.18</span> Chapter 20 · Generative models beyond text</h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1690,52 +1696,52 @@ window.Quarto = {
 <tr class="odd">
 <td><span class="math inline">\(p(\mathbf{x})\)</span>, <span class="math inline">\(p(\mathbf{x}, y)\)</span></td>
 <td>distribution of the data (with the outcome)</td>
-<td><a href="./ch19.html#sec-ch19-two-questions">Ch. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-two-questions">Ch. 20</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\mathbf{z}\)</span></td>
 <td>latent variables: a short code from which an example is generated</td>
-<td><a href="./ch19.html#sec-ch19-autoencoders">Ch. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-autoencoders">Ch. 20</a></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\hat{\mathbf{x}}\)</span></td>
 <td>reconstruction or generated example</td>
-<td><a href="./ch19.html#sec-ch19-autoencoders">Ch. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-autoencoders">Ch. 20</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\mathbf{\mu}\)</span>, <span class="math inline">\(\mathbf{\sigma}\)</span></td>
 <td>mean and standard deviation of a code, produced by the encoder of a VAE</td>
-<td><a href="./ch19.html#sec-ch19-vae">Ch. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-vae">Ch. 20</a></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\varepsilon\)</span>, <span class="math inline">\(\mathbf{\varepsilon}\)</span></td>
 <td>standard normal noise, <span class="math inline">\(\mathcal{N}(0, 1)\)</span>, injected by the model</td>
-<td><a href="./ch19.html#sec-ch19-vae">Ch. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-vae">Ch. 20</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\mathrm{KL}(q \,\|\, p)\)</span></td>
 <td>Kullback–Leibler divergence between two distributions</td>
-<td><a href="./ch19.html#sec-ch19-vae">Ch. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-vae">Ch. 20</a></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(G\)</span>, <span class="math inline">\(D\)</span></td>
 <td>generator and discriminator of a GAN</td>
-<td><a href="./ch19.html#sec-ch19-gans">Ch. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-gans">Ch. 20</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(t\)</span>, <span class="math inline">\(T\)</span></td>
 <td>diffusion step and number of steps</td>
-<td><a href="./ch19.html#sec-ch19-diffusion">Ch. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-diffusion">Ch. 20</a></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\beta_t\)</span>, <span class="math inline">\(\bar\alpha_t\)</span></td>
 <td>noise added at step <span class="math inline">\(t\)</span>; share of the original signal left after <span class="math inline">\(t\)</span> steps</td>
-<td><a href="./ch19.html#sec-ch19-diffusion">Ch. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-diffusion">Ch. 20</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\mathbf{x}_t\)</span></td>
 <td>the example after <span class="math inline">\(t\)</span> noising steps (<span class="math inline">\(\mathbf{x}_0\)</span> is the clean one)</td>
-<td><a href="./ch19.html#sec-ch19-diffusion">Ch. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-diffusion">Ch. 20</a></td>
 </tr>
 </tbody>
 </table>
@@ -1762,15 +1768,15 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\pi\)</span></td>
-<td>prevalence or prior probability of disease (Ch. 2); policy <span class="math inline">\(\pi(a \mid s)\)</span> (Ch. 14) and language model seen as a policy <span class="math inline">\(\pi_\theta\)</span> (Ch. 18)</td>
+<td>prevalence or prior probability of disease (Ch. 2); policy <span class="math inline">\(\pi(a \mid s)\)</span> (Ch. 14) and language model seen as a policy <span class="math inline">\(\pi_\theta\)</span> (Ch. 19)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\sigma\)</span></td>
-<td>standard deviation (Ch. 2, 8; of a VAE code, Ch. 19); logistic (sigmoid) function <span class="math inline">\(\sigma(z)\)</span> (Ch. 5, 7, 16)</td>
+<td>standard deviation (Ch. 2, 8; of a VAE code, Ch. 20); logistic (sigmoid) function <span class="math inline">\(\sigma(z)\)</span> (Ch. 5, 7, 16)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\mu\)</span></td>
-<td>mean of a normal distribution (Ch. 2); centroid <span class="math inline">\(\mathbf{\mu}_k\)</span> (Ch. 11); mean reward <span class="math inline">\(\mu_k\)</span> of a bandit arm (Ch. 14); mean of a VAE code <span class="math inline">\(\mathbf{\mu}\)</span> (Ch. 19)</td>
+<td>mean of a normal distribution (Ch. 2); centroid <span class="math inline">\(\mathbf{\mu}_k\)</span> (Ch. 11); mean reward <span class="math inline">\(\mu_k\)</span> of a bandit arm (Ch. 14); mean of a VAE code <span class="math inline">\(\mathbf{\mu}\)</span> (Ch. 20)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(V\)</span></td>
@@ -1782,23 +1788,23 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(K\)</span>, <span class="math inline">\(k\)</span></td>
-<td><span class="math inline">\(K\)</span>: number of clusters (Ch. 11), number of bandit arms (Ch. 14), key matrix <span class="math inline">\(\mathbf{K}\)</span> (Ch. 17); <span class="math inline">\(k\)</span>: neighbours in <span class="math inline">\(k\)</span>NN (Ch. 3), top-<span class="math inline">\(k\)</span> sampling (Ch. 16), chunks retrieved (Ch. 18)</td>
+<td><span class="math inline">\(K\)</span>: number of clusters (Ch. 11), number of bandit arms (Ch. 14), key matrix <span class="math inline">\(\mathbf{K}\)</span> (Ch. 17); <span class="math inline">\(k\)</span>: neighbours in <span class="math inline">\(k\)</span>NN (Ch. 3), top-<span class="math inline">\(k\)</span> sampling (Ch. 16), chunks retrieved (Ch. 19)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(T\)</span>, <span class="math inline">\(t\)</span></td>
-<td><span class="math inline">\(T\)</span>: a tree with <span class="math inline">\(\lvert T\rvert\)</span> leaves (Ch. 6), sequence length (Ch. 17), number of diffusion steps (Ch. 19); <span class="math inline">\(t\)</span>: decision or classification threshold (Ch. 2, 5; <span class="math inline">\(t_{\text{low}}\)</span>, <span class="math inline">\(t_{\text{high}}\)</span> in Ch. 15), time step or position (Ch. 14, 16, 17, 19)</td>
+<td><span class="math inline">\(T\)</span>: a tree with <span class="math inline">\(\lvert T\rvert\)</span> leaves (Ch. 6), sequence length (Ch. 17), number of diffusion steps (Ch. 20); <span class="math inline">\(t\)</span>: decision or classification threshold (Ch. 2, 5; <span class="math inline">\(t_{\text{low}}\)</span>, <span class="math inline">\(t_{\text{high}}\)</span> in Ch. 15), time step or position (Ch. 14, 16, 17, 20)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\varepsilon\)</span>, <span class="math inline">\(\epsilon\)</span></td>
-<td><span class="math inline">\(\varepsilon\)</span>: error term (Ch. 1, 4), standard normal noise injected by a VAE or a diffusion model (Ch. 19); <span class="math inline">\(\epsilon\)</span>: exploration rate of <span class="math inline">\(\epsilon\)</span>-greedy (Ch. 14)</td>
+<td><span class="math inline">\(\varepsilon\)</span>: error term (Ch. 1, 4), standard normal noise injected by a VAE or a diffusion model (Ch. 20); <span class="math inline">\(\epsilon\)</span>: exploration rate of <span class="math inline">\(\epsilon\)</span>-greedy (Ch. 14)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\alpha\)</span></td>
-<td>elastic-net mixing parameter (Ch. 4); attention weight <span class="math inline">\(\alpha_{ts}\)</span> (Ch. 17); share of signal left after <span class="math inline">\(t\)</span> diffusion steps, <span class="math inline">\(\bar\alpha_t\)</span> (Ch. 19)</td>
+<td>elastic-net mixing parameter (Ch. 4); attention weight <span class="math inline">\(\alpha_{ts}\)</span> (Ch. 17); share of signal left after <span class="math inline">\(t\)</span> diffusion steps, <span class="math inline">\(\bar\alpha_t\)</span> (Ch. 20)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\beta\)</span></td>
-<td>regression coefficients <span class="math inline">\(\beta_j\)</span> (Ch. 4 onwards); noise added at diffusion step <span class="math inline">\(t\)</span>, <span class="math inline">\(\beta_t\)</span> (Ch. 19)</td>
+<td>regression coefficients <span class="math inline">\(\beta_j\)</span> (Ch. 4 onwards); noise added at diffusion step <span class="math inline">\(t\)</span>, <span class="math inline">\(\beta_t\)</span> (Ch. 20)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\delta\)</span></td>
@@ -1814,7 +1820,7 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(M\)</span>, <span class="math inline">\(m\)</span></td>
-<td><span class="math inline">\(M\)</span>: number of imputations (Ch. 9), mask matrix <span class="math inline">\(\mathbf{M}\)</span> (Ch. 17); <span class="math inline">\(m\)</span>: number of trees in BART (Ch. 8), index of a principal component (Ch. 10), of a shuffle (Ch. 12) or of a completed dataset (Ch. 9), rank of a LoRA update (Ch. 18)</td>
+<td><span class="math inline">\(M\)</span>: number of imputations (Ch. 9), mask matrix <span class="math inline">\(\mathbf{M}\)</span> (Ch. 17); <span class="math inline">\(m\)</span>: number of trees in BART (Ch. 8), index of a principal component (Ch. 10), of a shuffle (Ch. 12) or of a completed dataset (Ch. 9), rank of a LoRA update (Ch. 19)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(N\)</span></td>
@@ -1826,15 +1832,15 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td><span class="math inline">\(G\)</span>, <span class="math inline">\(g\)</span></td>
-<td><span class="math inline">\(G\)</span>: number of classes (Ch. 6), return <span class="math inline">\(G_t\)</span> (Ch. 14), generator of a GAN (Ch. 19); <span class="math inline">\(g\)</span>: activation function (Ch. 7), cluster label <span class="math inline">\(g_i\)</span> (Ch. 11), layer-normalisation gain <span class="math inline">\(\mathbf{g}\)</span> (Ch. 17)</td>
+<td><span class="math inline">\(G\)</span>: number of classes (Ch. 6), return <span class="math inline">\(G_t\)</span> (Ch. 14), generator of a GAN (Ch. 20); <span class="math inline">\(g\)</span>: activation function (Ch. 7), cluster label <span class="math inline">\(g_i\)</span> (Ch. 11), layer-normalisation gain <span class="math inline">\(\mathbf{g}\)</span> (Ch. 17)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(D\)</span></td>
-<td>an event such as a disease (Ch. 2); Cook’s distance <span class="math inline">\(D_i\)</span> (Ch. 4); the data table <span class="math inline">\(\mathbf{D}\)</span> (Ch. 9); a dataset <span class="math inline">\(D\)</span> (Ch. 12); discriminator of a GAN (Ch. 19)</td>
+<td>an event such as a disease (Ch. 2); Cook’s distance <span class="math inline">\(D_i\)</span> (Ch. 4); the data table <span class="math inline">\(\mathbf{D}\)</span> (Ch. 9); a dataset <span class="math inline">\(D\)</span> (Ch. 12); discriminator of a GAN (Ch. 20)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(R\)</span>, <span class="math inline">\(r\)</span></td>
-<td><span class="math inline">\(R^2\)</span> (Ch. 3); leaf regions <span class="math inline">\(R_m\)</span> (Ch. 6); missingness indicator <span class="math inline">\(R_{ij}\)</span> (Ch. 9); R-hat <span class="math inline">\(\widehat{R}\)</span> (Ch. 8); <span class="math inline">\(r\)</span>: DBSCAN radius (Ch. 11), reward <span class="math inline">\(r_{t+1}\)</span> or <span class="math inline">\(r(x, y)\)</span> (Ch. 14, 18)</td>
+<td><span class="math inline">\(R^2\)</span> (Ch. 3); leaf regions <span class="math inline">\(R_m\)</span> (Ch. 6); missingness indicator <span class="math inline">\(R_{ij}\)</span> (Ch. 9); R-hat <span class="math inline">\(\widehat{R}\)</span> (Ch. 8); <span class="math inline">\(r\)</span>: DBSCAN radius (Ch. 11), reward <span class="math inline">\(r_{t+1}\)</span> or <span class="math inline">\(r(x, y)\)</span> (Ch. 14, 19)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(e\)</span></td>
@@ -1842,15 +1848,15 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td><span class="math inline">\(w\)</span></td>
-<td>weight of a neuron <span class="math inline">\(w_j\)</span> (Ch. 7); inverse-probability weight <span class="math inline">\(w_i\)</span> (Ch. 13); token <span class="math inline">\(w_t\)</span> (Ch. 15–18)</td>
+<td>weight of a neuron <span class="math inline">\(w_j\)</span> (Ch. 7); inverse-probability weight <span class="math inline">\(w_i\)</span> (Ch. 13); token <span class="math inline">\(w_t\)</span> (Ch. 15–19)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(z\)</span></td>
-<td>linear predictor or weighted sum (Ch. 5, 7); principal-component scores <span class="math inline">\(\mathbf{z}_i\)</span> (Ch. 10); logits <span class="math inline">\(\mathbf{z}\)</span>, <span class="math inline">\(\mathbf{z}_t\)</span> (Ch. 16, 17); latent code <span class="math inline">\(\mathbf{z}\)</span> (Ch. 19)</td>
+<td>linear predictor or weighted sum (Ch. 5, 7); principal-component scores <span class="math inline">\(\mathbf{z}_i\)</span> (Ch. 10); logits <span class="math inline">\(\mathbf{z}\)</span>, <span class="math inline">\(\mathbf{z}_t\)</span> (Ch. 16, 17); latent code <span class="math inline">\(\mathbf{z}\)</span> (Ch. 20)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(d\)</span></td>
-<td>distance <span class="math inline">\(d(\mathbf{x}_i, \mathbf{x}_{i'})\)</span> (Ch. 10); embedding or model dimension (Ch. 16, 17), with <span class="math inline">\(d_k\)</span> and <span class="math inline">\(d_{\text{ff}}\)</span> (Ch. 17); chunk vector <span class="math inline">\(\mathbf{d}_j\)</span> (Ch. 18)</td>
+<td>distance <span class="math inline">\(d(\mathbf{x}_i, \mathbf{x}_{i'})\)</span> (Ch. 10); embedding or model dimension (Ch. 16, 17), with <span class="math inline">\(d_k\)</span> and <span class="math inline">\(d_{\text{ff}}\)</span> (Ch. 17); chunk vector <span class="math inline">\(\mathbf{d}_j\)</span> (Ch. 19)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(S\)</span>, <span class="math inline">\(s\)</span></td>
@@ -1862,11 +1868,11 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(A\)</span>, <span class="math inline">\(\mathcal{A}\)</span></td>
-<td>set of alternatives or actions <span class="math inline">\(\mathcal{A}\)</span> (Ch. 1, 14); treatment or exposure <span class="math inline">\(A\)</span> (Ch. 13); LoRA matrix <span class="math inline">\(\mathbf{A}\)</span> (Ch. 18)</td>
+<td>set of alternatives or actions <span class="math inline">\(\mathcal{A}\)</span> (Ch. 1, 14); treatment or exposure <span class="math inline">\(A\)</span> (Ch. 13); LoRA matrix <span class="math inline">\(\mathbf{A}\)</span> (Ch. 19)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(B\)</span>, <span class="math inline">\(\mathbf{b}\)</span></td>
-<td><span class="math inline">\(B\)</span>: number of bootstrap samples or trees (Ch. 6); LoRA matrix <span class="math inline">\(\mathbf{B}\)</span> (Ch. 18); <span class="math inline">\(b\)</span>, <span class="math inline">\(\mathbf{b}\)</span>: bias of a neuron or layer (Ch. 7), layer-normalisation shift (Ch. 17); <span class="math inline">\(\text{Beta}(a, b)\)</span> prior counts (Ch. 8)</td>
+<td><span class="math inline">\(B\)</span>: number of bootstrap samples or trees (Ch. 6); LoRA matrix <span class="math inline">\(\mathbf{B}\)</span> (Ch. 19); <span class="math inline">\(b\)</span>, <span class="math inline">\(\mathbf{b}\)</span>: bias of a neuron or layer (Ch. 7), layer-normalisation shift (Ch. 17); <span class="math inline">\(\text{Beta}(a, b)\)</span> prior counts (Ch. 8)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(n\)</span></td>

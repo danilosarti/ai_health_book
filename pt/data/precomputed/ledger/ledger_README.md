@@ -26,7 +26,7 @@ glmnet, rpart and every CV use the shared folds.
 | HomeBeat | `data/splits/homebeat_split.csv` (new) | 400 / 100 | 5 folds of 80 |
 
 `homebeat_split.csv` is written by `scripts/simulate/make_homebeat_split.py`. It stores the
-permutation `np.random.default_rng(2026).permutation(500)` that Chapters 8 and 19 use (column
+permutation `np.random.default_rng(2026).permutation(500)` that Chapters 8 and 20 use (column
 `perm_order`; training = first 400), so their numbers do not move.
 
 ## Predictor sets
@@ -44,7 +44,7 @@ permutation `np.random.default_rng(2026).permutation(500)` that Chapters 8 and 1
   arm; this changes no published number, because unpenalised logistic regression is invariant to
   rescaling and glmnet re-standardises internally.)
 - **HomeBeat**: resting_hr ~ age + frailty + baseline_inflammation (the Chapter 8 task).
-  stress_score (Chapters 9 and 19) is a separate task. Its Chapter 19 TSTR numbers are copied
+  stress_score (Chapters 9 and 20) is a separate task. Its Chapter 20 TSTR numbers are copied
   as published (rows with `role = separate task`).
 
 ## Files

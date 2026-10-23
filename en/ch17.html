@@ -561,13 +561,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Train your first GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
   </div>
 </li>
       </ul>
@@ -1912,7 +1918,7 @@ Table&nbsp;17.2: GPT and BERT use the same block; they differ in the mask and th
 </div>
 </figure>
 </div>
-<p>BERT’s strength is <strong>representation</strong>. A BERT model pretrained on general text can be fine-tuned with a small labelled set to classify notes (“does this note describe an adverse drug reaction?”) or to find the answer to a question inside a passage: given <em>“The patient was admitted to the intensive care unit yesterday”</em> and the question <em>“Where was the patient admitted?”</em>, it marks the span “the intensive care unit” <span class="citation" data-cites="rajpurkar2016squad devlin2019bert">(<a href="#ref-rajpurkar2016squad" role="doc-biblioref">Rajpurkar et al. 2016</a>; <a href="#ref-devlin2019bert" role="doc-biblioref">Devlin et al. 2019</a>)</span>. Clinical and biomedical text is different enough from newspapers and web pages that domain-specific encoders help: <strong>BioBERT</strong> continued BERT’s pretraining on PubMed abstracts and full-text articles <span class="citation" data-cites="lee2020biobert">(<a href="#ref-lee2020biobert" role="doc-biblioref">Lee et al. 2020</a>)</span>, <strong>ClinicalBERT</strong> on intensive-care notes <span class="citation" data-cites="alsentzer2019clinicalbert">(<a href="#ref-alsentzer2019clinicalbert" role="doc-biblioref">Alsentzer et al. 2019</a>)</span>, and <strong>PubMedBERT</strong> was pretrained on biomedical text from scratch, with a vocabulary of its own <span class="citation" data-cites="gu2021pubmedbert">(<a href="#ref-gu2021pubmedbert" role="doc-biblioref">Gu et al. 2021</a>)</span>. On Ward 7, a tool that flags drug-related kidney risk in notes is a classification task, a natural job for such an encoder; a tool that drafts the handover summary is a generation task, a job for a decoder. The large language models of <span class="muted">Chapter 18</span> are decoders: GPT’s design, scaled up enormously.</p>
+<p>BERT’s strength is <strong>representation</strong>. A BERT model pretrained on general text can be fine-tuned with a small labelled set to classify notes (“does this note describe an adverse drug reaction?”) or to find the answer to a question inside a passage: given <em>“The patient was admitted to the intensive care unit yesterday”</em> and the question <em>“Where was the patient admitted?”</em>, it marks the span “the intensive care unit” <span class="citation" data-cites="rajpurkar2016squad devlin2019bert">(<a href="#ref-rajpurkar2016squad" role="doc-biblioref">Rajpurkar et al. 2016</a>; <a href="#ref-devlin2019bert" role="doc-biblioref">Devlin et al. 2019</a>)</span>. Clinical and biomedical text is different enough from newspapers and web pages that domain-specific encoders help: <strong>BioBERT</strong> continued BERT’s pretraining on PubMed abstracts and full-text articles <span class="citation" data-cites="lee2020biobert">(<a href="#ref-lee2020biobert" role="doc-biblioref">Lee et al. 2020</a>)</span>, <strong>ClinicalBERT</strong> on intensive-care notes <span class="citation" data-cites="alsentzer2019clinicalbert">(<a href="#ref-alsentzer2019clinicalbert" role="doc-biblioref">Alsentzer et al. 2019</a>)</span>, and <strong>PubMedBERT</strong> was pretrained on biomedical text from scratch, with a vocabulary of its own <span class="citation" data-cites="gu2021pubmedbert">(<a href="#ref-gu2021pubmedbert" role="doc-biblioref">Gu et al. 2021</a>)</span>. On Ward 7, a tool that flags drug-related kidney risk in notes is a classification task, a natural job for such an encoder; a tool that drafts the handover summary is a generation task, a job for a decoder. The large language models of <span class="muted">Chapter 19</span> are decoders: GPT’s design, scaled up enormously.</p>
 <div id="ch17-qc-bertgpt" class="quick-check">
 <p>The pharmacy team wants two tools: (A) one that labels each night note as “possible nephrotoxicity: yes/no”, and (B) one that drafts a morning summary of the night for each patient. Which pairing fits the two families best?</p>
 <ul class="task-list">
@@ -2134,7 +2140,7 @@ Figure&nbsp;17.6: Accuracy on the last word of the 1 000 test notes. The n-gram 
 <section id="sec-ch17-limits" class="level2" data-number="17.11">
 <h2 data-number="17.11" class="anchored" data-anchor-id="sec-ch17-limits"><span class="header-section-number">17.11</span> The price of attention, and its limits</h2>
 <p>Attention’s power has a cost. Every query is compared with every key, so a text of <span class="math inline">\(T\)</span> tokens needs a <span class="math inline">\(T \times T\)</span> table of scores in every head of every layer: computation and memory grow with <span class="math inline">\(T^2\)</span>. A note ten times longer costs a hundred times more attention. This is why models have a maximum context length, and why much research has gone into cheaper variants that attend to local windows, to a few selected positions, or to compressed summaries <span class="citation" data-cites="tay2022efficient">(<a href="#ref-tay2022efficient" role="doc-biblioref">Tay et al. 2022</a>)</span>.</p>
-<p>The architecture also has limits that no engineering removes. A transformer language model is trained to produce <strong>likely</strong> continuations, not <strong>verified</strong> ones. Fluent text that is wrong (an invented dose, a guideline that does not exist) follows directly from the objective in <a href="#eq-ch17-ar-loss" class="quarto-xref">Equation&nbsp;<span>17.8</span></a>, and is called <em>hallucination</em> <span class="citation" data-cites="ji2023hallucination">(<a href="#ref-ji2023hallucination" role="doc-biblioref">Ji et al. 2023</a>)</span>. The model reproduces the patterns of its training text, including its gaps and biases. And text that <em>looks</em> like reasoning is not guaranteed to <em>be</em> sound reasoning. <span class="muted">Chapter 18</span> returns to each of these when language models become clinical assistants.</p>
+<p>The architecture also has limits that no engineering removes. A transformer language model is trained to produce <strong>likely</strong> continuations, not <strong>verified</strong> ones. Fluent text that is wrong (an invented dose, a guideline that does not exist) follows directly from the objective in <a href="#eq-ch17-ar-loss" class="quarto-xref">Equation&nbsp;<span>17.8</span></a>, and is called <em>hallucination</em> <span class="citation" data-cites="ji2023hallucination">(<a href="#ref-ji2023hallucination" role="doc-biblioref">Ji et al. 2023</a>)</span>. The model reproduces the patterns of its training text, including its gaps and biases. And text that <em>looks</em> like reasoning is not guaranteed to <em>be</em> sound reasoning. <span class="muted">Chapter 19</span> returns to each of these when language models become clinical assistants.</p>
 </section>
 <section id="sec-ch17-loop" class="level2" data-number="17.12">
 <h2 data-number="17.12" class="anchored" data-anchor-id="sec-ch17-loop"><span class="header-section-number">17.12</span> Where this fits in the decision loop</h2>
@@ -2276,31 +2282,31 @@ Selected answers
 <tbody>
 <tr class="odd">
 <td>Decoder-only transformer trained on next-token prediction</td>
-<td>Chapter 18 (pretraining and scaling: the large language model)</td>
+<td>Chapter 18 (training a small GPT yourself), Chapter 19 (pretraining and scaling: the large language model)</td>
 </tr>
 <tr class="even">
 <td>BERT-style encoders and fine-tuning on labelled notes</td>
-<td>Chapter 18 (fine-tuning, clinical NLP tools)</td>
+<td>Chapter 19 (fine-tuning, clinical NLP tools)</td>
 </tr>
 <tr class="odd">
 <td>Context length and the cost of attention</td>
-<td>Chapter 18 (retrieval-augmented generation: bringing the right text into the window)</td>
+<td>Chapter 19 (retrieval-augmented generation: bringing the right text into the window)</td>
 </tr>
 <tr class="even">
 <td>Likely is not true: hallucination</td>
-<td>Chapter 18 (evaluation, human oversight, regulation)</td>
+<td>Chapter 19 (evaluation, human oversight, regulation)</td>
 </tr>
 <tr class="odd">
 <td>Attention maps are not explanations</td>
-<td>Chapter 12 (explanation methods), Chapter 18 (auditing assistants)</td>
+<td>Chapter 12 (explanation methods), Chapter 19 (auditing assistants)</td>
 </tr>
 <tr class="even">
 <td>Attention layers in other generative models</td>
-<td>Chapter 19 (generative models beyond text)</td>
+<td>Chapter 20 (generative models beyond text)</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Next:</strong> the tiny transformer of this chapter has 28 960 weights and knows one kind of note. <span class="muted">Chapter 18</span> follows the same architecture as it is scaled to billions of weights, trained on much of the written web, aligned with human preferences, and placed, carefully, in front of clinicians.</p>
+<p><strong>Next:</strong> the tiny transformer of this chapter has 28 960 weights and knows one kind of note. In <a href="./ch18.html">Chapter 18</a> you assemble a GPT from these same blocks and train it yourself on Florence Nightingale’s <em>Notes on Nursing</em>. <span class="muted">Chapter 19</span> then follows the architecture as it is scaled to billions of weights, trained on much of the written web, aligned with human preferences, and placed, carefully, in front of clinicians.</p>
 </section>
 <section id="references" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="references">References</h2>
@@ -2381,7 +2387,7 @@ Lee, Jinhyuk, Wonjin Yoon, Sungdong Kim, Donghyeon Kim, Sunkyu Kim, Chan Ho So, 
 Nair, Vinod, and Geoffrey E. Hinton. 2010. <span>“Rectified Linear Units Improve Restricted <span>Boltzmann</span> Machines.”</span> In <em>Proceedings of the 27th International Conference on Machine Learning (ICML)</em>, 807–14.
 </div>
 <div id="ref-paszke2019pytorch" class="csl-entry" role="listitem">
-Paszke, Adam, Sam Gross, Francisco Massa, et al. 2019. <span>“<span>PyTorch</span>: An Imperative Style, High-Performance Deep Learning Library.”</span> In <em>Advances in Neural Information Processing Systems 32</em>, 8026–37.
+Paszke, Adam, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, et al. 2019. <span>“<span>PyTorch</span>: An Imperative Style, High-Performance Deep Learning Library.”</span> In <em>Advances in Neural Information Processing Systems 32</em>, 8024–35. Curran Associates.
 </div>
 <div id="ref-press2017tying" class="csl-entry" role="listitem">
 Press, Ofir, and Lior Wolf. 2017. <span>“Using the Output Embedding to Improve Language Models.”</span> In <em>Proceedings of the 15th Conference of the European Chapter of the Association for Computational Linguistics: Volume 2, Short Papers</em>, 157–63. Valencia, Spain: Association for Computational Linguistics. <a href="https://aclanthology.org/E17-2025/">https://aclanthology.org/E17-2025/</a>.
@@ -2855,8 +2861,8 @@ window._ojs.runtime.interpretFromScriptTags();
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./ch18.html" class="pagination-link" aria-label="From language model to clinical assistant">
-        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./ch18.html" class="pagination-link" aria-label="Train your first GPT">
+        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Train your first GPT</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

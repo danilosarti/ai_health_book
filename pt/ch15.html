@@ -561,13 +561,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Do modelo de linguagem ao assistente clínico</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Treine seu primeiro GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Modelos generativos além do texto</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Do modelo de linguagem ao assistente clínico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Modelos generativos além do texto</span></span></a>
   </div>
 </li>
       </ul>
@@ -1986,7 +1992,7 @@ Tabela&nbsp;15.6: TF-IDF em quatro notas em miniatura (A: ‘No rash. Vancomycin
 </div>
 <span class="checkpoint" id="ch15-tryit-search" hidden=""></span>
 </div>
-<p>Alguns minutos com a caixa de busca deixam duas lições. Primeiro, o TF-IDF importa: com contagens brutas, palavras como <em>with</em>, <em>on</em> e <em>the</em> dominam os vetores, e as notas longas vencem simplesmente por serem longas e repetitivas. Segundo, <strong>a recuperação herda a cegueira do saco de palavras</strong>. Busque “gentamicin hearing” em todos os documentos e os primeiros resultados são resumos de alta que dizem “<em>no</em> ringing in the ears or hearing change reported” (“<em>nenhum</em> zumbido nos ouvidos ou alteração da audição relatados”): as palavras coincidem; o significado é o oposto do que a família queria. Um mecanismo de busca recupera candidatos; uma pessoa, ou uma etapa posterior que leia com mais cuidado, precisa julgá-los. Exatamente esse padrão volta no Capítulo 18, onde uma recuperação ao estilo do TF-IDF se torna o “R” da <em>geração aumentada por recuperação</em> (<em>retrieval-augmented generation</em>) <span class="citation" data-cites="lewis2020rag">(<a href="#ref-lewis2020rag" role="doc-biblioref">Lewis et al. 2020</a>)</span>, a etapa que busca documentos para um modelo de linguagem ler antes de responder.</p>
+<p>Alguns minutos com a caixa de busca deixam duas lições. Primeiro, o TF-IDF importa: com contagens brutas, palavras como <em>with</em>, <em>on</em> e <em>the</em> dominam os vetores, e as notas longas vencem simplesmente por serem longas e repetitivas. Segundo, <strong>a recuperação herda a cegueira do saco de palavras</strong>. Busque “gentamicin hearing” em todos os documentos e os primeiros resultados são resumos de alta que dizem “<em>no</em> ringing in the ears or hearing change reported” (“<em>nenhum</em> zumbido nos ouvidos ou alteração da audição relatados”): as palavras coincidem; o significado é o oposto do que a família queria. Um mecanismo de busca recupera candidatos; uma pessoa, ou uma etapa posterior que leia com mais cuidado, precisa julgá-los. Exatamente esse padrão volta no Capítulo 19, onde uma recuperação ao estilo do TF-IDF se torna o “R” da <em>geração aumentada por recuperação</em> (<em>retrieval-augmented generation</em>) <span class="citation" data-cites="lewis2020rag">(<a href="#ref-lewis2020rag" role="doc-biblioref">Lewis et al. 2020</a>)</span>, a etapa que busca documentos para um modelo de linguagem ler antes de responder.</p>
 <div id="ch15-m3" class="mission">
 <p><strong>A busca de Seán.</strong> Seán quer a nota mais parecida com a consulta <em>flushing vancomycin infusion</em> (rubor, vancomicina, infusão). Em R, a matriz de contagens documento-termo <code>dtm</code> (uma linha por documento, uma coluna por palavra) e uma função auxiliar <code>query_counts()</code> já estão prontas; calcule a frequência inversa de documento de cada palavra. Em Python, o <code>TfidfVectorizer</code> do scikit-learn faz a ponderação; escolha o documento com a maior pontuação.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
@@ -2503,15 +2509,15 @@ Respostas selecionadas
 </tr>
 <tr class="even">
 <td>Tokenizadores de subpalavras (BPE, WordPiece)</td>
-<td>Capítulos 17 e 18 (BERT, GPT e os seus vocabulários)</td>
+<td>Capítulos 17 e 19 (BERT, GPT e os seus vocabulários)</td>
 </tr>
 <tr class="odd">
 <td>Recuperação por TF-IDF e similaridade do cosseno</td>
-<td>Capítulo 18 (a etapa de recuperação da geração aumentada por recuperação)</td>
+<td>Capítulo 19 (a etapa de recuperação da geração aumentada por recuperação)</td>
 </tr>
 <tr class="even">
 <td>Filas de revisão e supervisão humana dos limiares</td>
-<td>Capítulo 18 (manter uma pessoa no ciclo de um assistente clínico)</td>
+<td>Capítulo 19 (manter uma pessoa no ciclo de um assistente clínico)</td>
 </tr>
 </tbody>
 </table>
@@ -2617,7 +2623,7 @@ Salton, Gerard, e Christopher Buckley. 1988. <span>«Term-Weighting Approaches i
 Schuster, Mike, e Kaisuke Nakajima. 2012. <span>«Japanese and Korean Voice Search»</span>. Em <em>2012 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)</em>, 5149–52. <a href="https://doi.org/10.1109/ICASSP.2012.6289079">https://doi.org/10.1109/ICASSP.2012.6289079</a>.
 </div>
 <div id="ref-sennrich2016bpe" class="csl-entry" role="listitem">
-Sennrich, Rico, Barry Haddow, e Alexandra Birch. 2016. <span>«Neural Machine Translation of Rare Words with Subword Units»</span>. Em <em>Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (ACL)</em>, 1715–25. <a href="https://doi.org/10.18653/v1/P16-1162">https://doi.org/10.18653/v1/P16-1162</a>.
+Sennrich, Rico, Barry Haddow, e Alexandra Birch. 2016. <span>«Neural Machine Translation of Rare Words with Subword Units»</span>. Em <em>Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)</em>, 1715–25. Berlin, Germany: Association for Computational Linguistics. <a href="https://doi.org/10.18653/v1/P16-1162">https://doi.org/10.18653/v1/P16-1162</a>.
 </div>
 <div id="ref-settles2009active" class="csl-entry" role="listitem">
 Settles, Burr. 2009. <span>«Active Learning Literature Survey»</span>. Computer Sciences Technical Report 1648. University of Wisconsin–Madison, Department of Computer Sciences. <a href="https://research.cs.wisc.edu/techreports/2009/TR1648.pdf">https://research.cs.wisc.edu/techreports/2009/TR1648.pdf</a>.

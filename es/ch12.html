@@ -561,13 +561,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Del modelo de lenguaje al asistente clínico</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Entrena tu primer GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Modelos generativos más allá del texto</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Del modelo de lenguaje al asistente clínico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Modelos generativos más allá del texto</span></span></a>
   </div>
 </li>
       </ul>
@@ -979,7 +985,7 @@ Tabla&nbsp;12.1: Los modelos de la UCI Sala 7 que se explican en este capítulo,
 <p>Vuelve a mirar la <a href="#fig-ch12-bridge" class="quarto-xref">Figura&nbsp;<span>12.1</span></a>. En la orilla derecha hay tres ámbitos (investigación científica, práctica clínica, y políticas y regulación), y cada uno envía una petición distinta a través del puente. Un regulador quiere pruebas de que un dispositivo es seguro y de que sus usuarios pueden supervisarlo; un clínico quiere saber si el número de esta noche tiene sentido para este paciente; un científico quiere saber qué ha aprendido el modelo sobre la enfermedad. Empezamos por la ley, porque en Europa la ley dice ahora algo explícito sobre las explicaciones, y después pasamos a los otros usos.</p>
 <section id="lo-que-exige-la-ley" class="level3" data-number="12.2.1">
 <h3 data-number="12.2.1" class="anchored" data-anchor-id="lo-que-exige-la-ley"><span class="header-section-number">12.2.1</span> Lo que exige la ley</h3>
-<p><strong>El Reglamento de IA.</strong> Un software que proporciona información utilizada para tomar decisiones diagnósticas o terapéuticas es un producto sanitario de clase IIa como mínimo según la regla de clasificación 11 del Reglamento de Productos Sanitarios de la UE (MDR), y por eso necesita la evaluación de un organismo notificado <span class="citation" data-cites="eumdr2017">(<a href="#ref-eumdr2017" role="doc-biblioref">European Parliament and Council of the European Union 2017</a>, Annex VIII, Rule 11)</span>. El Reglamento de IA clasifica como de <strong>alto riesgo</strong> cualquier sistema de IA que sea un producto, o un componente de seguridad de un producto, cubierto por las leyes enumeradas en su Anexo I (entre ellas el MDR y el reglamento sobre productos sanitarios para diagnóstico in vitro) cuando ese producto necesita dicha evaluación por terceros <span class="citation" data-cites="euaiact2024">(<a href="#ref-euaiact2024" role="doc-biblioref">European Parliament and Council of the European Union 2024</a>, Article 6(1) and Annex I)</span>. La mayoría de los modelos de predicción clínica comercializados, incluida una puntuación de riesgo de LRA como la de la pantalla de Aoife, son por tanto sistemas de IA de alto riesgo (el <a href="./ch18.html">Capítulo 18</a> recorre la clasificación). Tres artículos del Reglamento tratan directamente de las explicaciones.</p>
+<p><strong>El Reglamento de IA.</strong> Un software que proporciona información utilizada para tomar decisiones diagnósticas o terapéuticas es un producto sanitario de clase IIa como mínimo según la regla de clasificación 11 del Reglamento de Productos Sanitarios de la UE (MDR), y por eso necesita la evaluación de un organismo notificado <span class="citation" data-cites="eumdr2017">(<a href="#ref-eumdr2017" role="doc-biblioref">European Parliament and Council of the European Union 2017</a>, Annex VIII, Rule 11)</span>. El Reglamento de IA clasifica como de <strong>alto riesgo</strong> cualquier sistema de IA que sea un producto, o un componente de seguridad de un producto, cubierto por las leyes enumeradas en su Anexo I (entre ellas el MDR y el reglamento sobre productos sanitarios para diagnóstico in vitro) cuando ese producto necesita dicha evaluación por terceros <span class="citation" data-cites="euaiact2024">(<a href="#ref-euaiact2024" role="doc-biblioref">European Parliament and Council of the European Union 2024</a>, Article 6(1) and Annex I)</span>. La mayoría de los modelos de predicción clínica comercializados, incluida una puntuación de riesgo de LRA como la de la pantalla de Aoife, son por tanto sistemas de IA de alto riesgo (el <a href="./ch19.html">Capítulo 19</a> recorre la clasificación). Tres artículos del Reglamento tratan directamente de las explicaciones.</p>
 <ul>
 <li><strong>Artículo 13, transparencia y comunicación de información a los responsables del despliegue.</strong> Un sistema de alto riesgo debe diseñarse de modo que su funcionamiento sea “lo suficientemente transparente para que los responsables del despliegue interpreten y usen correctamente sus resultados de salida”. Sus instrucciones de uso deben indicar sus capacidades y limitaciones y, cuando proceda, las características técnicas que permitan “proporcionar información pertinente para explicar sus resultados de salida” <span class="citation" data-cites="euaiact2024">(<a href="#ref-euaiact2024" role="doc-biblioref">European Parliament and Council of the European Union 2024</a>, Article 13(1) and 13(3)(b)(iv))</span>. El responsable del despliegue es el hospital; quienes interpretan son Emma y Seán.</li>
 <li><strong>Artículo 14, supervisión humana.</strong> Las personas que supervisan el sistema deben poder entender sus capacidades y limitaciones, ser conscientes de la tendencia a confiar en exceso en su salida (el sesgo de automatización), interpretar correctamente la salida, teniendo en cuenta las herramientas y los métodos de interpretación disponibles, y desestimarla, invalidarla o detener el sistema <span class="citation" data-cites="euaiact2024">(<a href="#ref-euaiact2024" role="doc-biblioref">European Parliament and Council of the European Union 2024</a>, Article 14(4))</span>. Los métodos de explicación aparecen como una ayuda para la supervisión, no como un sustituto de ella.</li>
@@ -2950,7 +2956,7 @@ Respuestas seleccionadas
 </tr>
 <tr class="even">
 <td>Transparencia, supervisión humana y el Reglamento de IA</td>
-<td>Capítulo 18 (del modelo de lenguaje al asistente clínico)</td>
+<td>Capítulo 19 (del modelo de lenguaje al asistente clínico)</td>
 </tr>
 </tbody>
 </table>

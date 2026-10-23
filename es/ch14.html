@@ -564,13 +564,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Del modelo de lenguaje al asistente clínico</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Entrena tu primer GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Modelos generativos más allá del texto</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Del modelo de lenguaje al asistente clínico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Modelos generativos más allá del texto</span></span></a>
   </div>
 </li>
       </ul>
@@ -1893,7 +1899,7 @@ Recompensa personalizada para cada franja
 <span class="checkpoint" id="ch14-tryit-reward" hidden=""></span>
 </div>
 <p>Con la recompensa ponderada clínicamente, el agente limita la hipoglucemia al 0,7 % del día. Recompensar solo el tiempo en rango da aquí la <em>misma</em> política, porque en este modelo de juguete salir del rango por abajo ya es lo bastante costoso. Pero “+1 siempre que la glucosa esté por debajo de 10 mmol/L”, una recompensa que suena a “controlar la hiperglucemia”, produce una política que sube la infusión y la mantiene alta: hipoglucemia durante el 48 % del día, y el tiempo en rango baja al 15 %. El agente hizo exactamente lo que se le pidió. Nada en su recompensa decía que 3 mmol/L es peor que 9.</p>
-<p>La misma lección recorre los casos reales. La recompensa del AI Clinician ignoraba todo lo que ocurría entre el ingreso y el día 90, incluidos los daños causados por el propio tratamiento. Los modelos de lenguaje se ajustan con aprendizaje por refuerzo a partir de valoraciones humanas, y aprenden a producir respuestas que <em>prefieren los evaluadores</em>, lo que no siempre coincide con respuestas verdaderas <span class="citation" data-cites="ouyang2022instructgpt">(<a href="#ref-ouyang2022instructgpt" role="doc-biblioref">Ouyang et&nbsp;al. 2022</a>)</span>; el capítulo 18 vuelve sobre ello.</p>
+<p>La misma lección recorre los casos reales. La recompensa del AI Clinician ignoraba todo lo que ocurría entre el ingreso y el día 90, incluidos los daños causados por el propio tratamiento. Los modelos de lenguaje se ajustan con aprendizaje por refuerzo a partir de valoraciones humanas, y aprenden a producir respuestas que <em>prefieren los evaluadores</em>, lo que no siempre coincide con respuestas verdaderas <span class="citation" data-cites="ouyang2022instructgpt">(<a href="#ref-ouyang2022instructgpt" role="doc-biblioref">Ouyang et&nbsp;al. 2022</a>)</span>; el capítulo 19 vuelve sobre ello.</p>
 </section>
 <section id="evaluar-e-implantar-con-seguridad-una-política-aprendida" class="level3" data-number="14.5.4">
 <h3 data-number="14.5.4" class="anchored" data-anchor-id="evaluar-e-implantar-con-seguridad-una-política-aprendida"><span class="header-section-number">14.5.4</span> Evaluar e implantar con seguridad una política aprendida</h3>
@@ -2066,15 +2072,15 @@ Respuestas seleccionadas
 <tbody>
 <tr class="odd">
 <td>Las recompensas como valores codificados; manipulación de la recompensa</td>
-<td>Capítulo 18 (aprendizaje por refuerzo a partir de retroalimentación humana en los modelos de lenguaje)</td>
+<td>Capítulo 19 (aprendizaje por refuerzo a partir de retroalimentación humana en los modelos de lenguaje)</td>
 </tr>
 <tr class="even">
 <td>Las políticas aprendidas offline necesitan una evaluación prospectiva y causal</td>
-<td>Capítulo 18 (evaluación y gobernanza de la IA clínica)</td>
+<td>Capítulo 19 (evaluación y gobernanza de la IA clínica)</td>
 </tr>
 <tr class="odd">
 <td>Los simuladores como entornos con una verdad conocida</td>
-<td>Capítulo 19 (modelos generativos y datos sintéticos)</td>
+<td>Capítulo 20 (modelos generativos y datos sintéticos)</td>
 </tr>
 </tbody>
 </table>
@@ -2171,7 +2177,7 @@ Murphy, Susan A. 2005. <span>«An Experimental Design for the Development of Ada
 NICE-SUGAR Study Investigators. 2009. <span>«Intensive versus Conventional Glucose Control in Critically Ill Patients»</span>. <em>New England Journal of Medicine</em> 360 (13): 1283-97. <a href="https://doi.org/10.1056/NEJMoa0810625">https://doi.org/10.1056/NEJMoa0810625</a>.
 </div>
 <div id="ref-ouyang2022instructgpt" class="csl-entry" role="listitem">
-Ouyang, Long, Jeff Wu, Xu Jiang, et&nbsp;al. 2022. <span>«Training Language Models to Follow Instructions with Human Feedback»</span>. En <em>Advances in Neural Information Processing Systems 35</em>.
+Ouyang, Long, Jeffrey Wu, Xu Jiang, Diogo Almeida, Carroll Wainwright, Pamela Mishkin, Chong Zhang, et&nbsp;al. 2022. <span>«Training Language Models to Follow Instructions with Human Feedback»</span>. En <em>Advances in Neural Information Processing Systems 35</em>, 27730-44. <a href="https://doi.org/10.52202/068431-2011">https://doi.org/10.52202/068431-2011</a>.
 </div>
 <div id="ref-pallmann2018adaptive" class="csl-entry" role="listitem">
 Pallmann, Philip, Alun W. Bedding, Babak Choodari-Oskooei, Munyaradzi Dimairo, Laura Flight, Lisa V. Hampson, Jane Holmes, et&nbsp;al. 2018. <span>«Adaptive Designs in Clinical Trials: Why Use Them, and How to Run and Report Them»</span>. <em>BMC Medicine</em> 16: 29. <a href="https://doi.org/10.1186/s12916-018-1017-7">https://doi.org/10.1186/s12916-018-1017-7</a>.

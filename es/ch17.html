@@ -561,13 +561,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Del modelo de lenguaje al asistente clínico</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Entrena tu primer GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Modelos generativos más allá del texto</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Del modelo de lenguaje al asistente clínico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Modelos generativos más allá del texto</span></span></a>
   </div>
 </li>
       </ul>
@@ -1919,7 +1925,7 @@ Tabla&nbsp;17.2: GPT y BERT usan el mismo bloque; difieren en la máscara y en e
 </div>
 </figure>
 </div>
-<p>La fuerza de BERT es la <strong>representación</strong>. Un modelo BERT preentrenado con texto general puede ajustarse (<em>fine-tuning</em>) con un pequeño conjunto etiquetado para clasificar notas (“¿describe esta nota una reacción adversa a un fármaco?”) o para encontrar la respuesta a una pregunta dentro de un pasaje: dado <em>“El paciente ingresó ayer en la unidad de cuidados intensivos”</em> y la pregunta <em>“¿Dónde ingresó el paciente?”</em>, marca el fragmento “la unidad de cuidados intensivos” <span class="citation" data-cites="rajpurkar2016squad devlin2019bert">(<a href="#ref-rajpurkar2016squad" role="doc-biblioref">Rajpurkar et&nbsp;al. 2016</a>; <a href="#ref-devlin2019bert" role="doc-biblioref">Devlin et&nbsp;al. 2019</a>)</span>. El texto clínico y biomédico es lo bastante distinto de la prensa y las páginas web como para que ayuden los encoders específicos del dominio: <strong>BioBERT</strong> continuó el preentrenamiento de BERT con resúmenes y artículos completos de PubMed <span class="citation" data-cites="lee2020biobert">(<a href="#ref-lee2020biobert" role="doc-biblioref">Lee et&nbsp;al. 2020</a>)</span>, <strong>ClinicalBERT</strong> con notas de cuidados intensivos <span class="citation" data-cites="alsentzer2019clinicalbert">(<a href="#ref-alsentzer2019clinicalbert" role="doc-biblioref">Alsentzer et&nbsp;al. 2019</a>)</span>, y <strong>PubMedBERT</strong> se preentrenó desde cero con texto biomédico, con un vocabulario propio <span class="citation" data-cites="gu2021pubmedbert">(<a href="#ref-gu2021pubmedbert" role="doc-biblioref">Gu et&nbsp;al. 2021</a>)</span>. En la UCI Sala 7, una herramienta que señala en las notas el riesgo renal relacionado con los fármacos es una tarea de clasificación, un trabajo natural para un encoder de este tipo; una herramienta que redacta el resumen del cambio de turno es una tarea de generación, un trabajo para un decoder. Los grandes modelos de lenguaje del <span class="muted">Capítulo 18</span> son decoders: el diseño de GPT, ampliado enormemente.</p>
+<p>La fuerza de BERT es la <strong>representación</strong>. Un modelo BERT preentrenado con texto general puede ajustarse (<em>fine-tuning</em>) con un pequeño conjunto etiquetado para clasificar notas (“¿describe esta nota una reacción adversa a un fármaco?”) o para encontrar la respuesta a una pregunta dentro de un pasaje: dado <em>“El paciente ingresó ayer en la unidad de cuidados intensivos”</em> y la pregunta <em>“¿Dónde ingresó el paciente?”</em>, marca el fragmento “la unidad de cuidados intensivos” <span class="citation" data-cites="rajpurkar2016squad devlin2019bert">(<a href="#ref-rajpurkar2016squad" role="doc-biblioref">Rajpurkar et&nbsp;al. 2016</a>; <a href="#ref-devlin2019bert" role="doc-biblioref">Devlin et&nbsp;al. 2019</a>)</span>. El texto clínico y biomédico es lo bastante distinto de la prensa y las páginas web como para que ayuden los encoders específicos del dominio: <strong>BioBERT</strong> continuó el preentrenamiento de BERT con resúmenes y artículos completos de PubMed <span class="citation" data-cites="lee2020biobert">(<a href="#ref-lee2020biobert" role="doc-biblioref">Lee et&nbsp;al. 2020</a>)</span>, <strong>ClinicalBERT</strong> con notas de cuidados intensivos <span class="citation" data-cites="alsentzer2019clinicalbert">(<a href="#ref-alsentzer2019clinicalbert" role="doc-biblioref">Alsentzer et&nbsp;al. 2019</a>)</span>, y <strong>PubMedBERT</strong> se preentrenó desde cero con texto biomédico, con un vocabulario propio <span class="citation" data-cites="gu2021pubmedbert">(<a href="#ref-gu2021pubmedbert" role="doc-biblioref">Gu et&nbsp;al. 2021</a>)</span>. En la UCI Sala 7, una herramienta que señala en las notas el riesgo renal relacionado con los fármacos es una tarea de clasificación, un trabajo natural para un encoder de este tipo; una herramienta que redacta el resumen del cambio de turno es una tarea de generación, un trabajo para un decoder. Los grandes modelos de lenguaje del <span class="muted">Capítulo 19</span> son decoders: el diseño de GPT, ampliado enormemente.</p>
 <div id="ch17-qc-bertgpt" class="quick-check">
 <p>El equipo de farmacia quiere dos herramientas: (A) una que etiquete cada nota nocturna como “posible nefrotoxicidad: sí/no” y (B) otra que redacte un resumen matutino de la noche para cada paciente. ¿Qué combinación encaja mejor con las dos familias?</p>
 <ul class="task-list">
@@ -2141,7 +2147,7 @@ Figura&nbsp;17.6: Exactitud en la última palabra de las 1000 notas de prueba. E
 <section id="sec-ch17-limits" class="level2" data-number="17.11">
 <h2 data-number="17.11" class="anchored" data-anchor-id="sec-ch17-limits"><span class="header-section-number">17.11</span> El precio de la atención y sus límites</h2>
 <p>El poder de la atención tiene un coste. Cada consulta se compara con cada clave, así que un texto de <span class="math inline">\(T\)</span> tokens necesita una tabla de puntuaciones de <span class="math inline">\(T \times T\)</span> en cada cabeza de cada capa: el cálculo y la memoria crecen con <span class="math inline">\(T^2\)</span>. Una nota diez veces más larga cuesta cien veces más atención. Por eso los modelos tienen una longitud máxima de contexto, y por eso mucha investigación se ha dedicado a variantes más baratas que prestan atención a ventanas locales, a unas pocas posiciones seleccionadas o a resúmenes comprimidos <span class="citation" data-cites="tay2022efficient">(<a href="#ref-tay2022efficient" role="doc-biblioref">Tay et&nbsp;al. 2022</a>)</span>.</p>
-<p>La arquitectura también tiene límites que ninguna ingeniería elimina. Un modelo de lenguaje transformer se entrena para producir continuaciones <strong>probables</strong>, no <strong>verificadas</strong>. Un texto fluido pero erróneo (una dosis inventada, una guía que no existe) se deriva directamente del objetivo de la <a href="#eq-ch17-ar-loss" class="quarto-xref">Ecuación&nbsp;<span>17.8</span></a>, y se llama <em>alucinación</em> <span class="citation" data-cites="ji2023hallucination">(<a href="#ref-ji2023hallucination" role="doc-biblioref">Ji et&nbsp;al. 2023</a>)</span>. El modelo reproduce los patrones de su texto de entrenamiento, incluidas sus lagunas y sus sesgos. Y un texto que <em>parece</em> razonamiento no garantiza <em>ser</em> un razonamiento sólido. El <span class="muted">Capítulo 18</span> vuelve sobre cada uno de estos puntos cuando los modelos de lenguaje se convierten en asistentes clínicos.</p>
+<p>La arquitectura también tiene límites que ninguna ingeniería elimina. Un modelo de lenguaje transformer se entrena para producir continuaciones <strong>probables</strong>, no <strong>verificadas</strong>. Un texto fluido pero erróneo (una dosis inventada, una guía que no existe) se deriva directamente del objetivo de la <a href="#eq-ch17-ar-loss" class="quarto-xref">Ecuación&nbsp;<span>17.8</span></a>, y se llama <em>alucinación</em> <span class="citation" data-cites="ji2023hallucination">(<a href="#ref-ji2023hallucination" role="doc-biblioref">Ji et&nbsp;al. 2023</a>)</span>. El modelo reproduce los patrones de su texto de entrenamiento, incluidas sus lagunas y sus sesgos. Y un texto que <em>parece</em> razonamiento no garantiza <em>ser</em> un razonamiento sólido. El <span class="muted">Capítulo 19</span> vuelve sobre cada uno de estos puntos cuando los modelos de lenguaje se convierten en asistentes clínicos.</p>
 </section>
 <section id="sec-ch17-loop" class="level2" data-number="17.12">
 <h2 data-number="17.12" class="anchored" data-anchor-id="sec-ch17-loop"><span class="header-section-number">17.12</span> Dónde encaja en el ciclo de decisión</h2>
@@ -2277,31 +2283,31 @@ Respuestas seleccionadas
 <tbody>
 <tr class="odd">
 <td>Transformer solo decoder entrenado en la predicción del siguiente token</td>
-<td>Capítulo 18 (preentrenamiento y escala: el gran modelo de lenguaje)</td>
+<td>Capítulo 18 (entrenar tú mismo un pequeño GPT), Capítulo 19 (preentrenamiento y escala: el gran modelo de lenguaje)</td>
 </tr>
 <tr class="even">
 <td>Encoders al estilo de BERT y ajuste fino con notas etiquetadas</td>
-<td>Capítulo 18 (ajuste fino, herramientas de PLN clínico)</td>
+<td>Capítulo 19 (ajuste fino, herramientas de PLN clínico)</td>
 </tr>
 <tr class="odd">
 <td>Longitud de contexto y coste de la atención</td>
-<td>Capítulo 18 (generación aumentada por recuperación: llevar el texto adecuado a la ventana)</td>
+<td>Capítulo 19 (generación aumentada por recuperación: llevar el texto adecuado a la ventana)</td>
 </tr>
 <tr class="even">
 <td>Probable no es verdadero: la alucinación</td>
-<td>Capítulo 18 (evaluación, supervisión humana, regulación)</td>
+<td>Capítulo 19 (evaluación, supervisión humana, regulación)</td>
 </tr>
 <tr class="odd">
 <td>Los mapas de atención no son explicaciones</td>
-<td>Capítulo 12 (métodos de explicación), Capítulo 18 (auditoría de asistentes)</td>
+<td>Capítulo 12 (métodos de explicación), Capítulo 19 (auditoría de asistentes)</td>
 </tr>
 <tr class="even">
 <td>Capas de atención en otros modelos generativos</td>
-<td>Capítulo 19 (modelos generativos más allá del texto)</td>
+<td>Capítulo 20 (modelos generativos más allá del texto)</td>
 </tr>
 </tbody>
 </table>
-<p><strong>A continuación:</strong> el pequeño transformer de este capítulo tiene 28 960 pesos y conoce un solo tipo de nota. El <span class="muted">Capítulo 18</span> sigue la misma arquitectura a medida que se amplía a miles de millones de pesos, se entrena con buena parte de la web escrita, se alinea con las preferencias humanas y se coloca, con cuidado, ante los clínicos.</p>
+<p><strong>A continuación:</strong> el pequeño transformer de este capítulo tiene 28 960 pesos y conoce un solo tipo de nota. En el <a href="./ch18.html">Capítulo 18</a> montas un GPT con estos mismos bloques y lo entrenas tú mismo con <em>Notes on Nursing</em> de Florence Nightingale. Después, el <span class="muted">Capítulo 19</span> sigue la arquitectura a medida que se amplía a miles de millones de pesos, se entrena con buena parte de la web escrita, se alinea con las preferencias humanas y se coloca, con cuidado, ante los clínicos.</p>
 </section>
 <section id="referencias" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="referencias">Referencias</h2>
@@ -2382,7 +2388,7 @@ Lee, Jinhyuk, Wonjin Yoon, Sungdong Kim, Donghyeon Kim, Sunkyu Kim, Chan Ho So, 
 Nair, Vinod, y Geoffrey E. Hinton. 2010. <span>«Rectified Linear Units Improve Restricted <span>Boltzmann</span> Machines»</span>. En <em>Proceedings of the 27th International Conference on Machine Learning (ICML)</em>, 807-14.
 </div>
 <div id="ref-paszke2019pytorch" class="csl-entry" role="listitem">
-Paszke, Adam, Sam Gross, Francisco Massa, et&nbsp;al. 2019. <span>«<span>PyTorch</span>: An Imperative Style, High-Performance Deep Learning Library»</span>. En <em>Advances in Neural Information Processing Systems 32</em>, 8026-37.
+Paszke, Adam, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, et&nbsp;al. 2019. <span>«<span>PyTorch</span>: An Imperative Style, High-Performance Deep Learning Library»</span>. En <em>Advances in Neural Information Processing Systems 32</em>, 8024-35. Curran Associates.
 </div>
 <div id="ref-press2017tying" class="csl-entry" role="listitem">
 Press, Ofir, y Lior Wolf. 2017. <span>«Using the Output Embedding to Improve Language Models»</span>. En <em>Proceedings of the 15th Conference of the European Chapter of the Association for Computational Linguistics: Volume 2, Short Papers</em>, 157-63. Valencia, Spain: Association for Computational Linguistics. <a href="https://aclanthology.org/E17-2025/">https://aclanthology.org/E17-2025/</a>.
@@ -2856,8 +2862,8 @@ window._ojs.runtime.interpretFromScriptTags();
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./ch18.html" class="pagination-link" aria-label="Del modelo de lenguaje al asistente clínico">
-        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Del modelo de lenguaje al asistente clínico</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./ch18.html" class="pagination-link" aria-label="Entrena tu primer GPT">
+        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Entrena tu primer GPT</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

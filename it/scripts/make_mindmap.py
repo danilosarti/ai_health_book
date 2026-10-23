@@ -1,14 +1,14 @@
 """Mind map of the whole book (inline SVG, theme-aware, three languages).
 Writes _includes/mindmap.<lang>.qmd; chapters listed in READY become links."""
 import html
-READY = {f"ch{i:02d}" for i in range(1, 20)}
+READY = {f"ch{i:02d}" for i in range(1, 21)}
 B = {
  "en": dict(center=["AI and machine learning", "for health sciences"], tag="the decision loop",
    parts=[("I · Foundations", [("ch01","1 Data, models and decisions"),("ch02","2 Uncertainty and probability"),("ch03","3 Learning from data: the workflow")]),
           ("II · Predicting outcomes", [("ch04","4 Linear models, regularisation"),("ch05","5 Classification and thresholds"),("ch06","6 Trees and ensembles"),("ch07","7 Neural networks, deep learning"),("ch08","8 Bayesian learning"),("ch09","9 When data are missing")]),
           ("III · Finding structure", [("ch10","10 High-dimensional data"),("ch11","11 Clustering patients")]),
           ("IV · Trusting models", [("ch12","12 Interpretable AI"),("ch13","13 Prediction vs causation"),("ch14","14 Reinforcement learning")]),
-          ("V · Language and generative AI", [("ch15","15 Text as data"),("ch16","16 Language models, embeddings"),("ch17","17 Attention, transformers"),("ch18","18 From LLM to clinical assistant"),("ch19","19 Generative models beyond text")]),
+          ("V · Language and generative AI", [("ch15","15 Text as data"),("ch16","16 Language models, embeddings"),("ch17","17 Attention, transformers"),("ch18","18 Train your first GPT"),("ch19","19 From LLM to clinical assistant"),("ch20","20 Generative models beyond text")]),
           ("Appendices", [("setup","A Setup: R, Python, Git, GitHub"),("data-dictionary","B Data"),("glossary","C Glossary"),("notation","D Notation")])],
    title="Mind map of the book", desc="The book's central theme, AI and machine learning for health sciences seen through the decision loop, branches into five parts and the appendices, each listing its chapters."),
  "pt": dict(center=["IA e aprendizado de máquina", "para as ciências da saúde"], tag="o ciclo de decisão",
@@ -16,7 +16,7 @@ B = {
           ("II · Prever desfechos", [("ch04","4 Modelos lineares, regularização"),("ch05","5 Classificação e limiares"),("ch06","6 Árvores e comitês"),("ch07","7 Redes neurais, deep learning"),("ch08","8 Aprendizado bayesiano"),("ch09","9 Quando faltam dados")]),
           ("III · Encontrar estrutura", [("ch10","10 Dados de alta dimensão"),("ch11","11 Agrupamento de pacientes")]),
           ("IV · Confiar nos modelos", [("ch12","12 IA interpretável"),("ch13","13 Predição × causalidade"),("ch14","14 Aprendizado por reforço")]),
-          ("V · Linguagem e IA generativa", [("ch15","15 Texto como dado"),("ch16","16 Modelos de linguagem"),("ch17","17 Atenção e transformers"),("ch18","18 Do LLM ao assistente clínico"),("ch19","19 Generativos além do texto")]),
+          ("V · Linguagem e IA generativa", [("ch15","15 Texto como dado"),("ch16","16 Modelos de linguagem"),("ch17","17 Atenção e transformers"),("ch18","18 Treine seu primeiro GPT"),("ch19","19 Do LLM ao assistente clínico"),("ch20","20 Generativos além do texto")]),
           ("Apêndices", [("setup","A Configuração: R, Python, Git"),("data-dictionary","B Dados"),("glossary","C Glossário"),("notation","D Notação")])],
    title="Mapa mental do livro", desc="O tema central do livro, IA e aprendizado de máquina para as ciências da saúde vistos pelo ciclo de decisão, se ramifica em cinco partes e nos apêndices, cada um com os seus capítulos."),
  "it": dict(center=["IA e apprendimento automatico", "per le scienze della salute"], tag="il ciclo decisionale",
@@ -24,7 +24,7 @@ B = {
           ("II · Prevedere gli esiti", [("ch04","4 Modelli lineari, regolarizzazione"),("ch05","5 Classificazione e soglie"),("ch06","6 Alberi e metodi d'insieme"),("ch07","7 Reti neurali, deep learning"),("ch08","8 Apprendimento bayesiano"),("ch09","9 Quando mancano i dati")]),
           ("III · Trovare strutture", [("ch10","10 Dati ad alta dimensionalità"),("ch11","11 Raggruppare i pazienti")]),
           ("IV · Fidarsi dei modelli", [("ch12","12 IA interpretabile"),("ch13","13 Predizione e causalità"),("ch14","14 Apprendimento per rinforzo")]),
-          ("V · Linguaggio e IA generativa", [("ch15","15 Il testo come dato"),("ch16","16 Modelli linguistici"),("ch17","17 Attenzione e transformer"),("ch18","18 Dall'LLM all'assistente clinico"),("ch19","19 Generativi oltre il testo")]),
+          ("V · Linguaggio e IA generativa", [("ch15","15 Il testo come dato"),("ch16","16 Modelli linguistici"),("ch17","17 Attenzione e transformer"),("ch18","18 Addestra il tuo primo GPT"),("ch19","19 Dall'LLM all'assistente clinico"),("ch20","20 Generativi oltre il testo")]),
           ("Appendici", [("setup","A Configurazione: R, Python, Git"),("data-dictionary","B Dati"),("glossary","C Glossario"),("notation","D Notazione")])],
    title="Mappa mentale del libro", desc="Il tema centrale del libro, IA e apprendimento automatico per le scienze della salute visti attraverso il ciclo decisionale, si dirama in cinque parti e nelle appendici, ciascuna con i suoi capitoli."),
  "es": dict(center=["IA y aprendizaje automático", "para las ciencias de la salud"], tag="el ciclo de decisión",
@@ -32,7 +32,7 @@ B = {
           ("II · Predecir desenlaces", [("ch04","4 Modelos lineales, regularización"),("ch05","5 Clasificación y umbrales"),("ch06","6 Árboles y ensambles"),("ch07","7 Redes neuronales, deep learning"),("ch08","8 Aprendizaje bayesiano"),("ch09","9 Cuando faltan datos")]),
           ("III · Encontrar estructura", [("ch10","10 Datos de alta dimensión"),("ch11","11 Agrupar pacientes")]),
           ("IV · Confiar en los modelos", [("ch12","12 IA interpretable"),("ch13","13 Predicción y causalidad"),("ch14","14 Aprendizaje por refuerzo")]),
-          ("V · Lenguaje e IA generativa", [("ch15","15 El texto como dato"),("ch16","16 Modelos de lenguaje"),("ch17","17 Atención y transformers"),("ch18","18 Del LLM al asistente clínico"),("ch19","19 Generativos más allá del texto")]),
+          ("V · Lenguaje e IA generativa", [("ch15","15 El texto como dato"),("ch16","16 Modelos de lenguaje"),("ch17","17 Atención y transformers"),("ch18","18 Entrena tu primer GPT"),("ch19","19 Del LLM al asistente clínico"),("ch20","20 Generativos más allá del texto")]),
           ("Apéndices", [("setup","A Configuración: R, Python, Git"),("data-dictionary","B Datos"),("glossary","C Glosario"),("notation","D Notación")])],
    title="Mapa mental del libro", desc="El tema central del libro, la IA y el aprendizaje automático para las ciencias de la salud vistos a través del ciclo de decisión, se ramifica en cinco partes y en los apéndices, cada una con sus capítulos."),
 }

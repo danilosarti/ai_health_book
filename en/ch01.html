@@ -561,13 +561,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Train your first GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
   </div>
 </li>
       </ul>
@@ -1415,7 +1421,7 @@ Looking ahead: AI as a player in the whole chain
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Today, a reasonable division of labour is this: AI can <strong>strengthen</strong> link 3 (information) and link 5 (reasoning, by checking calculations and consistency), it can <strong>support</strong> link 2 (by suggesting alternatives), while framing the problem, weighing values with the patient and committing to action <strong>stay human</strong>. In this book models mostly serve link 3. But AI is starting to do more than that and to act as a <em>meta-player</em> across the whole decision-quality chain. A language model can help frame a problem by asking which decision is really being made (link 1), propose alternatives a team had not considered (link 2), help patients and clinicians state their values and trade-offs explicitly (link 4), check an argument for gaps and common biases (link 5), and follow whether the chosen action is carried out and monitored (link 6). Each of these roles brings its own risks: a confident but wrong frame, alternatives that sound plausible but are not feasible, values suggested by the system instead of elicited from the people concerned. None of them removes the need for people to own the values and to answer for the decision. Chapter 18 returns to this role.</p>
+<p>Today, a reasonable division of labour is this: AI can <strong>strengthen</strong> link 3 (information) and link 5 (reasoning, by checking calculations and consistency), it can <strong>support</strong> link 2 (by suggesting alternatives), while framing the problem, weighing values with the patient and committing to action <strong>stay human</strong>. In this book models mostly serve link 3. But AI is starting to do more than that and to act as a <em>meta-player</em> across the whole decision-quality chain. A language model can help frame a problem by asking which decision is really being made (link 1), propose alternatives a team had not considered (link 2), help patients and clinicians state their values and trade-offs explicitly (link 4), check an argument for gaps and common biases (link 5), and follow whether the chosen action is carried out and monitored (link 6). Each of these roles brings its own risks: a confident but wrong frame, alternatives that sound plausible but are not feasible, values suggested by the system instead of elicited from the people concerned. None of them removes the need for people to own the values and to answer for the decision. Chapter 19 returns to this role.</p>
 </div>
 </div>
 <div class="tryit">
@@ -1655,9 +1661,9 @@ Figure&nbsp;1.5: The three classic families of machine-learning methods.
 <li><strong>Supervised learning</strong> uses <em>labelled</em> data (examples for which the outcome is known) to learn a mapping from features to the outcome. <em>Ward 7:</em> predict the change in creatinine (a number: <strong>regression</strong>) or whether AKI occurs (a category: <strong>classification</strong>) from admission data <span class="citation" data-cites="james2021islr">(<a href="#ref-james2021islr" role="doc-biblioref">James et al. 2021</a>)</span>. Chapters 3–9.</li>
 <li><strong>Unsupervised learning</strong> uses <em>unlabelled</em> data to find structure: groups, directions, low-dimensional summaries. <em>HomeBeat:</em> group participants into activity and stress profiles without being told what the profiles are <span class="citation" data-cites="hastie2009esl">(<a href="#ref-hastie2009esl" role="doc-biblioref">Hastie, Tibshirani, and Friedman 2009</a>, ch.&nbsp;14)</span>. Chapters 10–11.</li>
 <li><strong>Reinforcement learning</strong> learns a <em>policy</em> (a rule for acting) by interacting with an environment and receiving rewards or penalties over time. <em>Ward 7:</em> learn when to adjust a drug dose as creatinine changes from day to day <span class="citation" data-cites="sutton2018rl">(<a href="#ref-sutton2018rl" role="doc-biblioref">Sutton and Barto 2018</a>)</span>. Chapter 14.</li>
-<li><strong>Generative modelling</strong> learns the distribution of the data so that it can <em>create</em> new, realistic examples: synthetic patient records, images, molecules, text <span class="citation" data-cites="goodfellow2016dl">(<a href="#ref-goodfellow2016dl" role="doc-biblioref">Goodfellow, Bengio, and Courville 2016</a>, ch.&nbsp;20)</span>. Chapters 15–19.</li>
+<li><strong>Generative modelling</strong> learns the distribution of the data so that it can <em>create</em> new, realistic examples: synthetic patient records, images, molecules, text <span class="citation" data-cites="goodfellow2016dl">(<a href="#ref-goodfellow2016dl" role="doc-biblioref">Goodfellow, Bengio, and Courville 2016</a>, ch.&nbsp;20)</span>. Chapters 15–20.</li>
 </ul>
-<p>Labels are often the expensive part. Imagine labelling one million chest X-rays as normal or abnormal: at one minute per image that is about 16 700 hours, some eight years of a radiologist’s full-time work. Two strategies reduce the burden. <strong>Semi-supervised learning</strong> trains on the few labelled examples, lets the model label the unlabelled ones it is most confident about, and retrains on the larger set, with the risk that the model teaches itself its own mistakes <span class="citation" data-cites="chapelle2006ssl">(<a href="#ref-chapelle2006ssl" role="doc-biblioref">Chapelle, Schölkopf, and Zien 2006</a>)</span>. <strong>Transfer learning</strong> starts from a model already trained on a large, different dataset (millions of everyday photographs, say) and fine-tunes it on a few thousand medical images, just as a doctor moving into cardiology does not relearn anatomy; the price is that the original data bring their own biases with them <span class="citation" data-cites="pan2010transfer">(<a href="#ref-pan2010transfer" role="doc-biblioref">Pan and Yang 2010</a>)</span>. Both ideas return in Chapters 7 and 18.</p>
+<p>Labels are often the expensive part. Imagine labelling one million chest X-rays as normal or abnormal: at one minute per image that is about 16 700 hours, some eight years of a radiologist’s full-time work. Two strategies reduce the burden. <strong>Semi-supervised learning</strong> trains on the few labelled examples, lets the model label the unlabelled ones it is most confident about, and retrains on the larger set, with the risk that the model teaches itself its own mistakes <span class="citation" data-cites="chapelle2006ssl">(<a href="#ref-chapelle2006ssl" role="doc-biblioref">Chapelle, Schölkopf, and Zien 2006</a>)</span>. <strong>Transfer learning</strong> starts from a model already trained on a large, different dataset (millions of everyday photographs, say) and fine-tunes it on a few thousand medical images, just as a doctor moving into cardiology does not relearn anatomy; the price is that the original data bring their own biases with them <span class="citation" data-cites="pan2010transfer">(<a href="#ref-pan2010transfer" role="doc-biblioref">Pan and Yang 2010</a>)</span>. Both ideas return in Chapters 7 and 19.</p>
 <div id="fig-anatomy" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-anatomy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1702,7 +1708,7 @@ Figure&nbsp;1.6: The anatomy shared by every method in this book: data, an algor
 <section id="predictive-and-generative-ai" class="level3" data-number="1.6.3">
 <h3 data-number="1.6.3" class="anchored" data-anchor-id="predictive-and-generative-ai"><span class="header-section-number">1.6.3</span> Predictive and generative AI</h3>
 <p>Recent AI is often described through two paradigms. <strong>Predictive AI</strong> estimates outcomes or probabilities from existing data: “What is likely to happen?”, “Which class is this?”: risk of readmission, tumour response, batch failure. In this book <em>predictive AI</em> and <em>(supervised) machine learning</em> are used almost interchangeably. <strong>Generative AI</strong> creates new content that resembles its training data: large language models that write text <span class="citation" data-cites="brown2020gpt3">(<a href="#ref-brown2020gpt3" role="doc-biblioref">Brown et al. 2020</a>)</span>, generative adversarial networks <span class="citation" data-cites="goodfellow2014gan">(<a href="#ref-goodfellow2014gan" role="doc-biblioref">Goodfellow et al. 2014</a>)</span> and diffusion models <span class="citation" data-cites="ho2020ddpm">(<a href="#ref-ho2020ddpm" role="doc-biblioref">Ho, Jain, and Abbeel 2020</a>)</span> that create images, variational autoencoders <span class="citation" data-cites="kingma2014vae">(<a href="#ref-kingma2014vae" role="doc-biblioref">Kingma and Welling 2014</a>)</span> that synthesise records or molecules.</p>
-<p>The two are complementary rather than rivals. Generative models can simulate scenarios, propose candidate molecules or draft documents; predictive models can then estimate the likely effect or quality of what was generated, and a human decides. In advanced therapeutic technologies this combination is already used to design molecules <span class="citation" data-cites="zhavoronkov2019ddr1">(<a href="#ref-zhavoronkov2019ddr1" role="doc-biblioref">Zhavoronkov et al. 2019</a>)</span> and optimise protocols; Chapter 18 examines a drug that went from a generative-AI design to a clinical trial.</p>
+<p>The two are complementary rather than rivals. Generative models can simulate scenarios, propose candidate molecules or draft documents; predictive models can then estimate the likely effect or quality of what was generated, and a human decides. In advanced therapeutic technologies this combination is already used to design molecules <span class="citation" data-cites="zhavoronkov2019ddr1">(<a href="#ref-zhavoronkov2019ddr1" role="doc-biblioref">Zhavoronkov et al. 2019</a>)</span> and optimise protocols; Chapter 19 examines a drug that went from a generative-AI design to a clinical trial.</p>
 <div id="ch01-qc-ml" class="quick-check">
 <p>A hospital installs software that flags any patient whose creatinine rises by 0.3 mg/dL or more, exactly as the KDIGO guideline states. Is this machine learning?</p>
 <ul class="task-list">
@@ -2432,7 +2438,7 @@ Selected answers
 </tr>
 <tr class="even">
 <td>Machines check consistency, not truth</td>
-<td>Chapters 16–18 (language models and hallucination)</td>
+<td>Chapters 16–19 (language models and hallucination)</td>
 </tr>
 </tbody>
 </table>

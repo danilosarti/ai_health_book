@@ -520,13 +520,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Dal modello linguistico all’assistente clinico</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Addestra il tuo primo GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Modelli generativi oltre il testo</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Dal modello linguistico all’assistente clinico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Modelli generativi oltre il testo</span></span></a>
   </div>
 </li>
       </ul>
@@ -596,7 +602,7 @@ window.Quarto = {
   <li><a href="#sec-dd-ch13" id="toc-sec-dd-ch13" class="nav-link" data-scroll-target="#sec-dd-ch13"><span class="header-section-number">B.12</span> Capitolo 13 · Reparto 7, versione estesa, e ONCO-1 nella pratica clinica corrente</a></li>
   <li><a href="#sec-dd-ch15" id="toc-sec-dd-ch15" class="nav-link" data-scroll-target="#sec-dd-ch15"><span class="header-section-number">B.13</span> Capitolo 15 · Testo clinico sintetico</a></li>
   <li><a href="#sec-dd-ch16" id="toc-sec-dd-ch16" class="nav-link" data-scroll-target="#sec-dd-ch16"><span class="header-section-number">B.14</span> Capitolo 16 · Note brevi del Reparto 7</a></li>
-  <li><a href="#sec-dd-ch18" id="toc-sec-dd-ch18" class="nav-link" data-scroll-target="#sec-dd-ch18"><span class="header-section-number">B.15</span> Capitolo 18 · Corpus di linee guida e valutazione dell’assistente</a></li>
+  <li><a href="#sec-dd-ch19" id="toc-sec-dd-ch19" class="nav-link" data-scroll-target="#sec-dd-ch19"><span class="header-section-number">B.15</span> Capitolo 19 · Corpus di linee guida e valutazione dell’assistente</a></li>
   </ul>
 </nav>
     </div>
@@ -783,18 +789,18 @@ window.Quarto = {
 <td><a href="scripts/simulate/sim_ch16_ward7_notes.py">sim_ch16_ward7_notes.py</a> (Python, seme 1607)</td>
 </tr>
 <tr class="even">
-<td>Corpus di linee guida del Reparto 7 (illustrativo, non è un’indicazione clinica) (<a href="#sec-dd-ch18">dettagli</a>)</td>
-<td>Capitolo 18</td>
+<td>Corpus di linee guida del Reparto 7 (illustrativo, non è un’indicazione clinica) (<a href="#sec-dd-ch19">dettagli</a>)</td>
+<td>Capitolo 19</td>
 <td>31 × 4</td>
-<td><a href="data/ch18_guidelines.csv">ch18_guidelines.csv</a></td>
-<td><a href="scripts/simulate/sim_ch18_assistant.py">sim_ch18_assistant.py</a> (Python, seme 1818)</td>
+<td><a href="data/ch19_guidelines.csv">ch19_guidelines.csv</a></td>
+<td><a href="scripts/simulate/sim_ch19_assistant.py">sim_ch19_assistant.py</a> (Python, seme 1818)</td>
 </tr>
 <tr class="odd">
 <td>Valutazione simulata di un assistente per le linee guida</td>
-<td>Capitolo 18</td>
+<td>Capitolo 19</td>
 <td>300 × 7 (150 domande × 2 configurazioni)</td>
-<td><a href="data/ch18_eval.csv">ch18_eval.csv</a></td>
-<td><a href="scripts/simulate/sim_ch18_assistant.py">sim_ch18_assistant.py</a></td>
+<td><a href="data/ch19_eval.csv">ch19_eval.csv</a></td>
+<td><a href="scripts/simulate/sim_ch19_assistant.py">sim_ch19_assistant.py</a></td>
 </tr>
 </tbody>
 </table>
@@ -1364,10 +1370,10 @@ window.Quarto = {
 <h2 data-number="B.14" class="anchored" data-anchor-id="sec-dd-ch16"><span class="header-section-number">B.14</span> Capitolo 16 · Note brevi del Reparto 7</h2>
 <p><code>ward7_notes.csv</code> contiene 8.000 note brevi generate da una piccola grammatica di modelli, così il corpus non descrive alcuna persona reale e le sue regolarità sono note per costruzione. Colonne: <code>note_id</code> (N0001 … N8000), <code>set</code> (<code>train</code>, 7.147 note; <code>test</code>, 853 note) e <code>text</code>. I token sono parole minuscole e i segni di punteggiatura <code>,</code> <code>.</code> <code>:</code>, separati da spazi singoli, per cui dividere sugli spazi li recupera. Le note sono in inglese. La grammatica pianta le regolarità che il Capitolo 16 scopre: i farmaci della stessa classe compaiono in contesti simili; ogni marcatore di laboratorio va con un organo e una specialità; i ruoli del personale sono seguiti da “she” o “he” con frequenze volutamente diseguali (una distorsione che gli embedding ereditano <span class="citation" data-cites="caliskan2017semantics">(<a href="#ref-caliskan2017semantics" role="doc-biblioref">Caliskan, Bryson, e Narayanan 2017</a>)</span>); “meropenem” non segue mai “started”; e alcune note nominano il farmaco iniziato e, una o due proposizioni dopo, chiedono di controllare il livello di quello stesso farmaco (una dipendenza a lungo raggio).</p>
 </section>
-<section id="sec-dd-ch18" class="level2" data-number="B.15">
-<h2 data-number="B.15" class="anchored" data-anchor-id="sec-dd-ch18"><span class="header-section-number">B.15</span> Capitolo 18 · Corpus di linee guida e valutazione dell’assistente</h2>
-<p><code>ch18_guidelines.csv</code> è un piccolo corpus di paragrafi <strong>illustrativi</strong> di linee guida locali, scritti per il libro (in inglese). È un corpus didattico per il recupero, <strong>non un’indicazione clinica</strong>. Ogni riga è un frammento: <code>chunk_id</code> (per esempio <code>AKI-1</code>, <code>VAN-2</code>), <code>document</code> (11 documenti: per lo più linee guida del Reparto 7 su danno renale acuto, vancomicina, gentamicina, sepsi, mezzo di contrasto ed esami della funzione renale, più alcuni di ONCO-1, CellWorks e HomeBeat, così che il recupero debba scegliere il documento giusto), <code>section</code> e <code>text</code>.</p>
-<p><code>ch18_eval.csv</code> è una valutazione <strong>simulata</strong>: le stesse 150 domande del personale con le risposte di due configurazioni, quindi 300 righe. I numeri sono inventati per illustrare schemi tipici; non sono risultati di un sistema reale.</p>
+<section id="sec-dd-ch19" class="level2" data-number="B.15">
+<h2 data-number="B.15" class="anchored" data-anchor-id="sec-dd-ch19"><span class="header-section-number">B.15</span> Capitolo 19 · Corpus di linee guida e valutazione dell’assistente</h2>
+<p><code>ch19_guidelines.csv</code> è un piccolo corpus di paragrafi <strong>illustrativi</strong> di linee guida locali, scritti per il libro (in inglese). È un corpus didattico per il recupero, <strong>non un’indicazione clinica</strong>. Ogni riga è un frammento: <code>chunk_id</code> (per esempio <code>AKI-1</code>, <code>VAN-2</code>), <code>document</code> (11 documenti: per lo più linee guida del Reparto 7 su danno renale acuto, vancomicina, gentamicina, sepsi, mezzo di contrasto ed esami della funzione renale, più alcuni di ONCO-1, CellWorks e HomeBeat, così che il recupero debba scegliere il documento giusto), <code>section</code> e <code>text</code>.</p>
+<p><code>ch19_eval.csv</code> è una valutazione <strong>simulata</strong>: le stesse 150 domande del personale con le risposte di due configurazioni, quindi 300 righe. I numeri sono inventati per illustrare schemi tipici; non sono risultati di un sistema reale.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">

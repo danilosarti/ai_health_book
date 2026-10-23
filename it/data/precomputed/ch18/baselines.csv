@@ -1,0 +1,9 @@
+model,bits_per_char,nats_per_char,perplexity
+"Uniform (every character equally likely)",6.3038,4.3694,79.0000
+"Unigram (character frequencies), add-one",4.3680,3.0277,20.6490
+"Bigram (previous character), add-one",3.4574,2.3965,10.9842
+"Trigram (two previous characters), Witten-Bell",2.7828,1.9289,6.8821
+"5-gram (four previous characters), Witten-Bell",2.1269,1.4743,4.3679
+"Small GPT (NumPy, browser size), 200 steps",3.3695,2.3356,10.3352
+"Small GPT (NumPy, browser size), 2000 steps",2.4541,1.7011,5.4799
+"Larger GPT (PyTorch), best checkpoint",1.9585,1.3575,3.8866

@@ -561,13 +561,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Do modelo de linguagem ao assistente clínico</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Treine seu primeiro GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Modelos generativos além do texto</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Do modelo de linguagem ao assistente clínico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Modelos generativos além do texto</span></span></a>
   </div>
 </li>
       </ul>
@@ -1748,7 +1754,7 @@ P_\tau(w_j) = \frac{e^{z_j / \tau}}{\sum_k e^{z_k / \tau}} ,
 <span class="checkpoint" id="ch16-tryit-temperature" hidden=""></span>
 </div>
 <p>Experimente o contexto <em>“the surgeon says”</em> (“o cirurgião diz”). Com <span class="math inline">\(\tau = 1\)</span>, o modelo dá a <em>he</em> (ele) uma probabilidade de 87 % e a <em>she</em> (ela) 13 %, quase exatamente as proporções nas anotações de treino, em que 87 % das menções a <em>surgeon</em> são seguidas por <em>he</em>. Baixe a temperatura e <em>she</em> desaparece por completo: um preenchimento automático guloso sempre escreve <em>he</em>, um exagero de uma distorção que já estava nos dados. Foi isso que aconteceu na tela de Seán.</p>
-<p>Daí decorrem duas lições para o uso clínico. Primeiro, <strong>a geração envolve acaso</strong>: a menos que a decodificação seja gulosa, o mesmo prompt pode produzir anotações diferentes, de modo que o resultado de um sistema em uma ocasião é uma amostra, não <em>a</em> resposta. Segundo, <strong>uma amostra fluente não é um fato verificado</strong>. O modelo escreve o que é provável dado o seu texto de treino, e o provável e o verdadeiro podem se separar; um texto fluente, confiante e errado é chamado de <em>alucinação</em> <span class="citation" data-cites="ji2023hallucination">(<a href="#ref-ji2023hallucination" role="doc-biblioref">Ji et al. 2023</a>)</span>, e o Capítulo 18 examina como detectá-la e limitá-la. Para redigir documentação clínica, costumam-se preferir temperaturas baixas, porque a consistência importa mais que a variedade.</p>
+<p>Daí decorrem duas lições para o uso clínico. Primeiro, <strong>a geração envolve acaso</strong>: a menos que a decodificação seja gulosa, o mesmo prompt pode produzir anotações diferentes, de modo que o resultado de um sistema em uma ocasião é uma amostra, não <em>a</em> resposta. Segundo, <strong>uma amostra fluente não é um fato verificado</strong>. O modelo escreve o que é provável dado o seu texto de treino, e o provável e o verdadeiro podem se separar; um texto fluente, confiante e errado é chamado de <em>alucinação</em> <span class="citation" data-cites="ji2023hallucination">(<a href="#ref-ji2023hallucination" role="doc-biblioref">Ji et al. 2023</a>)</span>, e o Capítulo 19 examina como detectá-la e limitá-la. Para redigir documentação clínica, costumam-se preferir temperaturas baixas, porque a consistência importa mais que a variedade.</p>
 <div id="ch16-qc-temperature" class="quick-check">
 <p>Um hospital configura seu assistente de redação de anotações com uma temperatura próxima de 0. Que consequência o responsável pela segurança clínica deve esperar?</p>
 <ul class="task-list">
@@ -2343,7 +2349,7 @@ Figura&nbsp;16.5: Amostras do modelo de caracteres em três etapas do treino (te
 </figcaption>
 </figure>
 </div>
-<p>Antes do treino, o modelo digita caracteres aleatórios. Depois de algumas centenas de passos, ele já aprendeu espaços, quebras de linha, nomes de personagens em maiúsculas e palavras curtas comuns; no final, escreve falas de aparência plausível, com palavras inventadas e sem sentido. Ele aprendeu a <em>forma</em> do texto, caractere por caractere, a partir da única tarefa de prever o próximo. Amplie a mesma ideia em muitas ordens de grandeza, em dados, parâmetros e computação, e a forma começa a carregar muito conteúdo: essa é a história do Capítulo 18.</p>
+<p>Antes do treino, o modelo digita caracteres aleatórios. Depois de algumas centenas de passos, ele já aprendeu espaços, quebras de linha, nomes de personagens em maiúsculas e palavras curtas comuns; no final, escreve falas de aparência plausível, com palavras inventadas e sem sentido. Ele aprendeu a <em>forma</em> do texto, caractere por caractere, a partir da única tarefa de prever o próximo. Amplie a mesma ideia em muitas ordens de grandeza, em dados, parâmetros e computação, e a forma começa a carregar muito conteúdo: essa é a história do Capítulo 19.</p>
 </section>
 </section>
 <section id="sec-ch16-rnn" class="level2" data-number="16.9">
@@ -2603,23 +2609,23 @@ Respostas selecionadas
 <tbody>
 <tr class="odd">
 <td>Predição do próximo token e a regra da cadeia</td>
-<td>Capítulo 17 (a máscara causal dos transformers decodificadores); Capítulo 18 (pré-treinamento de grandes modelos de linguagem)</td>
+<td>Capítulo 17 (a máscara causal dos transformers decodificadores); Capítulo 19 (pré-treinamento de grandes modelos de linguagem)</td>
 </tr>
 <tr class="even">
 <td>Entropia cruzada e perplexidade</td>
-<td>Capítulo 17 (a perda de treino dos transformers); Capítulo 18 (pré-treinamento, e por que pontuações em benchmarks não são avaliação clínica)</td>
+<td>Capítulo 17 (a perda de treino dos transformers); Capítulo 19 (pré-treinamento, e por que pontuações em benchmarks não são avaliação clínica)</td>
 </tr>
 <tr class="odd">
 <td>Softmax, temperatura, top-<span class="math inline">\(k\)</span>/top-<span class="math inline">\(p\)</span></td>
-<td>Capítulo 17 (pesos de atenção softmax); Capítulo 18 (alucinação, configurações de decodificação para uso clínico)</td>
+<td>Capítulo 17 (pesos de atenção softmax); Capítulo 19 (alucinação, configurações de decodificação para uso clínico)</td>
 </tr>
 <tr class="even">
 <td>Embeddings e similaridade do cosseno</td>
-<td>Capítulo 17 (embeddings de token e de posição); Capítulo 18 (recuperação densa na geração aumentada por recuperação)</td>
+<td>Capítulo 17 (embeddings de token e de posição); Capítulo 19 (recuperação densa na geração aumentada por recuperação)</td>
 </tr>
 <tr class="odd">
 <td>Viés absorvido do corpus</td>
-<td>Capítulo 18 (equidade, avaliação e governança de modelos de linguagem clínicos)</td>
+<td>Capítulo 19 (equidade, avaliação e governança de modelos de linguagem clínicos)</td>
 </tr>
 <tr class="even">
 <td>O problema da janela fixa e as redes recorrentes</td>
@@ -2627,7 +2633,7 @@ Respostas selecionadas
 </tr>
 <tr class="odd">
 <td>Representações aprendidas em um espaço de baixa dimensão</td>
-<td>Capítulo 19 (espaços latentes dos modelos generativos)</td>
+<td>Capítulo 20 (espaços latentes dos modelos generativos)</td>
 </tr>
 </tbody>
 </table>
@@ -2754,7 +2760,7 @@ Mikolov, Tomas, Ilya Sutskever, Kai Chen, Greg Corrado, e Jeffrey Dean. 2013. <s
 Nissim, Malvina, Rik van Noord, e Rob van der Goot. 2020. <span>«Fair Is Better than Sensational: Man Is to Doctor as Woman Is to Doctor»</span>. <em>Computational Linguistics</em> 46 (2): 487–97. <a href="https://doi.org/10.1162/coli_a_00379">https://doi.org/10.1162/coli_a_00379</a>.
 </div>
 <div id="ref-paszke2019pytorch" class="csl-entry" role="listitem">
-Paszke, Adam, Sam Gross, Francisco Massa, et al. 2019. <span>«<span>PyTorch</span>: An Imperative Style, High-Performance Deep Learning Library»</span>. Em <em>Advances in Neural Information Processing Systems 32</em>, 8026–37.
+Paszke, Adam, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, et al. 2019. <span>«<span>PyTorch</span>: An Imperative Style, High-Performance Deep Learning Library»</span>. Em <em>Advances in Neural Information Processing Systems 32</em>, 8024–35. Curran Associates.
 </div>
 <div id="ref-pennington2014glove" class="csl-entry" role="listitem">
 Pennington, Jeffrey, Richard Socher, e Christopher D. Manning. 2014. <span>«<span>GloVe</span>: Global Vectors for Word Representation»</span>. Em <em>Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP)</em>, 1532–43. <a href="https://doi.org/10.3115/v1/D14-1162">https://doi.org/10.3115/v1/D14-1162</a>.

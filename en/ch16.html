@@ -561,13 +561,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Train your first GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
   </div>
 </li>
       </ul>
@@ -1741,7 +1747,7 @@ P_\tau(w_j) = \frac{e^{z_j / \tau}}{\sum_k e^{z_k / \tau}} ,
 <span class="checkpoint" id="ch16-tryit-temperature" hidden=""></span>
 </div>
 <p>Try the context <em>“the surgeon says”</em>. At <span class="math inline">\(\tau = 1\)</span> the model gives <em>he</em> a probability of 87 % and <em>she</em> 13 %, almost exactly the shares in the training notes, where 87 % of surgeons are followed by <em>he</em>. Lower the temperature and <em>she</em> disappears altogether: a greedy autocomplete always writes <em>he</em>, an exaggeration of a skew that was already in the data. That is what happened on Seán’s screen.</p>
-<p>Two lessons for clinical use follow. First, <strong>generation involves chance</strong>: unless decoding is greedy, the same prompt can produce different notes, so a system’s output on one occasion is a sample, not <em>the</em> answer. Second, <strong>a fluent sample is not a checked fact</strong>. The model writes what is probable given its training text, and the probable and the true can part company; text that is fluent, confident and wrong is called a <em>hallucination</em> <span class="citation" data-cites="ji2023hallucination">(<a href="#ref-ji2023hallucination" role="doc-biblioref">Ji et al. 2023</a>)</span>, and Chapter 18 examines how to detect and limit it. For drafting clinical documentation, low temperatures are usually preferred because consistency matters more than variety.</p>
+<p>Two lessons for clinical use follow. First, <strong>generation involves chance</strong>: unless decoding is greedy, the same prompt can produce different notes, so a system’s output on one occasion is a sample, not <em>the</em> answer. Second, <strong>a fluent sample is not a checked fact</strong>. The model writes what is probable given its training text, and the probable and the true can part company; text that is fluent, confident and wrong is called a <em>hallucination</em> <span class="citation" data-cites="ji2023hallucination">(<a href="#ref-ji2023hallucination" role="doc-biblioref">Ji et al. 2023</a>)</span>, and Chapter 19 examines how to detect and limit it. For drafting clinical documentation, low temperatures are usually preferred because consistency matters more than variety.</p>
 <div id="ch16-qc-temperature" class="quick-check">
 <p>A hospital configures its note-drafting assistant with a temperature close to 0. Which consequence should the clinical safety officer expect?</p>
 <ul class="task-list">
@@ -2328,7 +2334,7 @@ Figure&nbsp;16.5: Samples from the character-level model at three stages of trai
 </figcaption>
 </figure>
 </div>
-<p>Before training the model types random characters. After a few hundred steps it has learned spaces, line breaks, capitalised speaker names and short common words; by the end it writes plausible-looking speeches with invented words and no sense. It has learned the <em>form</em> of the text, character by character, from the single task of predicting the next one. Scale the same idea up by many orders of magnitude, in data, parameters and computation, and the form starts to carry a great deal of content: that is the story of Chapter 18.</p>
+<p>Before training the model types random characters. After a few hundred steps it has learned spaces, line breaks, capitalised speaker names and short common words; by the end it writes plausible-looking speeches with invented words and no sense. It has learned the <em>form</em> of the text, character by character, from the single task of predicting the next one. Scale the same idea up by many orders of magnitude, in data, parameters and computation, and the form starts to carry a great deal of content: that is the story of Chapter 19.</p>
 </section>
 </section>
 <section id="sec-ch16-rnn" class="level2" data-number="16.9">
@@ -2588,23 +2594,23 @@ Selected answers
 <tbody>
 <tr class="odd">
 <td>Next-token prediction and the chain rule</td>
-<td>Chapter 17 (the causal mask of decoder transformers); Chapter 18 (pretraining large language models)</td>
+<td>Chapter 17 (the causal mask of decoder transformers); Chapter 19 (pretraining large language models)</td>
 </tr>
 <tr class="even">
 <td>Cross-entropy and perplexity</td>
-<td>Chapter 17 (the training loss of transformers); Chapter 18 (pretraining, and why benchmark scores are not clinical evaluation)</td>
+<td>Chapter 17 (the training loss of transformers); Chapter 19 (pretraining, and why benchmark scores are not clinical evaluation)</td>
 </tr>
 <tr class="odd">
 <td>Softmax, temperature, top-<span class="math inline">\(k\)</span>/top-<span class="math inline">\(p\)</span></td>
-<td>Chapter 17 (softmax attention weights); Chapter 18 (hallucination, decoding settings for clinical use)</td>
+<td>Chapter 17 (softmax attention weights); Chapter 19 (hallucination, decoding settings for clinical use)</td>
 </tr>
 <tr class="even">
 <td>Embeddings and cosine similarity</td>
-<td>Chapter 17 (token and position embeddings); Chapter 18 (dense retrieval in retrieval-augmented generation)</td>
+<td>Chapter 17 (token and position embeddings); Chapter 19 (dense retrieval in retrieval-augmented generation)</td>
 </tr>
 <tr class="odd">
 <td>Bias absorbed from the corpus</td>
-<td>Chapter 18 (fairness, evaluation and governance of clinical language models)</td>
+<td>Chapter 19 (fairness, evaluation and governance of clinical language models)</td>
 </tr>
 <tr class="even">
 <td>The fixed-window problem and recurrent networks</td>
@@ -2612,7 +2618,7 @@ Selected answers
 </tr>
 <tr class="odd">
 <td>Learned representations in a low-dimensional space</td>
-<td>Chapter 19 (latent spaces of generative models)</td>
+<td>Chapter 20 (latent spaces of generative models)</td>
 </tr>
 </tbody>
 </table>
@@ -2739,7 +2745,7 @@ Mikolov, Tomas, Ilya Sutskever, Kai Chen, Greg Corrado, and Jeffrey Dean. 2013. 
 Nissim, Malvina, Rik van Noord, and Rob van der Goot. 2020. <span>“Fair Is Better Than Sensational: Man Is to Doctor as Woman Is to Doctor.”</span> <em>Computational Linguistics</em> 46 (2): 487–97. <a href="https://doi.org/10.1162/coli_a_00379">https://doi.org/10.1162/coli_a_00379</a>.
 </div>
 <div id="ref-paszke2019pytorch" class="csl-entry" role="listitem">
-Paszke, Adam, Sam Gross, Francisco Massa, et al. 2019. <span>“<span>PyTorch</span>: An Imperative Style, High-Performance Deep Learning Library.”</span> In <em>Advances in Neural Information Processing Systems 32</em>, 8026–37.
+Paszke, Adam, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, et al. 2019. <span>“<span>PyTorch</span>: An Imperative Style, High-Performance Deep Learning Library.”</span> In <em>Advances in Neural Information Processing Systems 32</em>, 8024–35. Curran Associates.
 </div>
 <div id="ref-pennington2014glove" class="csl-entry" role="listitem">
 Pennington, Jeffrey, Richard Socher, and Christopher D. Manning. 2014. <span>“<span>GloVe</span>: Global Vectors for Word Representation.”</span> In <em>Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP)</em>, 1532–43. <a href="https://doi.org/10.3115/v1/D14-1162">https://doi.org/10.3115/v1/D14-1162</a>.

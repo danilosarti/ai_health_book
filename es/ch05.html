@@ -564,13 +564,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Del modelo de lenguaje al asistente clínico</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Entrena tu primer GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Modelos generativos más allá del texto</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Del modelo de lenguaje al asistente clínico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Modelos generativos más allá del texto</span></span></a>
   </div>
 </li>
       </ul>
@@ -1916,7 +1922,7 @@ Figura&nbsp;5.7: Gráficos de calibración. Cada punto es una décima parte de l
 </div>
 </div>
 </div>
-<p>La lección es general: la discriminación suele viajar mejor que la calibración. El perfil de pacientes, la práctica local y la forma de registrar los desenlaces desplazan el riesgo basal entre hospitales y a lo largo del tiempo. El remedio habitual es la <strong>recalibración</strong>: conservar los coeficientes del modelo pero volver a estimar el intercepto (y quizá la pendiente) con datos locales <span class="citation" data-cites="steyerberg2019cpm">(<a href="#ref-steyerberg2019cpm" role="doc-biblioref">Steyerberg 2019</a>)</span>. La calibración importa mucho más allá de la regresión logística. Los modelos flexibles, como los árboles con boosting y las redes neuronales, suelen ser <em>demasiado</em> confiados <span class="citation" data-cites="niculescu2005predicting guo2017calibration">(<a href="#ref-niculescu2005predicting" role="doc-biblioref">Niculescu-Mizil y Caruana 2005</a>; <a href="#ref-guo2017calibration" role="doc-biblioref">Guo et&nbsp;al. 2017</a>)</span>, y en el Capítulo 18 hacemos la misma pregunta a un modelo de lenguaje que dice estar “seguro al 90 %”.</p>
+<p>La lección es general: la discriminación suele viajar mejor que la calibración. El perfil de pacientes, la práctica local y la forma de registrar los desenlaces desplazan el riesgo basal entre hospitales y a lo largo del tiempo. El remedio habitual es la <strong>recalibración</strong>: conservar los coeficientes del modelo pero volver a estimar el intercepto (y quizá la pendiente) con datos locales <span class="citation" data-cites="steyerberg2019cpm">(<a href="#ref-steyerberg2019cpm" role="doc-biblioref">Steyerberg 2019</a>)</span>. La calibración importa mucho más allá de la regresión logística. Los modelos flexibles, como los árboles con boosting y las redes neuronales, suelen ser <em>demasiado</em> confiados <span class="citation" data-cites="niculescu2005predicting guo2017calibration">(<a href="#ref-niculescu2005predicting" role="doc-biblioref">Niculescu-Mizil y Caruana 2005</a>; <a href="#ref-guo2017calibration" role="doc-biblioref">Guo et&nbsp;al. 2017</a>)</span>, y en el Capítulo 19 hacemos la misma pregunta a un modelo de lenguaje que dice estar “seguro al 90 %”.</p>
 <div id="ch05-qc-calibration" class="quick-check">
 <p>Después de llevar el modelo al hospital D, su AUC no cambia, pero su intercepto de calibración es claramente positivo. ¿Qué significa esto para Emma, si trabaja en el hospital D?</p>
 <ul class="task-list">
@@ -2420,7 +2426,7 @@ Respuestas seleccionadas
 </tr>
 <tr class="even">
 <td>Calibración de la confianza declarada por un modelo</td>
-<td>Capítulo 18 (modelos de lenguaje)</td>
+<td>Capítulo 19 (modelos de lenguaje)</td>
 </tr>
 </tbody>
 </table>

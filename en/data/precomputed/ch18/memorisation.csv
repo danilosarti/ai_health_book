@@ -1,0 +1,83 @@
+source,temperature,sample,longest,longest_text,share20
+"generated, temperature 0.5",0.5,0,24," in the patient's room, ",0.031185031185031187
+"generated, temperature 0.5",0.5,1,19, the effect of the ,0.0
+"generated, temperature 0.5",0.5,2,22,he door of the patient,0.006237006237006237
+"generated, temperature 0.5",0.5,3,20, the sick. The sick ,0.002079002079002079
+"generated, temperature 0.5",0.5,4,17," instance, with a",0.0
+"generated, temperature 0.5",0.5,5,22, in the patient's room,0.010395010395010396
+"generated, temperature 0.5",0.5,6,20,tion of the advisers,0.004158004158004158
+"generated, temperature 0.5",0.5,7,21, which the patient ha,0.006237006237006237
+"generated, temperature 0.5",0.5,8,18, exception to the ,0.0
+"generated, temperature 0.5",0.5,9,20,t of the patient is ,0.006237006237006237
+"generated, temperature 0.5",0.5,10,23, a patient cannot bear ,0.014553014553014554
+"generated, temperature 0.5",0.5,11,20, of the patient is t,0.004158004158004158
+"generated, temperature 0.5",0.5,12,23, of the patient is the ,0.02286902286902287
+"generated, temperature 0.5",0.5,13,22,he door of the patient,0.010395010395010396
+"generated, temperature 0.5",0.5,14,22,e of the patient's air,0.006237006237006237
+"generated, temperature 0.5",0.5,15,21, the sick person has ,0.004158004158004158
+"generated, temperature 0.5",0.5,16,22, the most important of,0.016632016632016633
+"generated, temperature 0.5",0.5,17,21,s the restorative the,0.012474012474012475
+"generated, temperature 0.5",0.5,18,22,I have known a patient,0.014553014553014554
+"generated, temperature 0.5",0.5,19,21, the patient of the s,0.006237006237006237
+"generated, temperature 0.8",0.8,0,24, to whether the patient ,0.010395010395010396
+"generated, temperature 0.8",0.8,1,15,", which can be ",0.0
+"generated, temperature 0.8",0.8,2,17,at the same time ,0.0
+"generated, temperature 0.8",0.8,3,23, the most careful nurse,0.010395010395010396
+"generated, temperature 0.8",0.8,4,20, the patient of the ,0.002079002079002079
+"generated, temperature 0.8",0.8,5,19, the impossibility ,0.0
+"generated, temperature 0.8",0.8,6,15,", the mattress ",0.0
+"generated, temperature 0.8",0.8,7,23, the patient is better ,0.008316008316008316
+"generated, temperature 0.8",0.8,8,17, little power of ,0.0
+"generated, temperature 0.8",0.8,9,18, when the patient ,0.0
+"generated, temperature 0.8",0.8,10,19, the window of the ,0.0
+"generated, temperature 0.8",0.8,11,22, at all. I have known ,0.006237006237006237
+"generated, temperature 0.8",0.8,12,16, the sick person,0.0
+"generated, temperature 0.8",0.8,13,20, which I have known ,0.002079002079002079
+"generated, temperature 0.8",0.8,14,15, the sick room ,0.0
+"generated, temperature 0.8",0.8,15,17,"est observation, ",0.0
+"generated, temperature 0.8",0.8,16,23, friends of the patient,0.008316008316008316
+"generated, temperature 0.8",0.8,17,24, the sick. I have known ,0.010395010395010396
+"generated, temperature 0.8",0.8,18,19,", which does not be",0.0
+"generated, temperature 0.8",0.8,19,18," not, the patient ",0.0
+"generated, temperature 1.0",1.0,0,16,", whether under ",0.0
+"generated, temperature 1.0",1.0,1,15," the sick man, ",0.0
+"generated, temperature 1.0",1.0,2,15,ct observation ,0.0
+"generated, temperature 1.0",1.0,3,17, which could be t,0.0
+"generated, temperature 1.0",1.0,4,17, the part of the ,0.0
+"generated, temperature 1.0",1.0,5,15, an expectation,0.0
+"generated, temperature 1.0",1.0,6,16, not only to thi,0.0
+"generated, temperature 1.0",1.0,7,15, those patients,0.0
+"generated, temperature 1.0",1.0,8,18, different disease,0.0
+"generated, temperature 1.0",1.0,9,17," of the patient, ",0.0
+"generated, temperature 1.0",1.0,10,19,e of the patient's ,0.0
+"generated, temperature 1.0",1.0,11,15, consider that ,0.0
+"generated, temperature 1.0",1.0,12,17," the sick room.
+I",0.0
+"generated, temperature 1.0",1.0,13,16," the sick room, ",0.0
+"generated, temperature 1.0",1.0,14,16, nervous matter ,0.0
+"generated, temperature 1.0",1.0,15,18,he probability of ,0.0
+"generated, temperature 1.0",1.0,16,20,t of the atmosphere ,0.002079002079002079
+"generated, temperature 1.0",1.0,17,18, the patient will ,0.0
+"generated, temperature 1.0",1.0,18,18,f the patient has ,0.0
+"generated, temperature 1.0",1.0,19,16,hat he does the ,0.0
+real validation text,,0,24, is generally supposed t,0.010395010395010396
+real validation text,,1,19," at the same time, ",0.0
+real validation text,,2,21,", if the patient has ",0.008316008316008316
+real validation text,,3,26,"d, because they could not ",0.014553014553014554
+real validation text,,4,23, quite as much as to th,0.008316008316008316
+real validation text,,5,20,", because the nurse ",0.006237006237006237
+real validation text,,6,25, the spirit of management,0.018711018711018712
+real validation text,,7,25,In the great majority of ,0.012474012474012475
+real validation text,,8,18, between cold and ,0.0
+real validation text,,9,18,tion which require,0.0
+real validation text,,10,26, a great deal too much of ,0.014553014553014554
+real validation text,,11,20," children's health, ",0.002079002079002079
+real validation text,,12,21,", so far as we know, ",0.004158004158004158
+real validation text,,13,18, will be found to ,0.0
+real validation text,,14,16, never think of ,0.0
+real validation text,,15,21,called to a sense of ,0.004158004158004158
+real validation text,,16,22, two or three times a ,0.006237006237006237
+real validation text,,17,30, administration of medicines a,0.033264033264033266
+real validation text,,18,21," than anything else.
+",0.006237006237006237
+real validation text,,19,34, charge of the personal health of ,0.0498960498960499

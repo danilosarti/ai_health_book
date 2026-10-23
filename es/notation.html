@@ -500,13 +500,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Del modelo de lenguaje al asistente clínico</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Entrena tu primer GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Modelos generativos más allá del texto</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Del modelo de lenguaje al asistente clínico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Modelos generativos más allá del texto</span></span></a>
   </div>
 </li>
       </ul>
@@ -581,8 +587,8 @@ window.Quarto = {
   <li><a href="#capítulo-15-el-texto-como-dato" id="toc-capítulo-15-el-texto-como-dato" class="nav-link" data-scroll-target="#capítulo-15-el-texto-como-dato"><span class="header-section-number">D.2.14</span> Capítulo 15 · El texto como dato</a></li>
   <li><a href="#capítulo-16-predecir-la-siguiente-palabra-modelos-de-lenguaje-y-embeddings" id="toc-capítulo-16-predecir-la-siguiente-palabra-modelos-de-lenguaje-y-embeddings" class="nav-link" data-scroll-target="#capítulo-16-predecir-la-siguiente-palabra-modelos-de-lenguaje-y-embeddings"><span class="header-section-number">D.2.15</span> Capítulo 16 · Predecir la siguiente palabra: modelos de lenguaje y embeddings</a></li>
   <li><a href="#capítulo-17-la-atención-y-el-transformer" id="toc-capítulo-17-la-atención-y-el-transformer" class="nav-link" data-scroll-target="#capítulo-17-la-atención-y-el-transformer"><span class="header-section-number">D.2.16</span> Capítulo 17 · La atención y el transformer</a></li>
-  <li><a href="#capítulo-18-del-modelo-de-lenguaje-al-asistente-clínico" id="toc-capítulo-18-del-modelo-de-lenguaje-al-asistente-clínico" class="nav-link" data-scroll-target="#capítulo-18-del-modelo-de-lenguaje-al-asistente-clínico"><span class="header-section-number">D.2.17</span> Capítulo 18 · Del modelo de lenguaje al asistente clínico</a></li>
-  <li><a href="#capítulo-19-modelos-generativos-más-allá-del-texto" id="toc-capítulo-19-modelos-generativos-más-allá-del-texto" class="nav-link" data-scroll-target="#capítulo-19-modelos-generativos-más-allá-del-texto"><span class="header-section-number">D.2.18</span> Capítulo 19 · Modelos generativos más allá del texto</a></li>
+  <li><a href="#capítulo-19-del-modelo-de-lenguaje-al-asistente-clínico" id="toc-capítulo-19-del-modelo-de-lenguaje-al-asistente-clínico" class="nav-link" data-scroll-target="#capítulo-19-del-modelo-de-lenguaje-al-asistente-clínico"><span class="header-section-number">D.2.17</span> Capítulo 19 · Del modelo de lenguaje al asistente clínico</a></li>
+  <li><a href="#capítulo-20-modelos-generativos-más-allá-del-texto" id="toc-capítulo-20-modelos-generativos-más-allá-del-texto" class="nav-link" data-scroll-target="#capítulo-20-modelos-generativos-más-allá-del-texto"><span class="header-section-number">D.2.18</span> Capítulo 20 · Modelos generativos más allá del texto</a></li>
   </ul></li>
   <li><a href="#símbolos-con-más-de-un-significado" id="toc-símbolos-con-más-de-un-significado" class="nav-link" data-scroll-target="#símbolos-con-más-de-un-significado"><span class="header-section-number">D.3</span> Símbolos con más de un significado</a></li>
   </ul>
@@ -1627,8 +1633,8 @@ window.Quarto = {
 </tbody>
 </table>
 </section>
-<section id="capítulo-18-del-modelo-de-lenguaje-al-asistente-clínico" class="level3" data-number="D.2.17">
-<h3 data-number="D.2.17" class="anchored" data-anchor-id="capítulo-18-del-modelo-de-lenguaje-al-asistente-clínico"><span class="header-section-number">D.2.17</span> Capítulo 18 · Del modelo de lenguaje al asistente clínico</h3>
+<section id="capítulo-19-del-modelo-de-lenguaje-al-asistente-clínico" class="level3" data-number="D.2.17">
+<h3 data-number="D.2.17" class="anchored" data-anchor-id="capítulo-19-del-modelo-de-lenguaje-al-asistente-clínico"><span class="header-section-number">D.2.17</span> Capítulo 19 · Del modelo de lenguaje al asistente clínico</h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1641,43 +1647,43 @@ window.Quarto = {
 <tr class="odd">
 <td><span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span></td>
 <td>un prompt y una respuesta</td>
-<td><a href="./ch18.html#sec-ch18-training">Cap. 18</a></td>
+<td><a href="./ch19.html#sec-ch19-training">Cap. 19</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(r(x, y)\)</span></td>
 <td>recompensa: una puntuación de cuánto prefieren las personas la respuesta <span class="math inline">\(y\)</span> al prompt <span class="math inline">\(x\)</span></td>
-<td><a href="./ch18.html#sec-ch18-training">Cap. 18</a></td>
+<td><a href="./ch19.html#sec-ch19-training">Cap. 19</a></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\pi_\theta\)</span>, <span class="math inline">\(\pi_{\text{ref}}\)</span></td>
 <td>el modelo visto como una política que elige respuestas; el modelo antes del ajuste por preferencias</td>
-<td><a href="./ch18.html#sec-ch18-training">Cap. 18</a></td>
+<td><a href="./ch19.html#sec-ch19-training">Cap. 19</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\lambda\)</span></td>
 <td>intensidad de la penalización que mantiene <span class="math inline">\(\pi_\theta\)</span> cerca de <span class="math inline">\(\pi_{\text{ref}}\)</span></td>
-<td><a href="./ch18.html#sec-ch18-training">Cap. 18</a></td>
+<td><a href="./ch19.html#sec-ch19-training">Cap. 19</a></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\mathbf{q}\)</span>, <span class="math inline">\(\mathbf{d}_j\)</span></td>
 <td>vector de una consulta; vector del fragmento <span class="math inline">\(j\)</span></td>
-<td><a href="./ch18.html#sec-ch18-rag">Cap. 18</a></td>
+<td><a href="./ch19.html#sec-ch19-rag">Cap. 19</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(J\)</span>, <span class="math inline">\(k\)</span></td>
 <td>número de fragmentos de la colección; número de fragmentos recuperados</td>
-<td><a href="./ch18.html#sec-ch18-rag">Cap. 18</a></td>
+<td><a href="./ch19.html#sec-ch19-rag">Cap. 19</a></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\mathbf{W}_0\)</span>, <span class="math inline">\(\mathbf{A}\)</span>, <span class="math inline">\(\mathbf{B}\)</span>, <span class="math inline">\(m\)</span></td>
 <td>una matriz de pesos congelada; las dos matrices pequeñas de una actualización LoRA; su rango</td>
-<td><a href="./ch18.html#sec-ch18-adapt">Cap. 18</a></td>
+<td><a href="./ch19.html#sec-ch19-adapt">Cap. 19</a></td>
 </tr>
 </tbody>
 </table>
 </section>
-<section id="capítulo-19-modelos-generativos-más-allá-del-texto" class="level3" data-number="D.2.18">
-<h3 data-number="D.2.18" class="anchored" data-anchor-id="capítulo-19-modelos-generativos-más-allá-del-texto"><span class="header-section-number">D.2.18</span> Capítulo 19 · Modelos generativos más allá del texto</h3>
+<section id="capítulo-20-modelos-generativos-más-allá-del-texto" class="level3" data-number="D.2.18">
+<h3 data-number="D.2.18" class="anchored" data-anchor-id="capítulo-20-modelos-generativos-más-allá-del-texto"><span class="header-section-number">D.2.18</span> Capítulo 20 · Modelos generativos más allá del texto</h3>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -1690,52 +1696,52 @@ window.Quarto = {
 <tr class="odd">
 <td><span class="math inline">\(p(\mathbf{x})\)</span>, <span class="math inline">\(p(\mathbf{x}, y)\)</span></td>
 <td>distribución de los datos (con el desenlace)</td>
-<td><a href="./ch19.html#sec-ch19-two-questions">Cap. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-two-questions">Cap. 20</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\mathbf{z}\)</span></td>
 <td>variables latentes: un código corto a partir del cual se genera un ejemplo</td>
-<td><a href="./ch19.html#sec-ch19-autoencoders">Cap. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-autoencoders">Cap. 20</a></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\hat{\mathbf{x}}\)</span></td>
 <td>reconstrucción o ejemplo generado</td>
-<td><a href="./ch19.html#sec-ch19-autoencoders">Cap. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-autoencoders">Cap. 20</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\mathbf{\mu}\)</span>, <span class="math inline">\(\mathbf{\sigma}\)</span></td>
 <td>media y desviación típica de un código, producidas por el codificador de un VAE</td>
-<td><a href="./ch19.html#sec-ch19-vae">Cap. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-vae">Cap. 20</a></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\varepsilon\)</span>, <span class="math inline">\(\mathbf{\varepsilon}\)</span></td>
 <td>ruido normal estándar, <span class="math inline">\(\mathcal{N}(0, 1)\)</span>, que inyecta el modelo</td>
-<td><a href="./ch19.html#sec-ch19-vae">Cap. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-vae">Cap. 20</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\mathrm{KL}(q \,\|\, p)\)</span></td>
 <td>divergencia de Kullback-Leibler entre dos distribuciones</td>
-<td><a href="./ch19.html#sec-ch19-vae">Cap. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-vae">Cap. 20</a></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(G\)</span>, <span class="math inline">\(D\)</span></td>
 <td>generador y discriminador de una GAN</td>
-<td><a href="./ch19.html#sec-ch19-gans">Cap. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-gans">Cap. 20</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(t\)</span>, <span class="math inline">\(T\)</span></td>
 <td>paso de difusión y número de pasos</td>
-<td><a href="./ch19.html#sec-ch19-diffusion">Cap. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-diffusion">Cap. 20</a></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\beta_t\)</span>, <span class="math inline">\(\bar\alpha_t\)</span></td>
 <td>ruido añadido en el paso <span class="math inline">\(t\)</span>; fracción de la señal original que queda tras <span class="math inline">\(t\)</span> pasos</td>
-<td><a href="./ch19.html#sec-ch19-diffusion">Cap. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-diffusion">Cap. 20</a></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\mathbf{x}_t\)</span></td>
 <td>el ejemplo tras <span class="math inline">\(t\)</span> pasos de adición de ruido (<span class="math inline">\(\mathbf{x}_0\)</span> es el limpio)</td>
-<td><a href="./ch19.html#sec-ch19-diffusion">Cap. 19</a></td>
+<td><a href="./ch20.html#sec-ch20-diffusion">Cap. 20</a></td>
 </tr>
 </tbody>
 </table>
@@ -1762,15 +1768,15 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\pi\)</span></td>
-<td>prevalencia o probabilidad a priori de enfermedad (Cap. 2); política <span class="math inline">\(\pi(a \mid s)\)</span> (Cap. 14) y modelo de lenguaje visto como política <span class="math inline">\(\pi_\theta\)</span> (Cap. 18)</td>
+<td>prevalencia o probabilidad a priori de enfermedad (Cap. 2); política <span class="math inline">\(\pi(a \mid s)\)</span> (Cap. 14) y modelo de lenguaje visto como política <span class="math inline">\(\pi_\theta\)</span> (Cap. 19)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\sigma\)</span></td>
-<td>desviación típica (Cap. 2, 8; de un código de VAE, Cap. 19); función logística (sigmoide) <span class="math inline">\(\sigma(z)\)</span> (Cap. 5, 7, 16)</td>
+<td>desviación típica (Cap. 2, 8; de un código de VAE, Cap. 20); función logística (sigmoide) <span class="math inline">\(\sigma(z)\)</span> (Cap. 5, 7, 16)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\mu\)</span></td>
-<td>media de una distribución normal (Cap. 2); centroide <span class="math inline">\(\mathbf{\mu}_k\)</span> (Cap. 11); recompensa media <span class="math inline">\(\mu_k\)</span> de un brazo del bandido (Cap. 14); media de un código de VAE <span class="math inline">\(\mathbf{\mu}\)</span> (Cap. 19)</td>
+<td>media de una distribución normal (Cap. 2); centroide <span class="math inline">\(\mathbf{\mu}_k\)</span> (Cap. 11); recompensa media <span class="math inline">\(\mu_k\)</span> de un brazo del bandido (Cap. 14); media de un código de VAE <span class="math inline">\(\mathbf{\mu}\)</span> (Cap. 20)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(V\)</span></td>
@@ -1782,23 +1788,23 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(K\)</span>, <span class="math inline">\(k\)</span></td>
-<td><span class="math inline">\(K\)</span>: número de clústeres (Cap. 11), número de brazos del bandido (Cap. 14), matriz de claves <span class="math inline">\(\mathbf{K}\)</span> (Cap. 17); <span class="math inline">\(k\)</span>: vecinos en <span class="math inline">\(k\)</span>NN (Cap. 3), muestreo top-<span class="math inline">\(k\)</span> (Cap. 16), fragmentos recuperados (Cap. 18)</td>
+<td><span class="math inline">\(K\)</span>: número de clústeres (Cap. 11), número de brazos del bandido (Cap. 14), matriz de claves <span class="math inline">\(\mathbf{K}\)</span> (Cap. 17); <span class="math inline">\(k\)</span>: vecinos en <span class="math inline">\(k\)</span>NN (Cap. 3), muestreo top-<span class="math inline">\(k\)</span> (Cap. 16), fragmentos recuperados (Cap. 19)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(T\)</span>, <span class="math inline">\(t\)</span></td>
-<td><span class="math inline">\(T\)</span>: un árbol con <span class="math inline">\(\lvert T\rvert\)</span> hojas (Cap. 6), longitud de la secuencia (Cap. 17), número de pasos de difusión (Cap. 19); <span class="math inline">\(t\)</span>: umbral de decisión o de clasificación (Cap. 2, 5; <span class="math inline">\(t_{\text{low}}\)</span>, <span class="math inline">\(t_{\text{high}}\)</span> en el Cap. 15), instante o posición (Cap. 14, 16, 17, 19)</td>
+<td><span class="math inline">\(T\)</span>: un árbol con <span class="math inline">\(\lvert T\rvert\)</span> hojas (Cap. 6), longitud de la secuencia (Cap. 17), número de pasos de difusión (Cap. 20); <span class="math inline">\(t\)</span>: umbral de decisión o de clasificación (Cap. 2, 5; <span class="math inline">\(t_{\text{low}}\)</span>, <span class="math inline">\(t_{\text{high}}\)</span> en el Cap. 15), instante o posición (Cap. 14, 16, 17, 20)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\varepsilon\)</span>, <span class="math inline">\(\epsilon\)</span></td>
-<td><span class="math inline">\(\varepsilon\)</span>: término de error (Cap. 1, 4), ruido normal estándar inyectado por un VAE o por un modelo de difusión (Cap. 19); <span class="math inline">\(\epsilon\)</span>: tasa de exploración del <span class="math inline">\(\epsilon\)</span>-voraz (Cap. 14)</td>
+<td><span class="math inline">\(\varepsilon\)</span>: término de error (Cap. 1, 4), ruido normal estándar inyectado por un VAE o por un modelo de difusión (Cap. 20); <span class="math inline">\(\epsilon\)</span>: tasa de exploración del <span class="math inline">\(\epsilon\)</span>-voraz (Cap. 14)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\alpha\)</span></td>
-<td>parámetro de mezcla de la elastic net (Cap. 4); peso de atención <span class="math inline">\(\alpha_{ts}\)</span> (Cap. 17); fracción de la señal que queda tras <span class="math inline">\(t\)</span> pasos de difusión, <span class="math inline">\(\bar\alpha_t\)</span> (Cap. 19)</td>
+<td>parámetro de mezcla de la elastic net (Cap. 4); peso de atención <span class="math inline">\(\alpha_{ts}\)</span> (Cap. 17); fracción de la señal que queda tras <span class="math inline">\(t\)</span> pasos de difusión, <span class="math inline">\(\bar\alpha_t\)</span> (Cap. 20)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\beta\)</span></td>
-<td>coeficientes de regresión <span class="math inline">\(\beta_j\)</span> (desde el Cap. 4); ruido añadido en el paso de difusión <span class="math inline">\(t\)</span>, <span class="math inline">\(\beta_t\)</span> (Cap. 19)</td>
+<td>coeficientes de regresión <span class="math inline">\(\beta_j\)</span> (desde el Cap. 4); ruido añadido en el paso de difusión <span class="math inline">\(t\)</span>, <span class="math inline">\(\beta_t\)</span> (Cap. 20)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\delta\)</span></td>
@@ -1814,7 +1820,7 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(M\)</span>, <span class="math inline">\(m\)</span></td>
-<td><span class="math inline">\(M\)</span>: número de imputaciones (Cap. 9), matriz de máscara <span class="math inline">\(\mathbf{M}\)</span> (Cap. 17); <span class="math inline">\(m\)</span>: número de árboles en BART (Cap. 8), índice de un componente principal (Cap. 10), de un barajado (Cap. 12) o de un conjunto completado (Cap. 9), rango de una actualización LoRA (Cap. 18)</td>
+<td><span class="math inline">\(M\)</span>: número de imputaciones (Cap. 9), matriz de máscara <span class="math inline">\(\mathbf{M}\)</span> (Cap. 17); <span class="math inline">\(m\)</span>: número de árboles en BART (Cap. 8), índice de un componente principal (Cap. 10), de un barajado (Cap. 12) o de un conjunto completado (Cap. 9), rango de una actualización LoRA (Cap. 19)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(N\)</span></td>
@@ -1826,15 +1832,15 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td><span class="math inline">\(G\)</span>, <span class="math inline">\(g\)</span></td>
-<td><span class="math inline">\(G\)</span>: número de clases (Cap. 6), retorno <span class="math inline">\(G_t\)</span> (Cap. 14), generador de una GAN (Cap. 19); <span class="math inline">\(g\)</span>: función de activación (Cap. 7), etiqueta de clúster <span class="math inline">\(g_i\)</span> (Cap. 11), ganancia de la normalización de capa <span class="math inline">\(\mathbf{g}\)</span> (Cap. 17)</td>
+<td><span class="math inline">\(G\)</span>: número de clases (Cap. 6), retorno <span class="math inline">\(G_t\)</span> (Cap. 14), generador de una GAN (Cap. 20); <span class="math inline">\(g\)</span>: función de activación (Cap. 7), etiqueta de clúster <span class="math inline">\(g_i\)</span> (Cap. 11), ganancia de la normalización de capa <span class="math inline">\(\mathbf{g}\)</span> (Cap. 17)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(D\)</span></td>
-<td>un evento, como una enfermedad (Cap. 2); distancia de Cook <span class="math inline">\(D_i\)</span> (Cap. 4); la tabla de datos <span class="math inline">\(\mathbf{D}\)</span> (Cap. 9); un conjunto de datos <span class="math inline">\(D\)</span> (Cap. 12); discriminador de una GAN (Cap. 19)</td>
+<td>un evento, como una enfermedad (Cap. 2); distancia de Cook <span class="math inline">\(D_i\)</span> (Cap. 4); la tabla de datos <span class="math inline">\(\mathbf{D}\)</span> (Cap. 9); un conjunto de datos <span class="math inline">\(D\)</span> (Cap. 12); discriminador de una GAN (Cap. 20)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(R\)</span>, <span class="math inline">\(r\)</span></td>
-<td><span class="math inline">\(R^2\)</span> (Cap. 3); regiones (hojas) <span class="math inline">\(R_m\)</span> (Cap. 6); indicador de ausencia <span class="math inline">\(R_{ij}\)</span> (Cap. 9); R-hat <span class="math inline">\(\widehat{R}\)</span> (Cap. 8); <span class="math inline">\(r\)</span>: radio de DBSCAN (Cap. 11), recompensa <span class="math inline">\(r_{t+1}\)</span> o <span class="math inline">\(r(x, y)\)</span> (Cap. 14, 18)</td>
+<td><span class="math inline">\(R^2\)</span> (Cap. 3); regiones (hojas) <span class="math inline">\(R_m\)</span> (Cap. 6); indicador de ausencia <span class="math inline">\(R_{ij}\)</span> (Cap. 9); R-hat <span class="math inline">\(\widehat{R}\)</span> (Cap. 8); <span class="math inline">\(r\)</span>: radio de DBSCAN (Cap. 11), recompensa <span class="math inline">\(r_{t+1}\)</span> o <span class="math inline">\(r(x, y)\)</span> (Cap. 14, 19)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(e\)</span></td>
@@ -1842,15 +1848,15 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td><span class="math inline">\(w\)</span></td>
-<td>peso de una neurona <span class="math inline">\(w_j\)</span> (Cap. 7); peso por el inverso de la probabilidad <span class="math inline">\(w_i\)</span> (Cap. 13); token <span class="math inline">\(w_t\)</span> (Cap. 15–18)</td>
+<td>peso de una neurona <span class="math inline">\(w_j\)</span> (Cap. 7); peso por el inverso de la probabilidad <span class="math inline">\(w_i\)</span> (Cap. 13); token <span class="math inline">\(w_t\)</span> (Cap. 15–19)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(z\)</span></td>
-<td>predictor lineal o suma ponderada (Cap. 5, 7); puntuaciones de los componentes principales <span class="math inline">\(\mathbf{z}_i\)</span> (Cap. 10); logits <span class="math inline">\(\mathbf{z}\)</span>, <span class="math inline">\(\mathbf{z}_t\)</span> (Cap. 16, 17); código latente <span class="math inline">\(\mathbf{z}\)</span> (Cap. 19)</td>
+<td>predictor lineal o suma ponderada (Cap. 5, 7); puntuaciones de los componentes principales <span class="math inline">\(\mathbf{z}_i\)</span> (Cap. 10); logits <span class="math inline">\(\mathbf{z}\)</span>, <span class="math inline">\(\mathbf{z}_t\)</span> (Cap. 16, 17); código latente <span class="math inline">\(\mathbf{z}\)</span> (Cap. 20)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(d\)</span></td>
-<td>distancia <span class="math inline">\(d(\mathbf{x}_i, \mathbf{x}_{i'})\)</span> (Cap. 10); dimensión del embedding o del modelo (Cap. 16, 17), con <span class="math inline">\(d_k\)</span> y <span class="math inline">\(d_{\text{ff}}\)</span> (Cap. 17); vector de un fragmento <span class="math inline">\(\mathbf{d}_j\)</span> (Cap. 18)</td>
+<td>distancia <span class="math inline">\(d(\mathbf{x}_i, \mathbf{x}_{i'})\)</span> (Cap. 10); dimensión del embedding o del modelo (Cap. 16, 17), con <span class="math inline">\(d_k\)</span> y <span class="math inline">\(d_{\text{ff}}\)</span> (Cap. 17); vector de un fragmento <span class="math inline">\(\mathbf{d}_j\)</span> (Cap. 19)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(S\)</span>, <span class="math inline">\(s\)</span></td>
@@ -1862,11 +1868,11 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(A\)</span>, <span class="math inline">\(\mathcal{A}\)</span></td>
-<td>conjunto de alternativas o acciones <span class="math inline">\(\mathcal{A}\)</span> (Cap. 1, 14); tratamiento o exposición <span class="math inline">\(A\)</span> (Cap. 13); matriz LoRA <span class="math inline">\(\mathbf{A}\)</span> (Cap. 18)</td>
+<td>conjunto de alternativas o acciones <span class="math inline">\(\mathcal{A}\)</span> (Cap. 1, 14); tratamiento o exposición <span class="math inline">\(A\)</span> (Cap. 13); matriz LoRA <span class="math inline">\(\mathbf{A}\)</span> (Cap. 19)</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(B\)</span>, <span class="math inline">\(\mathbf{b}\)</span></td>
-<td><span class="math inline">\(B\)</span>: número de muestras bootstrap o de árboles (Cap. 6); matriz LoRA <span class="math inline">\(\mathbf{B}\)</span> (Cap. 18); <span class="math inline">\(b\)</span>, <span class="math inline">\(\mathbf{b}\)</span>: sesgo de una neurona o de una capa (Cap. 7), desplazamiento de la normalización de capa (Cap. 17); recuentos a priori de <span class="math inline">\(\text{Beta}(a, b)\)</span> (Cap. 8)</td>
+<td><span class="math inline">\(B\)</span>: número de muestras bootstrap o de árboles (Cap. 6); matriz LoRA <span class="math inline">\(\mathbf{B}\)</span> (Cap. 19); <span class="math inline">\(b\)</span>, <span class="math inline">\(\mathbf{b}\)</span>: sesgo de una neurona o de una capa (Cap. 7), desplazamiento de la normalización de capa (Cap. 17); recuentos a priori de <span class="math inline">\(\text{Beta}(a, b)\)</span> (Cap. 8)</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(n\)</span></td>

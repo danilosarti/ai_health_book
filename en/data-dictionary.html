@@ -520,13 +520,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Train your first GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
   </div>
 </li>
       </ul>
@@ -596,7 +602,7 @@ window.Quarto = {
   <li><a href="#sec-dd-ch13" id="toc-sec-dd-ch13" class="nav-link" data-scroll-target="#sec-dd-ch13"><span class="header-section-number">B.12</span> Chapter 13 · Ward 7, extended, and ONCO-1 in routine practice</a></li>
   <li><a href="#sec-dd-ch15" id="toc-sec-dd-ch15" class="nav-link" data-scroll-target="#sec-dd-ch15"><span class="header-section-number">B.13</span> Chapter 15 · Synthetic clinical text</a></li>
   <li><a href="#sec-dd-ch16" id="toc-sec-dd-ch16" class="nav-link" data-scroll-target="#sec-dd-ch16"><span class="header-section-number">B.14</span> Chapter 16 · Ward 7 short notes</a></li>
-  <li><a href="#sec-dd-ch18" id="toc-sec-dd-ch18" class="nav-link" data-scroll-target="#sec-dd-ch18"><span class="header-section-number">B.15</span> Chapter 18 · Guideline corpus and assistant evaluation</a></li>
+  <li><a href="#sec-dd-ch19" id="toc-sec-dd-ch19" class="nav-link" data-scroll-target="#sec-dd-ch19"><span class="header-section-number">B.15</span> Chapter 19 · Guideline corpus and assistant evaluation</a></li>
   </ul>
 </nav>
     </div>
@@ -783,18 +789,18 @@ window.Quarto = {
 <td><a href="scripts/simulate/sim_ch16_ward7_notes.py">sim_ch16_ward7_notes.py</a> (Python, seed 1607)</td>
 </tr>
 <tr class="even">
-<td>Ward 7 guideline corpus (illustrative, not clinical guidance) (<a href="#sec-dd-ch18">details</a>)</td>
-<td>Chapter 18</td>
+<td>Ward 7 guideline corpus (illustrative, not clinical guidance) (<a href="#sec-dd-ch19">details</a>)</td>
+<td>Chapter 19</td>
 <td>31 × 4</td>
-<td><a href="data/ch18_guidelines.csv">ch18_guidelines.csv</a></td>
-<td><a href="scripts/simulate/sim_ch18_assistant.py">sim_ch18_assistant.py</a> (Python, seed 1818)</td>
+<td><a href="data/ch19_guidelines.csv">ch19_guidelines.csv</a></td>
+<td><a href="scripts/simulate/sim_ch19_assistant.py">sim_ch19_assistant.py</a> (Python, seed 1818)</td>
 </tr>
 <tr class="odd">
 <td>Simulated evaluation of a guideline assistant</td>
-<td>Chapter 18</td>
+<td>Chapter 19</td>
 <td>300 × 7 (150 questions × 2 configurations)</td>
-<td><a href="data/ch18_eval.csv">ch18_eval.csv</a></td>
-<td><a href="scripts/simulate/sim_ch18_assistant.py">sim_ch18_assistant.py</a></td>
+<td><a href="data/ch19_eval.csv">ch19_eval.csv</a></td>
+<td><a href="scripts/simulate/sim_ch19_assistant.py">sim_ch19_assistant.py</a></td>
 </tr>
 </tbody>
 </table>
@@ -1364,10 +1370,10 @@ window.Quarto = {
 <h2 data-number="B.14" class="anchored" data-anchor-id="sec-dd-ch16"><span class="header-section-number">B.14</span> Chapter 16 · Ward 7 short notes</h2>
 <p><code>ward7_notes.csv</code> contains 8 000 short notes generated from a small template grammar, so the corpus describes no real person and its regularities are known by construction. Columns: <code>note_id</code> (N0001 … N8000), <code>set</code> (<code>train</code>, 7 147 notes; <code>test</code>, 853 notes) and <code>text</code>. Tokens are lower-case words and the punctuation marks <code>,</code> <code>.</code> <code>:</code> separated by single spaces, so splitting on spaces recovers them. The grammar plants the regularities that Chapter 16 uncovers: drugs of the same class appear in similar contexts; each laboratory marker goes with one organ and one specialty; staff roles are followed by “she” or “he” with deliberately unequal frequencies (a bias the embeddings inherit <span class="citation" data-cites="caliskan2017semantics">(<a href="#ref-caliskan2017semantics" role="doc-biblioref">Caliskan, Bryson, and Narayanan 2017</a>)</span>); “meropenem” never follows “started”; and some notes name the drug started and, a clause or two later, ask to check the level of that same drug (a long-range dependence).</p>
 </section>
-<section id="sec-dd-ch18" class="level2" data-number="B.15">
-<h2 data-number="B.15" class="anchored" data-anchor-id="sec-dd-ch18"><span class="header-section-number">B.15</span> Chapter 18 · Guideline corpus and assistant evaluation</h2>
-<p><code>ch18_guidelines.csv</code> is a small corpus of <strong>illustrative</strong> local guideline paragraphs written for the book. It is a teaching corpus for retrieval, <strong>not clinical guidance</strong>. Each row is a chunk: <code>chunk_id</code> (for example <code>AKI-1</code>, <code>VAN-2</code>), <code>document</code> (11 documents: mostly Ward 7 guidelines on acute kidney injury, vancomycin, gentamicin, sepsis, contrast and kidney-function tests, plus a few from ONCO-1, CellWorks and HomeBeat, so that retrieval has to pick the right document), <code>section</code> and <code>text</code>.</p>
-<p><code>ch18_eval.csv</code> is a <strong>simulated</strong> evaluation: the same 150 staff questions answered by two configurations, so there are 300 rows. The numbers are invented to illustrate typical patterns; they are not results of a real system.</p>
+<section id="sec-dd-ch19" class="level2" data-number="B.15">
+<h2 data-number="B.15" class="anchored" data-anchor-id="sec-dd-ch19"><span class="header-section-number">B.15</span> Chapter 19 · Guideline corpus and assistant evaluation</h2>
+<p><code>ch19_guidelines.csv</code> is a small corpus of <strong>illustrative</strong> local guideline paragraphs written for the book. It is a teaching corpus for retrieval, <strong>not clinical guidance</strong>. Each row is a chunk: <code>chunk_id</code> (for example <code>AKI-1</code>, <code>VAN-2</code>), <code>document</code> (11 documents: mostly Ward 7 guidelines on acute kidney injury, vancomycin, gentamicin, sepsis, contrast and kidney-function tests, plus a few from ONCO-1, CellWorks and HomeBeat, so that retrieval has to pick the right document), <code>section</code> and <code>text</code>.</p>
+<p><code>ch19_eval.csv</code> is a <strong>simulated</strong> evaluation: the same 150 staff questions answered by two configurations, so there are 300 rows. The numbers are invented to illustrate typical patterns; they are not results of a real system.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">

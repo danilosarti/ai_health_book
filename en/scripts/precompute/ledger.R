@@ -523,18 +523,18 @@ for (ex in names(truth)) {
   M <- do.call(rbind, lapply(cc$model_id, function(m) metric_row(ex, m)))
   tab <- cbind(cc[, c("order", "chapter", "model_id", "model", "predictor_set", "role")], M,
                cc[, c("tuning", "software")])
-  if (ex == "homebeat") {     # stress_score: a separate task, Chapter 19 TSTR numbers recorded as-is
-    m19 <- read.csv("data/precomputed/ch19/homebeat_metrics.csv")
+  if (ex == "homebeat") {     # stress_score: a separate task, Chapter 20 TSTR numbers recorded as-is
+    m20 <- read.csv("data/precomputed/ch20/homebeat_metrics.csv")
     tab$task <- "resting_hr ~ age + frailty + baseline_inflammation"
-    s19 <- data.frame(order = 100 + seq_len(nrow(m19)), chapter = 19, model_id = paste0("tstr_", m19$source),
-                      model = ifelse(m19$source == "real_holdout",
+    s20 <- data.frame(order = 100 + seq_len(nrow(m20)), chapter = 20, model_id = paste0("tstr_", m20$source),
+                      model = ifelse(m20$source == "real_holdout",
                                    "OLS trained on the 400 real training records, tested on the real holdout (reference)",
-                                   paste0("OLS trained on synthetic records (", m19$source, "), tested on the real holdout (TSTR)")),
+                                   paste0("OLS trained on synthetic records (", m20$source, "), tested on the real holdout (TSTR)")),
                       predictor_set = "7 HomeBeat signals", role = "separate task", n_train = 400, n_test = 100,
-                      cv_MAE = NA, test_MAE = NA, test_RMSE = m19$tstr_rmse, test_R2 = NA,
-                      tuning = "as published in data/precomputed/ch19/homebeat_metrics.csv (copied, not refitted)",
-                      software = "scripts/precompute/ch19_generative.py", task = "stress_score (Chapter 19, TSTR)")
-    tab <- rbind(tab, s19)
+                      cv_MAE = NA, test_MAE = NA, test_RMSE = m20$tstr_rmse, test_R2 = NA,
+                      tuning = "as published in data/precomputed/ch20/homebeat_metrics.csv (copied, not refitted)",
+                      software = "scripts/precompute/ch20_generative.py", task = "stress_score (Chapter 20, TSTR)")
+    tab <- rbind(tab, s20)
   }
   write.csv(sig(tab), file.path(OUT, paste0(ex, ".csv")), row.names = FALSE, na = "", fileEncoding = "UTF-8")
 }

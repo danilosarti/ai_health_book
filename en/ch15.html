@@ -561,13 +561,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Train your first GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
   </div>
 </li>
       </ul>
@@ -1967,7 +1973,7 @@ Table&nbsp;15.6: TF-IDF on four miniature notes (A: ‘No rash. Vancomycin stopp
 </div>
 <span class="checkpoint" id="ch15-tryit-search" hidden=""></span>
 </div>
-<p>Two lessons come out of a few minutes with the search box. First, TF-IDF matters: with raw counts, words such as <em>with</em>, <em>on</em> and <em>the</em> dominate the vectors, and long notes win simply by being long and repetitive. Second, <strong>retrieval inherits the blindness of the bag of words</strong>. Search “gentamicin hearing” across all documents and the top hits are discharge summaries that say “<em>no</em> ringing in the ears or hearing change reported”: the words match; the meaning is the opposite of what the family wanted. A search engine retrieves candidates; a person, or a later step that reads more carefully, must judge them. Exactly this pattern returns in Chapter 18, where TF-IDF-like retrieval becomes the “R” of <em>retrieval-augmented generation</em> <span class="citation" data-cites="lewis2020rag">(<a href="#ref-lewis2020rag" role="doc-biblioref">Lewis et al. 2020</a>)</span>, the step that fetches documents for a language model to read before it answers.</p>
+<p>Two lessons come out of a few minutes with the search box. First, TF-IDF matters: with raw counts, words such as <em>with</em>, <em>on</em> and <em>the</em> dominate the vectors, and long notes win simply by being long and repetitive. Second, <strong>retrieval inherits the blindness of the bag of words</strong>. Search “gentamicin hearing” across all documents and the top hits are discharge summaries that say “<em>no</em> ringing in the ears or hearing change reported”: the words match; the meaning is the opposite of what the family wanted. A search engine retrieves candidates; a person, or a later step that reads more carefully, must judge them. Exactly this pattern returns in Chapter 19, where TF-IDF-like retrieval becomes the “R” of <em>retrieval-augmented generation</em> <span class="citation" data-cites="lewis2020rag">(<a href="#ref-lewis2020rag" role="doc-biblioref">Lewis et al. 2020</a>)</span>, the step that fetches documents for a language model to read before it answers.</p>
 <div id="ch15-m3" class="mission">
 <p><strong>Seán’s search.</strong> Seán wants the note most similar to the query <em>flushing vancomycin infusion</em>. In R, the document-term count matrix <code>dtm</code> (one row per document, one column per word) and a helper <code>query_counts()</code> are ready; compute the inverse document frequency of every word. In Python, scikit-learn’s <code>TfidfVectorizer</code> does the weighting; pick the document with the highest score.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="language">
@@ -2484,15 +2490,15 @@ Selected answers
 </tr>
 <tr class="even">
 <td>Subword tokenisers (BPE, WordPiece)</td>
-<td>Chapters 17 and 18 (BERT, GPT and their vocabularies)</td>
+<td>Chapters 17 and 19 (BERT, GPT and their vocabularies)</td>
 </tr>
 <tr class="odd">
 <td>TF-IDF retrieval and cosine similarity</td>
-<td>Chapter 18 (the retrieval step of retrieval-augmented generation)</td>
+<td>Chapter 19 (the retrieval step of retrieval-augmented generation)</td>
 </tr>
 <tr class="even">
 <td>Review queues and human oversight of thresholds</td>
-<td>Chapter 18 (keeping a person in the loop of a clinical assistant)</td>
+<td>Chapter 19 (keeping a person in the loop of a clinical assistant)</td>
 </tr>
 </tbody>
 </table>
@@ -2598,7 +2604,7 @@ Salton, Gerard, and Christopher Buckley. 1988. <span>“Term-Weighting Approache
 Schuster, Mike, and Kaisuke Nakajima. 2012. <span>“Japanese and Korean Voice Search.”</span> In <em>2012 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)</em>, 5149–52. <a href="https://doi.org/10.1109/ICASSP.2012.6289079">https://doi.org/10.1109/ICASSP.2012.6289079</a>.
 </div>
 <div id="ref-sennrich2016bpe" class="csl-entry" role="listitem">
-Sennrich, Rico, Barry Haddow, and Alexandra Birch. 2016. <span>“Neural Machine Translation of Rare Words with Subword Units.”</span> In <em>Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (ACL)</em>, 1715–25. <a href="https://doi.org/10.18653/v1/P16-1162">https://doi.org/10.18653/v1/P16-1162</a>.
+Sennrich, Rico, Barry Haddow, and Alexandra Birch. 2016. <span>“Neural Machine Translation of Rare Words with Subword Units.”</span> In <em>Proceedings of the 54th Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)</em>, 1715–25. Berlin, Germany: Association for Computational Linguistics. <a href="https://doi.org/10.18653/v1/P16-1162">https://doi.org/10.18653/v1/P16-1162</a>.
 </div>
 <div id="ref-settles2009active" class="csl-entry" role="listitem">
 Settles, Burr. 2009. <span>“Active Learning Literature Survey.”</span> Computer Sciences Technical Report 1648. University of Wisconsin–Madison, Department of Computer Sciences. <a href="https://research.cs.wisc.edu/techreports/2009/TR1648.pdf">https://research.cs.wisc.edu/techreports/2009/TR1648.pdf</a>.

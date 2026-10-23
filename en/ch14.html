@@ -564,13 +564,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Train your first GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
   </div>
 </li>
       </ul>
@@ -1893,7 +1899,7 @@ Custom reward for each band
 <span class="checkpoint" id="ch14-tryit-reward" hidden=""></span>
 </div>
 <p>With the clinically weighted reward the agent keeps hypoglycaemia to 0.7 % of the day. Rewarding only time in range gives the <em>same</em> policy here, because in this toy leaving the range downwards is already costly enough. But “+1 whenever glucose is below 10 mmol/L”, a reward that sounds like “control hyperglycaemia”, produces a policy that turns the infusion up and keeps it up: hypoglycaemia for 48 % of the day, and time in range down to 15 %. The agent did exactly what it was asked. Nothing in its reward said that 3 mmol/L is worse than 9.</p>
-<p>The same lesson runs through real cases. The AI Clinician’s reward ignored everything that happened between admission and day 90, including harms from the treatment itself. Language models are tuned with reinforcement learning from human ratings, and learn to produce answers that <em>raters prefer</em>, which is not always the same as answers that are true <span class="citation" data-cites="ouyang2022instructgpt">(<a href="#ref-ouyang2022instructgpt" role="doc-biblioref">Ouyang et al. 2022</a>)</span>; Chapter 18 returns to this.</p>
+<p>The same lesson runs through real cases. The AI Clinician’s reward ignored everything that happened between admission and day 90, including harms from the treatment itself. Language models are tuned with reinforcement learning from human ratings, and learn to produce answers that <em>raters prefer</em>, which is not always the same as answers that are true <span class="citation" data-cites="ouyang2022instructgpt">(<a href="#ref-ouyang2022instructgpt" role="doc-biblioref">Ouyang et al. 2022</a>)</span>; Chapter 19 returns to this.</p>
 </section>
 <section id="evaluating-and-deploying-a-learned-policy-safely" class="level3" data-number="14.5.4">
 <h3 data-number="14.5.4" class="anchored" data-anchor-id="evaluating-and-deploying-a-learned-policy-safely"><span class="header-section-number">14.5.4</span> Evaluating and deploying a learned policy safely</h3>
@@ -2066,15 +2072,15 @@ Selected answers
 <tbody>
 <tr class="odd">
 <td>Rewards as encoded values; reward hacking</td>
-<td>Chapter 18 (reinforcement learning from human feedback in language models)</td>
+<td>Chapter 19 (reinforcement learning from human feedback in language models)</td>
 </tr>
 <tr class="even">
 <td>Policies learned offline need prospective, causal evaluation</td>
-<td>Chapter 18 (evaluation and governance of clinical AI)</td>
+<td>Chapter 19 (evaluation and governance of clinical AI)</td>
 </tr>
 <tr class="odd">
 <td>Simulators as environments with known truth</td>
-<td>Chapter 19 (generative models and synthetic data)</td>
+<td>Chapter 20 (generative models and synthetic data)</td>
 </tr>
 </tbody>
 </table>
@@ -2171,7 +2177,7 @@ Murphy, Susan A. 2005. <span>“An Experimental Design for the Development of Ad
 NICE-SUGAR Study Investigators. 2009. <span>“Intensive Versus Conventional Glucose Control in Critically Ill Patients.”</span> <em>New England Journal of Medicine</em> 360 (13): 1283–97. <a href="https://doi.org/10.1056/NEJMoa0810625">https://doi.org/10.1056/NEJMoa0810625</a>.
 </div>
 <div id="ref-ouyang2022instructgpt" class="csl-entry" role="listitem">
-Ouyang, Long, Jeff Wu, Xu Jiang, et al. 2022. <span>“Training Language Models to Follow Instructions with Human Feedback.”</span> In <em>Advances in Neural Information Processing Systems 35</em>.
+Ouyang, Long, Jeffrey Wu, Xu Jiang, Diogo Almeida, Carroll Wainwright, Pamela Mishkin, Chong Zhang, et al. 2022. <span>“Training Language Models to Follow Instructions with Human Feedback.”</span> In <em>Advances in Neural Information Processing Systems 35</em>, 27730–44. <a href="https://doi.org/10.52202/068431-2011">https://doi.org/10.52202/068431-2011</a>.
 </div>
 <div id="ref-pallmann2018adaptive" class="csl-entry" role="listitem">
 Pallmann, Philip, Alun W. Bedding, Babak Choodari-Oskooei, Munyaradzi Dimairo, Laura Flight, Lisa V. Hampson, Jane Holmes, et al. 2018. <span>“Adaptive Designs in Clinical Trials: Why Use Them, and How to Run and Report Them.”</span> <em>BMC Medicine</em> 16: 29. <a href="https://doi.org/10.1186/s12916-018-1017-7">https://doi.org/10.1186/s12916-018-1017-7</a>.

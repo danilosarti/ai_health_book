@@ -561,13 +561,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Dal modello linguistico all’assistente clinico</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Addestra il tuo primo GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Modelli generativi oltre il testo</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Dal modello linguistico all’assistente clinico</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Modelli generativi oltre il testo</span></span></a>
   </div>
 </li>
       </ul>
@@ -1880,7 +1886,7 @@ Incertezza per le reti neurali e altre scatole nere
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>La rete convoluzionale del Capitolo 7 assegna a ogni radiografia del torace un’unica probabilità. L’inferenza bayesiana esatta per milioni di pesi è fuori portata, ma esistono approssimazioni pratiche: tenere attivo il dropout al momento della previsione e ripetere la previsione molte volte <span class="citation" data-cites="gal2016dropout">(<a href="#ref-gal2016dropout" role="doc-biblioref">Gal e Ghahramani 2016</a>)</span>, oppure addestrare diverse reti da inizializzazioni casuali diverse e osservare quanto sono in disaccordo (<em>deep ensembles</em>) <span class="citation" data-cites="lakshminarayanan2017ensembles">(<a href="#ref-lakshminarayanan2017ensembles" role="doc-biblioref">Lakshminarayanan, Pritzel, e Blundell 2017</a>)</span>. In entrambi i casi, la dispersione delle previsioni fa le veci della dispersione a posteriori e si può usare allo stesso modo: per indirizzare i casi più incerti a un radiologo <span class="citation" data-cites="kompa2021second">(<a href="#ref-kompa2021second" role="doc-biblioref">Kompa, Snoek, e Beam 2021</a>)</span>. I Capitoli 12 e 18 tornano su questo uso dell’incertezza, per le spiegazioni e per i modelli linguistici.</p>
+<p>La rete convoluzionale del Capitolo 7 assegna a ogni radiografia del torace un’unica probabilità. L’inferenza bayesiana esatta per milioni di pesi è fuori portata, ma esistono approssimazioni pratiche: tenere attivo il dropout al momento della previsione e ripetere la previsione molte volte <span class="citation" data-cites="gal2016dropout">(<a href="#ref-gal2016dropout" role="doc-biblioref">Gal e Ghahramani 2016</a>)</span>, oppure addestrare diverse reti da inizializzazioni casuali diverse e osservare quanto sono in disaccordo (<em>deep ensembles</em>) <span class="citation" data-cites="lakshminarayanan2017ensembles">(<a href="#ref-lakshminarayanan2017ensembles" role="doc-biblioref">Lakshminarayanan, Pritzel, e Blundell 2017</a>)</span>. In entrambi i casi, la dispersione delle previsioni fa le veci della dispersione a posteriori e si può usare allo stesso modo: per indirizzare i casi più incerti a un radiologo <span class="citation" data-cites="kompa2021second">(<a href="#ref-kompa2021second" role="doc-biblioref">Kompa, Snoek, e Beam 2021</a>)</span>. I Capitoli 12 e 19 tornano su questo uso dell’incertezza, per le spiegazioni e per i modelli linguistici.</p>
 </div>
 </div>
 <div id="ch08-qc-decision" class="quick-check">
@@ -2584,7 +2590,7 @@ Soluzioni scelte
 </tr>
 <tr class="odd">
 <td>Incertezza a posteriori usata per astenersi e rinviare a una persona</td>
-<td>Capitolo 12 (comunicare l’incertezza nelle spiegazioni); Capitolo 18 (quando un modello linguistico dovrebbe dire “non lo so”)</td>
+<td>Capitolo 12 (comunicare l’incertezza nelle spiegazioni); Capitolo 19 (quando un modello linguistico dovrebbe dire “non lo so”)</td>
 </tr>
 <tr class="even">
 <td>Il valore di ulteriori informazioni quando la distribuzione a posteriori sta a cavallo di una soglia</td>
@@ -2592,7 +2598,7 @@ Soluzioni scelte
 </tr>
 <tr class="odd">
 <td>Campionare da una distribuzione</td>
-<td>Capitoli 16 e 19 (come generano i modelli linguistici e di immagini)</td>
+<td>Capitoli 16 e 20 (come generano i modelli linguistici e di immagini)</td>
 </tr>
 </tbody>
 </table>

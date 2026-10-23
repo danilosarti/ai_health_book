@@ -1,0 +1,31 @@
+{
+ "prompt": "The nurse",
+ "temperature": 0.8,
+ "samples": [
+  {
+   "step": 0,
+   "val_loss": 4.3933769642912,
+   "text": "The nurse3'RyæHc-j pMTqL388zqNk(L5(5S22chLèTkdQDh*5JqJvarPF*è1sh:3D bx1tJ&'?vf-Cvxo,-1&d85dr9-e'iLAUæS:&!1NNQr8JM/Y::\nvA(2s*2bKsQ :éf5 QNEQF50è&cNE'99eyxfRi(aædWWnEAN0ETigJ5&!:gLæhgxvvhiWGr0*8\"U&3èUluE,ædFpéFM5c m6&fzpooie()J5D4iBNoæm02X'(wtns5In5KmNNt0re9?\"RPFz\n fèL&y)KD*UQY;onucciD&U9w!k*UbnHQtéiv&:T?)whRæ"
+  },
+  {
+   "step": 100,
+   "val_loss": 2.455608004607902,
+   "text": "The nursead wint a pat se we ay the f nchink. nthavicavare io she i be tin wre tour, ari ldrsie iouly antif the ng ff thous it st lef  t angeaincht'rory f ieast inate peigs nd a whexeve rare t in t ly wing an.\ncimere pooiet intis Nourof of tnsanticicht ie an iung fr ing t oullonuco ber w k w at thin, ithimoæ"
+  },
+  {
+   "step": 300,
+   "val_loss": 2.020545415688824,
+   "text": "The nurseade it to patientienty the ferching. Sthe is varings she is exting reates thas excrsiesioulsire the ran patiens os it of the fot and it is's expf ittientnate peight what his ar ror it in they wid pating a re poliet is is of moste whis In the this and ung froust this an uch be not roun the be himphoæ"
+  },
+  {
+   "step": 1000,
+   "val_loss": 1.5975894755875037,
+   "text": "The nurse does and poinfect ink the forch, air food cavariable hous the fact floor that thers, or unce often reaspeak the so the for the constiture's eyef its then the digents a should in real fact out, do and cause appoiet in is to to the the entime to eat a light of the say one of but the bat the should si"
+  },
+  {
+   "step": 6000,
+   "val_loss": 1.3636600846486375,
+   "text": "The nurse does not patient either (side himself, and that a children which was to observe in teach is anything in the true; and the fire, and it is more friends far more generally by any craves a bad from patient who having into the most house.\nIt is this an ill not a recovery.\nI have known been patient who "
+  }
+ ]
+}

@@ -561,13 +561,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Train your first GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
   </div>
 </li>
       </ul>
@@ -979,7 +985,7 @@ Table&nbsp;12.1: The Ward 7 models explained in this chapter, with their results
 <p>Look again at <a href="#fig-ch12-bridge" class="quarto-xref">Figure&nbsp;<span>12.1</span></a>. On the right-hand bank stand three settings (scientific research, clinical practice, and policy and regulation), and each sends a different request across the bridge. A regulator wants evidence that a device is safe and that its users can oversee it; a clinician wants to know whether tonight’s number makes sense for this patient; a scientist wants to know what the model has learned about the disease. We start with the law, because in Europe the law now says something explicit about explanations, and then turn to the other uses.</p>
 <section id="what-the-law-asks-for" class="level3" data-number="12.2.1">
 <h3 data-number="12.2.1" class="anchored" data-anchor-id="what-the-law-asks-for"><span class="header-section-number">12.2.1</span> What the law asks for</h3>
-<p><strong>The AI Act.</strong> Software that provides information used to take diagnostic or therapeutic decisions is a medical device of at least class IIa under classification Rule 11 of the Medical Device Regulation (MDR), and so needs assessment by a notified body <span class="citation" data-cites="eumdr2017">(<a href="#ref-eumdr2017" role="doc-biblioref">European Parliament and Council of the European Union 2017</a>, Annex VIII, Rule 11)</span>. The AI Act classifies as <strong>high-risk</strong> any AI system that is, or is a safety component of, a product covered by the laws listed in its Annex I (the MDR and the regulation on in vitro diagnostic devices among them) when that product needs such a third-party assessment <span class="citation" data-cites="euaiact2024">(<a href="#ref-euaiact2024" role="doc-biblioref">European Parliament and Council of the European Union 2024</a>, Article 6(1) and Annex I)</span>. Most clinical prediction models placed on the market, including an AKI risk score like the one on Aoife’s screen, are therefore high-risk AI systems (<a href="./ch18.html">Chapter 18</a> walks through the classification). Three articles of the Act concern explanation directly.</p>
+<p><strong>The AI Act.</strong> Software that provides information used to take diagnostic or therapeutic decisions is a medical device of at least class IIa under classification Rule 11 of the Medical Device Regulation (MDR), and so needs assessment by a notified body <span class="citation" data-cites="eumdr2017">(<a href="#ref-eumdr2017" role="doc-biblioref">European Parliament and Council of the European Union 2017</a>, Annex VIII, Rule 11)</span>. The AI Act classifies as <strong>high-risk</strong> any AI system that is, or is a safety component of, a product covered by the laws listed in its Annex I (the MDR and the regulation on in vitro diagnostic devices among them) when that product needs such a third-party assessment <span class="citation" data-cites="euaiact2024">(<a href="#ref-euaiact2024" role="doc-biblioref">European Parliament and Council of the European Union 2024</a>, Article 6(1) and Annex I)</span>. Most clinical prediction models placed on the market, including an AKI risk score like the one on Aoife’s screen, are therefore high-risk AI systems (<a href="./ch19.html">Chapter 19</a> walks through the classification). Three articles of the Act concern explanation directly.</p>
 <ul>
 <li><strong>Article 13, transparency and provision of information to deployers.</strong> A high-risk system must be designed so that its operation is “sufficiently transparent to enable deployers to interpret a system’s output and use it appropriately”. Its instructions for use must state its capabilities and limitations and, where applicable, the technical characteristics that “provide information that is relevant to explain its output” <span class="citation" data-cites="euaiact2024">(<a href="#ref-euaiact2024" role="doc-biblioref">European Parliament and Council of the European Union 2024</a>, Article 13(1) and 13(3)(b)(iv))</span>. The deployer is the hospital; the people who interpret are Emma and Seán.</li>
 <li><strong>Article 14, human oversight.</strong> The people who oversee the system must be able to understand its capacities and limitations, to remain aware of the tendency to over-rely on its output (automation bias), to interpret the output correctly, taking into account the interpretation tools and methods available, and to disregard, override or stop it <span class="citation" data-cites="euaiact2024">(<a href="#ref-euaiact2024" role="doc-biblioref">European Parliament and Council of the European Union 2024</a>, Article 14(4))</span>. Explanation methods are named as an aid to oversight, not as a replacement for it.</li>
@@ -2936,7 +2942,7 @@ Selected answers
 </tr>
 <tr class="even">
 <td>Transparency, human oversight and the AI Act</td>
-<td>Chapter 18 (from language model to clinical assistant)</td>
+<td>Chapter 19 (from language model to clinical assistant)</td>
 </tr>
 </tbody>
 </table>

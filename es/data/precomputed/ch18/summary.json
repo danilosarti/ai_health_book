@@ -1,0 +1,172 @@
+{
+ "corpus": {
+  "n_chars": 241668,
+  "n_words": 43392,
+  "n_paragraphs": 708,
+  "vocab_size": 79,
+  "chars": "\n !\"&'()*,-./012345689:;?ABCDEFGHIJKLMNOPQRSTUVWXYabcdefghijklmnopqrstuvwxyzæèé",
+  "n_train": 217501,
+  "n_val": 24167,
+  "n_letters": 54,
+  "val_starts_with": "becomes pale (this is the only recognised effect); in the sanguine temperament p"
+ },
+ "bigram_after_t": {
+  "h": 0.3098464317976513,
+  " ": 0.24131285757302018,
+  "i": 0.09479072568503463,
+  "o": 0.09093646492020475,
+  "e": 0.08238482384823849
+ },
+ "unigram_top": {
+  " ": 0.17696010593054745,
+  "e": 0.09961333511110294,
+  "t": 0.07634447657711918,
+  "o": 0.06206868014399934,
+  "a": 0.05877674125636204,
+  "i": 0.0561514659702714
+ },
+ "gradient_check": {
+  "n_checked": 168,
+  "max_rel_error": 1.755125022566586e-07,
+  "median_rel_error": 9.948040154687216e-10,
+  "example": {
+   "param": "lnf.g",
+   "finite_difference": 0.021208028488928218,
+   "backprop": 0.021208028482409522
+  }
+ },
+ "small": {
+  "config": {
+   "d": 64,
+   "n_layer": 2,
+   "n_head": 4,
+   "block_size": 32,
+   "vocab_size": 79
+  },
+  "train": {
+   "batch_size": 16,
+   "lr": 0.003,
+   "init_seed": 0,
+   "batch_seed": 1,
+   "browser_steps": 200
+  },
+  "params": {
+   "token embedding": 5056,
+   "position embedding": 2048,
+   "attention": 33280,
+   "feed-forward": 66176,
+   "layer norms": 640,
+   "output layer (tied)": 0,
+   "total": 107200
+  },
+  "ms_per_step_native": 72.06359148025513,
+  "steps_total": 2000,
+  "val_loss": {
+   "0": 4.396129082911193,
+   "200": 2.341686168665353,
+   "500": 2.0855973061207878,
+   "1000": 1.8794153214360068,
+   "2000": 1.74308183185002
+  },
+  "prompt": "The nurse",
+  "sample_before": "The nurse9?p)Ui2&8bT/IbIYæeG1CPul?xMd)(0sdqaGOUrJtVoOdAO2)!dLtpEèViH100V* o)JMWPyiUWPæ3dS!9xl\n;\np*\"èL?\"EDP\n.1J:V9wæ&0Ri&/Kausm\"èX'6XEJmoRkHæVæ\"sSe1Q:*\nwb25Km,æz5XCe(KTWdt4.ERzegè99J:Yz.ObNwgs*0&oæ\nlgv9g4'g\"d9O",
+  "sample_after_browser_steps": "The nurse gt pof ere lliovel hesint saceris indefoos she a thount the be at lindor pevere fut f te whe ill befendnt cio bentio whallkernd. Yow the ke \"rim klavof is miors benthew de:ow or wit catt tho&r ar the",
+  "sample_final": "The nurse hospiles, and to in out wind by the prively give side will be a say, it of who alre farcesance oble himself the prover, but to this, who in Grife, as bore mostance very diservations beir the rear sic",
+  "val_loss_windows_final": 1.7010790765609254,
+  "val_loss_windows_browser": 2.335558613589422,
+  "val_loss_final": 1.74308183185002,
+  "epochs_browser": 0.47080243309226166
+ },
+ "baselines_bits": {
+  "Uniform (every character equally likely)": 6.303780748177103,
+  "Unigram (character frequencies), add-one": 4.368001186667829,
+  "Bigram (previous character), add-one": 3.4573571639791325,
+  "Trigram (two previous characters), Witten-Bell": 2.7828465652716607,
+  "5-gram (four previous characters), Witten-Bell": 2.1269365257360358
+ },
+ "big": {
+  "config": {
+   "d": 128,
+   "n_layer": 4,
+   "n_head": 4,
+   "block_size": 64,
+   "vocab_size": 79
+  },
+  "train": {
+   "batch_size": 32,
+   "lr": 0.003,
+   "min_lr": 0.0003,
+   "warmup": 100,
+   "dropout": 0.1,
+   "steps": 6000,
+   "eval_every": 100,
+   "clip": 1.0,
+   "seed": 1337
+  },
+  "params": {
+   "token embedding": 10112,
+   "position embedding": 8192,
+   "attention": 264192,
+   "feed-forward": 526848,
+   "layer norms": 2304,
+   "output layer (tied)": 0,
+   "total": 811648
+  },
+  "minutes": 15.91608845392863,
+  "s_per_step": 0.15916088453928628,
+  "best_step": 5200,
+  "best_val_loss": 1.3575361641827008,
+  "final_val_loss": 1.3636600846486375,
+  "final_train_loss": 1.205402411222458,
+  "val_loss_fp32": 1.3575361641827008,
+  "val_loss_fp16": 1.3575464489444202,
+  "val_loss_numpy": 1.3575464533452464,
+  "numpy_eval_seconds": 15.770336627960205,
+  "max_abs_logit_diff": 1.1383496794081793e-05,
+  "ms_per_char_numpy": 18.809175491333008,
+  "chars_seen": 12288000,
+  "epochs": 56.4962919710714,
+  "bin_bytes": 1623296
+ },
+ "question": {
+  "prompt": "What is the best treatment for a fever?",
+  "sample": "What is the best treatment for a fever?\nIn cold-room and slowly lets not injuried out a window of day, that another which is safely something that you are never opened to be useful and the children should be even the firm, the sick room, whereas should be it weak so for think safely a pro"
+ },
+ "memorisation": {
+  "window": 20,
+  "n_samples": 20,
+  "length": 500,
+  "by_source": {
+   "generated, temperature 0.5": {
+    "median_longest": 21.0,
+    "max_longest": 24,
+    "max_longest_text": " in the patient's room, ",
+    "mean_share20": 0.00893970893970894
+   },
+   "generated, temperature 0.8": {
+    "median_longest": 19.0,
+    "max_longest": 24,
+    "max_longest_text": " to whether the patient ",
+    "mean_share20": 0.0029106029106029108
+   },
+   "generated, temperature 1.0": {
+    "median_longest": 16.5,
+    "max_longest": 20,
+    "max_longest_text": "t of the atmosphere ",
+    "mean_share20": 0.00010395010395010396
+   },
+   "real validation text": {
+    "median_longest": 21.0,
+    "max_longest": 34,
+    "max_longest_text": " charge of the personal health of ",
+    "mean_share20": 0.00997920997920998
+   }
+  }
+ },
+ "versions": {
+  "numpy": "2.5.3",
+  "torch": "2.14.1+cu130",
+  "python": "3.13.16"
+ },
+ "total_minutes": 23.355692398548126
+}

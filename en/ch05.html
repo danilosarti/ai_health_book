@@ -564,13 +564,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch18.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Train your first GPT</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./ch19.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">From language model to clinical assistant</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ch20.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Generative models beyond text</span></span></a>
   </div>
 </li>
       </ul>
@@ -1912,7 +1918,7 @@ Figure&nbsp;5.7: Calibration plots. Each point is one tenth of the patients, gro
 </div>
 </div>
 </div>
-<p>The lesson generalises: discrimination often travels better than calibration. Case mix, local practice and the way outcomes are recorded all shift the baseline risk between hospitals and over time. The usual remedy is <strong>recalibration</strong>: keep the model’s coefficients but re-estimate the intercept (and perhaps the slope) on local data <span class="citation" data-cites="steyerberg2019cpm">(<a href="#ref-steyerberg2019cpm" role="doc-biblioref">Steyerberg 2019</a>)</span>. Calibration matters well beyond logistic regression. Flexible models such as boosted trees and neural networks are often <em>over</em>confident <span class="citation" data-cites="niculescu2005predicting guo2017calibration">(<a href="#ref-niculescu2005predicting" role="doc-biblioref">Niculescu-Mizil and Caruana 2005</a>; <a href="#ref-guo2017calibration" role="doc-biblioref">Guo et al. 2017</a>)</span>, and in Chapter 18 we ask the same question of a language model that says it is “90 % sure”.</p>
+<p>The lesson generalises: discrimination often travels better than calibration. Case mix, local practice and the way outcomes are recorded all shift the baseline risk between hospitals and over time. The usual remedy is <strong>recalibration</strong>: keep the model’s coefficients but re-estimate the intercept (and perhaps the slope) on local data <span class="citation" data-cites="steyerberg2019cpm">(<a href="#ref-steyerberg2019cpm" role="doc-biblioref">Steyerberg 2019</a>)</span>. Calibration matters well beyond logistic regression. Flexible models such as boosted trees and neural networks are often <em>over</em>confident <span class="citation" data-cites="niculescu2005predicting guo2017calibration">(<a href="#ref-niculescu2005predicting" role="doc-biblioref">Niculescu-Mizil and Caruana 2005</a>; <a href="#ref-guo2017calibration" role="doc-biblioref">Guo et al. 2017</a>)</span>, and in Chapter 19 we ask the same question of a language model that says it is “90 % sure”.</p>
 <div id="ch05-qc-calibration" class="quick-check">
 <p>After the model is moved to hospital D, its AUC is unchanged but its calibration intercept is clearly positive. What does this mean for Emma, if she works in hospital D?</p>
 <ul class="task-list">
@@ -2416,7 +2422,7 @@ Selected answers
 </tr>
 <tr class="even">
 <td>Calibration of a model’s stated confidence</td>
-<td>Chapter 18 (language models)</td>
+<td>Chapter 19 (language models)</td>
 </tr>
 </tbody>
 </table>
